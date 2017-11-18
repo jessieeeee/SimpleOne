@@ -1,0 +1,16 @@
+{
+  "name": "reactnative",
+  "version": "1.0.0",
+  "description": "simple one app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "start": "node node_modules/react-native/local-cli/cli.js start",
+  "author": "JessieKate",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-native": "^0.47.2"
+  }
+}
