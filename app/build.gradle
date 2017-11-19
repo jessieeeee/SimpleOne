@@ -1,29 +1,116 @@
 apply plugin: 'com.android.application'
 
+def verCode = 14
+
 android {
+
     compileSdkVersion 23
     buildToolsVersion "26.0.1"
+    signingConfigs {
+        signingConfig {
+            keyAlias 'gidea'
+            keyPassword 'gidea20160415'
+            storeFile file('../releasekey.keystore')
+            storePassword 'gidea20160415'
+        }
+    }
+
     defaultConfig {
         applicationId "simpleone.jessie.com.simpleone"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        versionName APP_VERSION
+        resValue("string", 'app_version', APP_VERSION)
+        buildConfigField "boolean", "LEO_DEBUG", "true"
+        buildConfigField 'String', 'API_SERVER_URL', RELEASE_API_SERVER_URL
+
+        signingConfig signingConfigs.signingConfig
+        versionCode verCode
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+
     buildTypes {
         release {
+            buildConfigField 'String', 'API_SERVER_URL', RELEASE_API_SERVER_URL
+            buildConfigField 'String', 'IM_SERVER_HOST', RELEASE_IM_SERVER_HOST
+            buildConfigField 'int', 'IM_SERVER_PORT', RELEASE_IM_SERVER_PORT
+            buildConfigField "boolean", "LEO_DEBUG", RELEASE_LEO_DEBUG
+
+            zipAlignEnabled true
+            shrinkResources true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            buildConfigField 'String', 'API_SERVER_URL', RELEASE_API_SERVER_URL
+            buildConfigField 'String', 'IM_SERVER_HOST', RELEASE_IM_SERVER_HOST
+            buildConfigField 'int', 'IM_SERVER_PORT', RELEASE_IM_SERVER_PORT
+            buildConfigField "boolean", "LEO_DEBUG", RELEASE_LEO_DEBUG
+        }
     }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+
+
+    //渠道Flavors，我这里写了一些常用的
+    productFlavors {
+        commonsoon {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "commonsoon"]
+        }
+        zhushou91 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "zhushou91"]
+        }
+    }
+
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
-    productFlavors {
+
+
+    allprojects {
+        repositories {
+            mavenCentral()
+            maven { url "https://jitpack.io" }
+        }
     }
 
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def newName
+            def timeNow
+            def oldFile = output.outputFile
+            def outDirectory = oldFile.parent
 
+            if ("true".equals(IS_JENKINS)) {
+                timeNow = JENKINS_TIME
+                outDirectory = '/Users/JessieKate/Documents/apk'
+                newName = APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
+            } else {
+                timeNow = getDate()
+                if (variant.buildType.name.equals('debug')) {
+                    newName = "${APP_VERSION}-debug.apk"
+                } else {
+                    newName = APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
+                }
+            }
+
+            output.outputFile = new File(outDirectory, newName)
+
+        }
+    }
+
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
 }
 
 dependencies {
