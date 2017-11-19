@@ -40,7 +40,6 @@ android {
             buildConfigField "boolean", "LEO_DEBUG", RELEASE_LEO_DEBUG
 
             zipAlignEnabled true
-            shrinkResources true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
