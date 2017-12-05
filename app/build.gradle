@@ -120,6 +120,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:23.0.1'
-    compile 'com.facebook.react:react-native:0.19.0'
+    compile "com.facebook.react:react-native:+"
     testCompile 'junit:junit:4.12'
 }

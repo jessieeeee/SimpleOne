@@ -1,5 +1,5 @@
 {
-  "name": "reactnative",
+  "name": "simpleone",
   "version": "1.0.0",
   "description": "simple one app",
   "main": "index.js",
@@ -10,7 +10,22 @@
   "author": "JessieKate",
   "license": "ISC",
   "dependencies": {
-    "react": "^15.6.1",
-    "react-native": "^0.47.2"
-  }
+    "react": "^16.0.0-alpha.12",
+    "react-native": "^0.47.2",
+    "react-native-deprecated-custom-components": "^0.1.1",
+    "react-native-easy-toast": "^1.0.9",
+    "react-native-tab-navigator": "^0.3.4"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jessieeeee/SimpleOne.git"
+  },
+  "keywords": [
+    "simpleone"
+  ],
+  "bugs": {
+    "url": "https://github.com/jessieeeee/SimpleOne/issues"
+  },
+  "homepage": "https://github.com/jessieeeee/SimpleOne#readme"
 }
