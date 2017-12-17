@@ -18,12 +18,12 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-import NetUtils from "../NetUtil";
+import DateUtils from "../util/DateUtil";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
-var OneListItem1 = React.createClass({
+var OneListMovie = React.createClass({
 
     //初始化变量
     getInitialState() {
@@ -35,14 +35,13 @@ var OneListItem1 = React.createClass({
     //要传入的参数
     getDefaultProps() {
         return {
-            category: 1,
-            userName: '谁答',
+            userName: '用户名',
             title: '标题',
-            imgUrl: '谁答下面的插图',
+            subTitle: '副标题',
+            imgUrl: '用户名下面的插图',
             forward: '插图下面的一句话',
             postDate: '发布的日期',
             likeNum: 0,
-            oneStory: false,
         }
     },
 
@@ -50,15 +49,24 @@ var OneListItem1 = React.createClass({
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.category}>{this.getCategory()}</Text>
+                <Text style={styles.category}>
+                    - 影视 -
+                </Text>
                 {/*标题*/}
                 <Text style={styles.title}>{this.props.title}</Text>
-                {/*回答者*/}
+                {/*用户名*/}
                 <Text style={styles.author}>{this.getAuthor()}</Text>
-                {/*回答者下面的插图*/}
-                <Image source={{uri: this.props.imgUrl}} style={styles.centerImg}/>
+                <View style={styles.centerImgBg}>
+                    <Image source={{uri: 'feeds_movie'}} style={{width: width * 0.9, height: width * 0.56,}}/>
+                    {/*用户名下面的插图*/}
+                    <Image source={{uri: this.props.imgUrl}} style={styles.centerImg}/>
+                </View>
                 {/*插图下面的那句话*/}
                 <Text style={styles.forward}>{this.props.forward}</Text>
+                <View style={{width:width}}>
+                {/*那句话右边的副标题*/}
+                <Text style={styles.subtitle}>{'-- 《' + this.props.subTitle + '》'}</Text>
+                </View>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
@@ -66,11 +74,11 @@ var OneListItem1 = React.createClass({
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
-                        <View style={{flexDirection: 'row' ,width:width * 0.1 ,marginRight: width * 0.03}}>
-                        <TouchableOpacity
-                            onPress={() => this.likeClick()}>
-                            <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
-                        </TouchableOpacity>
+                        <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
+                            <TouchableOpacity
+                                onPress={() => this.likeClick()}>
+                                <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                            </TouchableOpacity>
 
                             {this.renderlikeNum()}
 
@@ -81,8 +89,6 @@ var OneListItem1 = React.createClass({
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                <View style={styles.bottomLine}/>
 
                 <Toast
                     ref="toast"
@@ -99,40 +105,22 @@ var OneListItem1 = React.createClass({
     /**
      * 渲染喜欢数量
      */
-    renderlikeNum(){
-       if(this.props.likeNum>0){
-           return(
-           <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024,color:'#A7A7A7'}}>
-               {this.props.likeNum}
-           </Text>
-           );
-       }
+    renderlikeNum() {
+        if (this.props.likeNum > 0) {
+            return (
+                <Text style={{
+                    position: 'relative',
+                    left: width * 0.003,
+                    bottom: width * 0.016,
+                    fontSize: width * 0.024,
+                    color: '#A7A7A7'
+                }}>
+                    {this.props.likeNum}
+                </Text>
+            );
+        }
     },
 
-    /**
-     * 显示分类
-     */
-    getCategory(){
-        if(this.props.category==1){
-            if(this.props.oneStory===true){
-                return '- ONE STORY -';
-            }else{
-                return '- 阅读 -';
-            }
-        }
-        else if(this.props.category==2){
-            return '- 连载 -';
-        }
-        else if(this.props.category==3){
-            return '- 问答 -';
-        }
-        else if(this.props.category==4){
-            return '- 音乐 -';
-        }
-        else if(this.props.category==5){
-            return '- 影视 -';
-        }
-    },
 
     /**
      * 获取回答者
@@ -141,10 +129,8 @@ var OneListItem1 = React.createClass({
     getAuthor() {
         var tempStr = new Array();
         tempStr = this.props.userName.split(' ');
-        if(this.props.category==1){
-           return '文 / '+tempStr[0];
-        }
-        return tempStr[0];
+        return '文 / ' + tempStr[0];
+
     },
 
     /**
@@ -154,10 +140,9 @@ var OneListItem1 = React.createClass({
     showDate() {
         var tempStr = new Array();
         tempStr = this.props.postDate.split(' ');
-        console.log(tempStr[0]);
-        console.log(NetUtils.getCurrentDateFormat());
+        console.log(DateUtils.getCurrentDateFormat());
         //是今天
-        if (NetUtils.getCurrentDateFormat() == tempStr[0]) {
+        if (DateUtils.getCurrentDateFormat() == tempStr[0]) {
             return '今天';
         } else {
             return tempStr[0];
@@ -167,7 +152,7 @@ var OneListItem1 = React.createClass({
     /**
      * 点击喜欢
      */
-    likeClick(){
+    likeClick() {
         this.setState({
             like: !this.state.like
         });
@@ -177,28 +162,28 @@ var OneListItem1 = React.createClass({
      * 根据当前状态，显示喜欢图标
      * @returns {*}
      */
-    showLikeIcon(){
+    showLikeIcon() {
         //喜欢
-        if(this.state.like===true){
+        if (this.state.like === true) {
             return 'bubble_liked';
-        }else{
+        } else {
             return 'bubble_like';
         }
     },
 
     //点击喜欢
-    likeClick(){
+    likeClick() {
         this.setState({
             like: !this.state.like
         });
     },
 
     //根据当前状态，显示喜欢图标
-    showLikeIcon(){
+    showLikeIcon() {
         //喜欢
-        if(this.state.like===true){
+        if (this.state.like === true) {
             return 'bubble_liked';
-        }else{
+        } else {
             return 'bubble_like';
         }
     }
@@ -211,41 +196,56 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
     },
-    category:{
+    category: {
         marginTop: width * 0.03,
         fontSize: width * 0.032,
         color: '#8B8B8B'
     },
     title: {
-        fontSize: width*0.05,
+        fontSize: width * 0.056,
         color: '#333333',
         width: width,
-        paddingLeft: width*0.05,
-        marginTop: width* 0.03,
+        paddingLeft: width * 0.05,
+        marginTop: width * 0.03,
+    },
+    subtitle: {
+        fontSize: width * 0.038,
+        color: '#808080',
+        position:'absolute',
+        right:width * 0.05,
     },
     author: {
         width: width,
         marginTop: width * 0.03,
-        paddingLeft: width*0.05,
-        fontSize: width*0.038,
+        paddingLeft: width * 0.05,
+        fontSize: width * 0.038,
         color: '#808080'
     },
-    centerImg: {
+    centerImgBg: {
         marginTop: width * 0.02,
         width: width * 0.9,
-        height: width * 0.55,
+        height: width * 0.56,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    centerImg: {
+        position:'absolute',
+        top:width*0.046,
+        width: width * 0.9,
+        height: width * 0.47,
     },
     forward: {
         width: width,
-        paddingLeft: width*0.05,
-        paddingRight: width*0.05,
+        paddingLeft: width * 0.05,
+        paddingRight: width * 0.05,
         marginTop: width * 0.02,
-        fontSize: width*0.038,
-        color: '#808080'
+        fontSize: width * 0.038,
+        color: '#808080',
+        lineHeight: parseInt(width * 0.08)
     },
     bar: {
-        alignItems:'center',
-        marginTop: width * 0.06,
+        alignItems: 'center',
+        marginTop: width * 0.15,
         flexDirection: 'row',
         width: width,
         height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
@@ -272,11 +272,7 @@ const styles = StyleSheet.create({
         height: width * 0.045,
 
     },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.016,
-        width: width
-    },
+
 });
 
-module.exports = OneListItem1;
+module.exports = OneListMovie;

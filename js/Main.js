@@ -20,13 +20,13 @@ import {Navigator} from 'react-native-deprecated-custom-components';
  * */
 import TabNavigator from 'react-native-tab-navigator';
 
-var ONE = require('./MainOne/One');
-var ALL = require('./mainAll/All');
-var ME = require('./MainMe/Me');
+var ONE = require('./mainone/One');
+var ALL = require('./mainall/All');
+var ME = require('./mainme/Me');
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-var barHeight=height*0.1;
+var barHeight=height*0.082;
 
 
 var Main=React.createClass({
@@ -79,8 +79,10 @@ var Main=React.createClass({
 
 const styles = StyleSheet.create({
     iconStyle:{
-        width: Platform.OS == 'ios'? barHeight*0.6:barHeight*0.7,
-        height:Platform.OS == 'ios'? barHeight*0.6:barHeight*0.7,
+        position:'relative',
+        bottom:-8,
+        width: Platform.OS == 'ios'? barHeight*0.6:barHeight*0.8,
+        height:Platform.OS == 'ios'? barHeight*0.6:barHeight*0.8,
     },
     selectedTitleStyle:{
         color:'#555555'

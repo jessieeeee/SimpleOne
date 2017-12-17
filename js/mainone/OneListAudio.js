@@ -18,12 +18,11 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-import NetUtils from "../NetUtil";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
-var OneListItem1 = React.createClass({
+var OneListAudio = React.createClass({
 
     //初始化变量
     getInitialState() {
@@ -35,14 +34,9 @@ var OneListItem1 = React.createClass({
     //要传入的参数
     getDefaultProps() {
         return {
-            category: 1,
-            userName: '谁答',
             title: '标题',
             imgUrl: '谁答下面的插图',
-            forward: '插图下面的一句话',
-            postDate: '发布的日期',
             likeNum: 0,
-            oneStory: false,
         }
     },
 
@@ -50,19 +44,15 @@ var OneListItem1 = React.createClass({
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.category}>{this.getCategory()}</Text>
+                {/*背景*/}
+                <Image source={{uri: this.props.imgUrl}} style={styles.bg}/>
                 {/*标题*/}
                 <Text style={styles.title}>{this.props.title}</Text>
-                {/*回答者*/}
-                <Text style={styles.author}>{this.getAuthor()}</Text>
-                {/*回答者下面的插图*/}
-                <Image source={{uri: this.props.imgUrl}} style={styles.centerImg}/>
-                {/*插图下面的那句话*/}
-                <Text style={styles.forward}>{this.props.forward}</Text>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
+                    <Text style={{color:'#a6a6a6',fontSize:width*0.08,marginLeft:width*0.04}}>·</Text>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{this.showDate()}</Text>
+                    <Image source={{uri:'aliwx_chatfrom_play_02'}} style={styles.leftIcon}/>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -81,8 +71,6 @@ var OneListItem1 = React.createClass({
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                <View style={styles.bottomLine}/>
 
                 <Toast
                     ref="toast"
@@ -109,60 +97,6 @@ var OneListItem1 = React.createClass({
        }
     },
 
-    /**
-     * 显示分类
-     */
-    getCategory(){
-        if(this.props.category==1){
-            if(this.props.oneStory===true){
-                return '- ONE STORY -';
-            }else{
-                return '- 阅读 -';
-            }
-        }
-        else if(this.props.category==2){
-            return '- 连载 -';
-        }
-        else if(this.props.category==3){
-            return '- 问答 -';
-        }
-        else if(this.props.category==4){
-            return '- 音乐 -';
-        }
-        else if(this.props.category==5){
-            return '- 影视 -';
-        }
-    },
-
-    /**
-     * 获取回答者
-     * @returns {*}
-     */
-    getAuthor() {
-        var tempStr = new Array();
-        tempStr = this.props.userName.split(' ');
-        if(this.props.category==1){
-           return '文 / '+tempStr[0];
-        }
-        return tempStr[0];
-    },
-
-    /**
-     * 日期显示
-     * @returns {*}
-     */
-    showDate() {
-        var tempStr = new Array();
-        tempStr = this.props.postDate.split(' ');
-        console.log(tempStr[0]);
-        console.log(NetUtils.getCurrentDateFormat());
-        //是今天
-        if (NetUtils.getCurrentDateFormat() == tempStr[0]) {
-            return '今天';
-        } else {
-            return tempStr[0];
-        }
-    },
 
     /**
      * 点击喜欢
@@ -211,52 +145,35 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
     },
-    category:{
-        marginTop: width * 0.03,
-        fontSize: width * 0.032,
-        color: '#8B8B8B'
-    },
+
     title: {
-        fontSize: width*0.05,
-        color: '#333333',
+        fontSize: width*0.034,
+        color: '#c3c2c7',
         width: width,
-        paddingLeft: width*0.05,
-        marginTop: width* 0.03,
+        textAlign:'center',
+        position:'absolute',
+        bottom:height * 0.1,
     },
-    author: {
-        width: width,
-        marginTop: width * 0.03,
-        paddingLeft: width*0.05,
-        fontSize: width*0.038,
-        color: '#808080'
+
+    bg: {
+        width: width ,
+        height: width * 0.66,
     },
-    centerImg: {
-        marginTop: width * 0.02,
-        width: width * 0.9,
-        height: width * 0.55,
-    },
-    forward: {
-        width: width,
-        paddingLeft: width*0.05,
-        paddingRight: width*0.05,
-        marginTop: width * 0.02,
-        fontSize: width*0.038,
-        color: '#808080'
-    },
+
     bar: {
         alignItems:'center',
-        marginTop: width * 0.06,
+        position:'absolute',
+        bottom:0,
         flexDirection: 'row',
         width: width,
-        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
+        borderTopColor:'#c3c2c7',
+        borderTopWidth:width*0.0006,
+        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.07,
     },
-    date: {
+    leftIcon:{
+        width: width * 0.066,
+        height: width * 0.09,
 
-        fontSize: 12,
-        color: '#B6B6B6',
-        flexDirection: 'row',
-        position: 'absolute',
-        left: width * 0.05,
     },
     rightBtn: {
         flexDirection: 'row',
@@ -272,11 +189,7 @@ const styles = StyleSheet.create({
         height: width * 0.045,
 
     },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.016,
-        width: width
-    },
+
 });
 
-module.exports = OneListItem1;
+module.exports = OneListAudio;

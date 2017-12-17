@@ -1,11 +1,13 @@
 import React,{Component} from 'react';
 
 
-
-
 /**
- * 网络请求的工具类
+ * @date :2017/12/15 0015
+ * @author :JessieK
+ * @email :lyj1246505807@gmail.com
+ * @description :网络请求的工具类
  */
+
 export default class NetUtils extends Component{
 
 
@@ -33,7 +35,7 @@ export default class NetUtils extends Component{
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            Console.log(url+':'+error);
+            console.log(url+':'+error);
                 callbackError(error);
         });
     };
@@ -63,7 +65,7 @@ export default class NetUtils extends Component{
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            Console.log(url+':'+error);
+            console.log(url+':'+error);
             callbackError(error);
         });
     };
@@ -90,7 +92,7 @@ export default class NetUtils extends Component{
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            Console.log(url+':'+error);
+            console.log(url+':'+error);
             callbackError(error);
         });
     };
@@ -142,24 +144,4 @@ export default class NetUtils extends Component{
         return newParams;
     };
 
-
-    /**
-     * 获取当前系统时间 yyyyMMddHH
-     */
-    static getCurrentDateFormat(){
-        var space = "";
-        var dates = new Date();
-        var years = dates.getFullYear();
-        var months = dates.getMonth()+1;
-        if(months<10){
-            months = "0"+months;
-        }
-
-        var days = dates.getDate();
-        if(days<10){
-            days = "0"+days;
-        }
-        var time = years+space+months+space+days;
-        return time;
-    };
 }

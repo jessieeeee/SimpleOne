@@ -18,12 +18,12 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-import NetUtils from "../NetUtil";
+import DateUtils from "../util/DateUtil";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
-var OneListItem1 = React.createClass({
+var OneListCommon = React.createClass({
 
     //初始化变量
     getInitialState() {
@@ -42,7 +42,7 @@ var OneListItem1 = React.createClass({
             forward: '插图下面的一句话',
             postDate: '发布的日期',
             likeNum: 0,
-            oneStory: false,
+            tagTitle: '',
         }
     },
 
@@ -82,8 +82,6 @@ var OneListItem1 = React.createClass({
                     </View>
                 </View>
 
-                <View style={styles.bottomLine}/>
-
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -113,12 +111,11 @@ var OneListItem1 = React.createClass({
      * 显示分类
      */
     getCategory(){
-        if(this.props.category==1){
-            if(this.props.oneStory===true){
-                return '- ONE STORY -';
-            }else{
-                return '- 阅读 -';
-            }
+        if(this.props.tagTitle!==''){
+            return '- '+this.props.tagTitle+' -';
+        }
+        else if(this.props.category==1){
+            return '- 阅读 -';
         }
         else if(this.props.category==2){
             return '- 连载 -';
@@ -126,12 +123,7 @@ var OneListItem1 = React.createClass({
         else if(this.props.category==3){
             return '- 问答 -';
         }
-        else if(this.props.category==4){
-            return '- 音乐 -';
-        }
-        else if(this.props.category==5){
-            return '- 影视 -';
-        }
+
     },
 
     /**
@@ -154,10 +146,9 @@ var OneListItem1 = React.createClass({
     showDate() {
         var tempStr = new Array();
         tempStr = this.props.postDate.split(' ');
-        console.log(tempStr[0]);
-        console.log(NetUtils.getCurrentDateFormat());
+        console.log(DateUtils.getCurrentDateFormat());
         //是今天
-        if (NetUtils.getCurrentDateFormat() == tempStr[0]) {
+        if (DateUtils.getCurrentDateFormat() == tempStr[0]) {
             return '今天';
         } else {
             return tempStr[0];
@@ -217,7 +208,7 @@ const styles = StyleSheet.create({
         color: '#8B8B8B'
     },
     title: {
-        fontSize: width*0.05,
+        fontSize: width*0.056,
         color: '#333333',
         width: width,
         paddingLeft: width*0.05,
@@ -233,7 +224,7 @@ const styles = StyleSheet.create({
     centerImg: {
         marginTop: width * 0.02,
         width: width * 0.9,
-        height: width * 0.55,
+        height: width * 0.52,
     },
     forward: {
         width: width,
@@ -241,7 +232,8 @@ const styles = StyleSheet.create({
         paddingRight: width*0.05,
         marginTop: width * 0.02,
         fontSize: width*0.038,
-        color: '#808080'
+        color: '#808080',
+        lineHeight: parseInt(width * 0.08)
     },
     bar: {
         alignItems:'center',
@@ -272,11 +264,7 @@ const styles = StyleSheet.create({
         height: width * 0.045,
 
     },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.016,
-        width: width
-    },
+
 });
 
-module.exports = OneListItem1;
+module.exports = OneListCommon;
