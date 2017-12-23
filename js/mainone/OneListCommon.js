@@ -16,9 +16,8 @@ import {
     Platform,
     TouchableOpacity
 } from 'react-native';
-
+import DateUtil from "../util/DateUtil";
 import Toast, {DURATION} from 'react-native-easy-toast'
-import DateUtils from "../util/DateUtil";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
@@ -62,7 +61,7 @@ var OneListCommon = React.createClass({
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{this.showDate()}</Text>
+                    <Text style={styles.date}>{DateUtil.showDate(this.props.postDate)}</Text>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -139,21 +138,7 @@ var OneListCommon = React.createClass({
         return tempStr[0];
     },
 
-    /**
-     * 日期显示
-     * @returns {*}
-     */
-    showDate() {
-        var tempStr = new Array();
-        tempStr = this.props.postDate.split(' ');
-        console.log(DateUtils.getCurrentDateFormat());
-        //是今天
-        if (DateUtils.getCurrentDateFormat() == tempStr[0]) {
-            return '今天';
-        } else {
-            return tempStr[0];
-        }
-    },
+
 
     /**
      * 点击喜欢

@@ -16,18 +16,33 @@ var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
 var LoadingMore = React.createClass({
+    getDefaultProps() {
+        return {
+            // 外层回调函数参
+            loading: false, //加载更多
+        }
+    },
+
     render() {
         return (
             <View style={styles.container}>
-                {/*<Text style={{*/}
-                    {/*color: 'gray',*/}
-                    {/*fontSize: width * 0.04,*/}
-                    {/*marginTop:width * 0.1,*/}
-                {/*}}>*/}
-                    {/*正在加载...*/}
-                {/*</Text>*/}
+                {this.loading()}
             </View>
         );
+    },
+
+    loading() {
+        if (this.props.loading) {
+            return (
+                <Text style={{
+                    color: 'gray',
+                    fontSize: width * 0.04,
+                    margin: width * 0.04,
+                }}>
+                    正在加载中...
+                </Text>
+            );
+        }
     }
 });
 
@@ -38,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
     },
-    welcome: {
+    menu: {
         fontSize: 20,
         textAlign: 'center',
         margin: 10,

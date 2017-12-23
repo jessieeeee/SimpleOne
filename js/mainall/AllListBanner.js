@@ -65,25 +65,25 @@ var AllListBanner = React.createClass({
      */
     startTimer() {
         //获得scrollView
-        var scrollView = this.refs.sv;
+        var scrollView = this.refs.sv_banner;
 
         this.timer = this.setInterval(function () {
             //计算当前所在页数
             var activePage;
-            console.log("curPage:" + this.state.curPage);
+            // console.log("curPage:" + this.state.curPage);
             if (this.state.curPage + 1 >= this.state.banner.data.length) {
                 activePage = 0;
             } else {
                 activePage = parseInt(this.state.curPage + 1);
             }
-            console.log("activePage:" + activePage);
+            // console.log("activePage:" + activePage);
             //更新
             this.setState({
                 curPage: activePage
             });
             //设置偏移量，实现滚动
             var offsetx = activePage * width;
-            console.log("offsetx:" + offsetx);
+            // console.log("offsetx:" + offsetx);
             scrollView.scrollResponderScrollTo({x: offsetx, y: 0, animated: true});
         }, this.props.duration);
     },
@@ -105,7 +105,7 @@ var AllListBanner = React.createClass({
             this.setState({
                 banner: result,
             })
-            console.log(result);
+            // console.log(result);
             //开启定时器
             this.startTimer();
         }, (error) => {
@@ -117,7 +117,7 @@ var AllListBanner = React.createClass({
         return (
             <View style={styles.banner}>
 
-                <ScrollView ref='sv'
+                <ScrollView ref='sv_banner'
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             pagingEnabled={true}

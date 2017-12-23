@@ -26,7 +26,9 @@ var OneListTop = React.createClass({
     //初始化变量
     getInitialState() {
         return {
-            like: false
+            like: false,
+            originalW: 0,
+            originalH: 0,
         }
     },
 
@@ -42,6 +44,25 @@ var OneListTop = React.createClass({
         }
     },
 
+    /**
+     * 发起网络请求
+     */
+    componentDidMount() {
+        Image.getSize(this.props.topImgUrl, (width, height) => {
+            this.setState({
+                originalW:width,
+                originalH:height
+                }
+            );
+        });
+    },
+
+    //按图片宽度缩放
+    getHeight(w, h){
+        var ratio=width/w;
+        return h*ratio;
+    },
+
     //渲染
     render() {
         return (
@@ -49,7 +70,9 @@ var OneListTop = React.createClass({
 
                 {/*顶部大图*/}
                 <TouchableOpacity onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
-                    <Image source={{uri: this.props.topImgUrl}} style={styles.topImg}/>
+                    <Image source={{uri: this.props.topImgUrl} } style={{  width: width,
+                        height: this.getHeight(this.state.originalW,this.state.originalH),
+                        }}/>
                 </TouchableOpacity>
                 {/*标题和作者*/}
                 <Text style={styles.imgAuthor}>
@@ -140,20 +163,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    topImg: {
-        width: width,
-        height: height * 0.4,
     },
     imgAuthor: {
         marginTop: width * 0.02,

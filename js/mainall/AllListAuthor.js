@@ -173,7 +173,7 @@ var AllListAuthor = React.createClass({
             this.setState({
                 dataSource: ds.cloneWithRows(itemArr),
             });
-            console.log(result);
+            // console.log(result);
         }, (error) => {
             this.refs.toast.close('error' + error, 500)
         });

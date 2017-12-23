@@ -20,6 +20,7 @@ import {
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 
+import DateUtil from "../util/DateUtil";
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var OneListTop = require('./OneListTop');
@@ -28,8 +29,12 @@ var OneListMusic = require('./OneListMusic');
 var OneListItemBottom = require('./OneListItemBottom');
 var OneListMovie = require('./OneListMovie');
 var OneListAudio = require('./OneListAudio');
+var Search=require('../search/Search');
+var ServerApi = require('../ServerApi');
 
-var ServerApi=require('../ServerApi');
+var key=0;
+var itemPageArr=[]; //分页数组
+
 var One = React.createClass({
     /**
      * 初始化状态变量
@@ -37,9 +42,11 @@ var One = React.createClass({
      */
     getInitialState() {
         return {
-            oneData: null,
-            showToday: false,
+            curOneData: null,  //缓存当前页
+            nextOneData: null, //缓存下一页
             isRefreshing: false,
+            date: '0', //请求的日期
+            curPage:0,//当前页数
         }
 
     },
@@ -49,7 +56,7 @@ var One = React.createClass({
      * 发起网络请求
      */
     componentDidMount() {
-        this.getOneList();
+        this.loadPage();
     },
 
 
@@ -62,18 +69,11 @@ var One = React.createClass({
             <View style={styles.container}>
 
                 {this.renderNavBar()}
-                <ScrollView scrollEventThrottle={50}  refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.isRefreshing}
-                        onRefresh={this.onRefresh}
-                        title="Loading..."
-                        titleColor="#00ff00"
-                        colors={['#ff0000', '#00ff00', '#0000ff','#3ad564']}
-                        progressBackgroundColor="#ffffff"
-                    />
-                }>
+                <ScrollView horizontal={true} ref='sv_one' pagingEnabled={true}
+                            scrollEnabled={true} showsHorizontalScrollIndicator={false} onMomentumScrollEnd ={this.onMomentumScrollEnd}>
 
-                    {this.renderAllItem()}
+                    {/*渲染分页*/}
+                    {this.renderPage()}
 
                 </ScrollView>
                 <Toast
@@ -84,10 +84,73 @@ var One = React.createClass({
                     textStyle={{color: 'white'}}
                 />
 
+
             </View>
         );
     },
 
+    renderPage(){
+        return itemPageArr;
+    },
+
+    /**
+     * 滚动回调
+     * @private
+     */
+    onMomentumScrollEnd(e){
+        //水平方向偏移量
+        var offset = e.nativeEvent.contentOffset.x;
+        //当前页数
+        var currentPage = Math.floor(offset / width);
+
+
+        //往后翻
+        if(currentPage>this.state.curPage){
+            //设置当前页数
+            this.setState({
+                curOneData:this.state.nextOneData,
+                curPage: currentPage
+            });
+
+            this.getOneList((result)=>{
+                this.setState({
+                    nextOneData: result,
+                    isRefreshing: false,
+                });
+                this.addPage(this.state.nextOneData.data);
+            });
+        }else{
+            this.setState({
+                curPage: currentPage
+            });
+        }
+    },
+
+    /**
+     * 添加下一页
+     */
+    addPage(oneData){
+        itemPageArr.push(
+
+            <ScrollView  key={key} scrollEventThrottle={50} refreshControl={
+                <RefreshControl
+                    refreshing={this.state.isRefreshing}
+                    onRefresh={this.onRefresh}
+                    title="Loading..."
+                    titleColor="#00ff00"
+                    colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
+                    progressBackgroundColor="#ffffff"
+                />
+            }>
+
+            {this.renderAllItem(oneData)}
+
+            </ScrollView>
+
+        );
+        {key++}
+
+    },
     /**
      * 刷新操作
      */
@@ -95,17 +158,35 @@ var One = React.createClass({
         //更改刷新状态
         this.setState({isRefreshing: true});
         //发起请求
-        this.getOneList();
+        this.getOneList((result)=>{
+            this.setState({
+                curOneData: result,
+                isRefreshing: false,
+            });
+        });
     },
 
-    // 列表item渲染
-    renderAllItem() {
-        if (this.state.oneData !== null) {
+    /**
+     * 回到今天
+     */
+    backToday(){
+        //获得scrollView
+        var scrollView = this.refs.sv_one;
+        // console.log("offsetx:" + offsetx);
+        scrollView.scrollResponderScrollTo({x: 0, y: 0, animated: true});
+    },
+    /**
+     * 列表item渲染
+     * @param oneData
+     * @returns {Array}
+     */
+    renderAllItem(oneData) {
+        if (oneData !== null) {
             var itemArr = [];
             var key = 0;
-            for (var i = 0; i < this.state.oneData.data.content_list.length; i++) {
+            for (var i = 0; i < oneData.content_list.length; i++) {
                 //取出每一条数据
-                var data = this.state.oneData.data.content_list[i];
+                var data = oneData.content_list[i];
                 //最顶部的摄影和一句话
                 if (data.category == 0) {
                     //组件绑定数组
@@ -147,7 +228,7 @@ var One = React.createClass({
                     );
                 }
                 key++;
-                if (i !== this.state.oneData.data.content_list.length - 1) {
+                if (i !== oneData.content_list.length - 1) {
                     itemArr.push(
                         <View key={key} style={styles.bottomLine}/>
                     )
@@ -156,32 +237,34 @@ var One = React.createClass({
             }
             // 渲染底部item
             itemArr.push(
-                <OneListItemBottom key={this.state.oneData.data.content_list.length * 2}/>
+                <OneListItemBottom key={oneData.content_list.length * 2}/>
             );
             return itemArr;
         }
 
     },
 
+    /**
+     * 顶部导航bar
+     */
     renderNavBar() {
         return (
-            // 顶部导航bar
             <View style={styles.outNav}>
-
+                {/*左边按钮*/}
                 {this.renderToday()}
                 {/*中间标题*/}
                 <View style={styles.centerTitle}>
                     {/*上面日期*/}
                     <View style={styles.date}>
-                        <Text style={styles.dateText}>{this.state.oneData === null ? '' : this.getDateYear()}</Text>
-                        <Text style={styles.dividerText}>{this.state.oneData === null ? '' : '    /    '}</Text>
-                        <Text style={styles.dateText}>{this.state.oneData === null ? '' : this.getDateMonth()}</Text>
-                        <Text style={styles.dividerText}>{this.state.oneData === null ? '' : '    /    '}</Text>
-                        <Text style={styles.dateText}>{this.state.oneData === null ? '' : this.getDateDay()}</Text>
+                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateYear()}</Text>
+                        <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
+                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateMonth()}</Text>
+                        <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
+                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateDay()}</Text>
                     </View>
                     {/*下面天气*/}
                     <Text style={styles.weatherText}>
-                        {this.state.oneData === null ? '' : this.getWeatherInfo()}
+                        {this.state.curOneData === null ? '' : this.getWeatherInfo()}
                     </Text>
 
                 </View>
@@ -189,22 +272,37 @@ var One = React.createClass({
 
                 {/*右边按钮*/}
                 <TouchableOpacity style={styles.rightBtn}
-                                  onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                                  onPress={() => this.pushToSearch()}>
                     <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
                 </TouchableOpacity>
             </View>
         );
     },
 
+    /**
+     * 跳转到搜索页
+     * @param url
+     */
+    pushToSearch(){
 
-    // 渲染左边今天按钮
+        this.props.navigator.push(
+            {
+                component: Search,
+            }
+        )
+    },
+
+
+    /**
+     * 渲染左边今天按钮
+     */
     renderToday() {
-        if (this.state.showToday) {
+        if (this.state.curPage!=0) {
             return (
-                <View>
+                <View style={styles.leftBtn}>
                     {/*左边按钮*/}
-                    <TouchableOpacity style={styles.leftBtn}
-                                      onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                    <TouchableOpacity
+                                      onPress={() => this.backToday()}>
                         <Image source={{uri: 'today'}} style={styles.navLeftBar}/>
                     </TouchableOpacity>
                 </View>
@@ -212,21 +310,59 @@ var One = React.createClass({
         }
     },
 
+    /**
+     * 初始化载入页面
+     */
+    loadPage(){
+
+        //获取第一页后获取第二页
+      this.loadFirstPage(()=>{
+          this.getOneList((result)=>{
+              this.setState({
+                  nextOneData: result,
+                  isRefreshing: false,
+              });
+              this.addPage(this.state.nextOneData.data);
+          });
+      });
+    },
+
+    /**
+     * 第一页获取
+     * @param loadFirstSuccess 回调
+     */
+    loadFirstPage(loadFirstSuccess){
+        this.getOneList((result)=>{
+            this.setState({
+                curOneData: result,
+                isRefreshing: false,
+                cachePage:1,
+                date:result.data.weather.date
+            });
+            this.addPage(this.state.curOneData.data);
+            loadFirstSuccess();
+        });
+    },
+
 
     /**
      * 获取内容列表
+     * @param onSuccess
      */
-    getOneList() {
-        NetUtil.get(ServerApi.OneList, null, (result) => {
-            this.setState({
-                oneData: result,
-                isRefreshing: false,
-            });
+    getOneList(onSuccess) {
+        var lastDate=DateUtil.getLastDate(this.state.date);
+        var url=ServerApi.OneList.replace('{date}', this.state.date=='0'?'0':lastDate);
+        this.setState({
+            date:lastDate
+        });
 
-            console.log(result);
+        NetUtil.get(url, null, (result) => {
+            onSuccess(result);
+
         }, (error) => {
             this.refs.toast.close('error' + error, 500)
         });
+
     },
 
 
@@ -236,7 +372,7 @@ var One = React.createClass({
      * @returns {string}
      */
     getDateYear() {
-        var yearMonthDay = this.state.oneData.data.weather.date;
+        var yearMonthDay = this.state.curOneData.data.weather.date;
         return yearMonthDay.substring(0, 4);
     },
 
@@ -246,7 +382,7 @@ var One = React.createClass({
      * @returns {string}
      */
     getDateMonth() {
-        var yearMonthDay = this.state.oneData.data.weather.date;
+        var yearMonthDay = this.state.curOneData.data.weather.date;
         return yearMonthDay.substring(5, 7);
     },
 
@@ -256,7 +392,7 @@ var One = React.createClass({
      * @returns {string}
      */
     getDateDay() {
-        var yearMonthDay = this.state.oneData.data.weather.date;
+        var yearMonthDay = this.state.curOneData.data.weather.date;
         return yearMonthDay.substring(8, 10);
     },
 
@@ -265,9 +401,9 @@ var One = React.createClass({
      * @returns {string}
      */
     getWeatherInfo() {
-        var cityName = this.state.oneData.data.weather.city_name;
-        var climate = this.state.oneData.data.weather.climate;
-        var temperature = this.state.oneData.data.weather.temperature;
+        var cityName = this.state.curOneData.data.weather.city_name;
+        var climate = this.state.curOneData.data.weather.climate;
+        var temperature = this.state.curOneData.data.weather.temperature;
         return cityName + '  ' + climate + '  ' + temperature;
     },
 
@@ -301,7 +437,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width,
         justifyContent: 'center',
-        borderBottomWidth: 0.2,
+        borderBottomWidth: width*0.00046,
         borderBottomColor: 'gray'
     },
     weatherText: {
@@ -337,6 +473,7 @@ const styles = StyleSheet.create({
     navLeftBar: {
         width: width * 0.05 * 2.15,
         height: width * 0.05,
+
     },
     navRightBar: {
         width: width * 0.05,
@@ -348,13 +485,18 @@ const styles = StyleSheet.create({
     },
     leftBtn: {
         position: 'absolute',
-        left: width * 0.05,
+        left: width * 0.038,
     },
     bottomLine: {
         backgroundColor: '#EEEEEE',
         height: width * 0.024,
         width: width
     },
+    text: {
+        color: '#fff',
+        fontSize: 30,
+        fontWeight: 'bold',
+    }
 });
 
 module.exports = One;

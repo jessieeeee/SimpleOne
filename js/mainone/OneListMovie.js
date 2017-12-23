@@ -22,7 +22,7 @@ import DateUtils from "../util/DateUtil";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-
+import DateUtil from "../util/DateUtil";
 var OneListMovie = React.createClass({
 
     //初始化变量
@@ -70,7 +70,7 @@ var OneListMovie = React.createClass({
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{this.showDate()}</Text>
+                    <Text style={styles.date}>{DateUtil.showDate(this.props.postDate)}</Text>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -131,22 +131,6 @@ var OneListMovie = React.createClass({
         tempStr = this.props.userName.split(' ');
         return '文 / ' + tempStr[0];
 
-    },
-
-    /**
-     * 日期显示
-     * @returns {*}
-     */
-    showDate() {
-        var tempStr = new Array();
-        tempStr = this.props.postDate.split(' ');
-        console.log(DateUtils.getCurrentDateFormat());
-        //是今天
-        if (DateUtils.getCurrentDateFormat() == tempStr[0]) {
-            return '今天';
-        } else {
-            return tempStr[0];
-        }
     },
 
     /**

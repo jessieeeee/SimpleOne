@@ -12,31 +12,35 @@ import {
     View,
     Image,
     TouchableOpacity,
-    ListView,
+    FlatList,
 } from 'react-native';
+
+
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-var ServerApi=require('../ServerApi');
+
+var ServerApi = require('../ServerApi');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-//设置数据源
-var ds = new ListView.DataSource({
-    //返回条件，任意两条不等
-    rowHasChanged: (r1, r2) => r1 != r2
 
-});
+const VIEWABILITY_CONFIG = {
+    minimumViewTime: 3000,
+    viewAreaCoveragePercentThreshold: 100,
+    waitForInteraction: true,
+};
+
 var AllListTopic = React.createClass({
 
 
     getDefaultProps() {
         return {
-            showNum: 10 ,//展示个数
+            showNum: 10,//展示个数
             refreshView: false, //刷新
-            loadMore: false, //加载更多
+            loading: false, //加载更多
             startId: 0,  //请求起始id
-
+            endId: 0,
             // 外层回调函数参
-            getEndId:null,
+            getEndId: null,
         }
     },
 
@@ -45,6 +49,7 @@ var AllListTopic = React.createClass({
         return {
             topic: null,
             dataSource: null,
+
         };
     },
 
@@ -59,8 +64,11 @@ var AllListTopic = React.createClass({
      * 父组件传参变化回调
      * @param nextProps
      */
-    componentWillReceiveProps(nextProps){
-        if(nextProps.refreshView){
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.refreshView) {
+            console.log('刷新了');
+            // ImageCache.get().clear();
             this.getTopicData();
         }
     },
@@ -85,58 +93,102 @@ var AllListTopic = React.createClass({
     renderList() {
         if (this.state.dataSource !== null) {
             return (
-                <ListView dataSource={this.state.dataSource}
-                          renderRow={this.renderRow}
-                      >
+                <FlatList data={this.state.dataSource}
+                          renderItem={this.renderRow}
+                          keyExtractor={(item, index) => item.id}
+                          onViewableItemsChanged={(info) => {
+                              console.log('是否可见');
+                              console.log(info);
+                          }}
+
+                          viewabilityConfig={VIEWABILITY_CONFIG}
+                >
                     }
 
-                </ListView>
+                </FlatList>
             );
         }
     },
+
     // 单个item返回 线性布局
-    renderRow(rowData, sectionID, rowID, highlightRow) {
+    renderRow(rowData) {
         console.log(rowData);
-        return (
-            <TouchableOpacity activeOpacity={0.5}
-                              onPress={() => this.refs.toast.show('点击了' + rowID + '行', DURATION.LENGTH_LONG)}>
-                <View style={styles.contentContainer}>
-                    {/*上面的图片*/}
-                    <Image source={{uri: rowData.cover}} style={styles.TopImage}>
-                    </Image>
-                    {/*下面的文字*/}
-                    <Text style={styles.bottomText}>
-                        {rowData.title}
-                    </Text>
-                </View>
+        if (typeof(rowData) !== 'undefined') {
+            return (
+                <TouchableOpacity activeOpacity={0.5}
+                                  onPress={() => this.refs.toast.show('点击了' + rowData.index + '行', DURATION.LENGTH_LONG)}>
+                    <View style={styles.contentContainer}>
+                        {this.renderImage(rowData)}
+                        {/*下面的文字*/}
+                        <Text style={styles.bottomText}>
+                            {rowData.item.title}
+                        </Text>
+                    </View>
 
 
-            </TouchableOpacity>
-        )
+                </TouchableOpacity>
+            )
+        }
+
     },
 
+    /*上面的图片*/
+    renderImage(rowData) {
+        return (
+            <Image source={{uri: rowData.item.cover}}
+                         style={styles.TopImage}/>
+        );
+    },
     // 请求专题数据
     getTopicData() {
-        var url=ServerApi.AllTopic.replace('{id}',this.props.startId);
+        var itemArr = []; //把显示数据放到一个数组里
+        var url = ServerApi.AllTopic.replace('{id}', this.props.startId);
+
         NetUtils.get(url, null, (result) => {
             this.setState({
                 topic: result,
             });
-
-            var itemArr=[];
-            for(var i=0;i<this.props.showNum;i++){
-                itemArr.push(this.state.topic.data[i]);
+            var end = false;
+            if (this.state.topic.data.length >= this.props.showNum) {
+                for (var i = 0; i < this.props.showNum; i++) {
+                    console.log(this.state.topic.data[i].cover);
+                    itemArr.push(this.state.topic.data[i]);
+                    // let sss = ImageCache.get().getPath(this.state.topic.data[i].cover);
+                    // console.log('path:' + sss);
+                    // ImageCache.get().on(this.state.topic.data[i].cover, observer, true);
+                }
+                console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
+                this.setState({
+                    endId: this.state.topic.data[this.props.showNum - 1].id
+                });
+                this.props.getEndId(this.state.topic.data[this.props.showNum - 1].id, end);
+            }
+            //如果专题的数据数量小于显示数量，直接全部放进去
+            else {
+                for (var i = 0; i < this.state.topic.data.length; i++) {
+                    console.log(this.state.topic.data[i].cover);
+                    itemArr.push(this.state.topic.data[i]);
+                }
+                end = true;
+                this.setState({
+                    endId: this.state.topic.data[this.props.showNum - 1].id
+                });
+                console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
+                this.props.getEndId(this.state.topic.data[this.state.topic.data.length - 1].id, end);
             }
 
+
+            //将这个数组作为数据源
             this.setState({
-                dataSource: ds.cloneWithRows(itemArr),
+                dataSource: itemArr,
             });
-            this.props.getEndId(this.state.topic.data[this.props.showNum].id);
-            console.log(result);
+
         }, (error) => {
             this.refs.toast.close('error' + error, 500)
         });
-    }
+    },
+
+
 });
 
 const styles = StyleSheet.create({
@@ -144,23 +196,23 @@ const styles = StyleSheet.create({
     contentContainer: {
         backgroundColor: 'white',
         justifyContent: 'center',
-        borderBottomColor:'#EEEEEE',
+        borderBottomColor: '#EEEEEE',
         borderBottomWidth: width * 0.028,
 
     },
 
     TopImage: {
-        margin:width*0.045,
+        margin: width * 0.045,
         width: width * 0.9,
         height: width * 0.54,
     },
     bottomText: {
-        marginLeft:width*0.045,
-        marginRight:width*0.045,
+        marginLeft: width * 0.045,
+        marginRight: width * 0.045,
         marginTop: width * 0.01,
         marginBottom: width * 0.04,
         color: '#333333',
-        fontSize:width*0.042
+        fontSize: width * 0.042
     }
 });
 

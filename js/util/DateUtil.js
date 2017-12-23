@@ -90,7 +90,7 @@ export default class DateUtil extends Component{
                 numStr=this.chnNumChar[day%10];
             }
             if(day/10>=2){
-                numFirstStr=this.chnNumChar[day/10];
+                numFirstStr=this.chnNumChar[parseInt(day/10)];
             }
             return numFirstStr+'十'+ numStr;
         }else{
@@ -106,5 +106,57 @@ export default class DateUtil extends Component{
         var dates = new Date();
         var d = dates.getDay();
         return d;
+    }
+
+
+    /**
+     * 日期显示
+     * @returns {*}
+     */
+    static showDate(curdate) {
+        var tempStr = new Array();
+        tempStr = curdate.split(' ');
+        //是今天
+        if (DateUtil.getCurrentDateFormat() == tempStr[0]) {
+            return '今天';
+        } else {
+            return tempStr[0];
+        }
+    }
+
+    /**
+     * 获取前一天日期
+     * @param curDate 当前日期string
+     */
+    static getLastDate(curDate){
+        console.log('当前日期'+curDate);
+        var array =  curDate.split("-");
+        var dt = new Date(array[0], array[1]-1, array[2]);
+        var dateStr = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt,-1));//设置天数 -1 天
+        return dateStr;
+    }
+
+    /**
+     * 在指定日期上加减
+     * @param AddDayCount 加减参数
+     * @returns {Date}
+     */
+    static getDateForAddDay(date,AddDayCount) {
+        date.setDate(date.getDate()+AddDayCount);//获取AddDayCount天后的日期
+        return date;
+    }
+
+    /**
+     *  date转sting
+     * @param date
+     * @returns {string}
+     */
+    static dateConverStr(date){
+        console.log(date);
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;//获取当前月份的日期
+        var d = date.getDate();
+        console.log(y+"-"+m+"-"+d);
+        return y+"-"+m+"-"+d;
     }
 }

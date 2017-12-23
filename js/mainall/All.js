@@ -31,11 +31,13 @@ var AllListTopic = require('./AllListTopic');
 var AllListAuthor = require('./AllListAuthor');
 // 问所有人
 var AllListQuestion = require('./AllListQuestion');
+// 搜索界面
+var Search=require('../search/Search');
 
 // 加载更多的view
 var LoadingMore = require('../LoadingMore');
-
-
+var key=9;
+var bottomList = [];
 var All = React.createClass({
 
     /**
@@ -45,8 +47,11 @@ var All = React.createClass({
     getInitialState() {
         return {
             isRefreshing: false,
-            loadMore: false,
-            startId: 0,
+            loadMore: false, //底部是否显示更多列表
+            loading: false,//是否正在加载
+            startId: 0, //主题请求开始id
+            lastId: 0, //记录上一次请求id
+            isEnd:false//是否到末尾标记
         }
 
     },
@@ -67,7 +72,7 @@ var All = React.createClass({
                 }>
                     {this.renderAllItem()}
 
-                    {this.renderLoadMoreView()}
+                    {this.renderLoading()}
 
                     {this.renderLoadMoreList()}
                 </ScrollView>
@@ -87,17 +92,46 @@ var All = React.createClass({
      * scrollview滑动回调
      */
     onScroll(event) {
-        if (this.state.loadMore) {
-            return;
-        }
         let y = event.nativeEvent.contentOffset.y;
+        // console.log('滑动距离' + y);
         let height = event.nativeEvent.layoutMeasurement.height;
+        // console.log('列表高度' + height);
         let contentHeight = event.nativeEvent.contentSize.height;
+        // console.log('内容高度' + contentHeight);
+        // console.log('判断条件' + (y + height));
         if (y + height >= contentHeight - 20) {
-            console.log('in');
-            this.setState({
-                loadMore: true
-            });
+            console.log('触发加载更多');
+            //如果列表没有结束
+            if(this.state.isEnd!=true){
+                //如果最后一次请求起始id为0或者当前请求起始id不等于最后一次请求起始id,添加更多列表
+                if(this.state.lastId==0||(this.state.lastId!==0&&this.state.lastId!==this.state.startId)){
+                    //放入长度为5的列表
+                    key++;
+                    this.setState({
+                        lastId:this.state.startId,
+                    });
+                    bottomList.push(
+                        <AllListTopic key={key} showNum={5} startId={this.state.startId} loading={this.state.loading}
+                                      getEndId={(endId,end) => {
+                                          console.log('回调了' + endId+end);
+                                          this.setState({
+                                              startId: endId,
+                                              loading: false,
+                                              isEnd:end,
+                                          });
+
+                                      }}/>
+
+                    );
+                    //设置正在加载和更多列表标记
+                    this.setState({
+                        loadMore: true,
+                        loading: true,
+                    });
+                }
+
+            }
+
         }
     },
 
@@ -110,7 +144,8 @@ var All = React.createClass({
 
         setTimeout(() => {
             this.setState({
-                isRefreshing: false
+                isRefreshing: false,
+                loadMore: false
             });
         }, 1000);
 
@@ -127,29 +162,22 @@ var All = React.createClass({
         } else {
             //如果正在加载更多,添加这个专题列表
             if (this.state.loadMore) {
-                return (
-                    <AllListTopic key={9} showNum={5} startId={this.state.startId} getEndId={(endId) => {
-                        this.setState({
-                            startId: endId,
-                            loadMore: false
-                        })
-                    }}/>
-                );
+                console.log('最底部列表起始id' + this.state.startId);
+                return bottomList;
+
             }
         }
 
     },
 
     /**
-     * 显示加载更多view
+     * 显示正在加载
      */
-    renderLoadMoreView(){
-        if(this.state.loadMore){
-            console.log('加载更多');
-            return (
-                <LoadingMore/>
-            );
-        }
+    renderLoading() {
+
+        return (
+            <LoadingMore loading={this.state.loading}/>
+        );
     },
 
     /**
@@ -164,12 +192,26 @@ var All = React.createClass({
 
                 {/*右边按钮*/}
                 <TouchableOpacity style={styles.rightBtn}
-                                  onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                                  onPress={() => this.pushToSearch()}>
                     <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
                 </TouchableOpacity>
             </View>
         );
     },
+
+    /**
+     * 跳转到搜索页
+     * @param url
+     */
+    pushToSearch(){
+        this.props.navigator.push(
+            {
+                component: Search,
+            }
+        )
+    },
+
+
     /**
      * 渲染所有的item
      */
@@ -191,7 +233,7 @@ var All = React.createClass({
         );
         // 渲染专题列表
         itemArr.push(
-            <AllListTopic key={4} showNum={14} startId={0} getEndId={(endId) => {
+            <AllListTopic key={4} showNum={14} refreshView={this.state.isRefreshing} startId={0} getEndId={(endId,end) => {
                 this.setState({
                     startId: endId
                 })
@@ -200,7 +242,7 @@ var All = React.createClass({
 
         // 渲染热门作者
         itemArr.push(
-            <AllListAuthor key={5}/>
+            <AllListAuthor key={5} refreshView={this.state.isRefreshing}/>
         );
 
         itemArr.push(
@@ -209,7 +251,7 @@ var All = React.createClass({
 
         //问所有人
         itemArr.push(
-            <AllListQuestion key={7}/>
+            <AllListQuestion key={7} refreshView={this.state.isRefreshing}/>
         );
 
         itemArr.push(
