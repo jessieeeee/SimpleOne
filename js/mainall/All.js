@@ -8,17 +8,16 @@ import React, {Component} from 'react';
 import {
     AppRegistry,
     StyleSheet,
-    ScrollView,
     Text,
     View,
     Image,
+    ActivityIndicator,
     TouchableOpacity,
     Platform,
-    RefreshControl,
 
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+import {PullView} from 'react-native-pull';
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 // 顶部的banner
@@ -32,11 +31,12 @@ var AllListAuthor = require('./AllListAuthor');
 // 问所有人
 var AllListQuestion = require('./AllListQuestion');
 // 搜索界面
-var Search=require('../search/Search');
+var Search = require('../search/Search');
+
 
 // 加载更多的view
-var LoadingMore = require('../LoadingMore');
-var key=9;
+var LoadingMore = require('../view/LoadingMore');
+var key = 9;
 var bottomList = [];
 var All = React.createClass({
 
@@ -51,31 +51,37 @@ var All = React.createClass({
             loading: false,//是否正在加载
             startId: 0, //主题请求开始id
             lastId: 0, //记录上一次请求id
-            isEnd:false//是否到末尾标记
+            isEnd: false//是否到末尾标记
         }
 
+    },
+    onPullRelease(resolve) {
+        //更改刷新状态
+        this.setState({isRefreshing: true});
+        //do something
+        setTimeout(() => {
+            resolve();
+            this.setState({
+                isRefreshing: false,
+                loadMore: false
+            });
+        }, 3000);
     },
 
     render() {
         return (
             <View style={styles.container}>
                 {this.renderNavBar()}
-                <ScrollView onScroll={this.onScroll} refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.isRefreshing}
-                        onRefresh={this.onRefresh}
-                        title="Loading..."
-                        titleColor="#00ff00"
-                        colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
-                        progressBackgroundColor="#ffffff"
-                    />
-                }>
+                <PullView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
+
                     {this.renderAllItem()}
 
                     {this.renderLoading()}
 
                     {this.renderLoadMoreList()}
-                </ScrollView>
+
+                </PullView>
+
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -83,6 +89,7 @@ var All = React.createClass({
                     positionValue={height * 0.24}
                     textStyle={{color: 'white'}}
                 />
+
             </View>
         );
     },
@@ -102,26 +109,25 @@ var All = React.createClass({
         if (y + height >= contentHeight - 20) {
             console.log('触发加载更多');
             //如果列表没有结束
-            if(this.state.isEnd!=true){
+            if (this.state.isEnd != true) {
                 //如果最后一次请求起始id为0或者当前请求起始id不等于最后一次请求起始id,添加更多列表
-                if(this.state.lastId==0||(this.state.lastId!==0&&this.state.lastId!==this.state.startId)){
+                if (this.state.lastId == 0 || (this.state.lastId !== 0 && this.state.lastId !== this.state.startId)) {
                     //放入长度为5的列表
                     key++;
                     this.setState({
-                        lastId:this.state.startId,
+                        lastId: this.state.startId,
                     });
                     bottomList.push(
                         <AllListTopic key={key} showNum={5} startId={this.state.startId} loading={this.state.loading}
-                                      getEndId={(endId,end) => {
-                                          console.log('回调了' + endId+end);
+                                      getEndId={(endId, end) => {
+                                          console.log('回调了' + endId + end);
                                           this.setState({
                                               startId: endId,
                                               loading: false,
-                                              isEnd:end,
+                                              isEnd: end,
                                           });
 
                                       }}/>
-
                     );
                     //设置正在加载和更多列表标记
                     this.setState({
@@ -135,21 +141,6 @@ var All = React.createClass({
         }
     },
 
-    /**
-     * 刷新操作
-     */
-    onRefresh() {
-        //更改刷新状态
-        this.setState({isRefreshing: true});
-
-        setTimeout(() => {
-            this.setState({
-                isRefreshing: false,
-                loadMore: false
-            });
-        }, 1000);
-
-    },
 
     /**
      * 添加尾部专题列表
@@ -203,7 +194,7 @@ var All = React.createClass({
      * 跳转到搜索页
      * @param url
      */
-    pushToSearch(){
+    pushToSearch() {
         this.props.navigator.push(
             {
                 component: Search,
@@ -217,7 +208,6 @@ var All = React.createClass({
      */
     renderAllItem() {
         var itemArr = [];
-        // 渲染底部item
         itemArr.push(
             <AllListBanner key={0} refreshView={this.state.isRefreshing}/>
         );
@@ -233,11 +223,12 @@ var All = React.createClass({
         );
         // 渲染专题列表
         itemArr.push(
-            <AllListTopic key={4} showNum={14} refreshView={this.state.isRefreshing} startId={0} getEndId={(endId,end) => {
-                this.setState({
-                    startId: endId
-                })
-            }}/>
+            <AllListTopic key={4} showNum={14} refreshView={this.state.isRefreshing} startId={0}
+                          getEndId={(endId, end) => {
+                              this.setState({
+                                  startId: endId
+                              })
+                          }}/>
         );
 
         // 渲染热门作者
@@ -269,7 +260,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#eeeeee',
     },
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
@@ -278,8 +269,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width,
         justifyContent: 'center',
-        borderBottomWidth: 0.2,
-        borderBottomColor: 'gray'
+        borderBottomColor:'#dddddd',
+        borderBottomWidth: 0.167
     },
 
     navRightBar: {

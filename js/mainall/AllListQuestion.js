@@ -100,7 +100,7 @@ var AllListQuestion = React.createClass({
             });
             console.log(result);
         }, (error) => {
-            this.refs.toast.close('error' + error, 500)
+            this.refs.toast.show('error' + error, 500)
         });
     }
 });

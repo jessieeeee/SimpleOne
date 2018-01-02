@@ -22,7 +22,7 @@ class SimpleOne extends React.Component {
             }}
             renderScene={(route,navigator)=>{
                 let Component = route.component;
-                return <Component {...route.passProps} navigator={navigator}/>;
+                return <Component {...route.passProps} navigator={navigator} route={route}/>;
             }}
         />
     )

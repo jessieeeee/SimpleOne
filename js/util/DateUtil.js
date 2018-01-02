@@ -125,11 +125,23 @@ export default class DateUtil extends Component{
     }
 
     /**
+     * 获取后一天日期
+     * @param curDate
+     * @returns {string}
+     */
+    static getNextDate(curDate){
+        console.log('当前日期'+curDate);
+        var array =  curDate.split("-");
+        var dt = new Date(array[0], array[1]-1, array[2]);
+        var dateStr = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, 1));//设置天数 -1 天
+        return dateStr;
+    }
+    /**
      * 获取前一天日期
      * @param curDate 当前日期string
      */
     static getLastDate(curDate){
-        console.log('当前日期'+curDate);
+        // console.log('当前日期'+curDate);
         var array =  curDate.split("-");
         var dt = new Date(array[0], array[1]-1, array[2]);
         var dateStr = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt,-1));//设置天数 -1 天
@@ -157,6 +169,13 @@ export default class DateUtil extends Component{
         var m = date.getMonth()+1;//获取当前月份的日期
         var d = date.getDate();
         console.log(y+"-"+m+"-"+d);
+        if(m<10){
+            m='0'+m;
+        }
+        if(d<10){
+            d="0"+d;
+        }
         return y+"-"+m+"-"+d;
     }
+
 }

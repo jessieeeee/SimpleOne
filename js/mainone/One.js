@@ -6,6 +6,7 @@
 
 import React, {Component} from 'react';
 import NetUtil from '../util/NetUtil';
+import constants from '../Constants';
 import {
     AppRegistry,
     StyleSheet,
@@ -15,12 +16,16 @@ import {
     Image,
     Platform,
     TouchableOpacity,
-    RefreshControl,
+    ActivityIndicator,
+    NativeModules,
+    Animated,
+    Easing
 } from 'react-native';
-
+let toast = NativeModules.ToastNative;
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
+
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var OneListTop = require('./OneListTop');
@@ -31,10 +36,10 @@ var OneListMovie = require('./OneListMovie');
 var OneListAudio = require('./OneListAudio');
 var Search=require('../search/Search');
 var ServerApi = require('../ServerApi');
+var ExpandMenu=require('./menu/ExpandMenu');
 
 var key=0;
 var itemPageArr=[]; //分页数组
-
 var One = React.createClass({
     /**
      * 初始化状态变量
@@ -44,13 +49,12 @@ var One = React.createClass({
         return {
             curOneData: null,  //缓存当前页
             nextOneData: null, //缓存下一页
-            isRefreshing: false,
             date: '0', //请求的日期
             curPage:0,//当前页数
+            animatedValue : new Animated.Value(0),
         }
 
     },
-
 
     /**
      * 发起网络请求
@@ -59,12 +63,39 @@ var One = React.createClass({
         this.loadPage();
     },
 
+    // 刷新释放回调
+    onPullRelease(resolve) {
+        //do something
+        console.log('one分页调刷新');
+        //发起请求
+        this.getOneList((result)=>{
+            this.setState({
+                curOneData: result,
+            });
+        });
+        setTimeout(() => {
+            resolve();
+        }, 3000);
 
+    },
+    //动画
+    animateLastDay () {
+        Animated.timing(
+            this.state.animatedValue,
+            {
+                toValue: 1,
+                duration: 2000,
+                easing: Easing.linear
+            }
+        ).start(() => this.animateLastDay())
+    },
     /**
      * 界面绘制
      * @returns {XML}
      */
     render() {
+
+
         return (
             <View style={styles.container}>
 
@@ -79,12 +110,10 @@ var One = React.createClass({
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
-                    position='bottom'
-                    positionValue={height * 0.24}
+                    position='top'
+                    positionValue={height * 0.4}
                     textStyle={{color: 'white'}}
                 />
-
-
             </View>
         );
     },
@@ -115,10 +144,11 @@ var One = React.createClass({
             this.getOneList((result)=>{
                 this.setState({
                     nextOneData: result,
-                    isRefreshing: false,
                 });
                 this.addPage(this.state.nextOneData.data);
             });
+
+
         }else{
             this.setState({
                 curPage: currentPage
@@ -126,44 +156,22 @@ var One = React.createClass({
         }
     },
 
+
     /**
      * 添加下一页
      */
     addPage(oneData){
         itemPageArr.push(
 
-            <ScrollView  key={key} scrollEventThrottle={50} refreshControl={
-                <RefreshControl
-                    refreshing={this.state.isRefreshing}
-                    onRefresh={this.onRefresh}
-                    title="Loading..."
-                    titleColor="#00ff00"
-                    colors={['#ff0000', '#00ff00', '#0000ff', '#3ad564']}
-                    progressBackgroundColor="#ffffff"
-                />
-            }>
+            <PullView  key={key} onPullRelease={this.onPullRelease} >
 
-            {this.renderAllItem(oneData)}
+                {this.renderAllItem(oneData)}
 
-            </ScrollView>
+            </PullView>
 
         );
         {key++}
 
-    },
-    /**
-     * 刷新操作
-     */
-    onRefresh() {
-        //更改刷新状态
-        this.setState({isRefreshing: true});
-        //发起请求
-        this.getOneList((result)=>{
-            this.setState({
-                curOneData: result,
-                isRefreshing: false,
-            });
-        });
     },
 
     /**
@@ -191,10 +199,21 @@ var One = React.createClass({
                 if (data.category == 0) {
                     //组件绑定数组
                     itemArr.push(
-                        <OneListTop key={key} topImgUrl={data.img_url} title={data.title} picInfo={data.pic_info}
-                                    forward={data.forward} wordsInfo={data.words_info} likeNum={data.like_count}/>
+                        <OneListTop key={key}
+                                    topImgUrl={data.img_url}
+                                    title={data.title}
+                                    picInfo={data.pic_info}
+                                    forward={data.forward}
+                                    wordsInfo={data.words_info}
+                                    likeNum={data.like_count}
+                                    date={this.state.date}
+                                    weather={this.state.curOneData.data.weather}
+                                    topText={data.volume}
+                                    navigator={this.props.navigator} />
                     );
+
                 }
+
                 //音乐
                 else if (data.category == 4) {
                     itemArr.push(
@@ -228,26 +247,50 @@ var One = React.createClass({
                     );
                 }
                 key++;
-                if (i !== oneData.content_list.length - 1) {
+                if (i !== 0) {
                     itemArr.push(
                         <View key={key} style={styles.bottomLine}/>
                     )
+                }else{
+                    itemArr.push(
+                        <View key={key} style={styles.menuLine}/>
+                    )
                 }
                 key++;
+                if(key==2){
+                    key=key+2;
+                }
             }
+            //添加菜单
+            if(oneData.menu!=null){
+                itemArr.splice(2,0,
+                    <ExpandMenu key={2} menu={oneData.menu} navigator={this.props.navigator} date={this.state.date} todayRadio={()=>{this.refs.toast.show('今晚22:30主播在这里等你', 1500)}}/>
+                );
+                itemArr.splice(3,0,
+                    <View key={3} style={styles.menuLine}/>
+                );
+            }
+            key++;
             // 渲染底部item
             itemArr.push(
-                <OneListItemBottom key={oneData.content_list.length * 2}/>
+                <OneListItemBottom key={key}/>
             );
             return itemArr;
         }
 
     },
 
+
     /**
      * 顶部导航bar
      */
     renderNavBar() {
+        // const movingMargin = this.state.animatedValue.interpolate({
+        //     inputRange: [0, 0.5],
+        //     outputRange: [0, height*0.06]
+        // });
+        {/*<Animated.Text style={[styles.dateText,{marginBottom:movingMargin}]} >{this.state.curOneData === null ? '' : this.getDateDay()}</Animated.Text>*/}
+
         return (
             <View style={styles.outNav}>
                 {/*左边按钮*/}
@@ -256,11 +299,11 @@ var One = React.createClass({
                 <View style={styles.centerTitle}>
                     {/*上面日期*/}
                     <View style={styles.date}>
-                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateYear()}</Text>
+                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(0, 4)}</Text>
                         <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
-                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateMonth()}</Text>
+                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(5, 7)}</Text>
                         <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
-                        <Text style={styles.dateText}>{this.state.curOneData === null ? '' : this.getDateDay()}</Text>
+                        <Text style={styles.dateText} >{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(8, 10)}</Text>
                     </View>
                     {/*下面天气*/}
                     <Text style={styles.weatherText}>
@@ -288,6 +331,10 @@ var One = React.createClass({
         this.props.navigator.push(
             {
                 component: Search,
+                params:{
+                    date:DateUtil.getNextDate(this.state.date).substring(0, 4)+'年'+DateUtil.getNextDate(this.state.date).substring(5, 7)+'月',
+
+                }
             }
         )
     },
@@ -302,7 +349,7 @@ var One = React.createClass({
                 <View style={styles.leftBtn}>
                     {/*左边按钮*/}
                     <TouchableOpacity
-                                      onPress={() => this.backToday()}>
+                                      onPress={() =>  toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})}>
                         <Image source={{uri: 'today'}} style={styles.navLeftBar}/>
                     </TouchableOpacity>
                 </View>
@@ -320,7 +367,6 @@ var One = React.createClass({
           this.getOneList((result)=>{
               this.setState({
                   nextOneData: result,
-                  isRefreshing: false,
               });
               this.addPage(this.state.nextOneData.data);
           });
@@ -335,10 +381,10 @@ var One = React.createClass({
         this.getOneList((result)=>{
             this.setState({
                 curOneData: result,
-                isRefreshing: false,
                 cachePage:1,
                 date:result.data.weather.date
             });
+            constants.curDate=result.data.weather.date;
             this.addPage(this.state.curOneData.data);
             loadFirstSuccess();
         });
@@ -360,41 +406,13 @@ var One = React.createClass({
             onSuccess(result);
 
         }, (error) => {
-            this.refs.toast.close('error' + error, 500)
+            this.refs.toast.show('error' + error, 500)
         });
 
     },
 
 
-    /**
-     * 获得年份
-     * @param date
-     * @returns {string}
-     */
-    getDateYear() {
-        var yearMonthDay = this.state.curOneData.data.weather.date;
-        return yearMonthDay.substring(0, 4);
-    },
 
-    /**
-     * 获得月份
-     * @param date
-     * @returns {string}
-     */
-    getDateMonth() {
-        var yearMonthDay = this.state.curOneData.data.weather.date;
-        return yearMonthDay.substring(5, 7);
-    },
-
-    /**
-     * 获得日期
-     * @param date
-     * @returns {string}
-     */
-    getDateDay() {
-        var yearMonthDay = this.state.curOneData.data.weather.date;
-        return yearMonthDay.substring(8, 10);
-    },
 
     /**
      * 得到天气信息
@@ -428,7 +446,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#eeeeee',
     },
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
@@ -437,8 +455,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width,
         justifyContent: 'center',
-        borderBottomWidth: width*0.00046,
-        borderBottomColor: 'gray'
+        borderBottomColor:'#dddddd',
+        borderBottomWidth: 0.167
     },
     weatherText: {
         textAlign: 'center',
@@ -453,6 +471,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'absolute',
         top: width * 0.01,
+        height:height*0.05,
     },
     centerTitle: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
@@ -492,11 +511,23 @@ const styles = StyleSheet.create({
         height: width * 0.024,
         width: width
     },
+    menuLine: {
+        backgroundColor: '#EEEEEE',
+        height: width * 0.012,
+        width: width
+    },
     text: {
         color: '#fff',
         fontSize: 30,
         fontWeight: 'bold',
-    }
+    },
+    refreshView:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: width*0.5,
+    },
+
 });
 
 module.exports = One;

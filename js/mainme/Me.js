@@ -16,10 +16,13 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 
+var Setting = require('../setting/Setting');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
+
 var Me = React.createClass({
     render() {
+
         return (
             <View style={styles.container}>
                 {/*背景*/}
@@ -36,7 +39,7 @@ var Me = React.createClass({
                     paddingLeft: width * 0.04
                 }}>
                     <TouchableOpacity activeOpacity={0.5}
-                                      onPress={() => this.refs.toast.show('点击了', DURATION.LENGTH_LONG)}>
+                                      onPress={() => this.pushToSetting()}>
                         <Image source={{uri: 'center_setting'}} style={{width: width * 0.05, height: width * 0.05}}/>
                     </TouchableOpacity>
                 </View>
@@ -45,11 +48,18 @@ var Me = React.createClass({
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.refs.toast.show('点击了', DURATION.LENGTH_LONG)}>
                     <Image source={{uri: 'head'}}
-                           style={{width: width * 0.17, height: width * 0.17, borderRadius: width * 0.4, resizeMode: 'stretch',}}/>
+                           style={{
+                               width: width * 0.17,
+                               height: width * 0.17,
+                               borderRadius: width * 0.4,
+                               resizeMode: 'stretch',
+                           }}/>
                     <Text style={styles.loginText}>
                         点击登录
                     </Text>
                 </TouchableOpacity>
+
+
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -59,7 +69,19 @@ var Me = React.createClass({
                 />
             </View>
         );
-    }
+    },
+
+    /**
+     * 跳转到搜索页
+     * @param url
+     */
+    pushToSetting() {
+        this.props.navigator.push(
+            {
+                component: Setting,
+            }
+        )
+    },
 });
 
 const styles = StyleSheet.create({

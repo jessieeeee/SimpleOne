@@ -20,6 +20,10 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
+var DisplayImg=require('../display/DisplayImg');
+var Remark=require('../remark/Remark');
+var Login=require('../login/Login');
+var Share=require('../share/Share');
 
 var OneListTop = React.createClass({
 
@@ -40,7 +44,11 @@ var OneListTop = React.createClass({
             picInfo: '标题竖线旁边的作者',
             forward: '下面的一句话',
             wordsInfo: '一句话下面的作者',
-            likeNum: 0
+            likeNum: 0,
+            topText:'',
+            date:'',
+            weather:'',
+
         }
     },
 
@@ -69,14 +77,14 @@ var OneListTop = React.createClass({
             <View style={styles.container}>
 
                 {/*顶部大图*/}
-                <TouchableOpacity onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                <TouchableOpacity onPress={() => this.pushToDisplay()}>
                     <Image source={{uri: this.props.topImgUrl} } style={{  width: width,
                         height: this.getHeight(this.state.originalW,this.state.originalH),
                         }}/>
                 </TouchableOpacity>
                 {/*标题和作者*/}
                 <Text style={styles.imgAuthor}>
-                    {this.props.title + '|' + this.props.picInfo}
+                    {this.props.title + ' | ' + this.props.picInfo}
                 </Text>
                 {/*一句话*/}
                 <Text style={styles.textForward}>
@@ -91,7 +99,7 @@ var OneListTop = React.createClass({
                     {/*左边按钮区域*/}
 
                     <TouchableOpacity style={styles.leftBtn}
-                                      onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                                      onPress={() => this.pushToRemark()}>
                         <View style={{flexDirection: 'row', width: width * 0.2, alignItems: 'center'}}>
                             <Image source={{uri: 'bubble_diary'}} style={styles.bottomBtnsBarIcon}/>
                             <Text style={{
@@ -114,13 +122,13 @@ var OneListTop = React.createClass({
                         </Text>
 
                         <TouchableOpacity style={styles.rightBtnIconCenter}
-                                          onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                                          onPress={() => this.pushToLogin()}>
 
                             <Image source={{uri: 'stow_default'}} style={styles.rightBtnIconCenter}/>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.rightBtnIconRight}
-                                          onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                                          onPress={() => this.pushToShare()}>
 
                             <Image source={{uri: 'share_image'}} style={styles.rightBtnIconRight}/>
                         </TouchableOpacity>
@@ -139,6 +147,88 @@ var OneListTop = React.createClass({
         );
     },
 
+    /**
+     * 跳转到大图
+     * @param url
+     */
+    pushToDisplay(){
+
+        this.props.navigator.push(
+            {
+                component: DisplayImg,
+                title:'展示大图',
+                params:{
+                    topText:this.props.topText,
+                    imgUrl:this.props.topImgUrl,
+                    bottomText:this.props.title + ' | ' + this.props.picInfo,
+                    originalW:this.state.originalW,
+                    originalH:this.state.originalH
+
+                }
+            }
+        )
+    },
+
+
+    /**
+     * 跳转到小记
+     * @param url
+     */
+    pushToRemark(){
+
+        this.props.navigator.push(
+            {
+                component: Remark,
+                title:'小记',
+                params:{
+                    date:this.props.date,
+                    weather:this.props.weather,
+                    imgUrl:this.props.topImgUrl,
+                    bottomText:this.props.title + ' | ' + this.props.picInfo,
+                    forward:this.props.forward,
+                    wordsInfo:this.props.wordsInfo,
+                    originalW:this.state.originalW,
+                    originalH:this.state.originalH
+                }
+            }
+        )
+    },
+
+
+
+    /**
+     * 跳转到登录
+     * @param url
+     */
+    pushToLogin(){
+
+        this.props.navigator.push(
+            {
+                component: Login,
+                title:'登录',
+                params:{
+
+                }
+            }
+        )
+    },
+
+    /**
+     * 跳转到分享
+     * @param url
+     */
+    pushToShare(){
+
+        this.props.navigator.push(
+            {
+                component: Share,
+                title:'分享',
+                params:{
+                    showlink:true
+                }
+            }
+        )
+    },
     //点击喜欢
     likeClick(){
         this.setState({

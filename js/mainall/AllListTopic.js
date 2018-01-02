@@ -10,9 +10,9 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
     TouchableOpacity,
     FlatList,
+    Image,
 } from 'react-native';
 
 
@@ -65,10 +65,8 @@ var AllListTopic = React.createClass({
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-
         if (nextProps.refreshView) {
             console.log('刷新了');
-            // ImageCache.get().clear();
             this.getTopicData();
         }
     },
@@ -153,11 +151,8 @@ var AllListTopic = React.createClass({
                 for (var i = 0; i < this.props.showNum; i++) {
                     console.log(this.state.topic.data[i].cover);
                     itemArr.push(this.state.topic.data[i]);
-                    // let sss = ImageCache.get().getPath(this.state.topic.data[i].cover);
-                    // console.log('path:' + sss);
-                    // ImageCache.get().on(this.state.topic.data[i].cover, observer, true);
                 }
-                console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
+                // console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
                 this.setState({
                     endId: this.state.topic.data[this.props.showNum - 1].id
                 });
@@ -173,7 +168,7 @@ var AllListTopic = React.createClass({
                 this.setState({
                     endId: this.state.topic.data[this.props.showNum - 1].id
                 });
-                console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
+                // console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
                 this.props.getEndId(this.state.topic.data[this.state.topic.data.length - 1].id, end);
             }
 
@@ -184,7 +179,7 @@ var AllListTopic = React.createClass({
             });
 
         }, (error) => {
-            this.refs.toast.close('error' + error, 500)
+            this.refs.toast.show('error' + error, 500)
         });
     },
 

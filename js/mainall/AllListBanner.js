@@ -46,7 +46,6 @@ var AllListBanner = React.createClass({
      */
     componentDidMount() {
         this.getBannerData();
-
     },
 
     /**
@@ -55,7 +54,6 @@ var AllListBanner = React.createClass({
      */
     componentWillReceiveProps(nextProps){
         if(nextProps.refreshView){
-            this.stopTimer();
             this.getBannerData();
         }
     },
@@ -66,12 +64,14 @@ var AllListBanner = React.createClass({
     startTimer() {
         //获得scrollView
         var scrollView = this.refs.sv_banner;
-
+        if(this.timer!=null){
+            this.clearInterval(this.timer);
+        }
         this.timer = this.setInterval(function () {
             //计算当前所在页数
             var activePage;
             // console.log("curPage:" + this.state.curPage);
-            if (this.state.curPage + 1 >= this.state.banner.data.length) {
+            if (this.state.banner!== 'undefined' && this.state.curPage + 1 >= this.state.banner.data.length) {
                 activePage = 0;
             } else {
                 activePage = parseInt(this.state.curPage + 1);
@@ -109,7 +109,7 @@ var AllListBanner = React.createClass({
             //开启定时器
             this.startTimer();
         }, (error) => {
-            this.refs.toast.close('error' + error, 500)
+            this.refs.toast.show('error' + error, 500)
         });
     },
 
