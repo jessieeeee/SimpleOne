@@ -48,7 +48,8 @@ var OneListTop = React.createClass({
             topText:'',
             date:'',
             weather:'',
-
+            shareInfo:null,
+            shareList:null,
         }
     },
 
@@ -224,7 +225,9 @@ var OneListTop = React.createClass({
                 component: Share,
                 title:'分享',
                 params:{
-                    showlink:true
+                    showlink:true,
+                    shareInfo:this.props.shareInfo,
+                    shareList:this.props.shareList
                 }
             }
         )

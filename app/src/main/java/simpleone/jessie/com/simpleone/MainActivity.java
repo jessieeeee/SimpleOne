@@ -12,6 +12,8 @@ import com.facebook.react.ReactRootView;
 import com.facebook.react.common.LifecycleState;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
+import com.jessie.u_share.UShare;
+import com.umeng.socialize.UMShareAPI;
 
 public class MainActivity extends AppCompatActivity
         implements DefaultHardwareBackBtnHandler {
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
+                .addPackage(new MyReactPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(mLifecycleState)
                 .build();
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
                 "SimpleOne", null);
 
         setContentView(mReactRootView);
+
+        UShare.init(this);
     }
 
     @Override
@@ -89,7 +94,15 @@ public class MainActivity extends AppCompatActivity
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onActivityResult(this,requestCode,
                     resultCode, data);
+            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    //...省略部分代码
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        UShare.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 
     @Override

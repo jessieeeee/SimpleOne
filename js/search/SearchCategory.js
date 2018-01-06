@@ -11,6 +11,7 @@ import {
     Text,
     View,
     Platform,
+    ActivityIndicator,
     TouchableOpacity,
     WebView,
     Image
@@ -21,7 +22,6 @@ var {width, height} = Dimensions.get('window');
 var WEBVIEW_REF = 'webview';
 import NetUtils from "../util/NetUtil";
 var serverApi = require('../ServerApi');
-
 var SearchCategory = React.createClass({
 
     /**
@@ -31,9 +31,18 @@ var SearchCategory = React.createClass({
         return {
             scalesPageToFit: true,
             HTML: '',
+            loading:false, //是否在加载
+            progress: 0,
+            backButtonEnabled: false,
+            forwardButtonEnabled: false,
+            url: '',
+            status: '',
+            scalesPageToFit: true,
+            animating: true,
         }
 
     },
+
 
     componentDidMount() {
         var url = serverApi.SearchCategory.replace('{category_id}', this.props.route.params.categoryId);
@@ -57,6 +66,7 @@ var SearchCategory = React.createClass({
                     <Text>{this.props.route.params.date}</Text>
                     <Image source={{uri: 'arrow_down_black'}} style={styles.arrow}/>
                 </View>
+
                 <WebView
                     ref={WEBVIEW_REF}
                     automaticallyAdjustContentInsets={false}
@@ -70,8 +80,24 @@ var SearchCategory = React.createClass({
                     startInLoadingState={true}
                     scalesPageToFit={this.state.scalesPageToFit}
                 />
+
+                {this.renderProgressBar()}
             </View>
         );
+    },
+
+    //渲染进度条
+    renderProgressBar(){
+      if(this.state.loading){
+          return(
+              <ActivityIndicator
+                  color="#dcdcdc"
+                  animating={this.state.animating}
+                  style={[styles.centering, {height: width*0.4}]}
+                  size="large"
+              />
+          );
+      }
     },
 
     onShouldStartLoadWithRequest(event) {
@@ -139,6 +165,8 @@ var SearchCategory = React.createClass({
                 break;
         }
     },
+
+
 });
 
 const styles = StyleSheet.create({
@@ -146,10 +174,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: 'white',
     },
     webView: {
-        backgroundColor: '#F5FCFF',
+        backgroundColor: 'white',
         height: height * 0.4,
         width: width,
     },
@@ -168,6 +196,13 @@ const styles = StyleSheet.create({
         borderBottomColor:'#dddddd',
         borderBottomWidth: 0.167
     },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        position:'absolute',
+        top:height*0.4,
+    },
+
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
         backgroundColor: 'white',

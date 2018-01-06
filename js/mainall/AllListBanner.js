@@ -64,9 +64,7 @@ var AllListBanner = React.createClass({
     startTimer() {
         //获得scrollView
         var scrollView = this.refs.sv_banner;
-        if(this.timer!=null){
-            this.clearInterval(this.timer);
-        }
+        this.stopTimer();
         this.timer = this.setInterval(function () {
             //计算当前所在页数
             var activePage;
@@ -92,7 +90,9 @@ var AllListBanner = React.createClass({
      * 停止计时器
      */
     stopTimer() {
-        this.clearInterval(this.timer);
+        if(this.timer!=null){
+            this.clearInterval(this.timer);
+        }
     },
 
     /**

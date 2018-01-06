@@ -1,15 +1,11 @@
 package simpleone.jessie.com.simpleone;
 
 import android.app.Application;
+import android.util.Log;
 
-import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
-import java.util.Arrays;
-import java.util.List;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 /**
  * @author JessieKate
@@ -17,32 +13,19 @@ import java.util.List;
  * @email lyj1246505807@gmail.com
  * @describe
  */
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application {
 
-
-
-    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-        @Override
-        public boolean getUseDeveloperSupport() {
-            return BuildConfig.DEBUG;
-        }
-
-        @Override
-        protected List<ReactPackage> getPackages() {
-            return Arrays.<ReactPackage>asList(
-                    new MainReactPackage()
-            );
-        }
-    };
-
-    @Override
-    public ReactNativeHost getReactNativeHost() {
-        return mReactNativeHost;
+    {
+        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
+        PlatformConfig.setQQZone("1105188803", "yE7Sg1o4vevLYBKf");
+        PlatformConfig.setSinaWeibo("784241162", "0720307710beb53a0382345be698a803", "http://sns.whalecloud.com");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
+        UMShareAPI.get(this);
+        Log.d("app", "onCreate: ");
     }
 }

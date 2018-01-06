@@ -21,7 +21,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-
+var Share=require('../share/Share');
 var OneListAudio = React.createClass({
 
     //初始化变量
@@ -66,7 +66,7 @@ var OneListAudio = React.createClass({
 
                         </View>
                         <TouchableOpacity
-                            onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                            onPress={() => this.pushToShare()}>
                             <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
                         </TouchableOpacity>
                     </View>
@@ -83,6 +83,25 @@ var OneListAudio = React.createClass({
         );
     },
 
+
+    /**
+     * 跳转到分享
+     * @param url
+     */
+    pushToShare(){
+
+        this.props.navigator.push(
+            {
+                component: Share,
+                title:'分享',
+                params:{
+                    showlink:true,
+                    shareInfo:this.props.shareInfo,
+                    shareList:this.props.shareList
+                }
+            }
+        )
+    },
 
     /**
      * 渲染喜欢数量

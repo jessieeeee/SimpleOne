@@ -23,6 +23,7 @@ import DateUtils from "../util/DateUtil";
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 import DateUtil from "../util/DateUtil";
+var Share=require('../share/Share');
 var OneListMovie = React.createClass({
 
     //初始化变量
@@ -84,7 +85,7 @@ var OneListMovie = React.createClass({
 
                         </View>
                         <TouchableOpacity
-                            onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                            onPress={() => this.pushToShare()}>
                             <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
                         </TouchableOpacity>
                     </View>
@@ -102,6 +103,24 @@ var OneListMovie = React.createClass({
     },
 
 
+    /**
+     * 跳转到分享
+     * @param url
+     */
+    pushToShare(){
+
+        this.props.navigator.push(
+            {
+                component: Share,
+                title:'分享',
+                params:{
+                    showlink:true,
+                    shareInfo:this.props.shareInfo,
+                    shareList:this.props.shareList
+                }
+            }
+        )
+    },
     /**
      * 渲染喜欢数量
      */

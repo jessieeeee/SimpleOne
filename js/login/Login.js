@@ -46,7 +46,7 @@ var Login=React.createClass({
 
                 <Text style={{color:'#dde0e2', fontSize:width*0.038}}>或者</Text>
 
-                <Image source={{uri:'phone_login_bg'}} style={{width:width*0.6,height:width*0.1}}/>
+                <Image source={{uri:'phone_login_bg'}} style={{width:width*0.35,height:width*0.048, marginTop:width*0.04}}/>
 
                 <Text style={[styles.description,{bottom:width*0.122}]}>创建账户即代表您同意</Text>
                 <Text style={[styles.description,{bottom:width*0.056}]}>使用条款和隐私政策</Text>
