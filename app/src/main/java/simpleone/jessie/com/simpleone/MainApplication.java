@@ -13,7 +13,7 @@ import com.umeng.socialize.UMShareAPI;
  * @email lyj1246505807@gmail.com
  * @describe
  */
-public class MainApplication extends Application {
+public class MainApplication extends Application   {
 
     {
         PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");
@@ -28,4 +28,6 @@ public class MainApplication extends Application {
         UMShareAPI.get(this);
         Log.d("app", "onCreate: ");
     }
+
+
 }

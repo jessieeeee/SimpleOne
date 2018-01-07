@@ -381,7 +381,7 @@ var One = React.createClass({
         if (this.state.showSearch) {
             return (
                 <TouchableOpacity style={styles.rightBtn}
-                                  onPress={() =>  toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
+                                  onPress={() => this.pushToSearch()
                                       }>
                     <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
                 </TouchableOpacity>
