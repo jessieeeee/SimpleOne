@@ -52,4 +52,11 @@ public class ToastModule extends ReactContextBaseJavaModule {
         }
         flag = !flag;
     }
+
+
+    // 使用 @ReactMethod注解返回react-native中可调用的 方法
+    @ReactMethod
+    public void showMsg(String message, int duration) {
+        Toast.makeText(getReactApplicationContext(), message, duration).show();
+    }
 }

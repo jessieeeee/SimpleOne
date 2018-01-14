@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
+import constants from "../Constants";
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 // 顶部的banner
@@ -75,11 +76,8 @@ var All = React.createClass({
                 <PullView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
                     {this.renderAllItem()}
-
-                    {this.renderLoading()}
-
                     {this.renderLoadMoreList()}
-
+                    {this.renderLoading()}
                 </PullView>
 
                 <Toast
@@ -209,21 +207,21 @@ var All = React.createClass({
     renderAllItem() {
         var itemArr = [];
         itemArr.push(
-            <AllListBanner key={0} refreshView={this.state.isRefreshing}/>
+            <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
         itemArr.push(
             <View key={1} style={styles.bottomLine}/>
         );
         // 渲染分类导航
         itemArr.push(
-            <AllCategoryGuide key={2}/>
+            <AllCategoryGuide key={2} navigator={this.props.navigator} />
         );
         itemArr.push(
             <View key={3} style={styles.bottomLine}/>
         );
         // 渲染专题列表
         itemArr.push(
-            <AllListTopic key={4} showNum={14} refreshView={this.state.isRefreshing} startId={0}
+            <AllListTopic key={4} showNum={14} refreshView={this.state.isRefreshing} startId={0} navigator={this.props.navigator}
                           getEndId={(endId, end) => {
                               this.setState({
                                   startId: endId
@@ -233,7 +231,7 @@ var All = React.createClass({
 
         // 渲染热门作者
         itemArr.push(
-            <AllListAuthor key={5} refreshView={this.state.isRefreshing}/>
+            <AllListAuthor key={5} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
 
         itemArr.push(
@@ -242,7 +240,7 @@ var All = React.createClass({
 
         //问所有人
         itemArr.push(
-            <AllListQuestion key={7} refreshView={this.state.isRefreshing}/>
+            <AllListQuestion key={7} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
 
         itemArr.push(
@@ -270,7 +268,7 @@ const styles = StyleSheet.create({
         width: width,
         justifyContent: 'center',
         borderBottomColor:'#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth:constants.divideLineWidth
     },
 
     navRightBar: {

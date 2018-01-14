@@ -11,6 +11,7 @@ import {
     Text,
     View,
     Image,
+    Modal,
     TouchableOpacity
 } from 'react-native';
 
@@ -18,19 +19,40 @@ var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
 var DisplayImg = React.createClass({
+    getDefaultProps() {
+        return {
+            duration: 10,
+            topText:'',
+            originalW:0,
+            originalH:0,
+            imgUrl:'',
+            bottomText:'',
+            isVisible:false,
+            onCancel:null,
+        }
+    },
+
+
     render() {
         return (
-
-        <TouchableOpacity style={styles.container} onPress={() => this.props.navigator.pop()}>
-                <Text style={styles.showText}>{this.props.route.params.topText}</Text>
-                <Image style={[styles.displayImg, {
-                    width: width * 0.8,
-                    height: this.getHeight(this.props.route.params.originalW, this.props.route.params.originalH)
-                }]} source={{uri: this.props.route.params.imgUrl}}/>
-                <Text style={styles.showText}>{this.props.route.params.bottomText}</Text>
-        </TouchableOpacity>
-    )
-        ;
+            <Modal
+                animationType={'fade'}
+                transparent={true}
+                visible={this.props.isVisible}
+                onRequestClose={() => {
+                    this.props.onCancel()
+                }}>
+                <TouchableOpacity style={styles.container} onPress={() => this.props.onCancel()}>
+                    <Text style={styles.showText}>{this.props.topText}</Text>
+                    <Image style={[styles.displayImg, {
+                        width: width * 0.8,
+                        height: this.getHeight(this.props.originalW, this.props.originalH)
+                    }]} source={{uri: this.props.imgUrl}}/>
+                    <Text style={styles.showText}>{this.props.bottomText}</Text>
+                </TouchableOpacity>
+            </Modal>
+        )
+            ;
     },
     //按图片宽度缩放
     getHeight(w, h) {
@@ -45,7 +67,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.7)',
+        backgroundColor: 'rgba(0, 0, 0, 0.74)'
     },
     displayImg: {
         marginTop: width * 0.04,
@@ -54,7 +76,6 @@ const styles = StyleSheet.create({
     showText: {
         textAlign: 'center',
         color: 'white',
-        marginLeft: 5,
     },
 });
 

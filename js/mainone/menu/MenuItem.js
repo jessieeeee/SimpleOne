@@ -71,6 +71,7 @@ var MenuItem = React.createClass({
                 title:'阅读',
                 params:{
                     data:this.props.data,
+                    entry:constants.MenuRead
                 }
             }
         )

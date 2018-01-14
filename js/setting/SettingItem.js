@@ -14,6 +14,7 @@ import {
     TouchableOpacity,
 
 } from 'react-native';
+import constants from '../Constants';
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height:width*0.1384,
         borderBottomColor:'#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth: constants.divideLineWidth
     },
     item: {
         fontSize: width*0.04,

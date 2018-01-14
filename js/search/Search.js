@@ -19,6 +19,7 @@ import {
 var SearchCategory=require('./SearchCategory');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
+
 var Search = React.createClass({
 
     getInitialState() {
@@ -87,8 +88,7 @@ var Search = React.createClass({
                 component: SearchCategory,
                 title:'搜索分类',
                 params:{
-                    categoryId:id,
-                    date:this.props.route.params.date
+                    categoryId:id
                 }
             }
         )

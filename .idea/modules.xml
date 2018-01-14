@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SimpleOne.iml" filepath="$PROJECT_DIR$/SimpleOne.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/node_modules/react-native-image-picker/android/react-native-image-picker.iml" filepath="$PROJECT_DIR$/node_modules/react-native-image-picker/android/react-native-image-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/u_share/u_share.iml" filepath="$PROJECT_DIR$/u_share/u_share.iml" />
     </modules>
   </component>

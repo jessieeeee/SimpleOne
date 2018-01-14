@@ -17,4 +17,36 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- 弹出框风格 -->
+    <style name="dialog_normal_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@color/wheel_bg</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="dialog_btn_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/dialog_button_bg</item>
+        <item name="android:text">@string/ensure</item>
+        <item name="android:textColor">@color/button_ensure</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="dialog_cutting_line_style">
+        <item name="android:layout_width">0.5dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@color/cutting_line</item>
+    </style>
+
+    <style name="popmenu_animation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/show</item>
+        <item name="android:windowExitAnimation">@anim/hide</item>
+    </style>
+
 </resources>

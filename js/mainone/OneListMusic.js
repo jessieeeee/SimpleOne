@@ -18,8 +18,9 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-import DateUtils from "../util/DateUtil";
 import DateUtil from "../util/DateUtil";
+import constants from '../Constants';
+var Read=require('../read/Read');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var Share=require('../share/Share');
@@ -28,34 +29,28 @@ var OneListCommon = React.createClass({
     //初始化变量
     getInitialState() {
         return {
-            like: false
+            like: false,
+            likeNum:this.props.data.like_count
         }
     },
 
     //要传入的参数
     getDefaultProps() {
         return {
-            userName: '用户',
-            title: '标题',
-            imgUrl: '音乐封面',
-            musicName: '音乐名称',
-            audioAuthor: '作者',
-            audioAlbum: '专辑',
-            forward: '音乐描述',
-            postDate: '发布的日期',
-            likeNum: 0,
+            data:null,
         }
     },
 
     //渲染
     render() {
         return (
+            <TouchableOpacity onPress={() => this.pushToRead()}>
             <View style={styles.container}>
                 <Text style={styles.category}>
                     - 音乐 -
                 </Text>
                 {/*标题*/}
-                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.data.title}</Text>
                 {/*用户*/}
                 <Text style={styles.author}>{this.getAuthor()}</Text>
                 <View style={styles.centerView}>
@@ -72,7 +67,7 @@ var OneListCommon = React.createClass({
                         }}/>
                     </View>
                     {/*用户下面的音乐封面*/}
-                    <Image source={{uri: this.props.imgUrl}} style={styles.centerImg}/>
+                    <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
                     <View style={{
                         width: width * 0.52,
                         height: width * 0.52, justifyContent: 'center',
@@ -89,11 +84,11 @@ var OneListCommon = React.createClass({
                 {/*音乐封面下的音乐名称，作者和专辑*/}
                 <Text style={styles.musicInfo}>{this.getMusicInfo()}</Text>
                 {/*音乐描述*/}
-                <Text style={styles.forward}>{this.props.forward}</Text>
+                <Text style={styles.forward}>{this.props.data.forward}</Text>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{DateUtil.showDate(this.props.postDate)}</Text>
+                    <Text style={styles.date}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -121,9 +116,26 @@ var OneListCommon = React.createClass({
                     textStyle={{color: 'white'}}
                 />
             </View>
+            </TouchableOpacity>
         );
     },
 
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead() {
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    data:this.props.data,
+                    entry:constants.OneRead
+                }
+            }
+        )
+    },
 
     /**
      * 跳转到分享
@@ -137,8 +149,8 @@ var OneListCommon = React.createClass({
                 title:'分享',
                 params:{
                     showlink:true,
-                    shareInfo:this.props.shareInfo,
-                    shareList:this.props.shareList
+                    shareInfo:this.props.data.share_info,
+                    shareList:this.props.data.share_list
                 }
             }
         )
@@ -147,7 +159,7 @@ var OneListCommon = React.createClass({
      * 渲染喜欢数量
      */
     renderlikeNum() {
-        if (this.props.likeNum > 0) {
+        if (this.state.likeNum > 0) {
             return (
                 <Text style={{
                     position: 'relative',
@@ -156,7 +168,7 @@ var OneListCommon = React.createClass({
                     fontSize: width * 0.024,
                     color: '#A7A7A7'
                 }}>
-                    {this.props.likeNum}
+                    {this.state.likeNum}
                 </Text>
             );
         }
@@ -166,7 +178,7 @@ var OneListCommon = React.createClass({
      * 获得歌曲信息
      */
     getMusicInfo() {
-        return this.props.musicName + ' · ' + this.props.audioAuthor + ' | ' + this.props.audioAlbum;
+        return this.props.data.music_name + ' · ' + this.props.data.audio_author + ' | ' + this.props.data.audio_album;
     },
 
     /**
@@ -175,7 +187,7 @@ var OneListCommon = React.createClass({
      */
     getAuthor() {
         var tempStr = new Array();
-        tempStr = this.props.userName.split(' ');
+        tempStr = this.props.data.author.user_name.split(' ');
         return '文 / ' + tempStr[0];
     },
 
@@ -184,6 +196,7 @@ var OneListCommon = React.createClass({
      */
     likeClick() {
         this.setState({
+            likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
     },
@@ -194,29 +207,13 @@ var OneListCommon = React.createClass({
      */
     showLikeIcon() {
         //喜欢
-        if (this.state.like === true) {
+        if (this.state.like) {
             return 'bubble_liked';
         } else {
             return 'bubble_like';
         }
     },
 
-    //点击喜欢
-    likeClick() {
-        this.setState({
-            like: !this.state.like
-        });
-    },
-
-    //根据当前状态，显示喜欢图标
-    showLikeIcon() {
-        //喜欢
-        if (this.state.like === true) {
-            return 'bubble_liked';
-        } else {
-            return 'bubble_like';
-        }
-    }
 });
 
 const styles = StyleSheet.create({

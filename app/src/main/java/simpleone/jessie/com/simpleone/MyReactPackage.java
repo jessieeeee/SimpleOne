@@ -1,14 +1,18 @@
 package simpleone.jessie.com.simpleone;
 
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.jessie.u_share.ULoginModule;
 import com.jessie.u_share.UShareModule;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
+
+import simpleone.jessie.com.simpleone.view.PickDateViewManger;
 
 
 /**
@@ -28,7 +32,7 @@ public class MyReactPackage implements ReactPackage {
      */
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Arrays.<ViewManager>asList(new PickDateViewManger());
     }
 
     /**
@@ -41,6 +45,7 @@ public class MyReactPackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new UShareModule(reactContext));
+        modules.add(new ULoginModule(reactContext));
         modules.add(new ToastModule(reactContext));
 
         return modules;

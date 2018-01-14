@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+import constants from '../Constants';
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var Share=require('../share/Share');
@@ -27,32 +27,32 @@ var OneListAudio = React.createClass({
     //初始化变量
     getInitialState() {
         return {
-            like: false
+            like: false,
+            likeNum:this.props.data.like_count
         }
     },
 
     //要传入的参数
     getDefaultProps() {
         return {
-            title: '标题',
-            imgUrl: '谁答下面的插图',
-            likeNum: 0,
+            data: null,
+            date:'',
         }
     },
 
     //渲染
     render() {
         return (
+            <TouchableOpacity onPress={() => this.pushToRead()}>
             <View style={styles.container}>
                 {/*背景*/}
-                <Image source={{uri: this.props.imgUrl}} style={styles.bg}/>
+                <Image source={{uri: this.props.data.img_url}} style={styles.bg}/>
                 {/*标题*/}
-                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.data.title}</Text>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
-                    <Text style={{color:'#a6a6a6',fontSize:width*0.08,marginLeft:width*0.04}}>·</Text>
                     {/*左边的按钮*/}
-                    <Image source={{uri:'aliwx_chatfrom_play_02'}} style={styles.leftIcon}/>
+                    <Image source={{uri:'voice_fm_00'}} style={styles.leftIcon}/>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -80,9 +80,30 @@ var OneListAudio = React.createClass({
                     textStyle={{color: 'white'}}
                 />
             </View>
+            </TouchableOpacity>
         );
     },
 
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead() {
+        if(this.props.data.content_type==8 && this.props.date!='' && this.props.date === constants.curDate ){
+            this.props.todayRadio();
+            return;
+        }
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    data:this.props.data,
+                    entry:constants.OneRead
+                }
+            }
+        )
+    },
 
     /**
      * 跳转到分享
@@ -96,8 +117,8 @@ var OneListAudio = React.createClass({
                 title:'分享',
                 params:{
                     showlink:true,
-                    shareInfo:this.props.shareInfo,
-                    shareList:this.props.shareList
+                    shareInfo:this.props.data.share_info,
+                    shareList:this.props.data.share_list
                 }
             }
         )
@@ -107,10 +128,10 @@ var OneListAudio = React.createClass({
      * 渲染喜欢数量
      */
     renderlikeNum(){
-       if(this.props.likeNum>0){
+       if(this.state.likeNum>0){
            return(
            <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024,color:'#A7A7A7'}}>
-               {this.props.likeNum}
+               {this.state.likeNum}
            </Text>
            );
        }
@@ -122,6 +143,7 @@ var OneListAudio = React.createClass({
      */
     likeClick(){
         this.setState({
+            likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
     },
@@ -132,29 +154,13 @@ var OneListAudio = React.createClass({
      */
     showLikeIcon(){
         //喜欢
-        if(this.state.like===true){
+        if(this.state.like){
             return 'bubble_liked';
         }else{
             return 'bubble_like';
         }
     },
 
-    //点击喜欢
-    likeClick(){
-        this.setState({
-            like: !this.state.like
-        });
-    },
-
-    //根据当前状态，显示喜欢图标
-    showLikeIcon(){
-        //喜欢
-        if(this.state.like===true){
-            return 'bubble_liked';
-        }else{
-            return 'bubble_like';
-        }
-    }
 });
 
 const styles = StyleSheet.create({
@@ -190,9 +196,9 @@ const styles = StyleSheet.create({
         height: Platform.OS == 'ios' ? height * 0.06 : height * 0.07,
     },
     leftIcon:{
-        width: width * 0.066,
-        height: width * 0.09,
-
+        marginLeft:width*0.04,
+        width: width * 0.06,
+        height: width * 0.06,
     },
     rightBtn: {
         flexDirection: 'row',

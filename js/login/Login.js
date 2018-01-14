@@ -12,9 +12,13 @@ import {
     View,
     Image,
     Platform,
+    NativeModules,
     TouchableOpacity,
     StatusBar
 } from 'react-native';
+import constants from '../Constants';
+let toast = NativeModules.ToastNative;
+let ULogin = NativeModules.ULogin;
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
@@ -30,19 +34,19 @@ var Login=React.createClass({
                 <Image source={{uri:'login_bg'}} style={{width:width,height:height,position:'absolute', top:0}}/>
 
                 {this.renderNavBar()}
-                <View style={[styles.btnView,{marginTop:width*0.13}]}>
+                <TouchableOpacity style={[styles.btnView,{marginTop:width*0.13}]} onPress={()=>{this.platformLogin(constants.PlatformWeChat)}}>
                     <Image source={{uri:'bubble_wechat_night'}} style={styles.btnIcon}/>
                     <Text style={styles.btnText}>微信</Text>
-                </View>
-                <View style={styles.btnView}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnView} onPress={()=>{this.platformLogin(constants.PlatformSina)}}>
                     <Image source={{uri:'bubble_weibo_night'}} style={styles.btnIcon}/>
                     <Text style={styles.btnText}>微博</Text>
-                </View>
+                </TouchableOpacity>
 
-                <View style={styles.btnView}>
+                <TouchableOpacity style={styles.btnView} onPress={()=>{this.platformLogin(constants.PlatformQQ)}}>
                     <Image source={{uri:'bubble_qq_night'}} style={styles.btnIcon}/>
                     <Text style={styles.btnText}>QQ</Text>
-                </View>
+                </TouchableOpacity>
 
                 <Text style={{color:'#dde0e2', fontSize:width*0.038}}>或者</Text>
 
@@ -52,6 +56,24 @@ var Login=React.createClass({
                 <Text style={[styles.description,{bottom:width*0.056}]}>使用条款和隐私政策</Text>
             </View>
         );
+    },
+
+    /**
+     * 调起原生登录模块
+     * @param platform
+     */
+    platformLogin(platform) {
+        console.log('调登录')
+        ULogin.login(platform,
+            (platform) => {
+                console.log(platform + '成功');
+            },
+            (platform, msg) => {
+                console.log(platform + '失败' + msg);
+            },
+            (platform) => {
+                console.log(platform + '取消');
+            });
     },
 
     /**

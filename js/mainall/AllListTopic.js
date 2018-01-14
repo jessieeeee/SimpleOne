@@ -18,11 +18,11 @@ import {
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-
+import constants from "../Constants";
 var ServerApi = require('../ServerApi');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-
+var Read=require('../read/Read');
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -110,11 +110,11 @@ var AllListTopic = React.createClass({
 
     // 单个item返回 线性布局
     renderRow(rowData) {
-        console.log(rowData);
+        // console.log(rowData);
         if (typeof(rowData) !== 'undefined') {
             return (
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.refs.toast.show('点击了' + rowData.index + '行', DURATION.LENGTH_LONG)}>
+                                  onPress={() => this.pushToRead(rowData.item)}>
                     <View style={styles.contentContainer}>
                         {this.renderImage(rowData)}
                         {/*下面的文字*/}
@@ -183,7 +183,23 @@ var AllListTopic = React.createClass({
         });
     },
 
-
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead(rowData) {
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    contentId:rowData.content_id,
+                    contentType:rowData.category,
+                    entry:constants.AllRead
+                }
+            }
+        )
+    },
 });
 
 const styles = StyleSheet.create({

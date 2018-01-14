@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/dialog_normal_style"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:id="@+id/date_select_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <simpleone.jessie.com.simpleone.view.WheelView
+            android:id="@+id/select_date_wheel_year_wheel"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_weight="1" />
+
+        <simpleone.jessie.com.simpleone.view.WheelView
+            android:id="@+id/select_date_month_wheel"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_weight="1" />
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_above="@+id/select_date_sure_ly"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:id="@+id/select_date_sure_ly"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_select_layout"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/select_date_sure"
+            style="@style/dialog_btn_style" />
+    </LinearLayout>
+
+</RelativeLayout>

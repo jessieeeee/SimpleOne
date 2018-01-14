@@ -11,7 +11,9 @@ import {
     Text,
     View,
     Image,
-    Platform
+    Platform,
+    BackHandler,
+    NativeModules
 } from 'react-native';
 
 import {Navigator} from 'react-native-deprecated-custom-components';
@@ -19,7 +21,7 @@ import {Navigator} from 'react-native-deprecated-custom-components';
  * 导入外部的组件类
  * */
 import TabNavigator from 'react-native-tab-navigator';
-
+let toast = NativeModules.ToastNative;
 var ONE = require('./mainone/One');
 var ALL = require('./mainall/All');
 var ME = require('./mainme/Me');
@@ -28,13 +30,17 @@ var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var barHeight = height * 0.082;
 
-
+var lastBackPressed=0;
 var Main = React.createClass({
     getInitialState() {
         return {
             selectedTab: 'one',
-            curBarHeight: 0
+            curBarHeight: 0,
         }
+    },
+
+    componentDidMount(){
+        BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     },
 
     render() {
@@ -96,6 +102,25 @@ var Main = React.createClass({
 
         )
 
+
+    },
+
+    onBackAndroid(){
+        const nav = this.props.navigator;
+        const routers = nav.getCurrentRoutes();
+        if (routers.length > 1) {
+            // 默认行为： 退出当前界面。
+            nav.pop();
+            return true;
+        }else{
+            if (lastBackPressed && lastBackPressed + 2000 >= Date.now()) {
+                //最近2秒内按过back键，可以退出应用。
+                return false;
+            }
+            lastBackPressed = Date.now();
+            toast.showMsg('再按一次退出应用', toast.SHORT);
+            return true;
+        }
 
     }
 

@@ -16,16 +16,18 @@ import {
     Image,
     Platform,
     TouchableOpacity,
-    ActivityIndicator,
     NativeModules,
     Animated,
     Easing
 } from 'react-native';
 
-let toast = NativeModules.ToastNative;
+var DisplayImg = require('../display/DisplayImg');
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
+
+let toast = NativeModules.ToastNative;
+
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
@@ -55,7 +57,8 @@ var One = React.createClass({
             curPage: 0,//当前页数
             animatedValue: new Animated.Value(0),
             showSearch: false,//是否显示搜索按钮
-            showArrow: false//是否显示箭头
+            showArrow: false,//是否显示箭头
+            showDisplay:false//是否显示大图
         }
 
     },
@@ -112,6 +115,7 @@ var One = React.createClass({
                     {this.renderPage()}
 
                 </ScrollView>
+                {this.renderDisplay()}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -123,6 +127,18 @@ var One = React.createClass({
         );
     },
 
+    renderDisplay() {
+        return (
+            <DisplayImg topText={this.state.topText}
+                        originalW={this.state.originalW}
+                        originalH={this.state.originalH}
+                        imgUrl={this.state.imgUrl}
+                        bottomText={this.state.bottomText}
+                        isVisible={this.state.showDisplay}
+                        onCancel={() => {this.setState({showDisplay: false})}}/>
+        )
+
+    },
     renderPage() {
         return itemPageArr;
     },
@@ -210,6 +226,7 @@ var One = React.createClass({
             curPage: 0
         });
     },
+
     /**
      * 列表item渲染
      * @param oneData
@@ -227,18 +244,20 @@ var One = React.createClass({
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
-                                    topImgUrl={data.img_url}
-                                    title={data.title}
-                                    picInfo={data.pic_info}
-                                    forward={data.forward}
-                                    wordsInfo={data.words_info}
-                                    likeNum={data.like_count}
                                     date={this.state.date}
                                     weather={this.state.curOneData.data.weather}
-                                    topText={data.volume}
-                                    shareInfo={data.share_info}
-                                    shareList={data.share_list}
-                                    navigator={this.props.navigator}/>
+                                    data={data}
+                                    navigator={this.props.navigator}
+                                    clickDisplay={(topText,imgUrl,bottomText,originalW,originalH)=>{
+                                        this.setState({
+                                            topText:topText,
+                                            imgUrl:imgUrl,
+                                            bottomText:bottomText,
+                                            originalW:originalW,
+                                            originalH:originalH,
+                                            showDisplay:true
+                                        })
+                                    }}/>
                     );
 
                 }
@@ -246,41 +265,30 @@ var One = React.createClass({
                 //音乐
                 else if (data.category == 4) {
                     itemArr.push(
-                        <OneListMusic key={key} imgUrl={data.img_url} title={data.title}
-                                      userName={data.author.user_name} musicName={data.music_name}
-                                      audioAuthor={data.audio_author} audioAlbum={data.audio_album}
-                                      forward={data.forward} postDate={data.post_date} likeNum={data.like_count}
-                                      shareInfo={data.share_info}
-                                      shareList={data.share_list}/>
+                        <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电影
                 else if (data.category == 5) {
                     itemArr.push(
-                        <OneListMovie key={key} imgUrl={data.img_url} title={data.title}
-                                      userName={data.author.user_name} subTitle={data.subtitle} forward={data.forward}
-                                      postDate={data.post_date} likeNum={data.like_count}
-                                      shareInfo={data.share_info}
-                                      shareList={data.share_list}/>
+                        <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电台
                 else if (data.category == 8) {
                     itemArr.push(
-                        <OneListAudio key={key} imgUrl={data.img_url} title={data.title} likeNum={data.like_count}
-                                      shareInfo={data.share_info}
-                                      shareList={data.share_list}/>
+                        <OneListAudio key={key} data={data} navigator={this.props.navigator} date={this.state.date}
+                                      todayRadio={() => {
+                                          this.refs.toast.show('今晚22:30主播在这里等你', 1500)
+                                      }}/>
                     );
                 }
                 //普通item
                 else {
                     itemArr.push(
-                        <OneListCommon key={key} category={data.category} userName={data.author.user_name}
-                                       title={data.title} imgUrl={data.img_url} forward={data.forward}
-                                       postDate={data.post_date} likeNum={data.like_count}
-                                       tagTitle={this.showOneStory(data)}
-                                       shareInfo={data.share_info}
-                                       shareList={data.share_list}/>
+                        <OneListCommon key={key}
+                                       navigator={this.props.navigator}
+                                       data={data}/>
                     );
                 }
                 key++;
@@ -365,7 +373,7 @@ var One = React.createClass({
         if (this.state.showArrow) {
             return (
                 <Image source={{uri: 'triangle_down'}}
-                       style={{position: 'absolute', bottom: width * 0.01, width: width * 0.02, height: width * 0.02}}/>
+                       style={{position: 'absolute', bottom: width * 0.01, width: width * 0.03, height: width * 0.03}}/>
             );
         } else {
             return (
@@ -381,8 +389,7 @@ var One = React.createClass({
         if (this.state.showSearch) {
             return (
                 <TouchableOpacity style={styles.rightBtn}
-                                  onPress={() => this.pushToSearch()
-                                      }>
+                                  onPress={() => this.pushToSearch()}>
                     <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
                 </TouchableOpacity>
             );
@@ -396,11 +403,7 @@ var One = React.createClass({
 
         this.props.navigator.push(
             {
-                component: Search,
-                params: {
-                    date: DateUtil.getNextDate(this.state.date).substring(0, 4) + '年' + DateUtil.getNextDate(this.state.date).substring(5, 7) + '月',
-
-                }
+                component: Search
             }
         )
     },
@@ -489,19 +492,6 @@ var One = React.createClass({
         return cityName + '  ' + climate + '  ' + temperature;
     },
 
-    /**
-     * 是否是onestory判断
-     * @param data
-     * @returns {boolean}
-     */
-    showOneStory(data) {
-        if (data.tag_list != null && data.tag_list.length > 0) {
-            return data.tag_list[0].title;
-        } else {
-            return '';
-        }
-    },
-
 
 });
 
@@ -520,7 +510,7 @@ const styles = StyleSheet.create({
         width: width,
         justifyContent: 'center',
         borderBottomColor: '#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth: constants.divideLineWidth
     },
     weatherText: {
         textAlign: 'center',

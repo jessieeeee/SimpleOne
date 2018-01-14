@@ -19,7 +19,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 var Setting = require('../setting/Setting');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-
+var Login=require('../login/Login');
 var Me = React.createClass({
     render() {
 
@@ -46,7 +46,7 @@ var Me = React.createClass({
 
                 {/*登录头像*/}
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.refs.toast.show('点击了', DURATION.LENGTH_LONG)}>
+                                  onPress={() => this.pushToLogin()}>
                     <Image source={{uri: 'head'}}
                            style={{
                                width: width * 0.17,
@@ -69,6 +69,23 @@ var Me = React.createClass({
                 />
             </View>
         );
+    },
+
+    /**
+     * 跳转到登录
+     * @param url
+     */
+    pushToLogin(){
+
+        this.props.navigator.push(
+            {
+                component: Login,
+                title:'登录',
+                params:{
+
+                }
+            }
+        )
     },
 
     /**

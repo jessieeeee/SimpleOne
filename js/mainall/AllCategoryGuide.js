@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+var SearchCategory=require('../search/SearchCategory');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var key=0;
@@ -57,13 +57,53 @@ var AllCategoryGuide = React.createClass({
     },
 
     /**
+     * 跳转到搜索分类
+     * @param url
+     */
+    pushToSearchCategory(iconName){
+        var id=0;
+        switch (iconName){
+            case 'img_text':
+                id=0;
+                break;
+            case 'qa':
+                id=3;
+                break;
+            case 'read':
+                id=1;
+                break;
+            case 'serialize':
+                id=2;
+                break;
+            case 'movie':
+                id=5;
+                break;
+            case 'music':
+                id=4;
+                break;
+            case 'audio':
+                id=8;
+                break;
+        }
+        this.props.navigator.push(
+            {
+                component: SearchCategory,
+                title:'搜索分类',
+                params:{
+                    categoryId:id
+                }
+            }
+        )
+    },
+
+    /**
      * 单个跨度item
      */
     renderItemSpan1(iconName) {
         key++;
         return (
             <TouchableOpacity
-                              onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                              onPress={() => this.pushToSearchCategory(iconName)}>
             <Image source={{uri: iconName}} style={styles.iconSpan1} key={key}/>
             </TouchableOpacity>
         );

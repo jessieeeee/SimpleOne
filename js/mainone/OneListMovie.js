@@ -18,8 +18,8 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-import DateUtils from "../util/DateUtil";
-
+import constants from '../Constants';
+var Read=require('../read/Read');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 import DateUtil from "../util/DateUtil";
@@ -29,49 +29,45 @@ var OneListMovie = React.createClass({
     //初始化变量
     getInitialState() {
         return {
-            like: false
+            like: false,
+            likeNum:this.props.data.like_count
         }
     },
 
     //要传入的参数
     getDefaultProps() {
         return {
-            userName: '用户名',
-            title: '标题',
-            subTitle: '副标题',
-            imgUrl: '用户名下面的插图',
-            forward: '插图下面的一句话',
-            postDate: '发布的日期',
-            likeNum: 0,
+            data:null,
         }
     },
 
     //渲染
     render() {
         return (
+            <TouchableOpacity onPress={() => this.pushToRead()}>
             <View style={styles.container}>
                 <Text style={styles.category}>
                     - 影视 -
                 </Text>
                 {/*标题*/}
-                <Text style={styles.title}>{this.props.title}</Text>
+                <Text style={styles.title}>{this.props.data.title}</Text>
                 {/*用户名*/}
                 <Text style={styles.author}>{this.getAuthor()}</Text>
                 <View style={styles.centerImgBg}>
                     <Image source={{uri: 'feeds_movie'}} style={{width: width * 0.9, height: width * 0.56,}}/>
                     {/*用户名下面的插图*/}
-                    <Image source={{uri: this.props.imgUrl}} style={styles.centerImg}/>
+                    <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
                 </View>
                 {/*插图下面的那句话*/}
-                <Text style={styles.forward}>{this.props.forward}</Text>
+                <Text style={styles.forward}>{this.props.data.forward}</Text>
                 <View style={{width:width}}>
                 {/*那句话右边的副标题*/}
-                <Text style={styles.subtitle}>{'-- 《' + this.props.subTitle + '》'}</Text>
+                <Text style={styles.subtitle}>{'-- 《' + this.props.data.subtitle + '》'}</Text>
                 </View>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{DateUtil.showDate(this.props.postDate)}</Text>
+                    <Text style={styles.date}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                     {/*右边的按钮*/}
                     <View style={styles.rightBtn}>
@@ -99,9 +95,27 @@ var OneListMovie = React.createClass({
                     textStyle={{color: 'white'}}
                 />
             </View>
+            </TouchableOpacity>
         );
     },
 
+
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead() {
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    data:this.props.data,
+                    entry:constants.OneRead
+                }
+            }
+        )
+    },
 
     /**
      * 跳转到分享
@@ -115,8 +129,8 @@ var OneListMovie = React.createClass({
                 title:'分享',
                 params:{
                     showlink:true,
-                    shareInfo:this.props.shareInfo,
-                    shareList:this.props.shareList
+                    shareInfo:this.props.data.share_info,
+                    shareList:this.props.data.share_list
                 }
             }
         )
@@ -125,7 +139,7 @@ var OneListMovie = React.createClass({
      * 渲染喜欢数量
      */
     renderlikeNum() {
-        if (this.props.likeNum > 0) {
+        if (this.state.likeNum > 0) {
             return (
                 <Text style={{
                     position: 'relative',
@@ -134,7 +148,7 @@ var OneListMovie = React.createClass({
                     fontSize: width * 0.024,
                     color: '#A7A7A7'
                 }}>
-                    {this.props.likeNum}
+                    {this.state.likeNum}
                 </Text>
             );
         }
@@ -147,7 +161,7 @@ var OneListMovie = React.createClass({
      */
     getAuthor() {
         var tempStr = new Array();
-        tempStr = this.props.userName.split(' ');
+        tempStr = this.props.data.author.user_name.split(' ');
         return '文 / ' + tempStr[0];
 
     },
@@ -157,6 +171,7 @@ var OneListMovie = React.createClass({
      */
     likeClick() {
         this.setState({
+            likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
     },
@@ -167,29 +182,13 @@ var OneListMovie = React.createClass({
      */
     showLikeIcon() {
         //喜欢
-        if (this.state.like === true) {
+        if (this.state.like) {
             return 'bubble_liked';
         } else {
             return 'bubble_like';
         }
     },
 
-    //点击喜欢
-    likeClick() {
-        this.setState({
-            like: !this.state.like
-        });
-    },
-
-    //根据当前状态，显示喜欢图标
-    showLikeIcon() {
-        //喜欢
-        if (this.state.like === true) {
-            return 'bubble_liked';
-        } else {
-            return 'bubble_like';
-        }
-    }
 });
 
 const styles = StyleSheet.create({

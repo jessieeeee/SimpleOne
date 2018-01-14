@@ -14,19 +14,30 @@ import {
     Platform,
     TextInput,
     ScrollView,
+    NativeModules,
     TouchableOpacity
 } from 'react-native';
+import constants from '../Constants';
 import DateUtil from "../util/DateUtil";
 
+let toast = NativeModules.ToastNative;
+var Share = require('../share/Share');
+var Login = require('../login/Login');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
+var ChangeImg = require('./ChangeImg');
+
 var Remark = React.createClass({
     getInitialState() {
         return {
             curText: '<No Event>',
             prevText: '<No Event>',
             prev2Text: '<No Event>',
+            imgUri: ''
         }
+    },
+    componentDidMount() {
+        toast.showMsg('您可以修改图片和文字来创建自己的小记', toast.SHORT);
     },
     render() {
         return (
@@ -53,11 +64,12 @@ var Remark = React.createClass({
                         </Text>
 
                     </View>
-
-                    <Image style={{
-                        width: width,
-                        height: this.getHeight(this.props.route.params.originalW, this.props.route.params.originalH),
-                    }} source={{uri: this.props.route.params.imgUrl}}/>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.pushToChangeImg()
+                        }}>
+                        {this.renderImg()}
+                    </TouchableOpacity>
                     <Text style={styles.showText}>{this.props.route.params.bottomText}</Text>
 
                     <View style={styles.editView}>
@@ -80,13 +92,29 @@ var Remark = React.createClass({
                             )}
                             style={styles.editRemark}/>
                     </View>
-                    <Text style={[styles.showText,{marginBottom:width*0.14}]}>{this.props.route.params.wordsInfo}</Text>
+                    <Text
+                        style={[styles.showText, {marginBottom: width * 0.14}]}>{this.props.route.params.wordsInfo}</Text>
                 </ScrollView>
             </View>
 
         );
     },
 
+    renderImg() {
+        var uri = '';
+        if (this.state.imgUri != '') {
+            uri = this.state.imgUri;
+        } else {
+            uri = this.props.route.params.imgUrl;
+        }
+        return (
+            <Image style={{
+                width: width,
+                height: this.getHeight(this.props.route.params.originalW, this.props.route.params.originalH),
+            }} source={{uri: uri}}/>
+        );
+    },
+    
     updateText(text) {
         this.setState((state) => {
             return {
@@ -96,6 +124,63 @@ var Remark = React.createClass({
             };
         });
     },
+
+    /**
+     * 跳转到修改图片
+     */
+    pushToChangeImg() {
+        this.props.navigator.push(
+            {
+                component: ChangeImg,
+                title: '修改图片',
+                params: {
+                    response: this.changeImgResponse
+                }
+            }
+        );
+    },
+
+    changeImgResponse(response) {
+        console.log('receive = ', response);
+        this.setState({
+            imgUri: 'data:image/jpeg;base64,' + response.data
+        });
+    },
+    
+    /**
+     * 跳转到分享
+     * @param url
+     */
+    pushToShare() {
+
+        this.props.navigator.push(
+            {
+                component: Share,
+                title: '分享',
+                params: {
+                    showlink: true,
+                    shareInfo: this.props.route.params.shareInfo,
+                    shareList: this.props.route.params.shareList
+                }
+            }
+        )
+    },
+
+    /**
+     * 跳转到登录
+     * @param url
+     */
+    pushToLogin() {
+
+        this.props.navigator.push(
+            {
+                component: Login,
+                title: '登录',
+                params: {}
+            }
+        )
+    },
+
 
     //按图片宽度缩放
     getHeight(w, h) {
@@ -119,8 +204,16 @@ var Remark = React.createClass({
                 <Text style={styles.title}>小记</Text>
 
                 <View style={styles.rightBtnBar}>
-                    <Image style={styles.rightBtn1} source={{uri:'bubble_save'}}/>
-                    <Image style={styles.rightBtn2} source={{uri:'share_image'}}/>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.pushToLogin()
+                        }}>
+                        <Image style={styles.rightBtn1} source={{uri: 'bubble_save'}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.pushToShare()}>
+                        <Image style={styles.rightBtn2} source={{uri: 'share_image'}}/>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -148,16 +241,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: width * 0.03,
     },
-    editView:{
+    editView: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop:width*0.07,
-        marginLeft:width*0.08,
-        marginRight:width*0.08,
-        marginBottom:width*0.012,
-        borderRadius:width*0.02,
-        borderWidth:width*0.002,
-        borderColor:'#dddddd'
+        marginTop: width * 0.07,
+        marginLeft: width * 0.08,
+        marginRight: width * 0.08,
+        marginBottom: width * 0.012,
+        borderRadius: width * 0.02,
+        borderWidth: width * 0.002,
+        borderColor: '#dddddd'
     },
     editRemark: {
         width: width * 0.82,
@@ -202,7 +295,7 @@ const styles = StyleSheet.create({
         width: width,
         justifyContent: 'center',
         borderBottomColor: '#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth: constants.divideLineWidth
     },
     leftBtn: {
         position: 'absolute',
@@ -222,7 +315,7 @@ const styles = StyleSheet.create({
         height: height * 0.04,
     },
     rightBtn2: {
-        marginLeft:width*0.05,
+        marginLeft: width * 0.05,
         width: height * 0.04,
         height: height * 0.04,
     },

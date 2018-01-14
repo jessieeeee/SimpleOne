@@ -16,15 +16,17 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
+import constants from "../Constants";
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var TimerMixin = require('react-timer-mixin');
 var ServerApi=require('../ServerApi');
+var Read=require('../read/Read');
 var AllListBanner = React.createClass({
     getDefaultProps() {
         return {
-            duration: 1000,
+            duration: 4000,
             // 外层回调函数参
             refreshView: false, //刷新
         }
@@ -149,6 +151,8 @@ var AllListBanner = React.createClass({
             </View>
         );
     },
+
+
     /**
      * 渲染banner图片
      * @returns {Array}
@@ -156,14 +160,14 @@ var AllListBanner = React.createClass({
     renderChildView() {
         if (this.state.banner != null) {
             var allchild = [];
-            var imgs = this.state.banner.data;
+            var itemDatas = this.state.banner.data;
 
-            for (var i = 0; i < imgs.length; i++) {
-                var img = imgs[i];
+            for (var i = 0; i < itemDatas.length; i++) {
+                var itemData = itemDatas[i];
                 allchild.push(
                     <TouchableOpacity key={i}
-                                      onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
-                        <Image source={{uri: img.cover}} style={styles.img}/>
+                                      onPress={() => this.pushToRead()}>
+                        <Image source={{uri: itemData.cover}} style={styles.img}/>
                     </TouchableOpacity>
                 );
             }
@@ -218,6 +222,24 @@ var AllListBanner = React.createClass({
         this.setState({
             curPage: currentPage
         });
+    },
+
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead() {
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    contentId:this.state.banner.data[this.state.curPage].content_id,
+                    contentType:this.state.banner.data[this.state.curPage].category,
+                    entry:constants.AllRead
+                }
+            }
+        )
     },
 });
 

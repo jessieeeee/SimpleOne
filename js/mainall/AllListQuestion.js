@@ -17,7 +17,8 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-
+import constants from "../Constants";
+var Read=require('../read/Read');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var ServerApi=require('../ServerApi');
@@ -85,7 +86,7 @@ var AllListQuestion = React.createClass({
                var data = questionData[i];
                //创建组件装入数组
                itemArr.push(
-                   <QuestionItem key={i} questionImage={data.cover} questionText={data.title}/>
+                   <QuestionItem key={i} data={data} navigator={this.props.navigator}/>
                );
            }
            return itemArr;
@@ -98,7 +99,7 @@ var AllListQuestion = React.createClass({
             this.setState({
                 questions: result,
             });
-            console.log(result);
+            // console.log(result);
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
@@ -109,20 +110,19 @@ var AllListQuestion = React.createClass({
 var QuestionItem = React.createClass({
     getDefaultProps() {
         return {
-            questionImage: '',
-            questionText: '',
+            data:null,
         }
     },
 
     render() {
         return (
-            <TouchableOpacity  onPress={() => this.refs.toast.show('点击了', DURATION.LENGTH_LONG)}>
+            <TouchableOpacity  onPress={() => this.pushToRead(this.props.data)}>
                 <View style={styles.itemview}>
-                    <Image source={{uri: this.props.questionImage}} style={{resizeMode:'stretch',width:width*0.56,height:width*0.33,borderRadius:width*0.01}}/>
+                    <Image source={{uri: this.props.data.cover}} style={{resizeMode:'stretch',width:width*0.56,height:width*0.33,borderRadius:width*0.01}}/>
                     <View style={{position:'absolute', top:0, backgroundColor:'#333333',width:width*0.56,height:width*0.33 , opacity:0.5,borderRadius:width*0.01}}/>
                     <View style={styles.itemText}>
                     <Text style={{color:'white',fontSize:width*0.04  ,width:width*0.4}}
-                          numberOfLines={1}>{this.props.questionText}</Text>
+                          numberOfLines={1}>{this.props.data.title}</Text>
                     </View>
                 </View>
                 <Toast
@@ -136,6 +136,23 @@ var QuestionItem = React.createClass({
         );
     },
 
+    /**
+     * 跳转到阅读页
+     * @param url
+     */
+    pushToRead(itemData) {
+        this.props.navigator.push(
+            {
+                component: Read,
+                title:'阅读',
+                params:{
+                    contentId:itemData.content_id,
+                    contentType:itemData.category,
+                    entry:constants.AllRead
+                }
+            }
+        )
+    },
 });
 
 

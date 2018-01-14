@@ -121,6 +121,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:23.0.1'
     compile 'com.facebook.react:react-native:+'
+    compile project(':react-native-image-picker')
     testCompile 'junit:junit:4.12'
     compile project(':u_share')
 }

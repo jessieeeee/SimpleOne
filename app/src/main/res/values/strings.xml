@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">SimpleOne</string>
     <string name="action_settings">Settings</string>
+    <string-array name="weeks">
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+        <item>星期日</item>
+    </string-array>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
+    <string name="cancel">取 消</string>
+    <string name="ensure">确 定</string>
+
+    <string name="select_date">选择日期</string>
+    <string name="select_time">选择时间</string>
+    <string name="select_week">选择星期</string>
 </resources>

@@ -13,10 +13,13 @@ import {
     Image,
     Platform,
     ScrollView,
+    NativeModules,
     TouchableOpacity,
-
+    Alert,
+    Linking
 } from 'react-native';
-
+import constants from '../Constants';
+let toast = NativeModules.ToastNative;
 var SettingLabel = require('./SettingLabel');
 var SettingItem = require('./SettingItem');
 var Dimensions = require('Dimensions');
@@ -31,15 +34,32 @@ var Setting = React.createClass({
                 <SettingLabel text={'设置'}/>
                 <SettingItem text={'夜间模式'} rightStyle={1}/>
                 <SettingItem text={'流量播放提醒'} rightStyle={2}/>
+                <TouchableOpacity onPress={()=>{Alert.alert(
+                    '',
+                    '确认要清除缓存?',
+                    [
+                        {text: '确定', onPress: () => {toast.showMsg('清除缓存成功!',toast.SHORT)}},
+                        {text: '取消', onPress: () => {}},
+                    ]
+                )}}>
                 <SettingItem text={'清除缓存'} rightStyle={0}/>
+                </TouchableOpacity>
 
                 <SettingLabel text={'反馈'}/>
+                <TouchableOpacity onPress={()=>{toast.showMsg('欢迎到github提交issue!',toast.SHORT)}}>
                 <SettingItem text={'意见与反馈'} rightStyle={0}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{Linking.openURL('https://github.com/jessieeeee/SimpleOne').catch(err => console.error('发生了一个错误', err));}}>
                 <SettingItem text={'关注我们'} rightStyle={0}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{toast.showMsg('demo不支持此功能',toast.SHORT)}}>
                 <SettingItem text={'给一个评分'} rightStyle={0}/>
+                </TouchableOpacity>
 
                 <SettingLabel text={'关于'}/>
+                <TouchableOpacity onPress={()=>{toast.showMsg('遵守开源协议，仅供学习',toast.SHORT)}}>
                 <SettingItem text={'用户协议'} rightStyle={0}/>
+                </TouchableOpacity>
                 <SettingItem text={'版本号'} rightStyle={3}/>
 
             </View>
@@ -67,6 +87,8 @@ var Setting = React.createClass({
         );
     },
 
+
+
 });
 
 const styles = StyleSheet.create({
@@ -83,7 +105,7 @@ const styles = StyleSheet.create({
         width: width,
         justifyContent: 'center',
         borderBottomColor: '#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth: constants.divideLineWidth
     },
     leftBtn: {
         position: 'absolute',

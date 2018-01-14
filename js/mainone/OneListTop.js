@@ -20,7 +20,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-var DisplayImg=require('../display/DisplayImg');
+
 var Remark=require('../remark/Remark');
 var Login=require('../login/Login');
 var Share=require('../share/Share');
@@ -31,6 +31,7 @@ var OneListTop = React.createClass({
     getInitialState() {
         return {
             like: false,
+            likeNum:this.props.data.like_count,
             originalW: 0,
             originalH: 0,
         }
@@ -39,17 +40,10 @@ var OneListTop = React.createClass({
     //要传入的参数
     getDefaultProps() {
         return {
-            topImgUrl: '顶部图片地址',
-            title: '标题',
-            picInfo: '标题竖线旁边的作者',
-            forward: '下面的一句话',
-            wordsInfo: '一句话下面的作者',
-            likeNum: 0,
-            topText:'',
             date:'',
             weather:'',
-            shareInfo:null,
-            shareList:null,
+            data:null,
+            clickDisplay:null,
         }
     },
 
@@ -57,7 +51,7 @@ var OneListTop = React.createClass({
      * 发起网络请求
      */
     componentDidMount() {
-        Image.getSize(this.props.topImgUrl, (width, height) => {
+        Image.getSize(this.props.data.img_url, (width, height) => {
             this.setState({
                 originalW:width,
                 originalH:height
@@ -79,21 +73,21 @@ var OneListTop = React.createClass({
 
                 {/*顶部大图*/}
                 <TouchableOpacity onPress={() => this.pushToDisplay()}>
-                    <Image source={{uri: this.props.topImgUrl} } style={{  width: width,
+                    <Image source={{uri: this.props.data.img_url} } style={{  width: width,
                         height: this.getHeight(this.state.originalW,this.state.originalH),
                         }}/>
                 </TouchableOpacity>
                 {/*标题和作者*/}
                 <Text style={styles.imgAuthor}>
-                    {this.props.title + ' | ' + this.props.picInfo}
+                    {this.props.data.title + ' | ' + this.props.data.pic_info}
                 </Text>
                 {/*一句话*/}
                 <Text style={styles.textForward}>
-                    {this.props.forward}
+                    {this.props.data.forward}
                 </Text>
                 {/*一句话的作者*/}
                 <Text style={styles.textAuthor}>
-                    {this.props.wordsInfo}
+                    {this.props.data.words_info}
                 </Text>
                 {/*底部小按钮bar*/}
                 <View style={styles.bottomBtnsBar}>
@@ -118,9 +112,7 @@ var OneListTop = React.createClass({
                             <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIconLeft}/>
                         </TouchableOpacity>
 
-                        <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, marginRight: width * 0.03,color:'#A7A7A7'}}>
-                            {this.props.likeNum}
-                        </Text>
+                        {this.renderlikeNum()}
 
                         <TouchableOpacity style={styles.rightBtnIconCenter}
                                           onPress={() => this.pushToLogin()}>
@@ -149,25 +141,34 @@ var OneListTop = React.createClass({
     },
 
     /**
+     * 渲染喜欢数量
+     */
+    renderlikeNum(){
+        if(this.state.likeNum>0){
+            return(
+                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, marginRight: width * 0.03,color:'#A7A7A7'}}>
+                    {this.state.likeNum}
+                </Text>
+            );
+        }
+    },
+
+    /**
      * 跳转到大图
      * @param url
      */
     pushToDisplay(){
-
-        this.props.navigator.push(
-            {
-                component: DisplayImg,
-                title:'展示大图',
-                params:{
-                    topText:this.props.topText,
-                    imgUrl:this.props.topImgUrl,
-                    bottomText:this.props.title + ' | ' + this.props.picInfo,
-                    originalW:this.state.originalW,
-                    originalH:this.state.originalH
-
-                }
-            }
-        )
+        // topText:this.props.data.volume,
+        // imgUrl:this.props.data.img_url,
+        //   bottomText:this.props.data.title + ' | ' + this.props.data.pic_info,
+        //   originalW:this.state.originalW,
+        //   originalH:this.state.originalH
+        this.props.clickDisplay(
+            this.props.data.volume,
+            this.props.data.img_url,
+            this.props.data.title + ' | ' + this.props.data.pic_info,
+            this.state.originalW,
+            this.state.originalH);
     },
 
 
@@ -184,12 +185,14 @@ var OneListTop = React.createClass({
                 params:{
                     date:this.props.date,
                     weather:this.props.weather,
-                    imgUrl:this.props.topImgUrl,
-                    bottomText:this.props.title + ' | ' + this.props.picInfo,
-                    forward:this.props.forward,
-                    wordsInfo:this.props.wordsInfo,
+                    imgUrl:this.props.data.img_url,
+                    bottomText:this.props.data.title + ' | ' + this.props.data.pic_info,
+                    forward:this.props.data.forward,
+                    wordsInfo:this.props.data.words_info,
                     originalW:this.state.originalW,
-                    originalH:this.state.originalH
+                    originalH:this.state.originalH,
+                    shareInfo:this.props.data.share_info,
+                    shareList:this.props.data.share_list
                 }
             }
         )
@@ -226,8 +229,8 @@ var OneListTop = React.createClass({
                 title:'分享',
                 params:{
                     showlink:true,
-                    shareInfo:this.props.shareInfo,
-                    shareList:this.props.shareList
+                    shareInfo:this.props.data.share_info,
+                    shareList:this.props.data.share_list
                 }
             }
         )
@@ -235,6 +238,7 @@ var OneListTop = React.createClass({
     //点击喜欢
     likeClick(){
         this.setState({
+            likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
     },
@@ -242,7 +246,7 @@ var OneListTop = React.createClass({
     //根据当前状态，显示喜欢图标
     showLikeIcon(){
         //喜欢
-        if(this.state.like===true){
+        if(this.state.like){
             return 'bubble_liked';
         }else{
             return 'bubble_like';

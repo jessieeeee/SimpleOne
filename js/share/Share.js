@@ -12,13 +12,13 @@ import {
     View,
     Platform,
     Image,
+    NativeModules,
     ScrollView,
     TouchableOpacity,
-    NativeModules,
     Clipboard,
 } from 'react-native';
 import constants from '../Constants';
-
+let toast = NativeModules.ToastNative;
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 let UShare = NativeModules.UShare;
@@ -83,12 +83,12 @@ var Share = React.createClass({
         }else{
             content=data.desc;
         }
-        if(data.title==null||data.title==""){
+        if(data.imgUrl==null||data.imgUrl==""){
             image=this.props.route.params.shareInfo.image;
         }else{
             image=data.imgUrl;
         }
-        if(data.title==null||data.title==""){
+        if(data.link==null||data.link==""){
             url=this.props.route.params.shareInfo.url;
         }else{
             url=data.link;
@@ -115,6 +115,7 @@ var Share = React.createClass({
         try {
             var content = await Clipboard.getString();
             this.setState({content: content});
+            toast.showMsg('已复制到剪切板',toast.SHORT)
         } catch (e) {
             this.setState({content: e.message});
         }

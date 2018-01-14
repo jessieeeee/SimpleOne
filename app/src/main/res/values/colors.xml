@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="button_ensure">#363636</color>
+    <color name="gray">#888888</color>
+
+    <color name="cutting_line">#dfdfdf</color>
+
+    <color name="wheel_select">#858585</color>
+    <color name="wheel_unselect_text">#d9d9d9</color>
+    <color name="wheel_bg">#fbfbfb</color>
 </resources>

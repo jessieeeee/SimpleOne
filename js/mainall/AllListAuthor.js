@@ -21,6 +21,7 @@ import NetUtils from "../util/NetUtil";
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var serverApi=require('../ServerApi');
+var AuthorPage=require('../author/AuthorPage');
 //设置数据源
 var ds = new ListView.DataSource({
     //返回条件，任意两条不等
@@ -117,12 +118,12 @@ var AllListAuthor = React.createClass({
 
     // 单个item返回 线性布局
     renderRow(rowData, sectionID, rowID, highlightRow) {
-        console.log(rowData);
+        // console.log(rowData);
         return (
 
             <View style={styles.contentContainer}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
-                                  onPress={() => this.refs.toast.show('点击了' + rowID + '行', DURATION.LENGTH_LONG)}>
+                                  onPress={() => this.pushToRead(rowData)}>
                     {/*左边头像*/}
                     <Image source={{uri: rowData.web_url}} style={styles.leftImage}>
                     </Image>
@@ -177,7 +178,23 @@ var AllListAuthor = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    }
+    },
+
+    /**
+     * 跳转到作者页
+     * @param url
+     */
+    pushToRead(itemData) {
+        this.props.navigator.push(
+            {
+                component: AuthorPage,
+                title:'作者页',
+                params:{
+                    authorData:itemData
+                }
+            }
+        )
+    },
 });
 
 const styles = StyleSheet.create({

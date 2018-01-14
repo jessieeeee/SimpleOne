@@ -13,22 +13,57 @@ import {
     Platform,
     WebView,
     Image,
+    NativeModules,
+    ScrollView,
+    FlatList,
     TouchableOpacity,
+    Clipboard
 } from 'react-native';
+import constants from '../Constants';
+import NetUtils from "../util/NetUtil";
+import Toast, {DURATION} from 'react-native-easy-toast'
+import SingleChoiceDialog from '../view/SingleChoiceDialog'
+const VIEWABILITY_CONFIG = {
+    minimumViewTime: 3000,
+    viewAreaCoveragePercentThreshold: 100,
+    waitForInteraction: true,
+};
 
+let toast = NativeModules.ToastNative;
 var Dimensions = require('Dimensions');
+var {width, height} = Dimensions.get('window');
+
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
-var {width, height} = Dimensions.get('window');
+
 var Share = require('../share/Share');
 var Login = require('../login/Login');
 var TimerMixin = require('react-timer-mixin');
-import NetUtils from "../util/NetUtil";
 
-var loadingArr=[];
+var Comment = require('./Comment');
+var loadingArr = [];
+var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
+const BaseScript =
+    `
+    (function () {
+        var height = null;
+        function changeHeight() {
+          if (document.body.scrollHeight != height) {
+            height = document.body.scrollHeight;
+            if (window.postMessage) {
+              window.postMessage(JSON.stringify({
+                type: 'setHeight',
+                height: height,
+              }))
+            }
+          }
+        }
+        setInterval(changeHeight, 100);
+    } ())
+    `
 
 var Read = React.createClass({
-    
+
     getDefaultProps() {
         return {
             duration: 10,
@@ -36,22 +71,27 @@ var Read = React.createClass({
             refreshView: false, //刷新
         }
     },
-    
+
     /**
      * 初始化状态变量
      */
     getInitialState() {
         return {
-            scalesPageToFit: true,
             like: false,
+            likeNum: 0,
             readData: null,
-            loadingIndex:0,//加载下标
-            loading:true, //是否在加载
+            loadingIndex: 0,//加载下标
+            loading: true, //是否在加载
             backButtonEnabled: false,
             forwardButtonEnabled: false,
             url: '',
             status: '',
-            scalesPageToFit: true
+            scalesPageToFit: true,
+            bgColor: 'white',
+            commentData: null,
+            height: 0,
+            isVisible: false,
+            curItem:null,
         }
 
     },
@@ -60,12 +100,27 @@ var Read = React.createClass({
     mixins: [TimerMixin],
 
     componentDidMount() {
-        var url = this.getCategoryUrl().replace('{content_id}', this.props.route.params.data.content_id);
+        var url;
+        if (this.props.route.params.entry == constants.AllRead) {
+            url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId);
+        } else {
+            url = this.getContentUrl().replace('{content_id}', this.props.route.params.data.content_id);
+        }
+        console.log('地址' + url);
         NetUtils.get(url, null, (result) => {
             this.setState({
                 readData: result.data,
+                likeNum: result.data.praisenum,
             });
-
+            var bgColor;
+            if (result.data.category == 11) {
+                bgColor = result.data.bg_color;
+            } else {
+                bgColor = 'white';
+            }
+            this.setState({
+                bgColor: bgColor
+            });
             // console.log(result);
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
@@ -74,8 +129,67 @@ var Read = React.createClass({
         this.startTimer();
     },
 
-    getCategoryUrl() {
-        switch (parseInt(this.props.route.params.data.content_type)) {
+    /**
+     * 获取评论
+     */
+    getComments() {
+        var url;
+        if (this.props.route.params.entry == constants.AllRead) {
+            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.contentId);
+        } else {
+            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.data.content_id);
+        }
+        console.log('请求评论' + url);
+        NetUtils.get(url, null, (result) => {
+            this.setState({
+                commentData: result.data.data
+            });
+            console.log(result);
+        }, (error) => {
+            this.refs.toast.show('error' + error, 500)
+        });
+    },
+
+    getCommentUrl() {
+        var contentType;
+        if (this.props.route.params.entry == constants.AllRead) {
+            contentType = this.props.route.params.contentType;
+        } else {
+            contentType = this.props.route.params.data.content_type;
+        }
+        switch (parseInt(contentType)) {
+            case 1:
+                return serverApi.EssayComment;
+                break;
+            case 3:
+                return serverApi.QuestionComment;
+                break;
+            case 2:
+                return serverApi.SerialContentComment;
+                break;
+            case 4:
+                return serverApi.MusicComment;
+                break;
+            case 5:
+                return serverApi.MovieComment;
+                break;
+            case 8:
+                return serverApi.RadioComment;
+                break;
+            case 11:
+                return serverApi.TopicComment;
+                break;
+        }
+    },
+
+    getContentUrl() {
+        var contentType;
+        if (this.props.route.params.entry == constants.AllRead) {
+            contentType = this.props.route.params.contentType;
+        } else {
+            contentType = this.props.route.params.data.content_type;
+        }
+        switch (parseInt(contentType)) {
             case 1:
                 return serverApi.Essay;
                 break;
@@ -94,40 +208,181 @@ var Read = React.createClass({
             case 8:
                 return serverApi.Radio;
                 break;
+            case 11:
+                return serverApi.Topic;
+                break;
+
         }
 
 
     },
 
+    onMessage(event) {
+        console.log('onMessage->event.nativeEvent.data:');
+        console.log(event.nativeEvent.data);
+        try {
+            const action = JSON.parse(event.nativeEvent.data)
+            if (action.type === 'setHeight' && action.height > 0 && this.state.height < height) {
+                console.log('设置高度');
+                this.setState({height: action.height})
+            }
+        } catch (error) {
+            // pass
+        }
+
+    },
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor: this.state.bgColor}]}>
                 {this.renderNavBar()}
+                <ScrollView style={{width: width, height: height - width * 0.1 - 0.08 * width}}
+                            onScroll={this.onScroll}>
+                    <WebView
+                        ref={WEBVIEW_REF}
+                        automaticallyAdjustContentInsets={true}
+                        injectedJavaScript={BaseScript}
+                        style={{
+                            width: Dimensions.get('window').width,
+                            height: this.state.height
+                        }}
+                        source={{html: this.state.readData === null ? '' : this.state.readData.html_content}}
+                        javaScriptEnabled={true}
+                        domStorageEnabled={true}
+                        decelerationRate="normal"
+                        onNavigationStateChange={this.onNavigationStateChange}
+                        onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+                        startInLoadingState={true}
+                        onMessage={this.onMessage}
+                        scalesPageToFit={this.state.scalesPageToFit}
+                        scrollEnabled={false}
 
-                <WebView
-                    ref={WEBVIEW_REF}
-                    automaticallyAdjustContentInsets={false}
-                    style={styles.webView}
-                    source={{html: this.state.readData === null ? '' : this.state.readData.html_content}}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    decelerationRate="normal"
-                    onNavigationStateChange={this.onNavigationStateChange}
-                    onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-                    startInLoadingState={true}
-                    scalesPageToFit={this.state.scalesPageToFit}
-                />
+                    />
+                    {this.renderLoading()}
+                    {this.renderCommentList()}
 
-                {this.renderLoading()}
+                </ScrollView>
                 {this.renderBottomBar()}
+                {this.renderSingleChoiceDialog()}
+                <Toast
+                    ref="toast"
+                    style={{backgroundColor: 'gray'}}
+                    position='top'
+                    positionValue={height * 0.24}
+                    textStyle={{color: 'white'}}
+                />
             </View>
         );
     },
 
-    renderLoading(){
-        if(this.state.loading){
-            return(
-                <Image source={{uri:loadingArr[this.state.loadingIndex]}} style={{width:width*0.2,height:width*0.2,position:'absolute',top:height*0.4}}/>
+    /**
+     * scrollview滑动回调
+     */
+    onScroll(event) {
+        let y = event.nativeEvent.contentOffset.y;
+        // console.log('滑动距离' + y);
+        let height = event.nativeEvent.layoutMeasurement.height;
+        // console.log('列表高度' + height);
+        let contentHeight = event.nativeEvent.contentSize.height;
+        // console.log('内容高度' + contentHeight);
+        // console.log('判断条件' + (y + height));
+        if (y + height >= contentHeight - 20) {
+            console.log('加载更多');
+            if (this.state.commentData == null) {
+
+                this.getComments();
+            }
+        }
+    },
+
+    renderCommentList() {
+        if (this.state.commentData !== null) {
+            return (
+
+                <View style={{width: width, position: 'relative', bottom: width * 0.22}}>
+                    <FlatList
+                        data={this.state.commentData}
+                        renderItem={this.renderRow}
+                        keyExtractor={(item, index) => item.id}
+                        onViewableItemsChanged={(info) => {
+                            console.log('是否可见');
+                            console.log(info);
+                        }}
+
+                        viewabilityConfig={VIEWABILITY_CONFIG}
+                    >
+                        }
+
+                    </FlatList>
+                </View>
+            );
+        }
+    },
+
+    // 单个item返回 线性布局
+    renderRow(rowData) {
+        console.log(rowData);
+        if (typeof(rowData) !== 'undefined') {
+            return (
+                <TouchableOpacity activeOpacity={1} onPress={() => {
+                    this.setState({isVisible:true,curItem:rowData.item});
+                }}>
+                    <Comment data={rowData.item} navigator={this.props.navigator}/>
+
+                </TouchableOpacity>
+            )
+        }
+
+    },
+
+    renderSingleChoiceDialog(){
+        return(
+            <SingleChoiceDialog
+                isVisible={this.state.isVisible}
+                dataSource={itemChoiceArr}
+                onConfirm={(option) => {this.doSelected(option)}}
+                onCancel={() => {this.setState({isVisible: false})}}
+            />
+        );
+    },
+
+    /**
+     * 点击评论，选择弹窗后的回调
+     * @param option
+     */
+    doSelected(option) {
+        if(option.value == '1'){
+           this.pushToLogin();
+        }else{
+           this.setClipboardContent();
+        }
+    },
+
+    /**
+     * 复制到剪贴板
+     * @returns {Promise.<void>}
+     */
+    async setClipboardContent() {
+        Clipboard.setString(this.state.curItem.content);
+        try {
+            var content = await Clipboard.getString();
+            toast.showMsg('已复制到剪切板',toast.SHORT);
+            this.setState({content: content});
+        } catch (e) {
+            this.setState({content: e.message});
+        }
+    },
+
+    renderLoading() {
+        if (this.state.loading) {
+            return (
+                <Image source={{uri: loadingArr[this.state.loadingIndex]}}
+                       style={{
+                           width: width * 0.14,
+                           height: width * 0.14,
+                           position: 'absolute',
+                           top: height * 0.4 - width * 0.07,
+                           left: width / 2 - width * 0.07
+                       }}/>
             );
         }
     },
@@ -147,16 +402,16 @@ var Read = React.createClass({
             scalesPageToFit: true
         });
     },
-    
+
     /**
      * 渲染底部bar
      */
     renderBottomBar() {
         return (
-            <View style={styles.bottomView}>
+            <View style={[styles.bottomView, {backgroundColor: this.state.bgColor}]}>
 
-                <TouchableOpacity style={{ position: 'absolute', left: width * 0.05,}}
-                    onPress={() => this.pushToLogin()}>
+                <TouchableOpacity style={{position: 'absolute', left: width * 0.05,}}
+                                  onPress={() => this.pushToLogin()}>
                     <Text style={styles.textInput}>写一个评论..</Text>
                 </TouchableOpacity>
 
@@ -166,16 +421,7 @@ var Read = React.createClass({
                         <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIcon}/>
                     </TouchableOpacity>
 
-                    <Text style={{
-                        position: 'relative',
-                        left: width * 0.003,
-                        bottom: width * 0.016,
-                        fontSize: width * 0.024,
-                        marginRight: width * 0.06,
-                        color: '#A7A7A7'
-                    }}>
-                        {this.state.readData === null ? '' : this.state.readData.praisenum}
-                    </Text>
+                    {this.renderlikeNum()}
 
                     <TouchableOpacity style={styles.rightBtnIconCenter}
                                       onPress={() => {
@@ -184,16 +430,7 @@ var Read = React.createClass({
                         <Image source={{uri: 'bottom_comment'}} style={styles.rightBtnIcon}/>
                     </TouchableOpacity>
 
-                    <Text style={{
-                        position: 'relative',
-                        left: width * 0.003,
-                        bottom: width * 0.016,
-                        fontSize: width * 0.024,
-                        marginRight: width * 0.06,
-                        color: '#A7A7A7'
-                    }}>
-                        {this.state.readData === null ? '' : this.state.readData.commentnum}
-                    </Text>
+                    {this.renderCommentNum()}
 
                     <TouchableOpacity style={styles.rightBtnIconRight}
                                       onPress={() => this.pushToShare()}>
@@ -210,15 +447,18 @@ var Read = React.createClass({
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={[styles.outNav, {backgroundColor: this.state.bgColor}]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={styles.leftBtn}
-                                  onPress={() => {this.stopTimer();this.props.navigator.pop();}}>
+                                  onPress={() => {
+                                      this.stopTimer();
+                                      this.props.navigator.pop();
+                                  }}>
                     <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>{this.getCategory(this.props.route.params.data)}</Text>
+                <Text style={styles.title}>{this.getCategory()}</Text>
 
                 <TouchableOpacity
                     onPress={() => this.pushToLogin()} style={{position: 'absolute', right: width * 0.032}}>
@@ -228,33 +468,86 @@ var Read = React.createClass({
         );
     },
 
+    renderCommentNum() {
+        if (this.state.readData != null && this.state.readData.commentnum > 0) {
+            return (
+                <Text style={{
+                    position: 'relative',
+                    left: width * 0.003,
+                    bottom: width * 0.016,
+                    fontSize: width * 0.024,
+                    marginRight: width * 0.06,
+                    color: '#A7A7A7'
+                }}>
+                    {this.state.readData.commentnum}
+                </Text>
+            );
+        }
+    },
+    /**
+     * 渲染喜欢数量
+     */
+    renderlikeNum() {
+        if (this.state.likeNum > 0) {
+            return (
+                <Text style={{
+                    position: 'relative',
+                    left: width * 0.003,
+                    bottom: width * 0.016,
+                    fontSize: width * 0.024,
+                    marginRight: width * 0.04,
+                    color: '#A7A7A7'
+                }}>
+                    {this.state.likeNum}
+                </Text>
+            );
+        }
+    },
     /**
      * 获取分类
      */
-    getCategory(data) {
-        if (data.tag != null) {
-            return data.tag.title;
+    getCategory() {
+        var contentType;
+        if (this.props.route.params.entry == constants.MenuRead) {
+            var tag = this.props.route.params.data.tag;
+            contentType = this.props.route.params.data.content_type;
+            if (tag != null) {
+                return tag.title;
+            }
         }
-        else if (data.content_type == 1) {
+        if (this.props.route.params.entry == constants.OneRead) {
+            var tagList = this.props.route.params.data.tag_list;
+            contentType = this.props.route.params.data.content_type;
+            if (tagList != null && tagList.length > 0) {
+                return tagList[0].title;
+            }
+        } else {
+            contentType = this.props.route.params.contentType;
+        }
+
+        if (contentType == 1) {
             return '阅读';
         }
-        else if (data.content_type == 3) {
+        else if (contentType == 3) {
             return '问答';
         }
-        else if (data.content_type == 1) {
+        else if (contentType == 1) {
             return '阅读';
         }
-        else if (data.content_type == 2) {
+        else if (contentType == 2) {
             return '连载';
         }
-        else if (data.content_type == 4) {
+        else if (contentType == 4) {
             return '音乐';
         }
-        else if (data.content_type == 5) {
+        else if (contentType == 5) {
             return '影视';
         }
-        else if (data.content_type == 8) {
+        else if (contentType == 8) {
             return '电台';
+        }
+        else if (contentType == 11) {
+            return '专题';
         }
     },
 
@@ -276,6 +569,7 @@ var Read = React.createClass({
     //点击喜欢
     likeClick() {
         this.setState({
+            likeNum: this.state.like ? this.state.readData.praisenum : this.state.readData.praisenum + 1,
             like: !this.state.like
         });
     },
@@ -283,7 +577,7 @@ var Read = React.createClass({
     //根据当前状态，显示喜欢图标
     showLikeIcon() {
         //喜欢
-        if (this.state.like === true) {
+        if (this.state.like) {
             return 'bubble_liked';
         } else {
             return 'bubble_like';
@@ -307,9 +601,9 @@ var Read = React.createClass({
     /**
      * 载入图标名称初始化
      */
-    getLoadingIcon(){
-        for(var i=0;i<30;i++){
-            loadingArr.push(('webview_loading_0'+i).toString());
+    getLoadingIcon() {
+        for (var i = 0; i < 30; i++) {
+            loadingArr.push(('webview_loading_0' + i).toString());
         }
         // for(var i=0;i<30;i++){
         //     console.log(loadingArr[i]);
@@ -322,22 +616,22 @@ var Read = React.createClass({
     startTimer() {
         this.stopTimer();
         this.timer = this.setInterval(function () {
-            console.log('刷新下标'+this.state.loadingIndex);
-            if(this.state.loading){
-                var nextIndex=0;
+            console.log('刷新下标' + this.state.loadingIndex);
+            if (this.state.loading) {
+                var nextIndex = 0;
 
                 //移动下标
-                if(this.state.loadingIndex+1>29){
-                    nextIndex=0
-                }else{
-                    nextIndex=this.state.loadingIndex++;
+                if (this.state.loadingIndex + 1 > 29) {
+                    nextIndex = 0
+                } else {
+                    nextIndex = this.state.loadingIndex++;
                 }
-                console.log('刷新下标..'+nextIndex);
+                console.log('刷新下标..' + nextIndex);
                 //刷新下标
                 this.setState({
-                    loadingIndex:nextIndex
+                    loadingIndex: nextIndex
                 });
-            }else{
+            } else {
                 this.stopTimer();
             }
 
@@ -348,7 +642,7 @@ var Read = React.createClass({
      * 停止计时器
      */
     stopTimer() {
-        if(this.timer!=null){
+        if (this.timer != null) {
             this.clearInterval(this.timer);
         }
 
@@ -360,24 +654,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent:'center',
-        backgroundColor: 'white',
-    },
-    webView: {
-        backgroundColor: 'white',
-        height: height * 0.4,
-        width: width,
+        justifyContent: 'center',
     },
     bottomView: {
         height: width * 0.14,
         width: width,
         position: 'absolute',
         bottom: 0,
-        backgroundColor: '#fbfbfb',
         flexDirection: 'row',
         alignItems: 'center',
         borderTopColor: '#dddddd',
-        borderTopWidth: 0.167
+        borderTopWidth: 0.2
     },
     buttomBar: {
         height: width * 0.1,
@@ -399,13 +686,12 @@ const styles = StyleSheet.create({
     },
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         width: width,
         justifyContent: 'center',
         borderBottomColor: '#dddddd',
-        borderBottomWidth: 0.167
+        borderBottomWidth: constants.divideLineWidth
     },
     leftBtn: {
         position: 'absolute',
