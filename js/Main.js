@@ -25,7 +25,7 @@ let toast = NativeModules.ToastNative;
 var ONE = require('./mainone/One');
 var ALL = require('./mainall/All');
 var ME = require('./mainme/Me');
-
+var FrameAnimation = require('./view/FrameAnimationView');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var barHeight = height * 0.082;
@@ -36,6 +36,7 @@ var Main = React.createClass({
         return {
             selectedTab: 'one',
             curBarHeight: 0,
+
         }
     },
 
@@ -45,6 +46,7 @@ var Main = React.createClass({
 
     render() {
         return (
+
             <TabNavigator tabBarStyle={{height: this.state.curBarHeight, backgroundColor: 'white'}}
                           sceneStyle={{paddingBottom: this.state.curBarHeight}}>
                 {/*首页*/}
@@ -53,9 +55,13 @@ var Main = React.createClass({
                 {this.renderTabBarItem('all', 'ALL', ALL, 'all_line', 'all_fill')}
                 {/*我的*/}
                 {this.renderTabBarItem('me', 'ME', ME, 'me_line', 'me_fill')}
+
             </TabNavigator>
+
         );
+
     },
+
 
     /**
      * 设置底部导航是否可见

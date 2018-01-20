@@ -47,7 +47,7 @@ public class MyReactPackage implements ReactPackage {
         modules.add(new UShareModule(reactContext));
         modules.add(new ULoginModule(reactContext));
         modules.add(new ToastModule(reactContext));
-
+        modules.add(new MediaPlayerModule(reactContext));
         return modules;
     }
 }

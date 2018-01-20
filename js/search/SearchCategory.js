@@ -15,17 +15,18 @@ import {
     Modal,
     TouchableOpacity,
     WebView,
-    Image,
-    NativeModules
+    Image
 } from 'react-native';
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
-import PickDateView from '../view/PickDate';
-let pickDate = NativeModules.PickDateNative;
+
+var PullPickDate = require('../view/PullPickDate');
+var PullMenu = require('../view/PullMenu');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
+const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
 var SearchCategory = React.createClass({
 
@@ -36,21 +37,30 @@ var SearchCategory = React.createClass({
         return {
             HTML: '',
             loading: false, //是否在加载
-            progress: 0,
-            backButtonEnabled: false,
-            forwardButtonEnabled: false,
-            url: '',
-            status: '',
-            scalesPageToFit: true,
-            animating: true,
-            isVisible:true,
+            progress: 0,   //加载进度
+            backButtonEnabled: false,  //回退键开启
+            forwardButtonEnabled: false, //翻页键开启
+            url: '',  //请求地址
+            status: '',  //请求标题
+            scalesPageToFit: true, //大小自适应
+            animating: true, //动画开启
+            isVisible: false,  //选择日期是否可见
+            showMenu: false, //列表菜单是否可见
+            curYear: 0,  //当前年
+            curMonth: 0, //当前月
+            curTime: 0,   //当前时间
+            curMenuId:this.props.route.params.categoryId+''  //当前菜单
         }
 
     },
 
 
     componentDidMount() {
-        var url = serverApi.SearchCategory.replace('{category_id}', this.props.route.params.categoryId);
+      this.getCategory(this.props.route.params.categoryId);
+    },
+
+    getCategory(categoryId){
+        var url = serverApi.SearchCategory.replace('{category_id}', categoryId);
         NetUtils.get(url, null, (result) => {
             this.setState({
                 HTML: result.html_content,
@@ -62,34 +72,23 @@ var SearchCategory = React.createClass({
         });
     },
 
-
     render() {
         return (
             <View style={styles.container}>
                 {this.renderNavBar()}
 
-                <TouchableOpacity ref={(e) => this._view = e} style={styles.dateBar} onPress={() => {
-                    pickDate.showPick(
-                       null,
-                        (year) => {
-                            console.log('选择年份' + year);
-                        },
-                        (month) => {
-                            console.log('选择月份' + month);
-
-                        },
-                        (year, month, setTime) => {
-                            console.log('确定年' + year + '确定月' + month + '确定时间' + setTime);
-
-                        });
+                <TouchableOpacity style={styles.dateBar} onPress={() => {
+                    this.setState({
+                        isVisible: true,
+                    });
                 }}>
                     <Text>{constants.curDate.substring(0, 4) + '年' + constants.curDate.substring(5, 7) + '月'}</Text>
 
-                    <Image source={{uri: 'arrow_down_black'}} style={styles.arrow}/>
+                    {this.renderArrow(this.state.isVisible)}
 
                 </TouchableOpacity>
 
-            <View>
+
                 <WebView
                     ref={WEBVIEW_REF}
                     automaticallyAdjustContentInsets={false}
@@ -104,32 +103,43 @@ var SearchCategory = React.createClass({
                     scalesPageToFit={this.state.scalesPageToFit}
                 />
                 {this.renderPickDateView()}
-            </View>
+
+                {this.renderPullMenu()}
                 {this.renderProgressBar()}
+                {constants.renderAudioPlay()}
             </View>
         );
     },
 
-    //渲染日期选择器
-    renderPickDateView(){
-       return(
-           <Modal
-               style={styles.datePick}
-               animationType={'fade'}
-               transparent={true}
-               visible={this.state.isVisible}
-               onRequestClose={() => {
-                   this.props.navigator().pop();
-               }}>
-               <PickDateView
-                   onChange={(obj) => {
-                       console.log('onSure收到事件'+obj.nativeEvent.msg+"目标id"+obj.nativeEvent.target);
-
-                   }}
-                   style={{flex: 1, width: '100%'}}/>
-           </Modal>
-       );
+    //渲染下拉菜单选择器
+    renderPullMenu() {
+        return (
+            <PullMenu menuData={menuArr} select={this.state.curMenu} onShow={this.state.showMenu} onSure={(clickItem) => {
+                this.setState({showMenu: false,curMenuId:clickItem.key});
+                this.getCategory(clickItem.key);
+            }} onCancel={() => {
+                this.setState({showMenu: false})
+            }}/>
+        );
     },
+
+    //渲染日期选择器
+    renderPickDateView() {
+        return (
+            <PullPickDate onSure={(year, month, time) => {
+                this.setState({
+                    curYear: year,
+                    curMonth: month,
+                    curTime: time
+                });
+            }} onCancel={() => {
+                this.setState({
+                    isVisible: false
+                });
+            }} onShow={this.state.isVisible}/>
+        );
+    },
+
     //渲染进度条
     renderProgressBar() {
         if (this.state.loading) {
@@ -175,9 +185,33 @@ var SearchCategory = React.createClass({
                     <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>{this.getTitle()}</Text>
+                <TouchableOpacity style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center', alignItems: 'center'
+                }} onPress={() => {
+                    console.log()
+                    this.setState({
+                        showMenu: true
+                    });
+                }}>
+                    <Text style={styles.title}>{this.getTitle()}</Text>
+                    {this.renderArrow(this.state.showMenu)}
 
+                </TouchableOpacity>
             </View>
+        );
+    },
+
+    renderArrow(show){
+        var arrowUri='';
+        if(show){
+            arrowUri='arrow_up_black';
+        }else{
+            arrowUri='arrow_down_black';
+        }
+
+        return(
+            <Image source={{uri: arrowUri}} style={styles.arrow}/>
         );
     },
 
@@ -185,29 +219,14 @@ var SearchCategory = React.createClass({
      * 获得标题
      */
     getTitle() {
-        switch (this.props.route.params.categoryId) {
-            case 0:
-                return '图文';
-                break;
-            case 3:
-                return '问答';
-                break;
-            case 1:
-                return '阅读';
-                break;
-            case 2:
-                return '连载';
-                break;
-            case 5:
-                return '影视';
-                break;
-            case 4:
-                return '音乐';
-                break;
-            case 8:
-                return '电台';
-                break;
+        for(var i=0;i<menuArr.length;i++){
+            if(menuArr[i].key==this.state.curMenuId){
+                console.log('当前类型'+menuArr[i].value);
+                return menuArr[i].value;
+            }
         }
+
+
     },
 
 
@@ -265,11 +284,7 @@ const styles = StyleSheet.create({
         width: height * 0.04,
         height: height * 0.05,
     },
-    datePick:{
-        width:width,
-        position:'absolute',
-        top:0
-    }
+
 });
 
 module.exports = SearchCategory;

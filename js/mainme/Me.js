@@ -15,12 +15,18 @@ import {
 
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+import constants from "../Constants";
 var Setting = require('../setting/Setting');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 var Login=require('../login/Login');
+var FrameAnimation = require('../view/FrameAnimationView');
 var Me = React.createClass({
+    getInitialState() {
+       return{
+           play:true,
+       }
+    },
     render() {
 
         return (
@@ -59,6 +65,7 @@ var Me = React.createClass({
                     </Text>
                 </TouchableOpacity>
 
+                {constants.renderAudioPlay()}
 
                 <Toast
                     ref="toast"
@@ -70,6 +77,8 @@ var Me = React.createClass({
             </View>
         );
     },
+
+
 
     /**
      * 跳转到登录

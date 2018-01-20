@@ -44,7 +44,7 @@ var OneListMovie = React.createClass({
     //渲染
     render() {
         return (
-            <TouchableOpacity onPress={() => this.pushToRead()}>
+            <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
             <View style={styles.container}>
                 <Text style={styles.category}>
                     - 影视 -
@@ -77,7 +77,7 @@ var OneListMovie = React.createClass({
                                 <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
                             </TouchableOpacity>
 
-                            {this.renderlikeNum()}
+                            {constants.renderlikeNum(this.state.likeNum)}
 
                         </View>
                         <TouchableOpacity
@@ -135,24 +135,7 @@ var OneListMovie = React.createClass({
             }
         )
     },
-    /**
-     * 渲染喜欢数量
-     */
-    renderlikeNum() {
-        if (this.state.likeNum > 0) {
-            return (
-                <Text style={{
-                    position: 'relative',
-                    left: width * 0.003,
-                    bottom: width * 0.016,
-                    fontSize: width * 0.024,
-                    color: '#A7A7A7'
-                }}>
-                    {this.state.likeNum}
-                </Text>
-            );
-        }
-    },
+
 
 
     /**

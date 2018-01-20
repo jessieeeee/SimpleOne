@@ -17,7 +17,7 @@ import {
 var Login = require('../login/Login');
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
-
+import constants from '../Constants';
 var Comment = React.createClass({
 
     getDefaultProps() {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
             marginRight: width * 0.05,
             justifyContent: 'center',
             alignItems: 'center',
-            borderBottomWidth: 0.5,
+            borderBottomWidth: constants.divideLineWidth,
             borderBottomColor: '#dddddd',
             backgroundColor: 'white'
         },

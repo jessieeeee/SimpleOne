@@ -129,22 +129,33 @@ export default class DateUtil extends Component{
      * @param curDate
      * @returns {string}
      */
-    static getNextDate(curDate){
-        console.log('当前日期'+curDate);
+    static getNextDate(curDate,num){
+        // console.log('当前curDate'+curDate);
         var array =  curDate.split("-");
         var dt = new Date(array[0], array[1]-1, array[2]);
-        var dateStr = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, 1));//设置天数 -1 天
+        var dateStr;
+        if(arguments.length==1){
+            dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, 1));//设置天数 -1 天
+        }else{
+            dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, num));//设置天数 num 天
+        }
+
         return dateStr;
     }
     /**
      * 获取前一天日期
      * @param curDate 当前日期string
      */
-    static getLastDate(curDate){
+    static getLastDate(curDate,num){
         // console.log('当前日期'+curDate);
         var array =  curDate.split("-");
         var dt = new Date(array[0], array[1]-1, array[2]);
-        var dateStr = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt,-1));//设置天数 -1 天
+        var dateStr;
+        if(arguments.length==1){
+            dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, -1));//设置天数 -1 天
+        }else{
+            dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, -num));//设置天数 num 天
+        }
         return dateStr;
     }
 
@@ -164,11 +175,11 @@ export default class DateUtil extends Component{
      * @returns {string}
      */
     static dateConverStr(date){
-        console.log(date);
+        // console.log(date);
         var y = date.getFullYear();
         var m = date.getMonth()+1;//获取当前月份的日期
         var d = date.getDate();
-        console.log(y+"-"+m+"-"+d);
+        // console.log(y+"-"+m+"-"+d);
         if(m<10){
             m='0'+m;
         }

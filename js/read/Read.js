@@ -23,6 +23,7 @@ import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import SingleChoiceDialog from '../view/SingleChoiceDialog'
+
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -33,15 +34,16 @@ let toast = NativeModules.ToastNative;
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
+var FrameAnimation = require('../view/FrameAnimationView');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
 
 var Share = require('../share/Share');
 var Login = require('../login/Login');
-var TimerMixin = require('react-timer-mixin');
+
 
 var Comment = require('./Comment');
-var loadingArr = [];
+
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
     `
@@ -80,8 +82,7 @@ var Read = React.createClass({
             like: false,
             likeNum: 0,
             readData: null,
-            loadingIndex: 0,//加载下标
-            loading: true, //是否在加载
+
             backButtonEnabled: false,
             forwardButtonEnabled: false,
             url: '',
@@ -91,13 +92,12 @@ var Read = React.createClass({
             commentData: null,
             height: 0,
             isVisible: false,
-            curItem:null,
+            curItem: null,
+            loading: true
         }
 
     },
 
-    //注册计时器
-    mixins: [TimerMixin],
 
     componentDidMount() {
         var url;
@@ -125,8 +125,7 @@ var Read = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-        this.getLoadingIcon();
-        this.startTimer();
+
     },
 
     /**
@@ -257,12 +256,17 @@ var Read = React.createClass({
                         scrollEnabled={false}
 
                     />
-                    {this.renderLoading()}
+
                     {this.renderCommentList()}
 
                 </ScrollView>
+
+
                 {this.renderBottomBar()}
                 {this.renderSingleChoiceDialog()}
+
+                {this.renderLoading()}
+                {constants.renderAudioPlay()}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -324,7 +328,7 @@ var Read = React.createClass({
         if (typeof(rowData) !== 'undefined') {
             return (
                 <TouchableOpacity activeOpacity={1} onPress={() => {
-                    this.setState({isVisible:true,curItem:rowData.item});
+                    this.setState({isVisible: true, curItem: rowData.item});
                 }}>
                     <Comment data={rowData.item} navigator={this.props.navigator}/>
 
@@ -334,13 +338,17 @@ var Read = React.createClass({
 
     },
 
-    renderSingleChoiceDialog(){
-        return(
+    renderSingleChoiceDialog() {
+        return (
             <SingleChoiceDialog
                 isVisible={this.state.isVisible}
                 dataSource={itemChoiceArr}
-                onConfirm={(option) => {this.doSelected(option)}}
-                onCancel={() => {this.setState({isVisible: false})}}
+                onConfirm={(option) => {
+                    this.doSelected(option)
+                }}
+                onCancel={() => {
+                    this.setState({isVisible: false})
+                }}
             />
         );
     },
@@ -350,10 +358,10 @@ var Read = React.createClass({
      * @param option
      */
     doSelected(option) {
-        if(option.value == '1'){
-           this.pushToLogin();
-        }else{
-           this.setClipboardContent();
+        if (option.value == '1') {
+            this.pushToLogin();
+        } else {
+            this.setClipboardContent();
         }
     },
 
@@ -365,26 +373,25 @@ var Read = React.createClass({
         Clipboard.setString(this.state.curItem.content);
         try {
             var content = await Clipboard.getString();
-            toast.showMsg('已复制到剪切板',toast.SHORT);
+            toast.showMsg('已复制到剪切板', toast.SHORT);
             this.setState({content: content});
         } catch (e) {
             this.setState({content: e.message});
         }
     },
 
+
     renderLoading() {
-        if (this.state.loading) {
-            return (
-                <Image source={{uri: loadingArr[this.state.loadingIndex]}}
-                       style={{
-                           width: width * 0.14,
-                           height: width * 0.14,
-                           position: 'absolute',
-                           top: height * 0.4 - width * 0.07,
-                           left: width / 2 - width * 0.07
-                       }}/>
-            );
-        }
+        return (
+            <FrameAnimation
+                loadingArr={this.getLoadingIcon()}
+                width={width * 0.14} height={width * 0.14}
+                loading={this.state.loading} style={{
+                position: 'absolute',
+                top: height * 0.4 - width * 0.07,
+                left: width / 2 - width * 0.07
+            }}/>
+        );
     },
 
     onShouldStartLoadWithRequest(event) {
@@ -398,7 +405,7 @@ var Read = React.createClass({
             forwardButtonEnabled: navState.canGoForward,
             url: navState.url,
             status: navState.title,
-            loading: navState.loading,
+            loading:navState.loading,
             scalesPageToFit: true
         });
     },
@@ -421,7 +428,7 @@ var Read = React.createClass({
                         <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIcon}/>
                     </TouchableOpacity>
 
-                    {this.renderlikeNum()}
+                    {constants.renderlikeNum(this.state.likeNum)}
 
                     <TouchableOpacity style={styles.rightBtnIconCenter}
                                       onPress={() => {
@@ -452,7 +459,6 @@ var Read = React.createClass({
                 {/*左边按钮*/}
                 <TouchableOpacity style={styles.leftBtn}
                                   onPress={() => {
-                                      this.stopTimer();
                                       this.props.navigator.pop();
                                   }}>
                     <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
@@ -484,25 +490,7 @@ var Read = React.createClass({
             );
         }
     },
-    /**
-     * 渲染喜欢数量
-     */
-    renderlikeNum() {
-        if (this.state.likeNum > 0) {
-            return (
-                <Text style={{
-                    position: 'relative',
-                    left: width * 0.003,
-                    bottom: width * 0.016,
-                    fontSize: width * 0.024,
-                    marginRight: width * 0.04,
-                    color: '#A7A7A7'
-                }}>
-                    {this.state.likeNum}
-                </Text>
-            );
-        }
-    },
+
     /**
      * 获取分类
      */
@@ -566,6 +554,24 @@ var Read = React.createClass({
             }
         )
     },
+
+    /**
+     * 载入图标名称初始化
+     */
+    getLoadingIcon() {
+        var loadingArr=[];
+        for (var i = 0; i < 30; i++) {
+            var postfix;
+            if(i<10){
+                postfix='0'+i;
+            }else{
+                postfix=i;
+            }
+            loadingArr.push(('webview_loading_' + postfix).toString());
+        }
+        return loadingArr;
+    },
+
     //点击喜欢
     likeClick() {
         this.setState({
@@ -583,6 +589,7 @@ var Read = React.createClass({
             return 'bubble_like';
         }
     },
+
     /**
      * 跳转到登录
      * @param url
@@ -598,55 +605,6 @@ var Read = React.createClass({
         )
     },
 
-    /**
-     * 载入图标名称初始化
-     */
-    getLoadingIcon() {
-        for (var i = 0; i < 30; i++) {
-            loadingArr.push(('webview_loading_0' + i).toString());
-        }
-        // for(var i=0;i<30;i++){
-        //     console.log(loadingArr[i]);
-        // }
-    },
-
-    /**
-     * 开启计时器
-     */
-    startTimer() {
-        this.stopTimer();
-        this.timer = this.setInterval(function () {
-            console.log('刷新下标' + this.state.loadingIndex);
-            if (this.state.loading) {
-                var nextIndex = 0;
-
-                //移动下标
-                if (this.state.loadingIndex + 1 > 29) {
-                    nextIndex = 0
-                } else {
-                    nextIndex = this.state.loadingIndex++;
-                }
-                console.log('刷新下标..' + nextIndex);
-                //刷新下标
-                this.setState({
-                    loadingIndex: nextIndex
-                });
-            } else {
-                this.stopTimer();
-            }
-
-        }, this.props.duration);
-    },
-
-    /**
-     * 停止计时器
-     */
-    stopTimer() {
-        if (this.timer != null) {
-            this.clearInterval(this.timer);
-        }
-
-    },
 
 });
 

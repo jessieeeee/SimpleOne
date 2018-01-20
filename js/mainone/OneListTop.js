@@ -146,7 +146,7 @@ var OneListTop = React.createClass({
     renderlikeNum(){
         if(this.state.likeNum>0){
             return(
-                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, marginRight: width * 0.03,color:'#A7A7A7'}}>
+                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, color:'#A7A7A7'}}>
                     {this.state.likeNum}
                 </Text>
             );

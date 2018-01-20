@@ -6,7 +6,7 @@ import {
     Modal,
     ScrollView
 } from 'react-native';
-
+import constants from '../Constants';
 var Dimensions = require('Dimensions');
 var {width, height} = Dimensions.get('window');
 
@@ -74,7 +74,7 @@ export default class SingleChoiceDialog extends Component {
                         paddingLeft:width*0.06,
                         height:width*0.136,
                         width: width * 0.72,  fontSize: width * 0.044, textAlignVertical: 'center',
-                        borderBottomColor: '#dddddd', borderBottomWidth: 0.5,
+                        borderBottomColor: '#dddddd', borderBottomWidth: constants.divideLineWidth,
                         color: this.props.isSelected === option.value ? '#009ad6' : '#333333'
                     }}>
                         {option.label}

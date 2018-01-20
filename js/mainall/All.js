@@ -33,7 +33,7 @@ var AllListAuthor = require('./AllListAuthor');
 var AllListQuestion = require('./AllListQuestion');
 // 搜索界面
 var Search = require('../search/Search');
-
+var FrameAnimation = require('../view/FrameAnimationView');
 
 // 加载更多的view
 var LoadingMore = require('../view/LoadingMore');
@@ -52,7 +52,8 @@ var All = React.createClass({
             loading: false,//是否正在加载
             startId: 0, //主题请求开始id
             lastId: 0, //记录上一次请求id
-            isEnd: false//是否到末尾标记
+            isEnd: false,//是否到末尾标记
+            play:true,
         }
 
     },
@@ -79,7 +80,7 @@ var All = React.createClass({
                     {this.renderLoadMoreList()}
                     {this.renderLoading()}
                 </PullView>
-
+                {constants.renderAudioPlay()}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -91,6 +92,7 @@ var All = React.createClass({
             </View>
         );
     },
+
 
 
     /**

@@ -28,9 +28,7 @@ import DateUtil from "../util/DateUtil";
 
 let toast = NativeModules.ToastNative;
 
-
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var OneListTop = require('./OneListTop');
 var OneListCommon = require('./OneListCommon');
 var OneListMusic = require('./OneListMusic');
@@ -42,9 +40,12 @@ var ServerApi = require('../ServerApi');
 var ExpandMenu = require('./menu/ExpandMenu');
 
 var key = 0;
+var date= '0'; //请求的日期
 var itemPageArr = []; //分页数组
+var  curPage= 0;//当前页数
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
 var One = React.createClass({
+
     /**
      * 初始化状态变量
      * @returns {{oneData: null}}
@@ -53,12 +54,13 @@ var One = React.createClass({
         return {
             curOneData: null,  //缓存当前页
             nextOneData: null, //缓存下一页
-            date: '0', //请求的日期
-            curPage: 0,//当前页数
             animatedValue: new Animated.Value(0),
             showSearch: false,//是否显示搜索按钮
             showArrow: false,//是否显示箭头
-            showDisplay:false//是否显示大图
+            showDisplay:false,//是否显示大图
+
+            showDate:'0',//显示的日期
+            play:true,
         }
 
     },
@@ -79,12 +81,13 @@ var One = React.createClass({
             this.setState({
                 curOneData: result,
             });
-        });
+        },true);
         setTimeout(() => {
             resolve();
         }, 3000);
 
     },
+
     //动画
     animateLastDay() {
         Animated.timing(
@@ -96,13 +99,12 @@ var One = React.createClass({
             }
         ).start(() => this.animateLastDay())
     },
+
     /**
      * 界面绘制
      * @returns {XML}
      */
     render() {
-
-
         return (
             <View style={styles.container}>
 
@@ -116,6 +118,7 @@ var One = React.createClass({
 
                 </ScrollView>
                 {this.renderDisplay()}
+                {constants.renderAudioPlay()}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -127,6 +130,15 @@ var One = React.createClass({
         );
     },
 
+
+
+
+
+
+    /**
+     * 渲染大图查看
+     * @returns {XML}
+     */
     renderDisplay() {
         return (
             <DisplayImg topText={this.state.topText}
@@ -137,8 +149,8 @@ var One = React.createClass({
                         isVisible={this.state.showDisplay}
                         onCancel={() => {this.setState({showDisplay: false})}}/>
         )
-
     },
+
     renderPage() {
         return itemPageArr;
     },
@@ -152,36 +164,65 @@ var One = React.createClass({
         var offset = e.nativeEvent.contentOffset.x;
         //当前页数
         var currentPage = Math.floor(offset / width);
-
-
+        // console.log(currentPage+'上一次页数;'+curPage);
         //往后翻
-        if (currentPage > this.state.curPage) {
+        if (currentPage > curPage) {
+            // console.log('往后翻');
             //设置当前页数
             this.setState({
+                showDate: DateUtil.getLastDate(this.state.showDate,currentPage-curPage),
                 curOneData: this.state.nextOneData,
-                curPage: currentPage
             });
 
+            this.addPage(this.state.nextOneData.data);
             this.getOneList((result) => {
                 this.setState({
                     nextOneData: result,
                 });
-                this.addPage(this.state.nextOneData.data);
-            });
-
-
-        } else {
-            this.setState({
-                curPage: currentPage
-            });
+                this.addEmptyView();
+            },false);
         }
+        else if(currentPage < curPage) {
+            // console.log('往前翻');
+            this.setState({
+                showDate:DateUtil.getNextDate(this.state.showDate,curPage-currentPage)
+            })
+        }
+        curPage=currentPage;
     },
 
 
+    addEmptyView(){
+        itemPageArr.push(
+            <View key={key} style={{width:width,height:height}}/>
+        );
+        {
+            key++
+        }
+    },
     /**
      * 添加下一页
      */
+    // addPage(oneData) {
+    //     itemPageArr.pop();
+    //     key--;
+    //     itemPageArr.push(
+    //         <ScrollView key={key}  onScroll={this.onScroll}>
+    //
+    //             {this.renderAllItem(oneData)}
+    //
+    //         </ScrollView>
+    //     );
+    //     {
+    //         key++
+    //     }
+    // },
+    // /**
+    //  * 添加下一页
+    //  */
     addPage(oneData) {
+        itemPageArr.pop();
+        key--;
         itemPageArr.push(
             <PullView key={key} onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
@@ -222,8 +263,9 @@ var One = React.createClass({
         var scrollView = this.refs.sv_one;
         // console.log("offsetx:" + offsetx);
         scrollView.scrollResponderScrollTo({x: 0, y: 0, animated: true});
+        curPage= 0;
         this.setState({
-            curPage: 0
+            showDate: constants.curDate
         });
     },
 
@@ -244,7 +286,7 @@ var One = React.createClass({
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
-                                    date={this.state.date}
+                                    date={constants.curDate}
                                     weather={this.state.curOneData.data.weather}
                                     data={data}
                                     navigator={this.props.navigator}
@@ -277,9 +319,9 @@ var One = React.createClass({
                 //电台
                 else if (data.category == 8) {
                     itemArr.push(
-                        <OneListAudio key={key} data={data} navigator={this.props.navigator} date={this.state.date}
+                        <OneListAudio key={key} data={data} navigator={this.props.navigator} date={this.state.showDate}
                                       todayRadio={() => {
-                                          this.refs.toast.show('今晚22:30主播在这里等你', 1500)
+                                          toast.showMsg('今晚22:30主播在这里等你',toast.SHORT)
                                       }}/>
                     );
                 }
@@ -309,9 +351,9 @@ var One = React.createClass({
             //添加菜单
             if (oneData.menu != null) {
                 itemArr.splice(2, 0,
-                    <ExpandMenu key={2} menu={oneData.menu} navigator={this.props.navigator} date={this.state.date}
+                    <ExpandMenu key={2} menu={oneData.menu} navigator={this.props.navigator} date={this.state.showDate}
                                 todayRadio={() => {
-                                    this.refs.toast.show('今晚22:30主播在这里等你', 1500)
+                                    toast.showMsg('今晚22:30主播在这里等你',toast.SHORT)
                                 }}/>
                 );
                 itemArr.splice(3, 0,
@@ -351,13 +393,13 @@ var One = React.createClass({
                     {/*上面日期*/}
                     <View style={styles.date}>
                         <Text
-                            style={styles.dateText}>{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(0, 4)}</Text>
-                        <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
+                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(0, 4)}</Text>
+                        <Text style={styles.dividerText}>{this.state.showDate == '0' ? '' : '    /    '}</Text>
                         <Text
-                            style={styles.dateText}>{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(5, 7)}</Text>
-                        <Text style={styles.dividerText}>{this.state.curOneData === null ? '' : '    /    '}</Text>
+                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(5, 7)}</Text>
+                        <Text style={styles.dividerText}>{this.state.showDate == '0' ? '' : '    /    '}</Text>
                         <Text
-                            style={styles.dateText}>{this.state.curOneData === null ? '' : DateUtil.getNextDate(this.state.date).substring(8, 10)}</Text>
+                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(8, 10)}</Text>
                     </View>
                     {this.renderWeather()}
 
@@ -369,6 +411,10 @@ var One = React.createClass({
         );
     },
 
+    /**
+     * 天气绘制
+     * @returns {XML}
+     */
     renderWeather() {
         if (this.state.showArrow) {
             return (
@@ -385,6 +431,10 @@ var One = React.createClass({
 
     },
 
+    /**
+     * 搜索按钮绘制
+     * @returns {XML}
+     */
     renderSearch() {
         if (this.state.showSearch) {
             return (
@@ -395,6 +445,9 @@ var One = React.createClass({
             );
         }
     },
+
+
+
     /**
      * 跳转到搜索页
      * @param url
@@ -413,7 +466,7 @@ var One = React.createClass({
      * 渲染左边今天按钮
      */
     renderToday() {
-        if (this.state.curPage != 0) {
+        if (curPage != 0) {
             return (
                 <View style={styles.leftBtn}>
                     {/*左边按钮*/}
@@ -433,12 +486,13 @@ var One = React.createClass({
 
         //获取第一页后获取第二页
         this.loadFirstPage(() => {
+            this.addEmptyView();
             this.getOneList((result) => {
                 this.setState({
                     nextOneData: result,
                 });
-                this.addPage(this.state.nextOneData.data);
-            });
+
+            },false);
         });
     },
 
@@ -451,12 +505,16 @@ var One = React.createClass({
             this.setState({
                 curOneData: result,
                 cachePage: 1,
-                date: result.data.weather.date
             });
-            constants.curDate = result.data.weather.date;
+            date=result.data.weather.date;
+            this.setState({
+                showDate:result.data.weather.date
+            });
+            console.log('今日日期'+date);
+            constants.curDate = date;
             this.addPage(this.state.curOneData.data);
             loadFirstSuccess();
-        });
+        },false);
     },
 
 
@@ -464,18 +522,31 @@ var One = React.createClass({
      * 获取内容列表
      * @param onSuccess
      */
-    getOneList(onSuccess) {
-        var lastDate = DateUtil.getLastDate(this.state.date);
-        var url = ServerApi.OneList.replace('{date}', this.state.date == '0' ? '0' : lastDate);
-        this.setState({
-            date: lastDate
-        });
+    getOneList(onSuccess,refresh) {
+        console.log('请求date'+date);
+        var requestDate;
+        if(date == '0'){
+            requestDate= '0';
+        }else{
+            if(refresh){
+                requestDate= this.state.showDate;
+            }else{
+                requestDate= DateUtil.getLastDate(date);
+            }
+        }
+
+        var url = ServerApi.OneList.replace('{date}',  requestDate);
+
+        console.log('请求日期date'+requestDate);
 
         NetUtil.get(url, null, (result) => {
-            onSuccess(result);
+            if(!refresh){
 
+                date= requestDate;
+            }
+            onSuccess(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT)
         });
 
     },
@@ -536,7 +607,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: width * 0.05,
         color: '#525252',
-        fontFamily: 'hp-title'
     },
     dividerText: {
         fontSize: width * 0.05,
