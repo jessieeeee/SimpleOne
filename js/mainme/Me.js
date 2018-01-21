@@ -17,14 +17,15 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from "../Constants";
 var Setting = require('../setting/Setting');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var Login=require('../login/Login');
-var FrameAnimation = require('../view/FrameAnimationView');
+var MusicControl=require('../musiccontrol/MusicControl');
+
 var Me = React.createClass({
     getInitialState() {
        return{
            play:true,
+           showMusicControl:false,
        }
     },
     render() {
@@ -65,7 +66,16 @@ var Me = React.createClass({
                     </Text>
                 </TouchableOpacity>
 
-                {constants.renderAudioPlay()}
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                        showMusicControl:true,
+                    });
+                })}
+                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                        showMusicControl:false,
+                    });
+                }}/>
 
                 <Toast
                     ref="toast"

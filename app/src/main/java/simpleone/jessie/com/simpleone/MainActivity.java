@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 //下面代码中的"HelloWorld"来自index.android.js文件中最后一行代码
         mReactRootView.startReactApplication(mReactInstanceManager,
                 "SimpleOne", null);
-
+//        mReactInstanceManager.getDevSupportManager().handleReloadJS();
         setContentView(mReactRootView);
 
         UShare.init(this);

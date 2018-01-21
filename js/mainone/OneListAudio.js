@@ -22,8 +22,7 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 var FrameAnimation = require('../view/FrameAnimationView');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
@@ -39,8 +38,6 @@ var OneListAudio = React.createClass({
             volume: 1,
             muted: false,
             resizeMode: 'contain',
-            currentPosition:0,
-            totalDuration:0,
             loading:false,
         }
     },
@@ -57,11 +54,9 @@ var OneListAudio = React.createClass({
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
             console.log('当前进度' + reminder.currentPosition);
             console.log('总长度' + reminder.totalDuration);
-            this.setState({
-                totalDuration:reminder.totalDuration,
-                currentPosition:reminder.currentPosition,
-            });
 
+            constants.CURRENT_MUSIC_DURATION=reminder.currentPosition;
+            constants.CURRENT_MUSIC_TOTAL=reminder.totalDuration;
             if(!this.state.rotate){
                 this.setState({
                     loading:true

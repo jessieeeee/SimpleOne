@@ -25,8 +25,7 @@ var OneListCommon = require('../mainone/OneListCommon');
 var OneListMusic = require('../mainone/OneListMusic');
 var OneListMovie = require('../mainone/OneListMovie');
 var OneListAudio = require('../mainone/OneListAudio');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 // 加载更多的view
 var LoadingMore = require('../view/LoadingMore');
 var itemArr = [];

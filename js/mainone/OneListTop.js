@@ -17,9 +17,8 @@ import {
 } from 'react-native';
 
 import Toast, {DURATION} from 'react-native-easy-toast'
-
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 
 var Remark=require('../remark/Remark');
 var Login=require('../login/Login');

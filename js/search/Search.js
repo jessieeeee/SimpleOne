@@ -16,9 +16,9 @@ import {
     TouchableOpacity
 
 } from 'react-native';
+import constants from '../Constants';
 var SearchCategory=require('./SearchCategory');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 var Search = React.createClass({
 

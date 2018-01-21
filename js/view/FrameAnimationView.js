@@ -10,11 +10,11 @@ import {
     StyleSheet,
     Text,
     View,
-    Image
+    Image,
+    TouchableOpacity
 } from 'react-native';
 import MyImage from '../view/MyImage';
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+
 var TimerMixin = require('react-timer-mixin');
 var FrameAnimationView = React.createClass({
 
@@ -28,6 +28,7 @@ var FrameAnimationView = React.createClass({
             loading: false, //是否在加载
             style: null,
             loadingArr: null,
+            clickEvent:null//点击事件回调
         }
     },
     getInitialState() {
@@ -40,10 +41,11 @@ var FrameAnimationView = React.createClass({
         if (this.props.loading) {
             // console.log('刷新..' + this.props.loadingArr[this.state.loadingIndex]);
             return (
-
+              <TouchableOpacity style={this.props.style} onPress={() => {this.props.clickEvent()}}>
                 <MyImage ref={"img"} source={{uri: this.props.loadingArr[this.loadingIndex]}}
-                       style={[this.props.style, {width: this.props.width, height: this.props.height}]}/>
-            );
+                       style={[{width: this.props.width, height: this.props.height}]}/>
+              </TouchableOpacity>
+            )
         } else {
             return (
                 <View/>

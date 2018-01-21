@@ -19,8 +19,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 var Read=require('../read/Read');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var ServerApi=require('../ServerApi');
 var AllListQuestion = React.createClass({
 

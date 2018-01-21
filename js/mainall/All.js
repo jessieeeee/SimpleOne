@@ -19,8 +19,7 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import constants from "../Constants";
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 // 顶部的banner
 var AllListBanner = require('./AllListBanner');
 // 分类导航
@@ -33,7 +32,8 @@ var AllListAuthor = require('./AllListAuthor');
 var AllListQuestion = require('./AllListQuestion');
 // 搜索界面
 var Search = require('../search/Search');
-var FrameAnimation = require('../view/FrameAnimationView');
+
+var MusicControl=require('../musiccontrol/MusicControl');
 
 // 加载更多的view
 var LoadingMore = require('../view/LoadingMore');
@@ -54,6 +54,7 @@ var All = React.createClass({
             lastId: 0, //记录上一次请求id
             isEnd: false,//是否到末尾标记
             play:true,
+            showMusicControl:false,
         }
 
     },
@@ -80,7 +81,16 @@ var All = React.createClass({
                     {this.renderLoadMoreList()}
                     {this.renderLoading()}
                 </PullView>
-                {constants.renderAudioPlay()}
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                        showMusicControl:true,
+                    });
+                })}
+                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                        showMusicControl:false,
+                    });
+                }}/>
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}

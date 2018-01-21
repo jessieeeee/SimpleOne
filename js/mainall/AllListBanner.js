@@ -16,10 +16,9 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-import constants from "../Constants";
 
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 var TimerMixin = require('react-timer-mixin');
 var ServerApi=require('../ServerApi');
 var Read=require('../read/Read');

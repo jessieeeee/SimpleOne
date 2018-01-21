@@ -20,7 +20,7 @@ import {
     Animated,
     Easing
 } from 'react-native';
-
+var MusicControl=require('../musiccontrol/MusicControl');
 var DisplayImg = require('../display/DisplayImg');
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
@@ -58,7 +58,7 @@ var One = React.createClass({
             showSearch: false,//是否显示搜索按钮
             showArrow: false,//是否显示箭头
             showDisplay:false,//是否显示大图
-
+            showMusicControl:false,//是否显示音乐控制板
             showDate:'0',//显示的日期
             play:true,
         }
@@ -118,7 +118,17 @@ var One = React.createClass({
 
                 </ScrollView>
                 {this.renderDisplay()}
-                {constants.renderAudioPlay()}
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                       showMusicControl:true,
+                    });
+                    console.log('显示');
+                })}
+                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                    showMusicControl:false,
+                    });
+                }}/>
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}

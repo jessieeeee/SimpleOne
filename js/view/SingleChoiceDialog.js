@@ -7,8 +7,7 @@ import {
     ScrollView
 } from 'react-native';
 import constants from '../Constants';
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 export default class SingleChoiceDialog extends Component {
     static propTypes = {

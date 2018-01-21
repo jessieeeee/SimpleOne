@@ -22,8 +22,7 @@ import constants from '../Constants';
 let toast = NativeModules.ToastNative;
 var SettingLabel = require('./SettingLabel');
 var SettingItem = require('./SettingItem');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 var Setting = React.createClass({
     render() {

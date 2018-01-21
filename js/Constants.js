@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 var FrameAnimation = require('./view/FrameAnimationView');
 var Dimensions = require('Dimensions');
+
 import {
     Text,
 } from 'react-native';
@@ -33,6 +34,10 @@ const object = {
     PLAY_PROGRESS:'PLAY_PROGRESS',//播放进度
     CHANGE_MUSIC_CONTROL_MODAL_VISIBILITY: 'CHANGE_MUSIC_CONTROL_MODAL_VISIBILITY' , //控制悬浮窗可见
 
+    CURRENT_MUSIC_NAME:'来自另一个地球',  //当前播放的音乐名称
+    CURRENT_MUSIC_DURATION:0,//当前播放的音乐进度
+    CURRENT_MUSIC_TOTAL:0,//当前播放的音乐总进度
+    CURRENT_MUSIC_SINGER:'张亮银',//当前播放的歌手
     /**
      * 载入图标名称初始化
      */
@@ -53,13 +58,17 @@ const object = {
     /**
      * 音频播放绘制
      */
-    renderAudioPlay(){
+    renderAudioPlay(clickEvent){
 
         return(
             <FrameAnimation
                 loadingArr={this.getLoadingIcon()}
                 width={this.ScreenWH.width * 0.11} height={this.ScreenWH.width * 0.1}
-                loading={this.playMusic} style={{
+                loading={this.playMusic}
+                clickEvent={()=>{
+                    clickEvent();
+                }}
+                style={{
                 position: 'absolute',
                 top: this.ScreenWH.height * 0.17,
                 right: 0

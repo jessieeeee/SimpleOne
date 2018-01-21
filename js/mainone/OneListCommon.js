@@ -19,11 +19,10 @@ import {
 import DateUtil from "../util/DateUtil";
 import Toast, {DURATION} from 'react-native-easy-toast'
 
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
 var Read = require('../read/Read');
-import constants from '../Constants';
 
 var OneListCommon = React.createClass({
 

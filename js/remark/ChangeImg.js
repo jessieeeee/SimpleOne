@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 
 var options = {
     title: 'Select Avatar',

@@ -23,8 +23,7 @@ import DateUtil from "../util/DateUtil";
 let toast = NativeModules.ToastNative;
 var Share = require('../share/Share');
 var Login = require('../login/Login');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var ChangeImg = require('./ChangeImg');
 
 var Remark = React.createClass({

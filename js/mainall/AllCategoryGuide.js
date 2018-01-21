@@ -13,10 +13,10 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
+import constants from '../Constants';
 import Toast, {DURATION} from 'react-native-easy-toast'
 var SearchCategory=require('../search/SearchCategory');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var key=0;
 var AllCategoryGuide = React.createClass({
     render() {

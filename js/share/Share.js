@@ -19,8 +19,7 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 let toast = NativeModules.ToastNative;
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 let UShare = NativeModules.UShare;
 
 var Share = React.createClass({

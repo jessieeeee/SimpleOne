@@ -14,8 +14,8 @@ import {
     TouchableOpacity,
 
 } from 'react-native';
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 
 var AuthorHead=React.createClass({
     //要传入的参数

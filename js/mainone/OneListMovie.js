@@ -20,8 +20,7 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 var Read=require('../read/Read');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 import DateUtil from "../util/DateUtil";
 var Share=require('../share/Share');
 var OneListMovie = React.createClass({

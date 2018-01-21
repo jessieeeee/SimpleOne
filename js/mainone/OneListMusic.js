@@ -29,8 +29,7 @@ import constants from '../Constants';
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 var Read = require('../read/Read');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
 
 var OneListMusic = React.createClass({
@@ -40,9 +39,6 @@ var OneListMusic = React.createClass({
             return {
                 like: false,
                 likeNum: this.props.data.like_count,
-                totalDuration: 1,
-                currentPosition:0,
-                totalDuration:0,
                 spinValue : new Animated.Value(0),
                 isPlay: false,
                 rotate:false
@@ -69,10 +65,8 @@ var OneListMusic = React.createClass({
             DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
                 console.log('当前进度' + reminder.currentPosition);
                 console.log('总长度' + reminder.totalDuration);
-                this.setState({
-                    totalDuration:reminder.totalDuration,
-                    currentPosition:reminder.currentPosition,
-                });
+                constants.CURRENT_MUSIC_DURATION=reminder.currentPosition;
+                constants.CURRENT_MUSIC_TOTAL=reminder.totalDuration;
 
                 if(!this.state.rotate){
                     this.spin();

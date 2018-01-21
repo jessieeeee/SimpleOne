@@ -13,10 +13,10 @@ import {
     Image
 } from 'react-native';
 import DateUtils from "./util/DateUtil";
+import constants from './Constants';
 
 var Main = require('./Main');
-var Dimensions = require('Dimensions');
-var {width, height}=Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var LaunchImage = React.createClass({
     render() {
         return (

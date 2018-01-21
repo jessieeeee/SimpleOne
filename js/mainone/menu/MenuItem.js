@@ -15,8 +15,7 @@ import {
 } from 'react-native';
 import constants from '../../Constants';
 import Toast, {DURATION} from 'react-native-easy-toast'
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var Read=require('../../read/Read');
 
 var MenuItem = React.createClass({

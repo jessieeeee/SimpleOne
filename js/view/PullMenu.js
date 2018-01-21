@@ -17,8 +17,7 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 var TimerMixin = require('react-timer-mixin');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,

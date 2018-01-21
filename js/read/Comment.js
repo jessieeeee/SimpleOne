@@ -15,15 +15,14 @@ import {
 } from 'react-native';
 
 var Login = require('../login/Login');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
 import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 var Comment = React.createClass({
 
     getDefaultProps() {
         return {
             data: null,
-
+            bgColor: 'white'
         }
     },
     getInitialState() {
@@ -34,7 +33,7 @@ var Comment = React.createClass({
     },
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{backgroundColor:this.props.bgColor}]}>
                 <View style={styles.topView}>
                     <Image source={{uri: this.props.data.user.web_url}} style={styles.avatar}/>
                     <Text style={styles.username}>{this.props.data.user.user_name}</Text>
@@ -104,7 +103,6 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             borderBottomWidth: constants.divideLineWidth,
             borderBottomColor: '#dddddd',
-            backgroundColor: 'white'
         },
         topView: {
             marginTop: width * 0.034,

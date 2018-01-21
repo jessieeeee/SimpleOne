@@ -31,19 +31,15 @@ const VIEWABILITY_CONFIG = {
 };
 
 let toast = NativeModules.ToastNative;
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 var FrameAnimation = require('../view/FrameAnimationView');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
-
 var Share = require('../share/Share');
 var Login = require('../login/Login');
-
-
+var MusicControl=require('../musiccontrol/MusicControl');
 var Comment = require('./Comment');
-
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
     `
@@ -93,7 +89,8 @@ var Read = React.createClass({
             height: 0,
             isVisible: false,
             curItem: null,
-            loading: true
+            loading: true,
+            showMusicControl:false,
         }
 
     },
@@ -123,7 +120,7 @@ var Read = React.createClass({
             });
             // console.log(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+           console.log('error address' + error);
         });
 
     },
@@ -145,7 +142,8 @@ var Read = React.createClass({
             });
             console.log(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            console.log('error comment' + error);
+
         });
     },
 
@@ -220,7 +218,7 @@ var Read = React.createClass({
         console.log('onMessage->event.nativeEvent.data:');
         console.log(event.nativeEvent.data);
         try {
-            const action = JSON.parse(event.nativeEvent.data)
+            const action = JSON.parse(event.nativeEvent.data);
             if (action.type === 'setHeight' && action.height > 0 && this.state.height < height) {
                 console.log('设置高度');
                 this.setState({height: action.height})
@@ -241,7 +239,7 @@ var Read = React.createClass({
                         automaticallyAdjustContentInsets={true}
                         injectedJavaScript={BaseScript}
                         style={{
-                            width: Dimensions.get('window').width,
+                            width: width,
                             height: this.state.height
                         }}
                         source={{html: this.state.readData === null ? '' : this.state.readData.html_content}}
@@ -266,7 +264,16 @@ var Read = React.createClass({
                 {this.renderSingleChoiceDialog()}
 
                 {this.renderLoading()}
-                {constants.renderAudioPlay()}
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                        showMusicControl:true,
+                    });
+                })}
+                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                        showMusicControl:false,
+                    });
+                }}/>
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -330,7 +337,7 @@ var Read = React.createClass({
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     this.setState({isVisible: true, curItem: rowData.item});
                 }}>
-                    <Comment data={rowData.item} navigator={this.props.navigator}/>
+                    <Comment data={rowData.item} bgColor={this.state.bgColor} navigator={this.props.navigator}/>
 
                 </TouchableOpacity>
             )

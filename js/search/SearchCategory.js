@@ -22,10 +22,11 @@ import NetUtils from "../util/NetUtil";
 
 var PullPickDate = require('../view/PullPickDate');
 var PullMenu = require('../view/PullMenu');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
+var MusicControl=require('../musiccontrol/MusicControl');
+
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
 var SearchCategory = React.createClass({
@@ -49,7 +50,8 @@ var SearchCategory = React.createClass({
             curYear: 0,  //当前年
             curMonth: 0, //当前月
             curTime: 0,   //当前时间
-            curMenuId:this.props.route.params.categoryId+''  //当前菜单
+            curMenuId:this.props.route.params.categoryId+'',  //当前菜单
+            showMusicControl:false,
         }
 
     },
@@ -106,7 +108,16 @@ var SearchCategory = React.createClass({
 
                 {this.renderPullMenu()}
                 {this.renderProgressBar()}
-                {constants.renderAudioPlay()}
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                        showMusicControl:true,
+                    });
+                })}
+                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                        showMusicControl:false,
+                    });
+                }}/>
             </View>
         );
     },

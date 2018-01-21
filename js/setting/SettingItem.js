@@ -15,8 +15,7 @@ import {
 
 } from 'react-native';
 import constants from '../Constants';
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 var SettingItem=React.createClass({
     getDefaultProps(){

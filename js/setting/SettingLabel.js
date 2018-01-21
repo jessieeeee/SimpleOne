@@ -14,8 +14,8 @@ import {
     TouchableOpacity,
 
 } from 'react-native';
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 
 var SettingLabel=React.createClass({
     getDefaultProps(){

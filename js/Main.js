@@ -20,14 +20,13 @@ import {Navigator} from 'react-native-deprecated-custom-components';
 /**
  * 导入外部的组件类
  * */
+import constants from './Constants';
 import TabNavigator from 'react-native-tab-navigator';
 let toast = NativeModules.ToastNative;
 var ONE = require('./mainone/One');
 var ALL = require('./mainall/All');
 var ME = require('./mainme/Me');
-var FrameAnimation = require('./view/FrameAnimationView');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 var barHeight = height * 0.082;
 
 var lastBackPressed=0;

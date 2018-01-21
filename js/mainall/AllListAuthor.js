@@ -18,8 +18,8 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 var serverApi=require('../ServerApi');
 var AuthorPage=require('../author/AuthorPage');
 //设置数据源

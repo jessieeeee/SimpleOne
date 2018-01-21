@@ -19,8 +19,7 @@ import {
 import constants from '../Constants';
 let toast = NativeModules.ToastNative;
 let ULogin = NativeModules.ULogin;
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+var {width, height} = constants.ScreenWH;
 
 var Login=React.createClass({
     render() {

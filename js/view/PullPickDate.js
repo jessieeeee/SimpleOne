@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import PickDateView from '../view/PickDate';
 var TimerMixin = require('react-timer-mixin');
-var Dimensions = require('Dimensions');
-var {width, height} = Dimensions.get('window');
+import constants from '../Constants';
+var {width, height} = constants.ScreenWH;
 var PullPickDate=React.createClass({
     //注册计时器
     mixins: [TimerMixin],
