@@ -50,6 +50,7 @@ var OneListMusic = React.createClass({
         getDefaultProps() {
             return {
                 data: null,
+                onShow:null,
             }
         },
 
@@ -63,16 +64,16 @@ var OneListMusic = React.createClass({
                 }
             );
             DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
-                console.log('当前进度' + reminder.currentPosition);
-                console.log('总长度' + reminder.totalDuration);
-                constants.CURRENT_MUSIC_DURATION=reminder.currentPosition;
-                constants.CURRENT_MUSIC_TOTAL=reminder.totalDuration;
 
                 if(!this.state.rotate){
                     this.spin();
+                    constants.CURRENT_MUSIC_DATA=this.props.data;
+                    constants.playMusic=true;
+                    this
                     this.setState({
                         rotate:true
                     });
+                    this.props.onShow();
                 }
             });
 
@@ -184,7 +185,7 @@ var OneListMusic = React.createClass({
                             </TouchableOpacity>
                         </View>
 
-                        <Image source={{uri: 'xiami_right'}} style={styles.iconXia}/>
+                        <Image source={{uri: this.props.data.audio_platform==1?'xiami_right':'one_right'}} style={styles.iconXia}/>
                     </View>
                     {/*音乐封面下的音乐名称，作者和专辑*/}
                     <Text style={styles.musicInfo}>{this.getMusicInfo()}</Text>
@@ -229,8 +230,9 @@ var OneListMusic = React.createClass({
 
         playMusic() {
             console.log('播放地址'+this.props.data.audio_url);
-            if (!this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
+            if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
                 // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
+
                 media.start(this.props.data.audio_url);
                 this.setState({
                     isPlay: true

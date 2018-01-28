@@ -90,7 +90,6 @@ var FrameAnimationView = React.createClass({
                         this.loadingIndex++;
                     }
                     console.log('刷新下标' + this.loadingIndex);
-                    console.log('view'+this.refs.img);
                     if(this.refs.img+''!='undefined'){
                         this.refs.img.setNativeProps({
                             source:{uri: this.props.loadingArr[this.loadingIndex]},

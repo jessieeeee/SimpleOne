@@ -12,6 +12,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +25,9 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
 
     private ReactContext mContext;
 
-
+    private boolean singleCycle;//单曲循环
+    private int index;//当前歌曲下标
+    private List<String> urls;//歌曲地址列表
     private static String STOP_PLAY_MEDIA= "STOP_PLAY_MEDIA";//停止播放
     private static String LOADING_MEDIA_SUCCESS= "LOADING_MEDIA_SUCCESS";//缓冲成功
     private static String PLAY_EXCEPTION= "PLAY_EXCEPTION";//播放异常
@@ -56,6 +59,11 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
         return (mState == STATE_PLAYING);
     }
 
+
+    /**
+     * 开始播放
+     * @param url 目标地址
+     */
     @ReactMethod
     public void start(final String url) {
         if (mPlayer != null) {  //播放对象不为空
@@ -117,6 +125,21 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
 
     }
 
+    /**
+     * 添加地址到歌曲列表
+     * @param url
+     */
+    @ReactMethod
+    public void addMusicList(String url){
+        if(!url.isEmpty()){
+            urls.add(url);
+        }
+    }
+
+
+    /**
+     * 停止播放
+     */
     @ReactMethod
     public void stop() {
         mState = STATE_PAUSE;
@@ -145,8 +168,52 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
         }
     }
 
+    /**
+     * 播放下一首
+     */
+    @ReactMethod
+    public void playNext(){
+        if(hasNext()){
+            index++;
+            start(urls.get(index));
+        }
+    }
 
-    public  static void sendEvent(ReactContext reactContext, String eventName, WritableMap map)
+    /**
+     * 播放上一首
+     */
+    public void playPre(){
+        if(hasPre()){
+            index--;
+            start(urls.get(index));
+        }
+    }
+
+    /**
+     * 是否有下一首
+     * @return
+     */
+    public boolean hasNext(){
+        if(index+1<urls.size()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 是否有上一首
+     * @return
+     */
+    public boolean hasPre(){
+        if(index-1>=0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static void sendEvent(ReactContext reactContext, String eventName, WritableMap map)
     {
         System.out.println("reactContext="+reactContext);
 

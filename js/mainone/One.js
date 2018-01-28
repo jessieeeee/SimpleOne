@@ -20,13 +20,13 @@ import {
     Animated,
     Easing
 } from 'react-native';
-var MusicControl=require('../musiccontrol/MusicControl');
-var DisplayImg = require('../display/DisplayImg');
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
-
 let toast = NativeModules.ToastNative;
+
+var MusicControl=require('../musiccontrol/MusicControl');
+var DisplayImg = require('../display/DisplayImg');
 
 var {width, height} = constants.ScreenWH;
 var OneListTop = require('./OneListTop');
@@ -122,9 +122,9 @@ var One = React.createClass({
                     this.setState({
                        showMusicControl:true,
                     });
-                    console.log('显示');
                 })}
-                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl}
+                              onCancel={()=>{
                     this.setState({
                     showMusicControl:false,
                     });
@@ -317,7 +317,11 @@ var One = React.createClass({
                 //音乐
                 else if (data.category == 4) {
                     itemArr.push(
-                        <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
+                        <OneListMusic key={key} data={data} navigator={this.props.navigator} onShow={()=>{
+                            this.setState({
+                                refresh:true,
+                            });
+                        }}/>
                     );
                 }
                 //电影

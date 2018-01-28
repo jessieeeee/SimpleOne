@@ -269,11 +269,11 @@ var Read = React.createClass({
                         showMusicControl:true,
                     });
                 })}
-                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
+                {/*<MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{*/}
+                    {/*this.setState({*/}
+                        {/*showMusicControl:false,*/}
+                    {/*});*/}
+                {/*}}/>*/}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}

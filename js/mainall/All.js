@@ -86,7 +86,7 @@ var All = React.createClass({
                         showMusicControl:true,
                     });
                 })}
-                <MusicControl isVisible={this.state.showMusicControl} onCancel={()=>{
+                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
                     this.setState({
                         showMusicControl:false,
                     });

@@ -6,7 +6,7 @@ import {
     Text,
 } from 'react-native';
 const object = {
-    playMusic:true,
+    playMusic:false,
     ScreenWH: Dimensions.get('window'),
     curDate: '',
     /**
@@ -34,10 +34,7 @@ const object = {
     PLAY_PROGRESS:'PLAY_PROGRESS',//播放进度
     CHANGE_MUSIC_CONTROL_MODAL_VISIBILITY: 'CHANGE_MUSIC_CONTROL_MODAL_VISIBILITY' , //控制悬浮窗可见
 
-    CURRENT_MUSIC_NAME:'来自另一个地球',  //当前播放的音乐名称
-    CURRENT_MUSIC_DURATION:0,//当前播放的音乐进度
-    CURRENT_MUSIC_TOTAL:0,//当前播放的音乐总进度
-    CURRENT_MUSIC_SINGER:'张亮银',//当前播放的歌手
+    CURRENT_MUSIC_DATA:null, //当前播放的音乐数据
     /**
      * 载入图标名称初始化
      */
