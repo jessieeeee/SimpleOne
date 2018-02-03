@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false" >
+
+    <!-- animation-list 帧动画 -->
+    <!-- android:oneshot的值为 false代表播放多次，true代表只播放一次 -->
+    <!-- duration代表每张图片的播放时间 ,定义一个持续时间为50毫秒的动画帧 -->
+    <item
+        android:drawable="@drawable/float_player_play_01"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_02"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_03"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_04"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_05"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_06"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_07"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_08"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_09"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_10"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_11"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_12"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_13"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_14"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_15"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_16"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_17"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_18"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_19"
+        android:duration="50"/>
+    <item
+        android:drawable="@drawable/float_player_play_20"
+        android:duration="50"/>
+
+</animation-list>

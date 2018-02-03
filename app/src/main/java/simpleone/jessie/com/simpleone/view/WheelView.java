@@ -158,8 +158,15 @@ public class WheelView extends View {
     /**
      * 选择选中的item的index
      */
-    public void setCurrentItem(int selected) {
-        currentItem = selected;
+    public void setCurrentItem(String selected) {
+        for(int i=0; i<itemList.size();i++){
+            String item=itemList.get(i);
+            if(item.equals(selected)){
+                currentItem = i;
+                break;
+            }
+        }
+
         resetCurrentSelect();
     }
 

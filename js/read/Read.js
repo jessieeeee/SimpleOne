@@ -23,7 +23,7 @@ import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import Toast, {DURATION} from 'react-native-easy-toast'
 import SingleChoiceDialog from '../view/SingleChoiceDialog'
-
+var MusicControl=require('../musiccontrol/MusicControl');
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -38,7 +38,7 @@ var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
 var Share = require('../share/Share');
 var Login = require('../login/Login');
-var MusicControl=require('../musiccontrol/MusicControl');
+
 var Comment = require('./Comment');
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
@@ -228,9 +228,11 @@ var Read = React.createClass({
         }
 
     },
+
     render() {
         return (
             <View style={[styles.container, {backgroundColor: this.state.bgColor}]}>
+
                 {this.renderNavBar()}
                 <ScrollView style={{width: width, height: height - width * 0.1 - 0.08 * width}}
                             onScroll={this.onScroll}>
@@ -260,20 +262,23 @@ var Read = React.createClass({
                 </ScrollView>
 
 
+
                 {this.renderBottomBar()}
                 {this.renderSingleChoiceDialog()}
-
                 {this.renderLoading()}
+
+                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
+                    this.setState({
+                        showMusicControl:false,
+                    });
+                }}/>
+
                 {constants.renderAudioPlay(()=>{
                     this.setState({
                         showMusicControl:true,
                     });
                 })}
-                {/*<MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{*/}
-                    {/*this.setState({*/}
-                        {/*showMusicControl:false,*/}
-                    {/*});*/}
-                {/*}}/>*/}
+
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -315,7 +320,6 @@ var Read = React.createClass({
                         renderItem={this.renderRow}
                         keyExtractor={(item, index) => item.id}
                         onViewableItemsChanged={(info) => {
-                            console.log('是否可见');
                             console.log(info);
                         }}
 

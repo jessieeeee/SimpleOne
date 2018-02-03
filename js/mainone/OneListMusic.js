@@ -31,7 +31,7 @@ let toast = NativeModules.ToastNative;
 var Read = require('../read/Read');
 var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
-
+var rotate;
 var OneListMusic = React.createClass({
 
         //初始化变量
@@ -39,9 +39,9 @@ var OneListMusic = React.createClass({
             return {
                 like: false,
                 likeNum: this.props.data.like_count,
-                spinValue : new Animated.Value(0),
+                spinValue: new Animated.Value(0),
                 isPlay: false,
-                rotate:false
+                page:0,
             }
         },
 
@@ -50,12 +50,13 @@ var OneListMusic = React.createClass({
         getDefaultProps() {
             return {
                 data: null,
-                onShow:null,
+                onShow: null,
             }
         },
 
         componentDidMount() {
-            this.animation =Animated.timing(
+            rotate=false;
+            this.animation = Animated.timing(
                 this.state.spinValue,
                 {
                     toValue: 1,
@@ -63,16 +64,14 @@ var OneListMusic = React.createClass({
                     easing: Easing.linear
                 }
             );
-            DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
 
-                if(!this.state.rotate){
+            DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
+                //当前显示的等于当前播放的歌曲转起来
+                if (!rotate && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.MUSIC_TYPE) {
+                    console.log("调用旋转");
                     this.spin();
-                    constants.CURRENT_MUSIC_DATA=this.props.data;
-                    constants.playMusic=true;
-                    this
-                    this.setState({
-                        rotate:true
-                    });
+                    rotate=true;
+                    constants.playMusic = true;
                     this.props.onShow();
                 }
             });
@@ -82,22 +81,20 @@ var OneListMusic = React.createClass({
                 if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
                     this.setState({
                         isPlay: false,
-                        rotate:false
                     });
+                    rotate=false;
                     this.state.spinValue.stopAnimation(value => {
-                        console.log('剩余时间'+(1-value) * 4000);
+                        console.log('剩余时间' + (1 - value) * 4000);
                         //计算角度比例
                         this.animation = Animated.timing(this.state.spinValue, {
                             toValue: 1,
-                            duration: (1-value) * 4000,
+                            duration: (1 - value) * 4000,
                             easing: Easing.linear,
                         });
                     });
                 }
 
             });
-
-
 
         },
 
@@ -109,10 +106,10 @@ var OneListMusic = React.createClass({
 
         spin() {
 
-            this.animation.start((result)=>{
+            this.animation.start((result) => {
                 //正常转完1周,继续转
-                if(Boolean(result.finished)){
-                    this.animation =Animated.timing(
+                if (Boolean(result.finished)) {
+                    this.animation = Animated.timing(
                         this.state.spinValue,
                         {
                             toValue: 1,
@@ -134,9 +131,7 @@ var OneListMusic = React.createClass({
             });
 
             return (
-
-                <View style={styles.container}>
-
+                <TouchableOpacity style={styles.container} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
 
                     <Text style={styles.category}>
                         - 音乐 -
@@ -163,7 +158,7 @@ var OneListMusic = React.createClass({
                         {/*用户下面的音乐封面*/}
                         <Animated.Image
                             source={{uri: this.props.data.img_url}}
-                            style={[styles.centerImg,{transform: [{rotate: spinRange}]}]}
+                            style={[styles.centerImg, {transform: [{rotate: spinRange}]}]}
                         />
 
                         <View style={{
@@ -185,7 +180,8 @@ var OneListMusic = React.createClass({
                             </TouchableOpacity>
                         </View>
 
-                        <Image source={{uri: this.props.data.audio_platform==1?'xiami_right':'one_right'}} style={styles.iconXia}/>
+                        <Image source={{uri: this.props.data.audio_platform == 1 ? 'xiami_right' : 'one_right'}}
+                               style={styles.iconXia}/>
                     </View>
                     {/*音乐封面下的音乐名称，作者和专辑*/}
                     <Text style={styles.musicInfo}>{this.getMusicInfo()}</Text>
@@ -221,23 +217,25 @@ var OneListMusic = React.createClass({
                         positionValue={height * 0.24}
                         textStyle={{color: 'white'}}
                     />
-                </View>
+                </TouchableOpacity>
 
             );
         },
 
 
-
         playMusic() {
-            console.log('播放地址'+this.props.data.audio_url);
-            if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
+            constants.curPage=this.props.page;
+            console.log('播放地址' + this.props.data.audio_url);
+            constants.CURRENT_MUSIC_DATA = this.props.data;
+            constants.CURRENT_TYPE=constants.MUSIC_TYPE;
+            if (this.props.data.audio_platform != 1) {
                 // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
-
+                media.addMusicList(this.props.data.audio_url);
                 media.start(this.props.data.audio_url);
                 this.setState({
                     isPlay: true
                 });
-            }else{
+            } else {
                 toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
             }
 
@@ -262,8 +260,7 @@ var OneListMusic = React.createClass({
                     }
                 }
             )
-        }
-        ,
+        },
 
         /**
          * 跳转到分享
@@ -282,8 +279,7 @@ var OneListMusic = React.createClass({
                     }
                 }
             )
-        }
-        ,
+        },
 
 
         /**
@@ -291,8 +287,7 @@ var OneListMusic = React.createClass({
          */
         getMusicInfo() {
             return this.props.data.music_name + ' · ' + this.props.data.audio_author + ' | ' + this.props.data.audio_album;
-        }
-        ,
+        },
 
         /**
          * 获取回答者
@@ -302,8 +297,7 @@ var OneListMusic = React.createClass({
             var tempStr = new Array();
             tempStr = this.props.data.author.user_name.split(' ');
             return '文 / ' + tempStr[0];
-        }
-        ,
+        },
 
         /**
          * 点击喜欢
@@ -313,8 +307,7 @@ var OneListMusic = React.createClass({
                 likeNum: this.state.like ? this.props.data.like_count : this.props.data.like_count + 1,
                 like: !this.state.like
             });
-        }
-        ,
+        },
 
         /**
          * 根据当前状态，显示喜欢图标
@@ -327,8 +320,7 @@ var OneListMusic = React.createClass({
             } else {
                 return 'bubble_like';
             }
-        }
-        ,
+        },
 
     })
 ;

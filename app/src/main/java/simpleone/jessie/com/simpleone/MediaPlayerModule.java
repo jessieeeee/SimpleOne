@@ -2,6 +2,7 @@ package simpleone.jessie.com.simpleone;
 
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -12,6 +13,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -104,13 +106,25 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        //播放完成, 通过sendEvent发送事件
-                        mState=STATE_NO_PLAYING;
-                        stopTimerTask();
-                        mPlayer.reset();
-                        WritableMap map=Arguments.createMap();
-                        map.putString("state",PLAY_COMPLETE);
-                        sendEvent(mContext,PLAY_STATE,map);
+                        //如果当前不是单曲模式
+                       if(!singleCycle){
+                           //有下一首时播放下一首
+                           if(hasNext()){
+                               playNext();
+                           }else{
+                               //播放完成, 通过sendEvent发送事件
+                               mState=STATE_NO_PLAYING;
+                               stopTimerTask();
+                               mPlayer.reset();
+                               WritableMap map=Arguments.createMap();
+                               map.putString("state",PLAY_COMPLETE);
+                               sendEvent(mContext,PLAY_STATE,map);
+                           }
+                       }else{
+                           //继续播放当前歌曲
+                           start(url);
+                       }
+
                     }
                 });
                 mPlayer.prepareAsync();//异步
@@ -132,6 +146,9 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addMusicList(String url){
         if(!url.isEmpty()){
+            if(urls==null){
+                urls=new ArrayList<>();
+            }
             urls.add(url);
         }
     }
@@ -182,6 +199,7 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
     /**
      * 播放上一首
      */
+    @ReactMethod
     public void playPre(){
         if(hasPre()){
             index--;
@@ -193,8 +211,9 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
      * 是否有下一首
      * @return
      */
+    @ReactMethod
     public boolean hasNext(){
-        if(index+1<urls.size()){
+        if(urls!=null&&index+1<urls.size()){
             return true;
         }else{
             return false;
@@ -205,12 +224,22 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
      * 是否有上一首
      * @return
      */
+    @ReactMethod
     public boolean hasPre(){
-        if(index-1>=0){
+        if(urls!=null&&index-1>=0){
             return true;
         }else{
             return false;
         }
+    }
+
+    /**
+     * 修改播放模式
+     */
+    @ReactMethod
+    public void setPlayMode(){
+        singleCycle=!singleCycle;
+        Toast.makeText(mContext, singleCycle?"单曲模式":"循环播放", Toast.LENGTH_SHORT).show();
     }
 
     public static void sendEvent(ReactContext reactContext, String eventName, WritableMap map)

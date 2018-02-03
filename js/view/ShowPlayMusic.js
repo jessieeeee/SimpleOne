@@ -3,17 +3,16 @@ import {requireNativeComponent, View} from 'react-native';
 
 
 let iface = {
-    name: 'PickDateView',
+    name: 'ShowPlayView',
     propTypes: {
-        setYear: React.PropTypes.string,
-        setMonth: React.PropTypes.string,
+
         //回调
         onChange: React.PropTypes.func,
         ...View.propTypes  //支持View组件的所有属性
     }
 }
 
-var RCTPickDateView = requireNativeComponent('PickDateView', iface);
+var RCTShowPlayMusicView = requireNativeComponent('ShowPlayView', iface);
 
 
-export default RCTPickDateView;
+export default RCTShowPlayMusicView;

@@ -20,7 +20,7 @@ import {
     DeviceEventEmitter
 } from 'react-native';
 var Login = require('../login/Login');
-var Read = require('../read/Read');
+
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
@@ -39,6 +39,7 @@ var MusicControl = React.createClass({
             isPlay: false,
             duration:0,
             total:0,
+            totalMsec:0,
         }
     },
 
@@ -48,7 +49,13 @@ var MusicControl = React.createClass({
             console.log('总长度' + reminder.totalDuration);
             if(this.state.total==0){
                 this.setState({
-                    total:(reminder.totalDuration/1000/60).toFixed(2)
+                    total:(reminder.totalDuration/1000/60).toFixed(2),
+                    totalMsec:reminder.totalDuration
+                });
+            }
+            if(!this.state.isPlay){
+                this.setState({
+                    isPlay:true
                 });
             }
             this.setState({
@@ -79,7 +86,6 @@ var MusicControl = React.createClass({
                 visible={this.props.isVisible}
                 onRequestClose={() => {
                     this.props.onCancel()
-                    console.log("321");
                 }}>
                 <View style={styles.container} >
                     <View style={styles.bg}>
@@ -98,28 +104,36 @@ var MusicControl = React.createClass({
                                 borderRadius: width*0.024,
                             }}
                             onValueChange={value =>
-                            {console.log(value)}}
+                            {
+                                console.log(value);
+                                media.seekTo(value*this.state.totalMsec);
+                            }}
                         />
                         <View style={{width:width,height:width*0.03,marginTop:-width*0.04}}>
-                         <Text style={styles.durationtext}>{this.state.total.toString().replace('+','')}</Text>
+                         <Text style={styles.durationtext}>{this.state.total}''</Text>
                         </View>
                         <Text style={styles.singer}> {constants.CURRENT_MUSIC_DATA!=null?constants.CURRENT_MUSIC_DATA.audio_author:''}</Text>
                         <View style={styles.btnsView}>
-                            <TouchableOpacity style={ {position: 'absolute', left: width * 0.13}} onPress={() => {}}>
-                            <Image source={{uri: 'last_disable'}}
-                                   style={[styles.controlBtn,]}/>
+                            <TouchableOpacity style={ {position: 'absolute', left: width * 0.13}} onPress={() => {media.playPre();}}>
+                            <Image source={{uri: this.showLastUri()}} style={styles.controlBtn}/>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {}}>
-                            <Image source={{uri: this.state.isPlay?'player_pause':'player_play'}} style={[styles.controlBtn]}/>
+                            <TouchableOpacity onPress={() => {
+                                if (!this.state.isPlay) {
+                                    this.playMusic();
+                                } else {
+                                    this.stopMusic();
+                                }
+                            }}>
+                            <Image source={{uri: this.state.isPlay?'player_pause':'player_play'}} style={styles.controlBtn}/>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{position: 'absolute', right: width * 0.13}} onPress={() => {}}>
-                            <Image source={{uri: 'next_disable'}} style={[styles.controlBtn, ]}/>
+                            <TouchableOpacity style={{position: 'absolute', right: width * 0.13}} onPress={() => {media.playNext();}}>
+                            <Image source={{uri: this.showNextUri() }} style={styles.controlBtn}/>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.bottomBar}>
-                            <TouchableOpacity style={{position: 'absolute', left: width * 0.04}} onPress={() => {}}>
+                            <TouchableOpacity style={{position: 'absolute', left: width * 0.04}} onPress={() => {media.setPlayMode();}}>
                             <Image source={{uri: 'player_all_cycle'}}
-                                   style={[styles.bottomBtn, ]}/>
+                                   style={styles.bottomBtn}/>
                             </TouchableOpacity>
                             <View style={styles.centerfrom}>
                                 <Image source={{uri: 'one_right'}} style={styles.bottomBtn}/>
@@ -128,10 +142,10 @@ var MusicControl = React.createClass({
                             <View style={{position: 'absolute', right: width * 0.04, flexDirection: 'row'}}>
                                 <TouchableOpacity style={{marginRight: width * 0.05}} onPress={() => {this.pushToLogin()}}>
                                 <Image source={{uri: 'music_collection_night'}}
-                                       style={[styles.bottomBtn, ]}/>
+                                       style={styles.bottomBtn}/>
                                 </TouchableOpacity>
                                 <TouchableOpacity  onPress={() => {this.pushToRead()}}>
-                                <Image source={{uri: 'fm_info'}} style={[styles.bottomBtn,]}/>
+                                <Image source={{uri: 'fm_info'}} style={styles.bottomBtn}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -142,10 +156,26 @@ var MusicControl = React.createClass({
         );
     },
 
+    showLastUri(){
+      if(media.hasPre()){
+          return 'last';
+      }else{
+          return 'last_disable';
+      }
+    },
 
-
+    showNextUri(){
+        if(media.hasNext()){
+            return 'next'
+        }else{
+            return 'next_disable';
+        }
+    },
+    /**
+     * 播放音乐
+     */
     playMusic() {
-        console.log('播放地址'+this.props.data.audio_url);
+        console.log('播放地址'+constants.CURRENT_MUSIC_DATA.audio_url);
         if (!constants.CURRENT_MUSIC_DATA.audio_url.toString().contains('http://music.wufazhuce.com/')) {
             // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
             media.start(constants.CURRENT_MUSIC_DATA.audio_url);
@@ -156,6 +186,13 @@ var MusicControl = React.createClass({
             toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
         }
 
+    },
+
+    /**
+     * 停止播放
+     */
+    stopMusic() {
+        media.stop();
     },
 
     /**
@@ -179,6 +216,7 @@ var MusicControl = React.createClass({
      * @param url
      */
     pushToRead() {
+        var Read = require('../read/Read');
         this.props.navigator.push(
             {
                 component: Read,

@@ -4,6 +4,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 /**
@@ -14,10 +15,10 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
  */
 
 
-public class PickDateViewManger extends SimpleViewManager<PickDateView> {
+public class PickDateViewManager extends SimpleViewManager<PickDateView> {
     private static final String REACT_CLASS = "PickDateView";
     private static final String TAG = "PickDateViewManger原生Tag";
-
+    private PickDateView pickDateView;
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -25,7 +26,7 @@ public class PickDateViewManger extends SimpleViewManager<PickDateView> {
 
     @Override
     protected PickDateView createViewInstance(final ThemedReactContext reactContext) {
-        final PickDateView pickDateView=new PickDateView(reactContext);
+        pickDateView=new PickDateView(reactContext);
         pickDateView.setCallBack(new PickDateView.CallBack() {
             @Override
             public void changeYear(int year) {
@@ -67,6 +68,16 @@ public class PickDateViewManger extends SimpleViewManager<PickDateView> {
             }
         });
         return pickDateView;
+    }
+
+    @ReactProp(name = "setYear")
+    public void setYear(PickDateView pickDateView,String year) {
+        pickDateView.setYear(year);
+    }
+
+    @ReactProp(name = "setMonth")
+    public void setMonth(PickDateView pickDateView,String month) {
+        pickDateView.setMonth(month);
     }
 
 }

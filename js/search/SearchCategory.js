@@ -137,7 +137,8 @@ var SearchCategory = React.createClass({
     //渲染日期选择器
     renderPickDateView() {
         return (
-            <PullPickDate onSure={(year, month, time) => {
+            <PullPickDate year={constants.curDate.substring(0, 4) + '年'} month={constants.curDate.substring(5, 7) + '月'}
+                          onSure={(year, month, time) => {
                 this.setState({
                     curYear: year,
                     curMonth: month,

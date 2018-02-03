@@ -27,6 +27,8 @@ var PullPickDate=React.createClass({
             onSure:null,
             onCancel:null,
             onShow:false,
+            year:'',
+            month:'',
         }
     },
 
@@ -78,8 +80,10 @@ var PullPickDate=React.createClass({
                     this.props.onCancel();
                 }}>
 
-                <TouchableOpacity style={{width: width, flex: 1, marginTop: height * 0.08 + 0.12 * width,backgroundColor: 'rgba(0, 0, 0, 0.7)'}} onPress={() => this.props.onCancel()}>
+                <View style={{width: width, flex: 1, marginTop: height * 0.08 + 0.12 * width,backgroundColor: 'rgba(0, 0, 0, 0.7)'}}>
                     <PickDateView
+                        setYear={this.props.year}
+                        setMonth={this.props.month}
                         onLayout={this.onLayout}
                         onChange={(obj) => {
                             console.log('onSure收到事件' + obj.nativeEvent.msg + "目标id" + obj.nativeEvent.msg.year);
@@ -95,8 +99,8 @@ var PullPickDate=React.createClass({
 
                         }}
                         style={{width: '100%', flex: 0.42,}}/>
-
-                </TouchableOpacity>
+                     <TouchableOpacity style={{flex:0.58}} onPress={() => this.props.onCancel()}/>
+                </View>
             </Modal>
         );
     },

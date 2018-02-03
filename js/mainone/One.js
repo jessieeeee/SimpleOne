@@ -39,7 +39,7 @@ var Search = require('../search/Search');
 var ServerApi = require('../ServerApi');
 var ExpandMenu = require('./menu/ExpandMenu');
 
-var key = 0;
+var key = 1;
 var date= '0'; //请求的日期
 var itemPageArr = []; //分页数组
 var  curPage= 0;//当前页数
@@ -118,17 +118,19 @@ var One = React.createClass({
 
                 </ScrollView>
                 {this.renderDisplay()}
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                       showMusicControl:true,
-                    });
-                })}
+
                 <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl}
                               onCancel={()=>{
                     this.setState({
                     showMusicControl:false,
                     });
                 }}/>
+
+                {constants.renderAudioPlay(()=>{
+                    this.setState({
+                        showMusicControl:true,
+                    });
+                })}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
@@ -136,13 +138,10 @@ var One = React.createClass({
                     positionValue={height * 0.4}
                     textStyle={{color: 'white'}}
                 />
+
             </View>
         );
     },
-
-
-
-
 
 
     /**
@@ -172,32 +171,41 @@ var One = React.createClass({
     onMomentumScrollEnd(e) {
         //水平方向偏移量
         var offset = e.nativeEvent.contentOffset.x;
+        console.log(':'+offset+'宽度'+width);
         //当前页数
-        var currentPage = Math.floor(offset / width);
-        // console.log(currentPage+'上一次页数;'+curPage);
+        var currentPage = Math.round(offset / width);
+        console.log(':'+currentPage+'缓存页数'+this.state.cachePage);
         //往后翻
         if (currentPage > curPage) {
-            // console.log('往后翻');
-            //设置当前页数
             this.setState({
-                showDate: DateUtil.getLastDate(this.state.showDate,currentPage-curPage),
-                curOneData: this.state.nextOneData,
+                showDate: DateUtil.getLastDate(this.state.showDate,currentPage-curPage)
             });
-
-            this.addPage(this.state.nextOneData.data);
-            this.getOneList((result) => {
+            console.log('往后翻:'+currentPage+'缓存页数'+this.state.cachePage);
+            //添加下一页缓存
+            if(currentPage==this.state.cachePage){
+                console.log('添加下一页缓存');
+                //设置当前页数
                 this.setState({
-                    nextOneData: result,
+                    curOneData: this.state.nextOneData,
+                    cachePage: this.state.cachePage+1,
                 });
-                this.addEmptyView();
-            },false);
+                this.addPage(this.state.nextOneData.data);
+                this.getOneList((result) => {
+                    this.setState({
+                        nextOneData: result,
+                    });
+                    this.addEmptyView();
+                },false);
+            }
+
         }
         else if(currentPage < curPage) {
             // console.log('往前翻');
             this.setState({
-                showDate:DateUtil.getNextDate(this.state.showDate,curPage-currentPage)
-            })
+                showDate: DateUtil.getNextDate(this.state.showDate,curPage-currentPage)
+            });
         }
+
         curPage=currentPage;
     },
 
@@ -236,7 +244,8 @@ var One = React.createClass({
         itemPageArr.push(
             <PullView key={key} onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
-                {this.renderAllItem(oneData)}
+                {this.renderAllItem(oneData,key)}
+
 
             </PullView>
         );
@@ -284,7 +293,7 @@ var One = React.createClass({
      * @param oneData
      * @returns {Array}
      */
-    renderAllItem(oneData) {
+    renderAllItem(oneData,page) {
         if (oneData !== null) {
             var itemArr = [];
             var key = 0;
@@ -317,7 +326,7 @@ var One = React.createClass({
                 //音乐
                 else if (data.category == 4) {
                     itemArr.push(
-                        <OneListMusic key={key} data={data} navigator={this.props.navigator} onShow={()=>{
+                        <OneListMusic key={key} page={page} data={data} navigator={this.props.navigator} onShow={()=>{
                             this.setState({
                                 refresh:true,
                             });
@@ -333,7 +342,12 @@ var One = React.createClass({
                 //电台
                 else if (data.category == 8) {
                     itemArr.push(
-                        <OneListAudio key={key} data={data} navigator={this.props.navigator} date={this.state.showDate}
+                        <OneListAudio key={key} page={page} data={data} navigator={this.props.navigator} date={this.state.showDate}
+                                      onShow={()=>{
+                                          this.setState({
+                                              refresh:true,
+                                          });
+                                      }}
                                       todayRadio={() => {
                                           toast.showMsg('今晚22:30主播在这里等你',toast.SHORT)
                                       }}/>
@@ -502,6 +516,7 @@ var One = React.createClass({
         this.loadFirstPage(() => {
             this.addEmptyView();
             this.getOneList((result) => {
+                console.log('获取到第二页'+JSON.stringify(result));
                 this.setState({
                     nextOneData: result,
                 });

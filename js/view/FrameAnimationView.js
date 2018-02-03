@@ -15,12 +15,13 @@ import {
 } from 'react-native';
 import MyImage from '../view/MyImage';
 
+var flag = 0;
 var TimerMixin = require('react-timer-mixin');
 var FrameAnimationView = React.createClass({
-
+    loadingIndex: 0,
     //注册计时器
     mixins: [TimerMixin],
-    loadingIndex: 0,
+
     getDefaultProps() {
         return {
             width: 0,
@@ -28,23 +29,26 @@ var FrameAnimationView = React.createClass({
             loading: false, //是否在加载
             style: null,
             loadingArr: null,
-            clickEvent:null//点击事件回调
+            clickEvent: null//点击事件回调
         }
     },
     getInitialState() {
         return {
+            rotate: this.props.loading,
 
         }
     },
 
     render() {
-        if (this.props.loading) {
-            // console.log('刷新..' + this.props.loadingArr[this.state.loadingIndex]);
+        if (this.state.rotate) {
+            {console.log("刷新了悬浮窗")}
             return (
-              <TouchableOpacity style={this.props.style} onPress={() => {this.props.clickEvent()}}>
-                <MyImage ref={"img"} source={{uri: this.props.loadingArr[this.loadingIndex]}}
-                       style={[{width: this.props.width, height: this.props.height}]}/>
-              </TouchableOpacity>
+                <TouchableOpacity style={this.props.style} onPress={() => {
+                    this.props.clickEvent()
+                }}>
+                    <MyImage ref={"img"} source={{uri: this.props.loadingArr[this.loadingIndex]}}
+                             style={[{width: this.props.width, height: this.props.height}]}/>
+                </TouchableOpacity>
             )
         } else {
             return (
@@ -53,12 +57,7 @@ var FrameAnimationView = React.createClass({
         }
     },
 
-    /**
-     * 发起网络请求
-     */
-    componentDidMount() {
-        this.startTimer();
-    },
+
 
     /**
      * 父组件传参变化回调
@@ -68,7 +67,14 @@ var FrameAnimationView = React.createClass({
         if (!nextProps.loading) {
             console.log('停止动画');
             this.stopTimer()
+        } else {
+            console.log('开始动画');
+            this.startTimer()
         }
+        console.log(nextProps.loading);
+        this.setState({
+            rotate: nextProps.loading,
+        });
     },
 
 
@@ -76,28 +82,24 @@ var FrameAnimationView = React.createClass({
      * 开启计时器
      */
     startTimer() {
-        console.log('开始动画');
         this.stopTimer();
         this.timer = this.setInterval(function () {
-
-            if (this.props.loading) {
-
-                requestAnimationFrame(()=>{
+            if (this.state.rotate) {
+                requestAnimationFrame(() => {
                     //移动下标
-                    if (this.loadingIndex + 1 > this.props.loadingArr.length - 1) {
-                        this.loadingIndex=0;
-                    } else {
-                        this.loadingIndex++;
-                    }
-                    console.log('刷新下标' + this.loadingIndex);
-                    if(this.refs.img+''!='undefined'){
+                    flag++;
+                    if (this.refs.img + '' != 'undefined'&& this.loadingIndex>=0&&this.loadingIndex<this.props.loadingArr.length) {
+                        console.log('刷新下标' + this.props.loadingArr[this.loadingIndex]);
+                        this.loadingIndex=flag % this.props.loadingArr.length;
                         this.refs.img.setNativeProps({
                             source:{uri: this.props.loadingArr[this.loadingIndex]},
                         });
                     }
 
+                    if(flag>100000){
+                        flag=0;
+                    }
                 });
-
 
             } else {
                 this.stopTimer();

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import DateUtils from "./util/DateUtil";
 import constants from './Constants';
-
+// var Test = require('./view/Test');
 var Main = require('./Main');
 var {width, height} = constants.ScreenWH;
 var LaunchImage = React.createClass({

@@ -84,7 +84,6 @@ var PullMenu = React.createClass({
                             renderItem={this.renderRow}
                             keyExtractor={(item, index) => index}
                             onViewableItemsChanged={(info) => {
-                                console.log('是否可见');
                                 console.log(info);
                             }}
 

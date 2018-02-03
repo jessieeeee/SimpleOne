@@ -18,9 +18,6 @@ public class TestActivity extends Activity {
 
     private Button btn;
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,5 +25,6 @@ public class TestActivity extends Activity {
         btn = (Button) findViewById(R.id.button);
 
     }
+
 
 }

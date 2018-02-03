@@ -9,10 +9,10 @@ import com.jessie.u_share.ULoginModule;
 import com.jessie.u_share.UShareModule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import simpleone.jessie.com.simpleone.view.PickDateViewManger;
+import simpleone.jessie.com.simpleone.animation.ShowPlayViewManager;
+import simpleone.jessie.com.simpleone.view.PickDateViewManager;
 
 
 /**
@@ -32,7 +32,10 @@ public class MyReactPackage implements ReactPackage {
      */
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Arrays.<ViewManager>asList(new PickDateViewManger());
+        List<ViewManager> viewManagers=new ArrayList<>();
+        viewManagers.add(new PickDateViewManager());
+        viewManagers.add(new ShowPlayViewManager());
+        return viewManagers;
     }
 
     /**

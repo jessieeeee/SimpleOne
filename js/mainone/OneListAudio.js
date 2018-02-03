@@ -22,6 +22,7 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
+var Read = require('../read/Read');
 var Share = require('../share/Share');
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
@@ -44,15 +45,18 @@ var OneListAudio = React.createClass({
         return {
             data: null,
             date: '',
+            onShow: null,
         }
     },
 
     componentDidMount() {
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
-            if(!this.state.rotate){
+            if (!this.state.loading && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.AUDIO_TYPE) {
                 this.setState({
                     loading:true
                 });
+                constants.playMusic = true;
+                this.props.onShow();
             }
         });
 
@@ -71,7 +75,7 @@ var OneListAudio = React.createClass({
     componentWillUnmount() {
         DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS);
         DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE);
-
+        media.stop();
     },
 
     //渲染
@@ -161,8 +165,13 @@ var OneListAudio = React.createClass({
 
                     <View style={styles.playView}>
                         <TouchableOpacity
-                            onPress={() => this.playMusic()}>
-                            <Image source={{uri: 'feeds_radio_play'}} style={styles.playBtn}/>
+                            onPress={() => {
+                                if (!this.state.isPlay) {
+                                this.playMusic();
+                            } else {
+                                this.stopMusic();
+                            }}}>
+                            <Image source={{uri: this.state.isPlay?'feeds_radio_pause':'feeds_radio_play'}} style={styles.playBtn}/>
                         </TouchableOpacity>
                         <View style={styles.titles}>
                             <Text style={styles.volume}>{this.props.data.volume}</Text>
@@ -197,12 +206,14 @@ var OneListAudio = React.createClass({
 
 
     playMusic() {
+        constants.CURRENT_MUSIC_DATA = this.props.data;
+        constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
         if (this.props.data.audio_url+'' == 'undefined') {
             toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
         } else {
 
-            if (!this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
+            if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
                 // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
                 media.start(this.props.data.audio_url);
                 this.setState({
@@ -223,7 +234,7 @@ var OneListAudio = React.createClass({
      * @param url
      */
     pushToRead() {
-        if (this.props.data.content_type == 8 && this.props.date != '' && this.props.date === constants.curDate) {
+        if (this.props.data.content_type == 8 && this.props.page ==0) {
             this.props.todayRadio();
             return;
         }
