@@ -228,17 +228,22 @@ var AllListBanner = React.createClass({
      * @param url
      */
     pushToRead() {
-        this.props.navigator.push(
-            {
-                component: Read,
-                title:'阅读',
-                params:{
-                    contentId:this.state.banner.data[this.state.curPage].content_id,
-                    contentType:this.state.banner.data[this.state.curPage].category,
-                    entry:constants.AllRead
+        if(this.state.banner.data[this.state.curPage].category!=14){
+            this.props.navigator.push(
+                {
+                    component: Read,
+                    title:'阅读',
+                    params:{
+                        contentId:this.state.banner.data[this.state.curPage].content_id,
+                        contentType:this.state.banner.data[this.state.curPage].category,
+                        entry:constants.AllRead
+                    }
                 }
-            }
-        )
+            )
+        }else{
+            this.refs.toast.show('这是一个广告跳转', 500);
+        }
+
     },
 });
 
