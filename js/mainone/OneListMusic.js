@@ -73,6 +73,9 @@ var OneListMusic = React.createClass({
                     rotate=true;
                     constants.playMusic = true;
                     this.props.onShow();
+                    this.setState({
+                        isPlay: true
+                    });
                 }
             });
 

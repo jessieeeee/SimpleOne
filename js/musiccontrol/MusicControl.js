@@ -175,17 +175,11 @@ var MusicControl = React.createClass({
      * 播放音乐
      */
     playMusic() {
-        console.log('播放地址'+constants.CURRENT_MUSIC_DATA.audio_url);
-        if (!constants.CURRENT_MUSIC_DATA.audio_url.toString().contains('http://music.wufazhuce.com/')) {
             // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
-            media.start(constants.CURRENT_MUSIC_DATA.audio_url);
-            this.setState({
-                isPlay: true
-            });
-        }else{
-            toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
-        }
-
+        media.start(constants.CURRENT_MUSIC_DATA.audio_url);
+        this.setState({
+            isPlay: true
+        });
     },
 
     /**

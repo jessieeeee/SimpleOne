@@ -69,11 +69,6 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void start(final String url) {
         if (mPlayer != null) {  //播放对象不为空
-            if (isPlaying()) {  //当前正在播放
-                mPlayer.reset(); //重置
-                stopTimerTask(); //停止进度监听
-            }
-            else{
                 mState = STATE_PLAYING;
                 WritableMap map=Arguments.createMap();
                 map.putString("state",LOADING_MEDIA_SUCCESS);
@@ -81,7 +76,6 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
                 sendEvent(mContext,PLAY_STATE,map);
                 mPlayer.start();
                 startTimeTask();
-            }
         } else {
             stopTimerTask();
             mPlayer = new MediaPlayer();
@@ -159,13 +153,10 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void stop() {
-        mState = STATE_PAUSE;
-        if (mPlayer == null || !isPlaying()) {
-            WritableMap map=Arguments.createMap();
-            map.putString("state",STOP_PLAY_MEDIA);
-            sendEvent(mContext,PLAY_STATE,map);
-            return;
+        if (mPlayer != null) {
+            mPlayer.pause();
         }
+        mState = STATE_PAUSE;
         stopTimerTask();
         WritableMap map=Arguments.createMap();
         map.putString("state",STOP_PLAY_MEDIA);
