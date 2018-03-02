@@ -3,35 +3,20 @@
 
 先上目前的效果图：
 
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone1.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone2.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone3.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone4.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone5.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone6.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone7.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone8.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone9.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone10.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone12.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg)
 
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone1.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone2.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone3.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone4.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone5.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone6.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone7.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone8.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone9.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone10.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone12.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg" width="120" height="180" ></div>
-
-<div style="float:left;border:solid 1px 000;margin:2px;"><img src="http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg" width="120" height="180" ></div>
-
-
-<div style="clear:both;"></div>
 # api接口清单
 
 这里对提取出的api接口做个记录，本人以学习为目的，希望读者也不要用于任何商业项目中，目前列出的接口是基于4.3.4的android版：
