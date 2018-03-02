@@ -3,7 +3,7 @@
 
 先上目前的效果图：
 
- ![image](http://oqujmbgen.bkt.clouddn.com/simpleone1.jpg?imageView2/1/100/100)
+ ![image](http://oqujmbgen.bkt.clouddn.com/simpleone1.jpg?imageView2/2/w/200/h/200/q/75|imageslim)
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone2.jpg){:height="50%" width="50%"}
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone3.jpg){:height="50%" width="50%"}
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone4.jpg){:height="50%" width="50%"}
