@@ -82,11 +82,7 @@ public class UShare {
     }
 
     public static void openShare(final int platform, final String title, final String content, final String imageUrl, final String targetUrl) {
-        UMWeb web = new UMWeb(targetUrl);
-        web.setTitle(title);//标题
-        UMImage thumb = new UMImage(mActivity.get(), R.drawable.umeng_socialize_qq);
-        web.setThumb(thumb);  //缩略图
-        web.setDescription(content);//描述
+
         SHARE_MEDIA shareMedia = SHARE_MEDIA.QQ;
         switch (platform) {
             case Constants.QQ:
@@ -104,12 +100,16 @@ public class UShare {
             default:
                 break;
         }
+        UMWeb web = new UMWeb(targetUrl);
+        web.setTitle(title);//标题
+        UMImage thumb = new UMImage(mActivity.get(), R.drawable.umeng_socialize_qq);
+        web.setThumb(thumb);  //缩略图
+        web.setDescription(content);//描述
         new ShareAction(mActivity.get())
                 .setPlatform(shareMedia)//传入平台
                 .withMedia(web)
                 .setCallback(shareListener)//回调监听器
                 .share();
-
     }
 
     public static void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -158,6 +158,7 @@ public class UShare {
          */
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
+
             mErrorCallback.invoke(platform.toString(), "失败" + t.getMessage());
         }
 

@@ -101,6 +101,7 @@ var OneListCommon = React.createClass({
      * @param url
      */
     pushToRead() {
+
         this.props.navigator.push(
             {
                 component: Read,

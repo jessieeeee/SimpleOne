@@ -47,37 +47,38 @@ var MusicControl = React.createClass({
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
             console.log('当前进度' + reminder.currentPosition);
             console.log('总长度' + reminder.totalDuration);
-            if(this.state.total==0){
+            if(this.props.isVisible){
+                if(this.state.total==0){
+                    this.setState({
+                        total:(reminder.totalDuration/1000/60).toFixed(2),
+                        totalMsec:reminder.totalDuration
+                    });
+                }
+                if(!this.state.isPlay){
+                    this.setState({
+                        isPlay:true
+                    });
+                }
                 this.setState({
-                    total:(reminder.totalDuration/1000/60).toFixed(2),
-                    totalMsec:reminder.totalDuration
+                    duration:parseFloat(reminder.currentPosition/reminder.totalDuration)
                 });
             }
-            if(!this.state.isPlay){
-                this.setState({
-                    isPlay:true
-                });
-            }
-            this.setState({
-                duration:parseFloat(reminder.currentPosition/reminder.totalDuration)
-            });
+
         });
 
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
             console.log('当前状态' + reminder.state);
-            if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
-                this.setState({
-                    isPlay: false,
-                });
+            if(this.props.isVisible){
+                if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
+                    this.setState({
+                        isPlay: false,
+                    });
+                }
             }
+
         });
     },
 
-    componentWillUnmount() {
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS);
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE);
-
-    },
     render() {
         return (
             <Modal

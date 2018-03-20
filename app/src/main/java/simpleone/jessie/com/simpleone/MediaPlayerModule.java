@@ -46,7 +46,7 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
     private int mState = STATE_NO_PLAYING;
 
     private int mCurrentPosition;
-
+    private String lastUrl="";//最后一次播放地址
     public MediaPlayerModule(ReactApplicationContext reactContext) {
         super(reactContext);
         mContext = reactContext;
@@ -68,6 +68,14 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void start(final String url) {
+        if (!url.equals(lastUrl)){//当前播放的不是前一个
+            if (mPlayer != null) {
+                mPlayer.stop();
+                mPlayer=null;
+            }
+            mState = STATE_PAUSE;
+            stopTimerTask();
+        }
         if (mPlayer != null) {  //播放对象不为空
                 mState = STATE_PLAYING;
                 WritableMap map=Arguments.createMap();
@@ -77,7 +85,6 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
                 mPlayer.start();
                 startTimeTask();
         } else {
-            stopTimerTask();
             mPlayer = new MediaPlayer();
             try {
                 mState = STATE_PLAYING;
@@ -86,6 +93,7 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
                 mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
+                        lastUrl=url;
                         WritableMap map=Arguments.createMap();
                         map.putString("state",LOADING_MEDIA_SUCCESS);
                         //开始播放了
@@ -158,6 +166,7 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
         }
         mState = STATE_PAUSE;
         stopTimerTask();
+//        Log.i("lpw", "Android停止播放消息发送 ");
         WritableMap map=Arguments.createMap();
         map.putString("state",STOP_PLAY_MEDIA);
         sendEvent(mContext,PLAY_STATE,map);

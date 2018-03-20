@@ -246,6 +246,9 @@ var OneListMusic = React.createClass({
 
         stopMusic() {
             media.stop();
+            this.setState({
+                isPlay: false,
+            });
         },
 
         /**

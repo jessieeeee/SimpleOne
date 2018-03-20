@@ -147,7 +147,7 @@ var AllListTopic = React.createClass({
             var end = false;
             if (this.state.topic.data.length >= this.props.showNum) {
                 for (var i = 0; i < this.props.showNum; i++) {
-                    console.log(this.state.topic.data[i].cover);
+                    // console.log(this.state.topic.data[i]);
                     itemArr.push(this.state.topic.data[i]);
                 }
                 // console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
@@ -159,7 +159,7 @@ var AllListTopic = React.createClass({
             //如果专题的数据数量小于显示数量，直接全部放进去
             else {
                 for (var i = 0; i < this.state.topic.data.length; i++) {
-                    console.log(this.state.topic.data[i].cover);
+                    // console.log(this.state.topic.data[i]);
                     itemArr.push(this.state.topic.data[i]);
                 }
                 end = true;

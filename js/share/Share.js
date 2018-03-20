@@ -56,42 +56,46 @@ var Share = React.createClass({
      * @param platform
      */
     platformShare(platform) {
-        var data;
-        switch(platform){
-            case constants.PlatformWeChatMoments:
-                data=this.props.route.params.shareList.wx_timeline;
-                break;
-            case constants.PlatformWeChat:
-                data=this.props.route.params.shareList.wx;
-                break;
-            case constants.PlatformSina:
-                data=this.props.route.params.shareList.weibo;
-                break;
-            case constants.PlatformQQ:
-                data=this.props.route.params.shareList.qq;
-                break;
+        var title='',content='',image='',url='';
+        if(this.props.route.params.shareList !== undefined){
+            var data;
+            switch(platform){
+                case constants.PlatformWeChatMoments:
+                    data=this.props.route.params.shareList.wx_timeline;
+                    break;
+                case constants.PlatformWeChat:
+                    data=this.props.route.params.shareList.wx;
+                    break;
+                case constants.PlatformSina:
+                    data=this.props.route.params.shareList.weibo;
+                    break;
+                case constants.PlatformQQ:
+                    data=this.props.route.params.shareList.qq;
+                    break;
+            }
+            if(data.title==null||data.title==""){
+                title=this.props.route.params.shareInfo.title;
+            }else{
+                title=data.title;
+            }
+            if(data.desc==null||data.desc==""){
+                content=this.props.route.params.shareInfo.content;
+            }else{
+                content=data.desc;
+            }
+            if(data.imgUrl==null||data.imgUrl==""){
+                image=this.props.route.params.shareInfo.image;
+            }else{
+                image=data.imgUrl;
+            }
+            if(data.link==null||data.link==""){
+                url=this.props.route.params.shareInfo.url;
+            }else{
+                url=data.link;
+            }
+
         }
-        var title,content,image,url;
-        if(data.title==null||data.title==""){
-           title=this.props.route.params.shareInfo.title;
-        }else{
-            title=data.title;
-        }
-        if(data.desc==null||data.desc==""){
-            content=this.props.route.params.shareInfo.content;
-        }else{
-            content=data.desc;
-        }
-        if(data.imgUrl==null||data.imgUrl==""){
-            image=this.props.route.params.shareInfo.image;
-        }else{
-            image=data.imgUrl;
-        }
-        if(data.link==null||data.link==""){
-            url=this.props.route.params.shareInfo.url;
-        }else{
-            url=data.link;
-        }
+
         UShare.share(platform,title ,content ,
             image,url,
             (platform) => {
@@ -99,6 +103,7 @@ var Share = React.createClass({
             },
             (platform, msg) => {
                 console.log(platform + '失败' + msg);
+                toast.showMsg(msg,toast.SHORT);
             },
             (platform) => {
                 console.log(platform + '取消');
@@ -110,14 +115,19 @@ var Share = React.createClass({
      * @returns {Promise.<void>}
      */
     async setClipboardContent() {
-        Clipboard.setString(this.props.route.params.shareInfo.url);
-        try {
-            var content = await Clipboard.getString();
-            this.setState({content: content});
-            toast.showMsg('已复制到剪切板',toast.SHORT)
-        } catch (e) {
-            this.setState({content: e.message});
+        if(this.props.route.params.shareInfo!==undefined){
+            Clipboard.setString(this.props.route.params.shareInfo.url);
+            try {
+                var content = await Clipboard.getString();
+                this.setState({content: content});
+                toast.showMsg('已复制到剪切板',toast.SHORT);
+            } catch (e) {
+                this.setState({content: e.message});
+            }
+        }else{
+            toast.showMsg('当前内容不支持分享',toast.SHORT);
         }
+
     },
 
     showLink() {

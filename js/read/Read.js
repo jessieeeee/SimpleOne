@@ -450,11 +450,7 @@ var Read = React.createClass({
 
                     {this.renderCommentNum()}
 
-                    <TouchableOpacity style={styles.rightBtnIconRight}
-                                      onPress={() => this.pushToShare()}>
-
-                        <Image source={{uri: 'share_image'}} style={styles.rightBtnIcon}/>
-                    </TouchableOpacity>
+                    {this.renderShare()}
                 </View>
             </View>
         );
@@ -485,6 +481,17 @@ var Read = React.createClass({
         );
     },
 
+    renderShare(){
+        if(this.props.route.params.data!==undefined){
+            return(
+                <TouchableOpacity style={styles.rightBtnIconRight}
+                                  onPress={() => this.pushToShare()}>
+
+                    <Image source={{uri: 'share_image'}} style={styles.rightBtnIcon}/>
+                </TouchableOpacity>
+            );
+        }
+    },
     renderCommentNum() {
         if (this.state.readData != null && this.state.readData.commentnum > 0) {
             return (
@@ -555,12 +562,15 @@ var Read = React.createClass({
      * @param url
      */
     pushToShare() {
+        console.log(this.props.route.params.data);
         this.props.navigator.push(
             {
                 component: Share,
                 title: '分享',
                 params: {
-                    showlink: true
+                    showlink: true,
+                    shareInfo: this.props.route.params.data.share_info,
+                    shareList: this.props.route.params.data.share_list,
                 }
             }
         )

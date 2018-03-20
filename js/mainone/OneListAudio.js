@@ -51,12 +51,18 @@ var OneListAudio = React.createClass({
 
     componentDidMount() {
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
-            if (!this.state.loading && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.AUDIO_TYPE) {
+            if (this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.AUDIO_TYPE) {
                 this.setState({
                     loading:true
                 });
                 constants.playMusic = true;
                 this.props.onShow();
+            }else{ //不是播放的页面，播放按钮重置
+                if(this.state.isPlay){
+                    this.setState({
+                        isPlay:false
+                    });
+                }
             }
         });
 
@@ -206,6 +212,7 @@ var OneListAudio = React.createClass({
 
 
     playMusic() {
+        constants.curPage=this.props.page;
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
@@ -227,6 +234,9 @@ var OneListAudio = React.createClass({
 
     stopMusic() {
         media.stop();
+        this.setState({
+            isPlay: false,
+        });
     },
 
     /**
