@@ -19,6 +19,8 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import constants from "../Constants";
+import MusicControl from '../musiccontrol/MusicControl';
+import Search from '../search/Search';
 var {width, height} = constants.ScreenWH;
 // 顶部的banner
 var AllListBanner = require('./AllListBanner');
@@ -30,10 +32,8 @@ var AllListTopic = require('./AllListTopic');
 var AllListAuthor = require('./AllListAuthor');
 // 问所有人
 var AllListQuestion = require('./AllListQuestion');
-// 搜索界面
-var Search = require('../search/Search');
 
-var MusicControl=require('../musiccontrol/MusicControl');
+
 
 // 加载更多的view
 var LoadingMore = require('../view/LoadingMore');

@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－一个－菜单列表
  */
 
 import React, {Component} from 'react';
@@ -15,9 +15,8 @@ import {
 } from 'react-native';
 import constants from '../../Constants';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import Read from '../../read/Read';
 var {width, height} = constants.ScreenWH;
-var Read=require('../../read/Read');
-
 var MenuItem = React.createClass({
 
     getDefaultProps() {

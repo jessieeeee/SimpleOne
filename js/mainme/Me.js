@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－我的
  */
 
 import React, {Component} from 'react';
@@ -16,20 +16,23 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from "../Constants";
-var Setting = require('../setting/Setting');
+import Login from '../login/Login';
+import MusicControl from '../musiccontrol/MusicControl';
+import Setting from '../setting/Setting';
+
 var {width, height} = constants.ScreenWH;
-var Login=require('../login/Login');
-var MusicControl=require('../musiccontrol/MusicControl');
 
-var Me = React.createClass({
-    getInitialState() {
-       return{
-           play:true,
-           showMusicControl:false,
-       }
-    },
+
+class Me extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            play:true,
+            showMusicControl:false,
+        }
+    }
+
     render() {
-
         return (
             <View style={styles.container}>
                 {/*背景*/}
@@ -86,16 +89,13 @@ var Me = React.createClass({
                 />
             </View>
         );
-    },
-
-
+    }
 
     /**
      * 跳转到登录
      * @param url
      */
     pushToLogin(){
-
         this.props.navigator.push(
             {
                 component: Login,
@@ -105,10 +105,10 @@ var Me = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
-     * 跳转到搜索页
+     * 跳转到设置页
      * @param url
      */
     pushToSetting() {
@@ -117,8 +117,8 @@ var Me = React.createClass({
                 component: Setting,
             }
         )
-    },
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Me;
+export default Me;

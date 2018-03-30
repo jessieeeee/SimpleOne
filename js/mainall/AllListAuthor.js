@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－所有－作者列表
  */
 
 import React, {Component} from 'react';
@@ -19,9 +19,9 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 
 import constants from '../Constants';
+import AuthorPage from '../author/AuthorPage';
 var {width, height} = constants.ScreenWH;
 var serverApi=require('../ServerApi');
-var AuthorPage=require('../author/AuthorPage');
 //设置数据源
 var ds = new ListView.DataSource({
     //返回条件，任意两条不等

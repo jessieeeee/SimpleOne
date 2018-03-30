@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 作者信息的头部
  */
 
 import React, { Component } from 'react';
@@ -17,32 +17,30 @@ import {
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 
-var AuthorHead=React.createClass({
-    //要传入的参数
-    getDefaultProps() {
-        return {
-            data: null,
-        }
-    },
-
+class AuthorHead extends Component{
+    constructor(props){
+        super(props);
+    }
     render() {
         return (
             <View style={styles.container}>
-               <Image source={{uri:this.props.data.web_url}} style={styles.avatar}/>
+                <Image source={{uri:this.props.data.web_url}} style={styles.avatar}/>
                 <Text style={styles.name}>{this.props.data.user_name} </Text>
                 <Text style={styles.summary}>{this.props.data.summary}</Text>
                 <TouchableOpacity onPress={() => this.followAuthor()}>
-                <Text style={styles.follow}>关注</Text>
+                    <Text style={styles.follow}>关注</Text>
                 </TouchableOpacity>
                 <Text style={styles.followNum}>{this.props.data.fans_total+'关注'}</Text>
             </View>
         );
-    },
+    }
 
     followAuthor(){
 
     }
-});
+
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -89,4 +87,5 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports=AuthorHead;
+export default AuthorHead;
+

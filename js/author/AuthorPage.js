@@ -1,13 +1,15 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 作者详情页
  */
 
 import React, {Component} from 'react';
 import {PullView} from 'react-native-pull';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import NetUtil from '../util/NetUtil';
+import AuthorHead from './AuthorHead';
+
 import {
     AppRegistry,
     StyleSheet,
@@ -19,7 +21,6 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 var ServerApi = require('../ServerApi');
-var AuthorHead = require('./AuthorHead');
 var OneListTop = require('../mainone/OneListTop');
 var OneListCommon = require('../mainone/OneListCommon');
 var OneListMusic = require('../mainone/OneListMusic');
@@ -32,25 +33,28 @@ var itemArr = [];
 var key = 0;
 var pageNum = 0;
 var workList=[];
-var AuthorPage = React.createClass({
-    getInitialState() {
-        return {
+
+class AuthorPage extends Component{
+    constructor(props){
+        super(props);
+        this.onScroll=this.onScroll.bind(this);
+        this.state={
             loading: false,
             isEnd: false//是否到末尾标记
         }
-    },
+    }
 
     componentDidMount() {
         this.reset();
         this.getWorkList();
-    },
+    }
 
     reset(){
         key=0;
         itemArr = [];
         workList= [];
         pageNum = 0;
-    },
+    }
 
     getWorkList() {
         var url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorData.user_id);
@@ -77,7 +81,7 @@ var AuthorPage = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    },
+    }
 
     render() {
         return (
@@ -102,7 +106,7 @@ var AuthorPage = React.createClass({
             </View>
 
         );
-    },
+    }
 
     /**
      * 显示正在加载
@@ -112,7 +116,7 @@ var AuthorPage = React.createClass({
         return (
             <LoadingMore loading={this.state.loading}/>
         );
-    },
+    }
 
     // 刷新释放回调
     onPullRelease(resolve) {
@@ -124,7 +128,7 @@ var AuthorPage = React.createClass({
             resolve();
         }, 3000);
 
-    },
+    }
 
     /**
      * scrollview滑动回调
@@ -152,7 +156,7 @@ var AuthorPage = React.createClass({
 
 
         }
-    },
+    }
 
     loadMoreView() {
         if (workList.length != 0) {
@@ -199,7 +203,7 @@ var AuthorPage = React.createClass({
                 key++;
                 itemArr.push(
                     <View key={key} style={styles.bottomLine}/>
-                )
+                );
 
                 key++;
                 console.log('渲染view' + itemArr.length);
@@ -207,7 +211,7 @@ var AuthorPage = React.createClass({
             }
 
         }
-    },
+    }
 
     /**
      * 列表item渲染
@@ -216,7 +220,7 @@ var AuthorPage = React.createClass({
      */
     renderAllItem() {
         return itemArr;
-    },
+    }
 
     /**
      * 渲染顶部导航
@@ -236,8 +240,8 @@ var AuthorPage = React.createClass({
 
             </View>
         );
-    },
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -275,4 +279,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = AuthorPage;
+export default AuthorPage;

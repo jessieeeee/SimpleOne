@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　阅读界面
  */
 
 import React, {Component} from 'react';
@@ -21,9 +21,9 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
-import Toast, {DURATION} from 'react-native-easy-toast'
-import SingleChoiceDialog from '../view/SingleChoiceDialog'
-var MusicControl=require('../musiccontrol/MusicControl');
+import Login from '../login/Login';
+import SingleChoiceDialog from '../view/SingleChoiceDialog';
+import MusicControl from '../musiccontrol/MusicControl';
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -37,7 +37,6 @@ var FrameAnimation = require('../view/FrameAnimationView');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
 var Share = require('../share/Share');
-var Login = require('../login/Login');
 
 var Comment = require('./Comment');
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
@@ -58,23 +57,17 @@ const BaseScript =
         }
         setInterval(changeHeight, 100);
     } ())
-    `
+    `;
 
-var Read = React.createClass({
-
-    getDefaultProps() {
-        return {
-            duration: 10,
-            // 外层回调函数参
-            refreshView: false, //刷新
-        }
-    },
-
-    /**
-     * 初始化状态变量
-     */
-    getInitialState() {
-        return {
+class Read extends Component{
+    constructor(props){
+        super(props);
+        this.onScroll=this.onScroll.bind(this);
+        this.renderRow=this.renderRow.bind(this);
+        this.onNavigationStateChange=this.onNavigationStateChange.bind(this);
+        this.onShouldStartLoadWithRequest=this.onShouldStartLoadWithRequest.bind(this);
+        this.onMessage=this.onMessage.bind(this);
+        this.state={
             like: false,
             likeNum: 0,
             readData: null,
@@ -92,24 +85,22 @@ var Read = React.createClass({
             loading: true,
             showMusicControl:false,
         }
-
-    },
-
+    }
 
     componentDidMount() {
-        var url;
+        let url;
         if (this.props.route.params.entry == constants.AllRead) {
             url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId);
         } else {
             url = this.getContentUrl().replace('{content_id}', this.props.route.params.data.content_id);
         }
-        console.log('地址' + url);
+        console.log('当前文章地址' + url);
         NetUtils.get(url, null, (result) => {
             this.setState({
                 readData: result.data,
                 likeNum: result.data.praisenum,
             });
-            var bgColor;
+            let bgColor;
             if (result.data.category == 11) {
                 bgColor = result.data.bg_color;
             } else {
@@ -120,16 +111,16 @@ var Read = React.createClass({
             });
             // console.log(result);
         }, (error) => {
-           console.log('error address' + error);
+            console.log('error address' + error);
         });
 
-    },
+    }
 
     /**
      * 获取评论
      */
     getComments() {
-        var url;
+        let url;
         if (this.props.route.params.entry == constants.AllRead) {
             url = this.getCommentUrl().replace('{content_id}', this.props.route.params.contentId);
         } else {
@@ -145,10 +136,10 @@ var Read = React.createClass({
             console.log('error comment' + error);
 
         });
-    },
+    }
 
     getCommentUrl() {
-        var contentType;
+        let contentType;
         if (this.props.route.params.entry == constants.AllRead) {
             contentType = this.props.route.params.contentType;
         } else {
@@ -177,10 +168,10 @@ var Read = React.createClass({
                 return serverApi.TopicComment;
                 break;
         }
-    },
+    }
 
     getContentUrl() {
-        var contentType;
+        let contentType;
         if (this.props.route.params.entry == constants.AllRead) {
             contentType = this.props.route.params.contentType;
         } else {
@@ -189,30 +180,20 @@ var Read = React.createClass({
         switch (parseInt(contentType)) {
             case 1:
                 return serverApi.Essay;
-                break;
             case 3:
                 return serverApi.Question;
-                break;
             case 2:
                 return serverApi.SerialContent;
-                break;
             case 4:
                 return serverApi.Music;
-                break;
             case 5:
                 return serverApi.Movie;
-                break;
             case 8:
                 return serverApi.Radio;
-                break;
             case 11:
                 return serverApi.Topic;
-                break;
-
         }
-
-
-    },
+    }
 
     onMessage(event) {
         console.log('onMessage->event.nativeEvent.data:');
@@ -226,8 +207,7 @@ var Read = React.createClass({
         } catch (error) {
             // pass
         }
-
-    },
+    }
 
     render() {
         return (
@@ -279,16 +259,10 @@ var Read = React.createClass({
                     });
                 })}
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
+
             </View>
         );
-    },
+    }
 
     /**
      * scrollview滑动回调
@@ -304,11 +278,10 @@ var Read = React.createClass({
         if (y + height >= contentHeight - 20) {
             console.log('加载更多');
             if (this.state.commentData == null) {
-
                 this.getComments();
             }
         }
-    },
+    }
 
     renderCommentList() {
         if (this.state.commentData !== null) {
@@ -331,7 +304,7 @@ var Read = React.createClass({
                 </View>
             );
         }
-    },
+    }
 
     // 单个item返回 线性布局
     renderRow(rowData) {
@@ -346,8 +319,7 @@ var Read = React.createClass({
                 </TouchableOpacity>
             )
         }
-
-    },
+    }
 
     renderSingleChoiceDialog() {
         return (
@@ -362,7 +334,7 @@ var Read = React.createClass({
                 }}
             />
         );
-    },
+    }
 
     /**
      * 点击评论，选择弹窗后的回调
@@ -374,7 +346,7 @@ var Read = React.createClass({
         } else {
             this.setClipboardContent();
         }
-    },
+    }
 
     /**
      * 复制到剪贴板
@@ -389,7 +361,7 @@ var Read = React.createClass({
         } catch (e) {
             this.setState({content: e.message});
         }
-    },
+    }
 
 
     renderLoading() {
@@ -403,12 +375,12 @@ var Read = React.createClass({
                 left: width / 2 - width * 0.07
             }}/>
         );
-    },
+    }
 
     onShouldStartLoadWithRequest(event) {
         // Implement any custom loading logic here, don't forget to return!
         return true;
-    },
+    }
 
     onNavigationStateChange(navState) {
         this.setState({
@@ -419,7 +391,7 @@ var Read = React.createClass({
             loading:navState.loading,
             scalesPageToFit: true
         });
-    },
+    }
 
     /**
      * 渲染底部bar
@@ -454,7 +426,7 @@ var Read = React.createClass({
                 </View>
             </View>
         );
-    },
+    }
     /**
      * 渲染顶部导航
      */
@@ -479,7 +451,7 @@ var Read = React.createClass({
                 </TouchableOpacity>
             </View>
         );
-    },
+    }
 
     renderShare(){
         if(this.props.route.params.data!==undefined){
@@ -491,7 +463,8 @@ var Read = React.createClass({
                 </TouchableOpacity>
             );
         }
-    },
+    }
+
     renderCommentNum() {
         if (this.state.readData != null && this.state.readData.commentnum > 0) {
             return (
@@ -507,13 +480,13 @@ var Read = React.createClass({
                 </Text>
             );
         }
-    },
+    }
 
     /**
      * 获取分类
      */
     getCategory() {
-        var contentType;
+        let contentType;
         if (this.props.route.params.entry == constants.MenuRead) {
             var tag = this.props.route.params.data.tag;
             contentType = this.props.route.params.data.content_type;
@@ -555,7 +528,7 @@ var Read = React.createClass({
         else if (contentType == 11) {
             return '专题';
         }
-    },
+    }
 
     /**
      * 跳转到分享
@@ -574,7 +547,7 @@ var Read = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 载入图标名称初始化
@@ -591,7 +564,7 @@ var Read = React.createClass({
             loadingArr.push(('webview_loading_' + postfix).toString());
         }
         return loadingArr;
-    },
+    }
 
     //点击喜欢
     likeClick() {
@@ -599,7 +572,7 @@ var Read = React.createClass({
             likeNum: this.state.like ? this.state.readData.praisenum : this.state.readData.praisenum + 1,
             like: !this.state.like
         });
-    },
+    }
 
     //根据当前状态，显示喜欢图标
     showLikeIcon() {
@@ -609,14 +582,13 @@ var Read = React.createClass({
         } else {
             return 'bubble_like';
         }
-    },
+    }
 
     /**
      * 跳转到登录
      * @param url
      */
     pushToLogin() {
-
         this.props.navigator.push(
             {
                 component: Login,
@@ -624,10 +596,13 @@ var Read = React.createClass({
                 params: {}
             }
         )
-    },
-
-
-});
+    }
+}
+Read.defaultProps={
+    duration: 10,
+    // 外层回调函数参
+    refreshView: false, //刷新
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -693,4 +668,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Read;
+export default Read;

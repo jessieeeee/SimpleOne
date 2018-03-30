@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面分页－所有－问题列表
  */
 
 import React, {Component} from 'react';
@@ -18,7 +18,7 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
-var Read=require('../read/Read');
+import Read from '../read/Read';
 var {width, height} = constants.ScreenWH;
 var ServerApi=require('../ServerApi');
 var AllListQuestion = React.createClass({

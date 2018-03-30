@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow　主界面分页－一个－音乐item
  */
 
 import React, {Component} from 'react';
@@ -25,10 +23,10 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import DateUtil from "../util/DateUtil";
 import constants from '../Constants';
-
+import Read from '../read/Read';
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
-var Read = require('../read/Read');
+
 var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
 var rotate;

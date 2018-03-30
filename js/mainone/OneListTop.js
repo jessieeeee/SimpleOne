@@ -15,13 +15,11 @@ import {
     Platform,
     TouchableOpacity
 } from 'react-native';
-
+import Remark from '../remark/Remark';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import Login from '../login/Login';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
-
-var Remark=require('../remark/Remark');
-var Login=require('../login/Login');
 var Share=require('../share/Share');
 
 var OneListTop = React.createClass({

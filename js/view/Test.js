@@ -1,5 +1,7 @@
 /**
- * Created by blueberry on 6/20/2017.
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow 组件测试界面
  */
 
 import React, {Component} from 'react';

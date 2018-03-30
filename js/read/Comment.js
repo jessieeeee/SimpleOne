@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 阅读界面下面的评论
  */
 
 import React, {Component} from 'react';
@@ -14,7 +14,7 @@ import {
     Image,
 } from 'react-native';
 
-var Login = require('../login/Login');
+import Login from '../login/Login';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 var Comment = React.createClass({

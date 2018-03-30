@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　分类搜索界面
  */
 
 import React, {Component} from 'react';
@@ -17,18 +17,19 @@ import {
 
 } from 'react-native';
 import constants from '../Constants';
-var SearchCategory=require('./SearchCategory');
+import SearchCategory from '../search/SearchCategory';
 var {width, height} = constants.ScreenWH;
 
-var Search = React.createClass({
-
-    getInitialState() {
-        return {
+class Search extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             curText: '<No Event>',
             prevText: '<No Event>',
             prev2Text: '<No Event>',
         }
-    },
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -76,7 +77,7 @@ var Search = React.createClass({
                 </TouchableOpacity>
             </View>
         );
-    },
+    }
 
     /**
      * 跳转到搜索分类
@@ -92,7 +93,8 @@ var Search = React.createClass({
                 }
             }
         )
-    },
+    }
+
     updateText(text) {
         this.setState((state) => {
             return {
@@ -101,7 +103,7 @@ var Search = React.createClass({
                 prev2Text: state.prevText,
             };
         });
-    },
+    }
 
     /**
      * 顶部导航bar
@@ -135,8 +137,9 @@ var Search = React.createClass({
                 </TouchableOpacity>
             </View>
         );
-    },
-});
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -179,4 +182,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = Search;
+export default Search;

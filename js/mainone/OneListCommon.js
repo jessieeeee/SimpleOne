@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow 主界面分页－一个－大多数item
  */
 
 import React, {Component} from 'react';
@@ -17,12 +15,13 @@ import {
     TouchableOpacity
 } from 'react-native';
 import DateUtil from "../util/DateUtil";
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
 import constants from '../Constants';
+import Login from "../login/Login";
 var {width, height} = constants.ScreenWH;
 var Share = require('../share/Share');
-var Read = require('../read/Read');
+
 
 var OneListCommon = React.createClass({
 
@@ -112,6 +111,7 @@ var OneListCommon = React.createClass({
                 }
             }
         )
+
     },
 
     /**

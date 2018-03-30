@@ -22,10 +22,10 @@ import {Navigator} from 'react-native-deprecated-custom-components';
  * */
 import constants from './Constants';
 import TabNavigator from 'react-native-tab-navigator';
+import ME from './mainme/Me';
 let toast = NativeModules.ToastNative;
 var ONE = require('./mainone/One');
 var ALL = require('./mainall/All');
-var ME = require('./mainme/Me');
 var {width, height} = constants.ScreenWH;
 var barHeight = height * 0.082;
 

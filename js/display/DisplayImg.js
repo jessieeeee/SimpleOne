@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　显示大图详情
  */
 
 import React, {Component} from 'react';
@@ -18,21 +18,10 @@ import {
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 
-var DisplayImg = React.createClass({
-    getDefaultProps() {
-        return {
-            duration: 10,
-            topText:'',
-            originalW:0,
-            originalH:0,
-            imgUrl:'',
-            bottomText:'',
-            isVisible:false,
-            onCancel:null,
-        }
-    },
-
-
+class DisplayImg extends Component{
+  constructor(props){
+      super(props);
+  }
     render() {
         return (
             <Modal
@@ -53,14 +42,33 @@ var DisplayImg = React.createClass({
             </Modal>
         )
             ;
-    },
+    }
+
     //按图片宽度缩放
     getHeight(w, h) {
         var ratio = (width * 0.8) / w;
         return h * ratio;
-    },
+    }
+}
 
-});
+DisplayImg.propTypes ={
+    topText:React.PropTypes.string,
+    imgUrl:React.PropTypes.string,
+    bottomText:React.PropTypes.string,
+};
+
+DisplayImg.defaultProps={
+    duration: 10,
+    topText:'',
+    originalW:0,
+    originalH:0,
+    imgUrl:'',
+    bottomText:'',
+    isVisible:false,
+    onCancel:null,
+};
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -79,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = DisplayImg;
+export default DisplayImg;

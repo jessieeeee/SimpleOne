@@ -23,11 +23,11 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
+import MusicControl from '../musiccontrol/MusicControl';
+import Search from '../search/Search';
 let toast = NativeModules.ToastNative;
 
-var MusicControl=require('../musiccontrol/MusicControl');
-var DisplayImg = require('../display/DisplayImg');
-
+import DisplayImg from '../display/DisplayImg';
 var {width, height} = constants.ScreenWH;
 var OneListTop = require('./OneListTop');
 var OneListCommon = require('./OneListCommon');
@@ -35,7 +35,6 @@ var OneListMusic = require('./OneListMusic');
 var OneListItemBottom = require('./OneListItemBottom');
 var OneListMovie = require('./OneListMovie');
 var OneListAudio = require('./OneListAudio');
-var Search = require('../search/Search');
 var ServerApi = require('../ServerApi');
 var ExpandMenu = require('./menu/ExpandMenu');
 
@@ -516,7 +515,6 @@ var One = React.createClass({
         this.loadFirstPage(() => {
             this.addEmptyView();
             this.getOneList((result) => {
-                console.log('获取到第二页'+JSON.stringify(result));
                 this.setState({
                     nextOneData: result,
                 });

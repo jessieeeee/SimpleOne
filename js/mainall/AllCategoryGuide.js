@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import Toast, {DURATION} from 'react-native-easy-toast'
-var SearchCategory=require('../search/SearchCategory');
+import SearchCategory from '../search/SearchCategory';
 var {width, height} = constants.ScreenWH;
 var key=0;
 var AllCategoryGuide = React.createClass({

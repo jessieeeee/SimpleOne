@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow 主界面分页－一个－视频item
  */
 
 import React, {Component} from 'react';
@@ -19,7 +17,7 @@ import {
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
-var Read=require('../read/Read');
+var Read = require('../read/Read');
 var {width, height} = constants.ScreenWH;
 import DateUtil from "../util/DateUtil";
 var Share=require('../share/Share');

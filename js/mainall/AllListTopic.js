@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－所有－主题列表
  */
 
 import React, {Component} from 'react';
@@ -14,14 +14,12 @@ import {
     FlatList,
     Image,
 } from 'react-native';
-
-
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 var ServerApi = require('../ServerApi');
 var {width, height} = constants.ScreenWH;
-var Read=require('../read/Read');
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,

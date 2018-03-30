@@ -28,35 +28,38 @@ var options = {
         path: 'images'
     }
 };
-var ChangeImg = React.createClass({
-    
+
+class ChangeImg extends Component{
+    constructor(props){
+        super(props);
+    }
     render() {
         return (
             <TouchableOpacity  style={styles.container} onPress={() => { this.props.navigator.pop()
             }}>
-                    <View style={styles.btns}>
-                        <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center'}} onPress={() => {
-                            this.openCamera()
-                        }}>
-                            <Text style={styles.text}>拍照</Text>
-                            <Image source={{uri: 'abc_btn_switch_to_on_mtrl_00001'}} style={styles.iconBg}/>
-                            <Image source={{uri: 'bubble_photo'}} style={[styles.icon, {}]}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { this.openLibrary()
-                        }}
-                                          style={{
-                                              marginLeft: width * 0.3,
-                                              justifyContent: 'center',
-                                              alignItems: 'center',
-                                          }}>
-                            <Text style={styles.text}>相册</Text>
-                            <Image source={{uri: 'abc_btn_switch_to_on_mtrl_00001'}} style={styles.iconBg}/>
-                            <Image source={{uri: 'bubble_album'}} style={[styles.icon, {}]}/>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.btns}>
+                    <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center'}} onPress={() => {
+                        this.openCamera()
+                    }}>
+                        <Text style={styles.text}>拍照</Text>
+                        <Image source={{uri: 'abc_btn_switch_to_on_mtrl_00001'}} style={styles.iconBg}/>
+                        <Image source={{uri: 'bubble_photo'}} style={[styles.icon, {}]}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { this.openLibrary()
+                    }}
+                                      style={{
+                                          marginLeft: width * 0.3,
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                      }}>
+                        <Text style={styles.text}>相册</Text>
+                        <Image source={{uri: 'abc_btn_switch_to_on_mtrl_00001'}} style={styles.iconBg}/>
+                        <Image source={{uri: 'bubble_album'}} style={[styles.icon, {}]}/>
+                    </TouchableOpacity>
+                </View>
             </TouchableOpacity>
         );
-    },
+    }
 
     openCamera() {
         // Launch Camera:
@@ -78,12 +81,11 @@ var ChangeImg = React.createClass({
                 // console.log('source = ', source);
                 this.props.route.params.response(response);
                 this.props.navigator.pop();
-             
+
             }
         });
 
-
-    },
+    }
 
     openLibrary() {
         // Open Image Library:
@@ -105,11 +107,11 @@ var ChangeImg = React.createClass({
                 // console.log('source = ', source);
                 this.props.route.params.response(response);
                 this.props.navigator.pop();
-              
+
             }
         });
-    },
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -141,4 +143,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = ChangeImg;
+export default ChangeImg;

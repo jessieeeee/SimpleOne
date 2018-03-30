@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow　主界面分页－一个－广播item
  */
 
 import React, {Component} from 'react';
@@ -18,11 +16,10 @@ import {
     TouchableOpacity,
     DeviceEventEmitter
 } from 'react-native';
-
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
-var Read = require('../read/Read');
 var Share = require('../share/Share');
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
