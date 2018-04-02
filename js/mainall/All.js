@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面-all分页
  */
 
 import React, {Component} from 'react';
@@ -31,25 +31,22 @@ var {width, height} = constants.ScreenWH;
 var AllListBanner = require('./AllListBanner');
 var key = 9;
 var bottomList = [];
-var All = React.createClass({
-
-    /**
-     * 初始化状态变量
-     * @returns {{oneData: null}}
-     */
-    getInitialState() {
-        return {
+class All extends Component{
+    constructor(props){
+        super(props);
+        this.onScroll=this.onScroll.bind(this);
+        this.onPullRelease=this.onPullRelease.bind(this);
+        this.state={
             isRefreshing: false,
             loadMore: false, //底部是否显示更多列表
             loading: false,//是否正在加载
             startId: 0, //主题请求开始id
             lastId: 0, //记录上一次请求id
             isEnd: false,//是否到末尾标记
-            play:true,
             showMusicControl:false,
-        }
+        };
+    }
 
-    },
     onPullRelease(resolve) {
         //更改刷新状态
         this.setState({isRefreshing: true});
@@ -61,7 +58,7 @@ var All = React.createClass({
                 loadMore: false
             });
         }, 3000);
-    },
+    }
 
     render() {
         return (
@@ -93,9 +90,7 @@ var All = React.createClass({
 
             </View>
         );
-    },
-
-
+    }
 
     /**
      * scrollview滑动回调
@@ -137,11 +132,9 @@ var All = React.createClass({
                         loading: true,
                     });
                 }
-
             }
-
         }
-    },
+    }
 
 
     /**
@@ -160,18 +153,16 @@ var All = React.createClass({
 
             }
         }
-
-    },
+    }
 
     /**
      * 显示正在加载
      */
     renderLoading() {
-
         return (
             <LoadingMore loading={this.state.loading}/>
         );
-    },
+    }
 
     /**
      * 渲染顶部导航
@@ -190,7 +181,7 @@ var All = React.createClass({
                 </TouchableOpacity>
             </View>
         );
-    },
+    }
 
     /**
      * 跳转到搜索页
@@ -202,8 +193,7 @@ var All = React.createClass({
                 component: Search,
             }
         )
-    },
-
+    }
 
     /**
      * 渲染所有的item
@@ -250,12 +240,9 @@ var All = React.createClass({
         itemArr.push(
             <View key={8} style={styles.bottomLine}/>
         );
-
         return itemArr;
-    },
-
-
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -294,4 +281,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = All;
+export default All;
