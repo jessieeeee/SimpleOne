@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 分享界面
  */
 
 import React, {Component} from 'react';
@@ -22,12 +22,14 @@ let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
 let UShare = NativeModules.UShare;
 
-var Share = React.createClass({
-    getInitialState() {
-        return {
-            content: 'Content will appear here'
+class Share extends Component{
+    constructor(props){
+        super(props);
+        this.state={
+            content: 'Content will appear here',
         };
-    },
+    }
+    
     render() {
         return (
             <View style={styles.container}>
@@ -49,7 +51,7 @@ var Share = React.createClass({
                 </ScrollView>
             </View>
         );
-    },
+    }
 
     /**
      * 调起原生分享模块
@@ -108,7 +110,7 @@ var Share = React.createClass({
             (platform) => {
                 console.log(platform + '取消');
             });
-    },
+    }
 
     /**
      * 复制到剪贴板
@@ -127,8 +129,7 @@ var Share = React.createClass({
         }else{
             toast.showMsg('当前内容不支持分享',toast.SHORT);
         }
-
-    },
+    }
 
     showLink() {
         if (this.props.route.params.showlink) {
@@ -138,7 +139,7 @@ var Share = React.createClass({
                 </TouchableOpacity>
             );
         }
-    },
+    }
 
 
     /**
@@ -155,8 +156,8 @@ var Share = React.createClass({
                 </View>
             </View>
         );
-    },
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -190,4 +191,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Share;
+export default Share;

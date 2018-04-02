@@ -9,7 +9,7 @@ import {AppRegistry, StyleSheet, View, Text, requireNativeComponent, TextInput, 
 
 import PickDate from './PickDate';
 import ShowPlayMusic from './ShowPlayMusic'
-var Test = React.createClass({
+class Test extends Component{
     render() {
         return (
             <View style={{flex: 1}}>
@@ -31,5 +31,5 @@ var Test = React.createClass({
             </View>
         );
     }
-});
-module.exports = Test;
+}
+export default Test;

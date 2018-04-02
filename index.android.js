@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 
 import {Navigator} from 'react-native-deprecated-custom-components';
+import LaunchImage from './js/launchImage';
 
-
-var LaunchImage=require('./js/launchImage');
 class SimpleOne extends React.Component {
   render() {
     return (
@@ -40,4 +39,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('SimpleOne', () => SimpleOne)
+AppRegistry.registerComponent('SimpleOne', () => SimpleOne);

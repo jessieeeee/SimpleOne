@@ -15,13 +15,10 @@ import {
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 
-var LoadingMore = React.createClass({
-    getDefaultProps() {
-        return {
-            // 外层回调函数参
-            loading: false, //加载更多
-        }
-    },
+class LoadingMore extends Component{
+    constructor(props){
+        super(props);
+    }
 
     render() {
         return (
@@ -29,7 +26,7 @@ var LoadingMore = React.createClass({
                 {this.loading()}
             </View>
         );
-    },
+    }
 
     loading() {
         if (this.props.loading) {
@@ -44,7 +41,10 @@ var LoadingMore = React.createClass({
             );
         }
     }
-});
+}
+LoadingMore.defaultProps={
+    loading: false, //加载更多
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = LoadingMore;
+export default LoadingMore;

@@ -17,7 +17,6 @@ import {
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-
 import constants from '../Constants';
 import AuthorPage from '../author/AuthorPage';
 var {width, height} = constants.ScreenWH;
@@ -29,26 +28,18 @@ var ds = new ListView.DataSource({
 
 });
 
-var AllListAuthor = React.createClass({
-    getDefaultProps() {
-        return {
-            // 外层回调函数参
-            refreshView: false, //刷新
-        }
-    },
-    getInitialState() {
-        return {
-            author: null,
-            dataSource: null,
-        };
-    },
-
+class AllListAuthor extends Component{
+    constructor(props){
+        super(props);
+        this.state={};
+        this.renderRow=this.renderRow.bind(this);
+    }
     /**
      * 发起网络请求
      */
     componentDidMount() {
         this.getHotAuthorData();
-    },
+    }
 
     /**
      * 父组件传参变化回调
@@ -58,7 +49,7 @@ var AllListAuthor = React.createClass({
         if(nextProps.refreshView){
             this.getHotAuthorData();
         }
-    },
+    }
 
     render() {
         return (
@@ -72,23 +63,23 @@ var AllListAuthor = React.createClass({
                 {this.renderList()}
 
                 <View style={{width:width, height:width*0.26,alignItems: 'center',justifyContent: 'center',}}>
-                <View style={{
-                    width: width * 0.22,
-                    height: width * 0.096,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderColor: '#808080',
-                    borderWidth: width * 0.003,
-                    borderRadius: width * 0.005,
-                }}>
-                    <Text style={{
-                        textAlign: 'center',
-                        fontSize: width * 0.034,
-                        color: '#333333'
+                    <View style={{
+                        width: width * 0.22,
+                        height: width * 0.096,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderColor: '#808080',
+                        borderWidth: width * 0.003,
+                        borderRadius: width * 0.005,
                     }}>
-                        换一换
-                    </Text>
-                </View>
+                        <Text style={{
+                            textAlign: 'center',
+                            fontSize: width * 0.034,
+                            color: '#333333'
+                        }}>
+                            换一换
+                        </Text>
+                    </View>
 
                 </View>
                 <Toast
@@ -100,11 +91,12 @@ var AllListAuthor = React.createClass({
                 />
             </View>
         );
-    },
+    }
 
     // 热门作者列表
     renderList() {
-        if (this.state.dataSource !== null) {
+        if (this.state.dataSource !== undefined) {
+            // console.log(this.state.dataSource);
             return (
                 <ListView dataSource={this.state.dataSource}
                           renderRow={this.renderRow}
@@ -114,13 +106,12 @@ var AllListAuthor = React.createClass({
                 </ListView>
             );
         }
-    },
+    }
 
     // 单个item返回 线性布局
     renderRow(rowData, sectionID, rowID, highlightRow) {
         // console.log(rowData);
         return (
-
             <View style={styles.contentContainer}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
                                   onPress={() => this.pushToRead(rowData)}>
@@ -155,9 +146,8 @@ var AllListAuthor = React.createClass({
 
                 </TouchableOpacity>
             </View>
-
         )
-    },
+    }
 
     // 请求专题数据
     getHotAuthorData() {
@@ -178,7 +168,7 @@ var AllListAuthor = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    },
+    }
 
     /**
      * 跳转到作者页
@@ -194,8 +184,11 @@ var AllListAuthor = React.createClass({
                 }
             }
         )
-    },
-});
+    }
+}
+AllListAuthor.defaultProps={
+    refreshView: false, //刷新
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -246,4 +239,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AllListAuthor;
+export default AllListAuthor;

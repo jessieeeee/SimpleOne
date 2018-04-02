@@ -21,22 +21,14 @@ import {PullView} from 'react-native-pull';
 import constants from "../Constants";
 import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
+import LoadingMore from  '../view/LoadingMore';// 加载更多的view
+import AllListTopic from './AllListTopic';// 专题列表
+import AllCategoryGuide from './AllCategoryGuide';// 分类导航
+import AllListAuthor from './AllListAuthor';// 热门作者
+import AllListQuestion from './AllListQuestion';// 问所有人
 var {width, height} = constants.ScreenWH;
 // 顶部的banner
 var AllListBanner = require('./AllListBanner');
-// 分类导航
-var AllCategoryGuide = require('./AllCategoryGuide');
-// 专题列表
-var AllListTopic = require('./AllListTopic');
-// 热门作者
-var AllListAuthor = require('./AllListAuthor');
-// 问所有人
-var AllListQuestion = require('./AllListQuestion');
-
-
-
-// 加载更多的view
-var LoadingMore = require('../view/LoadingMore');
 var key = 9;
 var bottomList = [];
 var All = React.createClass({

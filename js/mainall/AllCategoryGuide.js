@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 中间分类导航
  */
 
 import React, {Component} from 'react';
@@ -18,7 +18,7 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import SearchCategory from '../search/SearchCategory';
 var {width, height} = constants.ScreenWH;
 var key=0;
-var AllCategoryGuide = React.createClass({
+class AllCategoryGuide extends Component{
     render() {
         return (
             <View style={styles.container}>
@@ -37,24 +37,24 @@ var AllCategoryGuide = React.createClass({
                 />
             </View>
         );
-    },
+    }
 
     /**
      *  渲染分类item
      */
     renderItem() {
-      return(
-          <View style={styles.itemsView}>
-              {this.renderItemSpan1('img_text')}
-              {this.renderItemSpan1('qa')}
-              {this.renderItemSpan2('read')}
-              {this.renderItemSpan1('serialize')}
-              {this.renderItemSpan1('movie')}
-              {this.renderItemSpan1('music')}
-              {this.renderItemSpan1('audio')}
-          </View>
-      );
-    },
+        return(
+            <View style={styles.itemsView}>
+                {this.renderItemSpan1('img_text')}
+                {this.renderItemSpan1('qa')}
+                {this.renderItemSpan2('read')}
+                {this.renderItemSpan1('serialize')}
+                {this.renderItemSpan1('movie')}
+                {this.renderItemSpan1('music')}
+                {this.renderItemSpan1('audio')}
+            </View>
+        );
+    }
 
     /**
      * 跳转到搜索分类
@@ -94,7 +94,7 @@ var AllCategoryGuide = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 单个跨度item
@@ -103,12 +103,11 @@ var AllCategoryGuide = React.createClass({
         key++;
         return (
             <TouchableOpacity
-                              onPress={() => this.pushToSearchCategory(iconName)}>
-            <Image source={{uri: iconName}} style={styles.iconSpan1} key={key}/>
+                onPress={() => this.pushToSearchCategory(iconName)}>
+                <Image source={{uri: iconName}} style={styles.iconSpan1} key={key}/>
             </TouchableOpacity>
         );
-
-    },
+    }
 
     /**
      * 两个跨度item
@@ -117,13 +116,12 @@ var AllCategoryGuide = React.createClass({
         key++;
         return (
             <TouchableOpacity
-                              onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
-            <Image source={{uri: iconName}} style={styles.iconSpan2} key={key}/>
+                onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                <Image source={{uri: iconName}} style={styles.iconSpan2} key={key}/>
             </TouchableOpacity>
         );
-
     }
-});
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -160,4 +158,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AllCategoryGuide;
+export default AllCategoryGuide;

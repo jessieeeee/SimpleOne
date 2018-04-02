@@ -21,10 +21,9 @@ import constants from '../Constants';
 import DateUtil from "../util/DateUtil";
 import Login from '../login/Login';
 import ChangeImg from './ChangeImg';
+import Share from '../share/Share';
 let toast = NativeModules.ToastNative;
-var Share = require('../share/Share');
 var {width, height} = constants.ScreenWH;
-
 
 class Remark extends Component{
     constructor(props){

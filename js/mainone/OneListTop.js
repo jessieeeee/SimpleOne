@@ -1,8 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- * 最顶部的item，摄影和一句话
+ * @flow 最顶部的item，摄影和一句话
  */
 
 import React, {Component} from 'react';
@@ -19,30 +18,19 @@ import Remark from '../remark/Remark';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import Login from '../login/Login';
 import constants from '../Constants';
+import Share from '../share/Share';
 var {width, height} = constants.ScreenWH;
-var Share=require('../share/Share');
 
-var OneListTop = React.createClass({
-
-    //初始化变量
-    getInitialState() {
-        return {
+class OneListTop extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             like: false,
             likeNum:this.props.data.like_count,
             originalW: 0,
             originalH: 0,
-        }
-    },
-
-    //要传入的参数
-    getDefaultProps() {
-        return {
-            date:'',
-            weather:'',
-            data:null,
-            clickDisplay:null,
-        }
-    },
+        };
+    }
 
     /**
      * 发起网络请求
@@ -50,18 +38,18 @@ var OneListTop = React.createClass({
     componentDidMount() {
         Image.getSize(this.props.data.img_url, (width, height) => {
             this.setState({
-                originalW:width,
-                originalH:height
+                    originalW:width,
+                    originalH:height
                 }
             );
         });
-    },
+    }
 
     //按图片宽度缩放
     getHeight(w, h){
         var ratio=width/w;
         return h*ratio;
-    },
+    }
 
     //渲染
     render() {
@@ -72,7 +60,7 @@ var OneListTop = React.createClass({
                 <TouchableOpacity onPress={() => this.pushToDisplay()}>
                     <Image source={{uri: this.props.data.img_url} } style={{  width: width,
                         height: this.getHeight(this.state.originalW,this.state.originalH),
-                        }}/>
+                    }}/>
                 </TouchableOpacity>
                 {/*标题和作者*/}
                 <Text style={styles.imgAuthor}>
@@ -135,7 +123,7 @@ var OneListTop = React.createClass({
                 />
             </View>
         );
-    },
+    }
 
     /**
      * 渲染喜欢数量
@@ -148,7 +136,7 @@ var OneListTop = React.createClass({
                 </Text>
             );
         }
-    },
+    }
 
     /**
      * 跳转到大图
@@ -166,8 +154,7 @@ var OneListTop = React.createClass({
             this.props.data.title + ' | ' + this.props.data.pic_info,
             this.state.originalW,
             this.state.originalH);
-    },
-
+    }
 
     /**
      * 跳转到小记
@@ -193,8 +180,7 @@ var OneListTop = React.createClass({
                 }
             }
         )
-    },
-
+    }
 
 
     /**
@@ -212,7 +198,7 @@ var OneListTop = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 跳转到分享
@@ -231,14 +217,16 @@ var OneListTop = React.createClass({
                 }
             }
         )
-    },
+    }
+
+
     //点击喜欢
     likeClick(){
         this.setState({
             likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
-    },
+    }
 
     //根据当前状态，显示喜欢图标
     showLikeIcon(){
@@ -249,7 +237,8 @@ var OneListTop = React.createClass({
             return 'bubble_like';
         }
     }
-});
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -312,4 +301,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = OneListTop;
+export default OneListTop;

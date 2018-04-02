@@ -28,16 +28,15 @@ import Search from '../search/Search';
 let toast = NativeModules.ToastNative;
 
 import DisplayImg from '../display/DisplayImg';
+import ExpandMenu from './menu/ExpandMenu';
+import OneListItemBottom from './OneListItemBottom';
+import OneListCommon from './OneListCommon';
+import OneListAudio from './OneListAudio';
+import OneListMusic from './OneListMusic';
+import OneListMovie from './OneListMovie';
+import OneListTop from './OneListTop';
 var {width, height} = constants.ScreenWH;
-var OneListTop = require('./OneListTop');
-var OneListCommon = require('./OneListCommon');
-var OneListMusic = require('./OneListMusic');
-var OneListItemBottom = require('./OneListItemBottom');
-var OneListMovie = require('./OneListMovie');
-var OneListAudio = require('./OneListAudio');
 var ServerApi = require('../ServerApi');
-var ExpandMenu = require('./menu/ExpandMenu');
-
 var key = 1;
 var date= '0'; //请求的日期
 var itemPageArr = []; //分页数组

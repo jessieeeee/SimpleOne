@@ -24,6 +24,7 @@ import NetUtils from "../util/NetUtil";
 import Login from '../login/Login';
 import SingleChoiceDialog from '../view/SingleChoiceDialog';
 import MusicControl from '../musiccontrol/MusicControl';
+import Share from '../share/Share';
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -36,8 +37,6 @@ var {width, height} = constants.ScreenWH;
 var FrameAnimation = require('../view/FrameAnimationView');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
-var Share = require('../share/Share');
-
 var Comment = require('./Comment');
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =

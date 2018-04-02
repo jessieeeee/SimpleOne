@@ -1,3 +1,10 @@
+/**
+ * @date : 18-4-2
+ * @author : JessieK
+ * @email :lyj1246505807@gmail.com
+ * @description : 自定义image
+ */
+
 import React, {Component} from 'react';
 import {
     AppRegistry,
@@ -36,4 +43,4 @@ class MyImage extends Image {
         }
     }
 }
-module.exports = MyImage;
+export default MyImage;

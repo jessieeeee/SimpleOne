@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面-one列表-最后一项
  */
 
 import React, { Component } from 'react';
@@ -14,8 +14,11 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
+class OneListItemBottom extends Component{
+    constructor(props){
+        super(props);
+    }
 
-var OneListItemBottom=React.createClass({
     render() {
         return (
             <View style={styles.container}>
@@ -23,7 +26,7 @@ var OneListItemBottom=React.createClass({
             </View>
         );
     }
-});
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -36,4 +39,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports=OneListItemBottom;
+export default OneListItemBottom;

@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 展开菜单动画
  */
 
 import React, {Component} from 'react';
@@ -17,21 +17,11 @@ import {
 
 import constants from '../../Constants';
 var {width, height} = constants.ScreenWH;
-
-var Panel = React.createClass({
-
-    getDefaultProps() {
-        return {
-            title: '',
-        }
-    },
-
-    /**
-     * 初始化状态变量
-     * @returns {{oneData: null}}
-     */
-    getInitialState() {
-        return {
+class Panel extends Component{
+    constructor(props){
+        super(props);
+        this.toggle=this.toggle.bind(this);
+        this.state={
             up: 'arrow_up_black',    //箭头向上图片
             down: 'arrow_down_black', //箭头向下图片
             title: this.props.title,
@@ -39,8 +29,8 @@ var Panel = React.createClass({
             animation: new Animated.Value(),
             maxHeight: 0,       //最大高度
             minHeight: 0,       //最小高度
-        }
-    },
+        };
+    }
 
     componentDidMount() {
         this.setState({
@@ -50,8 +40,7 @@ var Panel = React.createClass({
 
         let initialValue = this.state.expanded ? width * (0.7 + 0.1 * this.props.children.length) : width * 0.1;
         this.state.animation.setValue(initialValue);
-    },
-
+    }
 
     /**
      * 展开或折叠动画
@@ -71,8 +60,7 @@ var Panel = React.createClass({
                 toValue: finalValue
             }
         ).start();
-    },
-
+    }
 
     render() {
         let icon = this.state.down;
@@ -100,9 +88,12 @@ var Panel = React.createClass({
 
             </Animated.View>
         );
-
     }
-});
+}
+
+Panel.defaultProps={
+    title: ''
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -135,4 +126,5 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Panel;
+export default Panel;
+

@@ -9,7 +9,8 @@ import {PullView} from 'react-native-pull';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import NetUtil from '../util/NetUtil';
 import AuthorHead from './AuthorHead';
-
+// 加载更多的view
+import LoadingMore from '../view/LoadingMore';
 import {
     AppRegistry,
     StyleSheet,
@@ -27,8 +28,7 @@ var OneListMusic = require('../mainone/OneListMusic');
 var OneListMovie = require('../mainone/OneListMovie');
 var OneListAudio = require('../mainone/OneListAudio');
 var {width, height} = constants.ScreenWH;
-// 加载更多的view
-var LoadingMore = require('../view/LoadingMore');
+
 var itemArr = [];
 var key = 0;
 var pageNum = 0;

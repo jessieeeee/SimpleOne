@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面
  */
 
 import React, {Component} from 'react';
@@ -30,18 +30,17 @@ var {width, height} = constants.ScreenWH;
 var barHeight = height * 0.082;
 
 var lastBackPressed=0;
-var Main = React.createClass({
-    getInitialState() {
-        return {
+class Main extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             selectedTab: 'one',
             curBarHeight: 0,
-
-        }
-    },
-
+        };
+    }
     componentDidMount(){
         BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
-    },
+    }
 
     render() {
         return (
@@ -59,7 +58,7 @@ var Main = React.createClass({
 
         );
 
-    },
+    }
 
 
     /**
@@ -77,7 +76,7 @@ var Main = React.createClass({
         this.setState({
             curBarHeight: updateHeight
         });
-    },
+    }
 
     renderTabBarItem(selectedTab, componentName, component, iconNormal, iconSelected) {
         return (
@@ -103,12 +102,8 @@ var Main = React.createClass({
                     }}
                 />
             </TabNavigator.Item>
-
-
         )
-
-
-    },
+    }
 
     onBackAndroid(){
         const nav = this.props.navigator;
@@ -126,10 +121,10 @@ var Main = React.createClass({
             toast.showMsg('再按一次退出应用', toast.SHORT);
             return true;
         }
-
     }
 
-});
+}
+
 
 const styles = StyleSheet.create({
     iconStyle: {
@@ -143,4 +138,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Main;
+export default Main;
