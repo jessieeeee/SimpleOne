@@ -25,8 +25,7 @@ import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
 import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
-let toast = NativeModules.ToastNative;
-
+import GuideView from './GuideView';
 import DisplayImg from '../display/DisplayImg';
 import ExpandMenu from './menu/ExpandMenu';
 import OneListItemBottom from './OneListItemBottom';
@@ -35,6 +34,8 @@ import OneListAudio from './OneListAudio';
 import OneListMusic from './OneListMusic';
 import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
+let toast = NativeModules.ToastNative;
+
 var {width, height} = constants.ScreenWH;
 var ServerApi = require('../ServerApi');
 var key = 1;
@@ -57,6 +58,7 @@ class One extends Component{
             showDisplay:false,//是否显示大图
             showMusicControl:false,//是否显示音乐控制板
             showDate:'0',//显示的日期
+            showGuide:false,//显示引导
         };
     }
 
@@ -132,7 +134,8 @@ class One extends Component{
                     positionValue={height * 0.4}
                     textStyle={{color: 'white'}}
                 />
-
+                <GuideView  isVisible={this.state.showGuide}
+                            onCancel={() => {this.setState({showGuide: false})}}/>
             </View>
         );
     }

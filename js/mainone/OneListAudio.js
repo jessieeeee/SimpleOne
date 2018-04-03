@@ -23,6 +23,7 @@ import Share from '../share/Share';
 var {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
+var FrameAnimation =require('../view/FrameAnimationView');
 class OneListAudio extends Component{
     constructor(props){
         super(props);
@@ -128,18 +129,28 @@ class OneListAudio extends Component{
             );
 
         } else {
+            if(!this.state.isPlay){
+                return (
+                    <TouchableOpacity
+                        onPress={() => this.playMusic()}>
+                        {/*左边的按钮*/}
+                        <Image source={{uri: 'voice_fm_00'}} style={styles.leftIcon}/>
+                    </TouchableOpacity>
+                );
+            }else{
+                return(
+                    <TouchableOpacity
+                        onPress={() => this.playMusic()}>
+                        {/*左边的按钮*/}
+                        <FrameAnimation
+                        loadingArr={this.getLoadingIcon()}
+                        width={width * 0.05} height={width * 0.05}
+                        refreshTime={30}
+                        loading={this.state.isPlay} style={styles.leftIcon}/>
+                    </TouchableOpacity>
+                );
+            }
 
-            return (
-                <TouchableOpacity
-                    onPress={() => this.playMusic()}>
-                    {/*左边的按钮*/}
-                    {/*<Image source={{uri: 'voice_fm_00'}} style={styles.leftIcon}/>*/}
-                    {/*<FrameAnimation*/}
-                    {/*loadingArr={this.getLoadingIcon()}*/}
-                    {/*width={width * 0.11} height={width * 0.1}*/}
-                    {/*loading={this.state.loading} style={styles.leftIcon}/>*/}
-                </TouchableOpacity>
-            );
         }
     }
 
@@ -193,6 +204,7 @@ class OneListAudio extends Component{
         }
         return loadingArr;
     }
+
 
     playMusic() {
         constants.curPage=this.props.page;

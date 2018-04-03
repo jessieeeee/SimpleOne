@@ -33,6 +33,7 @@ var lastBackPressed=0;
 class Main extends Component{
     constructor(props){
         super(props);
+        this.onBackAndroid=this.onBackAndroid.bind(this);
         this.state={
             selectedTab: 'one',
             curBarHeight: 0,
@@ -106,10 +107,12 @@ class Main extends Component{
     }
 
     onBackAndroid(){
+        console.log(this.props);
         const nav = this.props.navigator;
         const routers = nav.getCurrentRoutes();
         if (routers.length > 1) {
             // 默认行为： 退出当前界面。
+
             nav.pop();
             return true;
         }else{
