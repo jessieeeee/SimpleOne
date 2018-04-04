@@ -34,6 +34,8 @@ import OneListAudio from './OneListAudio';
 import OneListMusic from './OneListMusic';
 import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
+import MyStorage from '../util/MySorage';
+
 let toast = NativeModules.ToastNative;
 
 var {width, height} = constants.ScreenWH;
@@ -66,6 +68,18 @@ class One extends Component{
      * 发起网络请求
      */
     componentDidMount() {
+        //初始化数据库
+        MyStorage.initStorage();
+        //检查是否第一次打开
+        MyStorage.loadByKey('isFirst',(result)=>{
+            console.log("查询结果"+result);
+        },(err)=>{
+            //第一次打开，显示引导，刷新标记
+           this.setState({
+               showGuide:true
+           });
+            MyStorage.save('isFirst',false);
+        });
         this.loadPage();
     }
 

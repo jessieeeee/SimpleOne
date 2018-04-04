@@ -17,9 +17,6 @@ import {
 } from 'react-native';
 
 import {Navigator} from 'react-native-deprecated-custom-components';
-/**
- * 导入外部的组件类
- * */
 import constants from './Constants';
 import TabNavigator from 'react-native-tab-navigator';
 import ONE from './mainone/One';

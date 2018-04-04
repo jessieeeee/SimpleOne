@@ -38,5 +38,5 @@ var styles = StyleSheet.create({
     margin: 10,
   },
 });
-
+// console.disableYellowBox = true; 忽略警告弹窗
 AppRegistry.registerComponent('SimpleOne', () => SimpleOne);
