@@ -1,6 +1,8 @@
 # SimpleOne
 High imitation of Han Han's one client based on react-native
-[中文文档][0]
+[中文文档][1]
+
+
 current rendering：
 
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone1.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
@@ -157,4 +159,5 @@ React-native encapsulates native components.
 16. Call component based on Android native
 17. Integrate react-native framework for hybrid development based on Android native projects
 18. Music album cover rotation animation (solves pause and play events in animated loops), improves frame performance by directly modifying the property
-[0]:https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md
+
+[1]:https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md
