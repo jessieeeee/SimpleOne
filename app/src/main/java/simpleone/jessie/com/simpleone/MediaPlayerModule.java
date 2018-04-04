@@ -68,6 +68,9 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void start(final String url) {
+        if(url==null){
+            return;
+        }
         if (!url.equals(lastUrl)){//当前播放的不是前一个
             if (mPlayer != null) {
                 mPlayer.stop();
@@ -118,6 +121,12 @@ public class MediaPlayerModule extends ReactContextBaseJavaModule {
                                mState=STATE_NO_PLAYING;
                                stopTimerTask();
                                mPlayer.reset();
+                               int totalDuration = mPlayer.getDuration();//单位都是毫秒
+                               WritableMap mapProgress = Arguments.createMap();
+                               mapProgress.putInt("currentPosition", totalDuration);
+                               mapProgress.putInt("totalDuration", totalDuration);
+                               sendEvent(mContext,PLAY_PROGRESS,mapProgress);
+
                                WritableMap map=Arguments.createMap();
                                map.putString("state",PLAY_COMPLETE);
                                sendEvent(mContext,PLAY_STATE,map);

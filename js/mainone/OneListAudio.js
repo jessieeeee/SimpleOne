@@ -144,7 +144,7 @@ class OneListAudio extends Component{
                         {/*左边的按钮*/}
                         <FrameAnimation
                         loadingArr={this.getLoadingIcon()}
-                        width={width * 0.05} height={width * 0.05}
+                        width={width * 0.06} height={width * 0.06}
                         refreshTime={30}
                         loading={this.state.isPlay} style={styles.leftIcon}/>
                     </TouchableOpacity>
@@ -211,8 +211,11 @@ class OneListAudio extends Component{
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
-        if (this.props.data.audio_url+'' == 'undefined') {
-            toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
+        if (this.props.data.default_audios != undefined && this.props.data.default_audios.length>0) {
+            media.start(this.props.data.default_audios[0]);
+            this.setState({
+                isPlay: true
+            });
         } else {
 
             if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
@@ -222,7 +225,7 @@ class OneListAudio extends Component{
                     isPlay: true
                 });
             }else{
-                toast.showMsg('很抱歉，无法播放', toast.SHORT);
+                toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
             }
         }
     }
