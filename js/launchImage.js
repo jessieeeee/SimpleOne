@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 启动欢迎页面
  */
 
 import React, {Component} from 'react';
@@ -14,10 +14,13 @@ import {
 } from 'react-native';
 import DateUtils from "./util/DateUtil";
 import constants from './Constants';
-// var Test = require('./view/Test');
-var Main = require('./Main');
+import Main from './Main';
 var {width, height} = constants.ScreenWH;
-var LaunchImage = React.createClass({
+class LaunchImage extends Component{
+    constructor(props){
+        super(props);
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -28,49 +31,50 @@ var LaunchImage = React.createClass({
                 </Text>
             </View>
         );
-    },
+    }
+
     //返回当前星期对应的图片名称
     getOpenImg(){
         var str;
-       switch (DateUtils.getweek()){
-           case 0:
-               str='opening_sunday';
+        switch (DateUtils.getweek()){
+            case 0:
+                str='opening_sunday';
 
-               break;
-           case 1:
-               str='opening_monday';
+                break;
+            case 1:
+                str='opening_monday';
 
-               break;
-           case 2:
-               str='opening_tuesday';
+                break;
+            case 2:
+                str='opening_tuesday';
 
-               break;
-           case 3:
-               str='opening_wednesday';
+                break;
+            case 3:
+                str='opening_wednesday';
 
-               break;
-           case 4:
-               str='opening_thursday';
+                break;
+            case 4:
+                str='opening_thursday';
 
-               break;
-           case 5:
-               str='opening_friday';
+                break;
+            case 5:
+                str='opening_friday';
 
-               break;
-           case 6:
-               str='opening_saturday';
+                break;
+            case 6:
+                str='opening_saturday';
 
-               break;
-       }
+                break;
+        }
         return str;
-    },
+    }
+
     componentDidMount() {
         setTimeout(() => {
-          this.props.navigator.replace({component:Main})
+            this.props.navigator.replace({component:Main})
         }, 2000);
     }
-});
-
+}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -85,4 +89,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = LaunchImage;
+export default LaunchImage;

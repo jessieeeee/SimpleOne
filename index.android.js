@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 
 import {Navigator} from 'react-native-deprecated-custom-components';
+import LaunchImage from './js/launchImage';
 
-
-var LaunchImage=require('./js/launchImage');
 class SimpleOne extends React.Component {
   render() {
     return (
@@ -39,5 +38,5 @@ var styles = StyleSheet.create({
     margin: 10,
   },
 });
-
-AppRegistry.registerComponent('SimpleOne', () => SimpleOne)
+// console.disableYellowBox = true; 忽略警告弹窗
+AppRegistry.registerComponent('SimpleOne', () => SimpleOne);

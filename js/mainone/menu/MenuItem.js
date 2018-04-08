@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－一个－展开菜单列表项
  */
 
 import React, {Component} from 'react';
@@ -15,20 +15,13 @@ import {
 } from 'react-native';
 import constants from '../../Constants';
 import Toast, {DURATION} from 'react-native-easy-toast'
+import Read from '../../read/Read';
 var {width, height} = constants.ScreenWH;
-var Read=require('../../read/Read');
 
-var MenuItem = React.createClass({
-
-    getDefaultProps() {
-        return {
-            category: '分类',
-            title: '分类标题',
-            data:null,
-            date:'',
-            todayRadio:null,
-        }
-    },
+class MenuItem extends Component{
+    constructor(props){
+        super(props);
+    }
 
     render() {
         return (
@@ -39,7 +32,7 @@ var MenuItem = React.createClass({
                     <View style={styles.titleView}>
                         <Text style={styles.category}>{this.props.category}</Text>
                         <Text style={styles.title}  numberOfLines={1}
-                        ellipsizeMode='tail'>{this.props.title}</Text>
+                              ellipsizeMode='tail'>{this.props.title}</Text>
                     </View>
                 </View>
 
@@ -52,7 +45,7 @@ var MenuItem = React.createClass({
                 />
             </TouchableOpacity>
         );
-    },
+    }
 
 
     /**
@@ -61,8 +54,8 @@ var MenuItem = React.createClass({
      */
     pushToRead() {
         if(this.props.data.content_type==8 && this.props.date === constants.curDate ){
-              this.props.todayRadio();
-              return;
+            this.props.todayRadio();
+            return;
         }
         this.props.navigator.push(
             {
@@ -74,9 +67,15 @@ var MenuItem = React.createClass({
                 }
             }
         )
-    },
-
-});
+    }
+}
+MenuItem.defaultProps={
+    category: '分类',
+    title: '分类标题',
+    data:null,
+    date:'',
+    todayRadio:null,
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -107,4 +106,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = MenuItem;
+export default MenuItem;

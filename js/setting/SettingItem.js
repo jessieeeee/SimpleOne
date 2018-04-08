@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　设置项
  */
 
 import React, { Component } from 'react';
@@ -17,15 +17,7 @@ import {
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 
-var SettingItem=React.createClass({
-    getDefaultProps(){
-        return {
-            text: '',
-            rightStyle:0,
-            //右边显示样式，箭头0,checkbox未选1,选中2,文字3
-        }
-    },
-
+class SettingItem extends Component{
     render() {
         return (
             <View style={styles.container}>
@@ -36,7 +28,7 @@ var SettingItem=React.createClass({
                 {this.renderRight()}
             </View>
         );
-    },
+    }
 
     renderRight() {
         if(this.props.rightStyle==0){
@@ -60,12 +52,65 @@ var SettingItem=React.createClass({
         }else if(this.props.rightStyle==3){
             return (
                 <Text style={styles.rightText}>
-                   4.3.4
+                    4.3.4
                 </Text>
             );
         }
-    },
-});
+    }
+}
+SettingItem.defaultProps={
+    text: '',
+    rightStyle:0,
+};
+// var SettingItem=React.createClass({
+//     getDefaultProps(){
+//         return {
+//             text: '',
+//             rightStyle:0,
+//             //右边显示样式，箭头0,checkbox未选1,选中2,文字3
+//         }
+//     },
+//
+//     render() {
+//         return (
+//             <View style={styles.container}>
+//                 <Text style={styles.item}>
+//                     {this.props.text}
+//                 </Text>
+//
+//                 {this.renderRight()}
+//             </View>
+//         );
+//     },
+//
+//     renderRight() {
+//         if(this.props.rightStyle==0){
+//             return (
+//                 <Image style={styles.iconArrow} source={{uri:'arrow_right'}}/>
+//             );
+//         }else if(this.props.rightStyle==1){
+//             return(
+//                 <View style={styles.checkBoxView}>
+//
+//                     <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
+//                 </View>
+//             );
+//         }else if(this.props.rightStyle==2){
+//             return (
+//                 <View style={styles.checkBoxView}>
+//                     <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
+//                     <Image source={{uri:'checkbox_click'}} style={{width:width*0.05,height:width*0.04,position:'absolute',top:width*0.01}}/>
+//                 </View>
+//             );
+//         }else if(this.props.rightStyle==3){
+//             return (
+//                 <Text style={styles.rightText}>
+//                    4.3.4
+//                 </Text>
+//             );
+//         }
+//     },
+// });
 const styles = StyleSheet.create({
     container: {
         justifyContent:'center',
@@ -100,4 +145,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports=SettingItem;
+export default SettingItem;

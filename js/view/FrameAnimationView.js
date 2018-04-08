@@ -29,19 +29,18 @@ var FrameAnimationView = React.createClass({
             loading: false, //是否在加载
             style: null,
             loadingArr: null,
-            clickEvent: null//点击事件回调
+            clickEvent: null,//点击事件回调
+            refreshTime:0 //刷新频率
         }
     },
     getInitialState() {
         return {
             rotate: this.props.loading,
-
         }
     },
 
     render() {
         if (this.state.rotate) {
-            {console.log("刷新了悬浮窗")}
             return (
                 <TouchableOpacity style={this.props.style} onPress={() => {
                     this.props.clickEvent()
@@ -57,7 +56,15 @@ var FrameAnimationView = React.createClass({
         }
     },
 
-
+   componentDidMount(){
+       if (!this.props.loading) {
+           console.log('停止动画');
+           this.stopTimer()
+       } else {
+           console.log('开始动画');
+           this.startTimer()
+       }
+   },
 
     /**
      * 父组件传参变化回调
@@ -88,17 +95,20 @@ var FrameAnimationView = React.createClass({
                 requestAnimationFrame(() => {
                     //移动下标
                     flag++;
-                    if (this.refs.img + '' != 'undefined'&& this.loadingIndex>=0&&this.loadingIndex<this.props.loadingArr.length) {
-                        console.log('刷新下标' + this.props.loadingArr[this.loadingIndex]);
-                        this.loadingIndex=flag % this.props.loadingArr.length;
-                        this.refs.img.setNativeProps({
-                            source:{uri: this.props.loadingArr[this.loadingIndex]},
-                        });
-                    }
-
-                    if(flag>100000){
+                    if(flag>this.props.refreshTime){
+                        if (this.refs.img + '' != 'undefined'&& this.loadingIndex>=0&&this.loadingIndex<this.props.loadingArr.length) {
+                            this.refs.img.setNativeProps({
+                                source:{uri: this.props.loadingArr[this.loadingIndex]},
+                            });
+                            console.log('刷新下标' + this.props.loadingArr[this.loadingIndex]);
+                            this.loadingIndex++;
+                            if(this.loadingIndex>=this.props.loadingArr.length){
+                                this.loadingIndex=0;
+                            }
+                        }
                         flag=0;
                     }
+
                 });
 
             } else {

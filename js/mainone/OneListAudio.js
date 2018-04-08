@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow　主界面分页－一个－广播item
  */
 
 import React, {Component} from 'react';
@@ -18,36 +16,25 @@ import {
     TouchableOpacity,
     DeviceEventEmitter
 } from 'react-native';
-
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
+import Share from '../share/Share';
 var {width, height} = constants.ScreenWH;
-var Read = require('../read/Read');
-var Share = require('../share/Share');
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
-var OneListAudio = React.createClass({
-
-    //初始化变量
-    getInitialState() {
-        return {
+var FrameAnimation =require('../view/FrameAnimationView');
+class OneListAudio extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             like: false,
             likeNum: this.props.data.like_count,
-
             isPlay: false,
             resizeMode: 'contain',
             loading:false,
         }
-    },
-
-    //要传入的参数
-    getDefaultProps() {
-        return {
-            data: null,
-            date: '',
-            onShow: null,
-        }
-    },
+    }
 
     componentDidMount() {
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
@@ -75,14 +62,13 @@ var OneListAudio = React.createClass({
                 });
             }
         });
-
-    },
+    }
 
     componentWillUnmount() {
         DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS);
         DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE);
         media.stop();
-    },
+    }
 
     //渲染
     render() {
@@ -125,7 +111,7 @@ var OneListAudio = React.createClass({
                 </View>
             </TouchableOpacity>
         );
-    },
+    }
 
     renderLeftView() {
         //播出过有音频，渲染带图的
@@ -143,20 +129,31 @@ var OneListAudio = React.createClass({
             );
 
         } else {
+            if(!this.state.isPlay){
+                return (
+                    <TouchableOpacity
+                        onPress={() => this.playMusic()}>
+                        {/*左边的按钮*/}
+                        <Image source={{uri: 'voice_fm_00'}} style={styles.leftIcon}/>
+                    </TouchableOpacity>
+                );
+            }else{
+                return(
+                    <TouchableOpacity
+                        onPress={() => this.playMusic()}>
+                        {/*左边的按钮*/}
+                        <FrameAnimation
+                        loadingArr={this.getLoadingIcon()}
+                        width={width * 0.06} height={width * 0.06}
+                        refreshTime={30}
+                        loading={this.state.isPlay} style={styles.leftIcon}/>
+                    </TouchableOpacity>
+                );
+            }
 
-            return (
-                <TouchableOpacity
-                    onPress={() => this.playMusic()}>
-                    {/*左边的按钮*/}
-                    {/*<Image source={{uri: 'voice_fm_00'}} style={styles.leftIcon}/>*/}
-                    {/*<FrameAnimation*/}
-                        {/*loadingArr={this.getLoadingIcon()}*/}
-                        {/*width={width * 0.11} height={width * 0.1}*/}
-                        {/*loading={this.state.loading} style={styles.leftIcon}/>*/}
-                </TouchableOpacity>
-            );
         }
-    },
+    }
+
     /**
      * 渲染内容
      */
@@ -173,10 +170,10 @@ var OneListAudio = React.createClass({
                         <TouchableOpacity
                             onPress={() => {
                                 if (!this.state.isPlay) {
-                                this.playMusic();
-                            } else {
-                                this.stopMusic();
-                            }}}>
+                                    this.playMusic();
+                                } else {
+                                    this.stopMusic();
+                                }}}>
                             <Image source={{uri: this.state.isPlay?'feeds_radio_pause':'feeds_radio_play'}} style={styles.playBtn}/>
                         </TouchableOpacity>
                         <View style={styles.titles}>
@@ -186,8 +183,6 @@ var OneListAudio = React.createClass({
                     </View>
                 </View>
             );
-
-
         } else {
 
             return (
@@ -197,7 +192,7 @@ var OneListAudio = React.createClass({
                 </View>
             );
         }
-    },
+    }
 
     /**
      * 载入图标名称初始化
@@ -208,7 +203,7 @@ var OneListAudio = React.createClass({
             loadingArr.push(('voice_fm_0' + i).toString());
         }
         return loadingArr;
-    },
+    }
 
 
     playMusic() {
@@ -216,8 +211,11 @@ var OneListAudio = React.createClass({
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
-        if (this.props.data.audio_url+'' == 'undefined') {
-            toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
+        if (this.props.data.default_audios != undefined && this.props.data.default_audios.length>0) {
+            media.start(this.props.data.default_audios[0]);
+            this.setState({
+                isPlay: true
+            });
         } else {
 
             if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
@@ -227,17 +225,17 @@ var OneListAudio = React.createClass({
                     isPlay: true
                 });
             }else{
-                toast.showMsg('很抱歉，无法播放', toast.SHORT);
+                toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
             }
         }
-    },
+    }
 
     stopMusic() {
         media.stop();
         this.setState({
             isPlay: false,
         });
-    },
+    }
 
     /**
      * 跳转到阅读页
@@ -258,7 +256,7 @@ var OneListAudio = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 跳转到分享
@@ -277,9 +275,7 @@ var OneListAudio = React.createClass({
                 }
             }
         )
-    },
-
-
+    }
 
     /**
      * 点击喜欢
@@ -289,7 +285,7 @@ var OneListAudio = React.createClass({
             likeNum: this.state.like ? this.props.data.like_count : this.props.data.like_count + 1,
             like: !this.state.like
         });
-    },
+    }
 
     /**
      * 根据当前状态，显示喜欢图标
@@ -302,10 +298,13 @@ var OneListAudio = React.createClass({
         } else {
             return 'bubble_like';
         }
-    },
-
-});
-
+    }
+}
+OneListAudio.defaultProps={
+    data: null,
+    date: '',
+    onShow: null,
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -401,4 +400,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = OneListAudio;
+export default OneListAudio;

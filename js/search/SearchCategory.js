@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　分类搜索结果
  */
 
 import React, {Component} from 'react';
@@ -19,23 +19,22 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
-
+import MusicControl from '../musiccontrol/MusicControl';
 var PullPickDate = require('../view/PullPickDate');
 var PullMenu = require('../view/PullMenu');
 var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
-var MusicControl=require('../musiccontrol/MusicControl');
 
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
-var SearchCategory = React.createClass({
+class SearchCategory extends Component{
+    constructor(props){
+        super(props);
+        this.onNavigationStateChange=this.onNavigationStateChange.bind(this);
+        this.onShouldStartLoadWithRequest=this.onShouldStartLoadWithRequest.bind(this);
 
-    /**
-     * 初始化状态变量
-     */
-    getInitialState() {
-        return {
+        this.state={
             HTML: '',
             loading: false, //是否在加载
             progress: 0,   //加载进度
@@ -53,13 +52,11 @@ var SearchCategory = React.createClass({
             curMenuId:this.props.route.params.categoryId+'',  //当前菜单
             showMusicControl:false,
         }
-
-    },
-
+    }
 
     componentDidMount() {
-      this.getCategory(this.props.route.params.categoryId);
-    },
+        this.getCategory(this.props.route.params.categoryId);
+    }
 
     getCategory(categoryId){
         var url = serverApi.SearchCategory.replace('{category_id}', categoryId);
@@ -72,7 +69,7 @@ var SearchCategory = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    },
+    }
 
     render() {
         return (
@@ -120,7 +117,7 @@ var SearchCategory = React.createClass({
                 }}/>
             </View>
         );
-    },
+    }
 
     //渲染下拉菜单选择器
     renderPullMenu() {
@@ -132,25 +129,25 @@ var SearchCategory = React.createClass({
                 this.setState({showMenu: false})
             }}/>
         );
-    },
+    }
 
     //渲染日期选择器
     renderPickDateView() {
         return (
             <PullPickDate year={constants.curDate.substring(0, 4) + '年'} month={constants.curDate.substring(5, 7) + '月'}
                           onSure={(year, month, time) => {
-                this.setState({
-                    curYear: year,
-                    curMonth: month,
-                    curTime: time
-                });
-            }} onCancel={() => {
+                              this.setState({
+                                  curYear: year,
+                                  curMonth: month,
+                                  curTime: time
+                              });
+                          }} onCancel={() => {
                 this.setState({
                     isVisible: false
                 });
             }} onShow={this.state.isVisible}/>
         );
-    },
+    }
 
     //渲染进度条
     renderProgressBar() {
@@ -164,12 +161,12 @@ var SearchCategory = React.createClass({
                 />
             );
         }
-    },
+    }
 
     onShouldStartLoadWithRequest(event) {
         // Implement any custom loading logic here, don't forget to return!
         return true;
-    },
+    }
 
     onNavigationStateChange(navState) {
         this.setState({
@@ -180,7 +177,7 @@ var SearchCategory = React.createClass({
             loading: navState.loading,
             scalesPageToFit: true
         });
-    },
+    }
 
 
     /**
@@ -212,7 +209,7 @@ var SearchCategory = React.createClass({
                 </TouchableOpacity>
             </View>
         );
-    },
+    }
 
     renderArrow(show){
         var arrowUri='';
@@ -225,7 +222,7 @@ var SearchCategory = React.createClass({
         return(
             <Image source={{uri: arrowUri}} style={styles.arrow}/>
         );
-    },
+    }
 
     /**
      * 获得标题
@@ -239,10 +236,8 @@ var SearchCategory = React.createClass({
         }
 
 
-    },
-
-
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -299,4 +294,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = SearchCategory;
+export default SearchCategory;

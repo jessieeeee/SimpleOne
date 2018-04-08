@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　主界面分页－所有－主题列表
  */
 
 import React, {Component} from 'react';
@@ -14,50 +14,30 @@ import {
     FlatList,
     Image,
 } from 'react-native';
-
-
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 var ServerApi = require('../ServerApi');
 var {width, height} = constants.ScreenWH;
-var Read=require('../read/Read');
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
     waitForInteraction: true,
 };
-
-var AllListTopic = React.createClass({
-
-
-    getDefaultProps() {
-        return {
-            showNum: 10,//展示个数
-            refreshView: false, //刷新
-            loading: false, //加载更多
-            startId: 0,  //请求起始id
-            endId: 0,
-            // 外层回调函数参
-            getEndId: null,
-        }
-    },
-
-    getInitialState() {
-
-        return {
-            topic: null,
-            dataSource: null,
-
-        };
-    },
+class AllListTopic extends Component{
+    constructor(props){
+        super(props);
+        this.renderRow=this.renderRow.bind(this);
+        this.state={}
+    }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
         this.getTopicData();
-    },
+    }
 
     /**
      * 父组件传参变化回调
@@ -68,7 +48,7 @@ var AllListTopic = React.createClass({
             console.log('刷新了');
             this.getTopicData();
         }
-    },
+    }
 
     render() {
         return (
@@ -84,8 +64,7 @@ var AllListTopic = React.createClass({
                 />
             </View>
         );
-
-    },
+    }
 
     renderList() {
         if (this.state.dataSource !== null) {
@@ -104,7 +83,7 @@ var AllListTopic = React.createClass({
                 </FlatList>
             );
         }
-    },
+    }
 
     // 单个item返回 线性布局
     renderRow(rowData) {
@@ -125,16 +104,17 @@ var AllListTopic = React.createClass({
                 </TouchableOpacity>
             )
         }
+    }
 
-    },
 
     /*上面的图片*/
     renderImage(rowData) {
         return (
             <Image source={{uri: rowData.item.cover}}
-                         style={styles.TopImage}/>
+                   style={styles.TopImage}/>
         );
-    },
+    }
+
     // 请求专题数据
     getTopicData() {
         var itemArr = []; //把显示数据放到一个数组里
@@ -179,7 +159,7 @@ var AllListTopic = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    },
+    }
 
     /**
      * 跳转到阅读页
@@ -197,8 +177,17 @@ var AllListTopic = React.createClass({
                 }
             }
         )
-    },
-});
+    }
+}
+AllListTopic.defaultProps={
+    showNum: 10,//展示个数
+    refreshView: false, //刷新
+    loading: false, //加载更多
+    startId: 0,  //请求起始id
+    endId: 0,
+    // 外层回调函数参
+    getEndId: null,
+};
 
 const styles = StyleSheet.create({
 
@@ -225,4 +214,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AllListTopic;
+export default AllListTopic;

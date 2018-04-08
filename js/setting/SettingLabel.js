@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow　设置标题
  */
 
 import React, { Component } from 'react';
@@ -16,14 +16,7 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
-
-var SettingLabel=React.createClass({
-    getDefaultProps(){
-        return {
-            text: '',
-        }
-    },
-
+class SettingLabel extends Component{
     render() {
         return (
             <View style={styles.container}>
@@ -32,10 +25,12 @@ var SettingLabel=React.createClass({
                 </Text>
             </View>
         );
-    },
+    }
+}
 
-
-});
+SettingLabel.defaultProps={
+    text: ''
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -52,4 +47,26 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports=SettingLabel;
+
+// var SettingLabel=React.createClass({
+//     getDefaultProps(){
+//         return {
+//             text: '',
+//         }
+//     },
+//
+//     render() {
+//         return (
+//             <View style={styles.container}>
+//                 <Text style={styles.label}>
+//                     {this.props.text}
+//                 </Text>
+//             </View>
+//         );
+//     },
+//
+//
+// });
+
+
+export default SettingLabel;

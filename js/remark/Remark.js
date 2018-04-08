@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面分页-one顶部图片的小记
  */
 
 import React, {Component} from 'react';
@@ -19,25 +19,26 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import DateUtil from "../util/DateUtil";
-
+import Login from '../login/Login';
+import ChangeImg from './ChangeImg';
+import Share from '../share/Share';
 let toast = NativeModules.ToastNative;
-var Share = require('../share/Share');
-var Login = require('../login/Login');
 var {width, height} = constants.ScreenWH;
-var ChangeImg = require('./ChangeImg');
 
-var Remark = React.createClass({
-    getInitialState() {
-        return {
+class Remark extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             curText: '<No Event>',
             prevText: '<No Event>',
             prev2Text: '<No Event>',
             imgUri: ''
-        }
-    },
+        };
+    }
     componentDidMount() {
         toast.showMsg('您可以修改图片和文字来创建自己的小记', toast.SHORT);
-    },
+    }
+
     render() {
         return (
 
@@ -97,7 +98,7 @@ var Remark = React.createClass({
             </View>
 
         );
-    },
+    }
 
     renderImg() {
         var uri = '';
@@ -112,8 +113,8 @@ var Remark = React.createClass({
                 height: this.getHeight(this.props.route.params.originalW, this.props.route.params.originalH),
             }} source={{uri: uri}}/>
         );
-    },
-    
+    }
+
     updateText(text) {
         this.setState((state) => {
             return {
@@ -122,7 +123,7 @@ var Remark = React.createClass({
                 prev2Text: state.prevText,
             };
         });
-    },
+    }
 
     /**
      * 跳转到修改图片
@@ -137,15 +138,15 @@ var Remark = React.createClass({
                 }
             }
         );
-    },
+    }
 
     changeImgResponse(response) {
         console.log('receive = ', response);
         this.setState({
             imgUri: 'data:image/jpeg;base64,' + response.data
         });
-    },
-    
+    }
+
     /**
      * 跳转到分享
      * @param url
@@ -163,7 +164,7 @@ var Remark = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 跳转到登录
@@ -178,14 +179,14 @@ var Remark = React.createClass({
                 params: {}
             }
         )
-    },
-
+    }
 
     //按图片宽度缩放
     getHeight(w, h) {
         var ratio = width / w;
         return h * ratio;
-    },
+    }
+
     /**
      * 渲染顶部导航
      */
@@ -216,7 +217,7 @@ var Remark = React.createClass({
                 </View>
             </View>
         );
-    },
+    }
 
     /**
      * 得到天气信息
@@ -226,8 +227,8 @@ var Remark = React.createClass({
         var cityName = this.props.route.params.weather.city_name;
         var climate = this.props.route.params.weather.climate;
         return cityName + '  ' + climate;
-    },
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -325,4 +326,4 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = Remark;
+export default Remark;

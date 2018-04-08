@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 展开菜单
  */
 
 import React, {Component} from 'react';
@@ -14,19 +14,14 @@ import {
 
 } from 'react-native';
 import constants from '../../Constants';
+import Panel from './Panel';
+import MenuItem from  './MenuItem';
 var {width, height} = constants.ScreenWH;
-var Panel = require('./Panel');
-var MenuItem=require('./MenuItem');
 
-
-var ExpandMenu = React.createClass({
-    getDefaultProps() {
-        return {
-            menu: null,
-            date:'',
-            todayRadio:null,
-        }
-    },
+class ExpandMenu extends Component{
+    constructor(props){
+        super(props);
+    }
 
     render() {
         return (
@@ -36,8 +31,7 @@ var ExpandMenu = React.createClass({
                 </Panel>
             </ScrollView>
         );
-    },
-
+    }
 
     /**
      * 获取菜单标题
@@ -46,7 +40,7 @@ var ExpandMenu = React.createClass({
     getTitle(){
         var title="一个VOL.";
         return title+this.props.menu.vol;
-    },
+    }
 
     /**
      * 渲染菜单列表
@@ -60,9 +54,9 @@ var ExpandMenu = React.createClass({
                 <MenuItem key={i} category={this.getCategory(data)} title={data.title} data={data} date={this.props.date} todayRadio={this.props.todayRadio} navigator={this.props.navigator}/>
             );
         }
-        
+
         return itemArr;
-    },
+    }
 
     /**
      * 获取分类
@@ -93,7 +87,12 @@ var ExpandMenu = React.createClass({
             return '电台';
         }
     }
-});
+}
+ExpandMenu.defaultProps={
+    menu: null,
+    date:'',
+    todayRadio:null,
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -102,4 +101,4 @@ const styles = StyleSheet.create({
     },
 });
 
-module.exports = ExpandMenu;
+export default ExpandMenu;

@@ -1,9 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
- *
- * 大多数item 除广告和顶部item
+ * @flow 主界面分页－一个－大多数item
  */
 
 import React, {Component} from 'react';
@@ -17,29 +15,21 @@ import {
     TouchableOpacity
 } from 'react-native';
 import DateUtil from "../util/DateUtil";
+import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
 import constants from '../Constants';
+import Share from '../share/Share';
+import Login from "../login/Login";
 var {width, height} = constants.ScreenWH;
-var Share = require('../share/Share');
-var Read = require('../read/Read');
 
-var OneListCommon = React.createClass({
-
-    //初始化变量
-    getInitialState() {
-        return {
+class OneListCommon extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             like: false,
             likeNum:this.props.data.like_count
-        }
-    },
-
-    //要传入的参数
-    getDefaultProps() {
-        return {
-            data: null,
-        }
-    },
+        };
+    }
 
     //渲染
     render() {
@@ -87,7 +77,7 @@ var OneListCommon = React.createClass({
                 </View>
             </TouchableOpacity>
         );
-    },
+    }
 
     renderImg() {
         if (this.props.data.img_url != '') {
@@ -95,7 +85,8 @@ var OneListCommon = React.createClass({
                 <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
             );
         }
-    },
+    }
+
     /**
      * 跳转到阅读页
      * @param url
@@ -112,14 +103,13 @@ var OneListCommon = React.createClass({
                 }
             }
         )
-    },
+    }
 
     /**
      * 跳转到分享
      * @param url
      */
     pushToShare() {
-
         this.props.navigator.push(
             {
                 component: Share,
@@ -131,8 +121,7 @@ var OneListCommon = React.createClass({
                 }
             }
         )
-    },
-
+    }
 
     /**
      * 显示分类
@@ -153,8 +142,7 @@ var OneListCommon = React.createClass({
         else {
             return '- 连载 -';
         }
-
-    },
+    }
 
     /**
      * 获取回答者
@@ -167,8 +155,7 @@ var OneListCommon = React.createClass({
             return '文 / ' + tempStr[0];
         }
         return tempStr[0];
-    },
-
+    }
 
     /**
      * 点击喜欢
@@ -178,7 +165,7 @@ var OneListCommon = React.createClass({
             likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
         });
-    },
+    }
 
     /**
      * 根据当前状态，显示喜欢图标
@@ -191,9 +178,8 @@ var OneListCommon = React.createClass({
         } else {
             return 'bubble_like';
         }
-    },
-
-});
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -267,4 +253,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = OneListCommon;
+export default OneListCommon;

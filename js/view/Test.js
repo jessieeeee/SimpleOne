@@ -1,5 +1,7 @@
 /**
- * Created by blueberry on 6/20/2017.
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow 组件测试界面
  */
 
 import React, {Component} from 'react';
@@ -7,7 +9,7 @@ import {AppRegistry, StyleSheet, View, Text, requireNativeComponent, TextInput, 
 
 import PickDate from './PickDate';
 import ShowPlayMusic from './ShowPlayMusic'
-var Test = React.createClass({
+class Test extends Component{
     render() {
         return (
             <View style={{flex: 1}}>
@@ -29,5 +31,5 @@ var Test = React.createClass({
             </View>
         );
     }
-});
-module.exports = Test;
+}
+export default Test;

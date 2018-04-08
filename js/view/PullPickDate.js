@@ -15,8 +15,8 @@ import {
     TouchableOpacity
 } from 'react-native';
 import PickDateView from '../view/PickDate';
-var TimerMixin = require('react-timer-mixin');
 import constants from '../Constants';
+var TimerMixin = require('react-timer-mixin');
 var {width, height} = constants.ScreenWH;
 var PullPickDate=React.createClass({
     //注册计时器

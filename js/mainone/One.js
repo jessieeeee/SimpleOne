@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面-one分页
  */
 
 import React, {Component} from 'react';
@@ -23,35 +23,35 @@ import {
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {PullView} from 'react-native-pull';
 import DateUtil from "../util/DateUtil";
+import MusicControl from '../musiccontrol/MusicControl';
+import Search from '../search/Search';
+import GuideView from './GuideView';
+import DisplayImg from '../display/DisplayImg';
+import ExpandMenu from './menu/ExpandMenu';
+import OneListItemBottom from './OneListItemBottom';
+import OneListCommon from './OneListCommon';
+import OneListAudio from './OneListAudio';
+import OneListMusic from './OneListMusic';
+import OneListMovie from './OneListMovie';
+import OneListTop from './OneListTop';
+import MyStorage from '../util/MySorage';
+
 let toast = NativeModules.ToastNative;
 
-var MusicControl=require('../musiccontrol/MusicControl');
-var DisplayImg = require('../display/DisplayImg');
-
 var {width, height} = constants.ScreenWH;
-var OneListTop = require('./OneListTop');
-var OneListCommon = require('./OneListCommon');
-var OneListMusic = require('./OneListMusic');
-var OneListItemBottom = require('./OneListItemBottom');
-var OneListMovie = require('./OneListMovie');
-var OneListAudio = require('./OneListAudio');
-var Search = require('../search/Search');
 var ServerApi = require('../ServerApi');
-var ExpandMenu = require('./menu/ExpandMenu');
-
 var key = 1;
 var date= '0'; //请求的日期
 var itemPageArr = []; //分页数组
 var  curPage= 0;//当前页数
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
-var One = React.createClass({
-
-    /**
-     * 初始化状态变量
-     * @returns {{oneData: null}}
-     */
-    getInitialState() {
-        return {
+class One extends Component{
+    constructor(props){
+        super(props);
+        this.onMomentumScrollEnd=this.onMomentumScrollEnd.bind(this);
+        this.onPullRelease=this.onPullRelease.bind(this);
+        this.onScroll=this.onScroll.bind(this);
+        this.state={
             curOneData: null,  //缓存当前页
             nextOneData: null, //缓存下一页
             animatedValue: new Animated.Value(0),
@@ -60,17 +60,28 @@ var One = React.createClass({
             showDisplay:false,//是否显示大图
             showMusicControl:false,//是否显示音乐控制板
             showDate:'0',//显示的日期
-            play:true,
-        }
-
-    },
+            showGuide:false,//显示引导
+        };
+    }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
+        //初始化数据库
+        MyStorage.initStorage();
+        //检查是否第一次打开
+        MyStorage.loadByKey('isFirst',(result)=>{
+            console.log("查询结果"+result);
+        },(err)=>{
+            //第一次打开，显示引导，刷新标记
+           this.setState({
+               showGuide:true
+           });
+            MyStorage.save('isFirst',false);
+        });
         this.loadPage();
-    },
+    }
 
     // 刷新释放回调
     onPullRelease(resolve) {
@@ -85,8 +96,7 @@ var One = React.createClass({
         setTimeout(() => {
             resolve();
         }, 3000);
-
-    },
+    }
 
     //动画
     animateLastDay() {
@@ -98,7 +108,7 @@ var One = React.createClass({
                 easing: Easing.linear
             }
         ).start(() => this.animateLastDay())
-    },
+    }
 
     /**
      * 界面绘制
@@ -114,17 +124,17 @@ var One = React.createClass({
                             onMomentumScrollEnd={this.onMomentumScrollEnd}>
 
                     {/*渲染分页*/}
-                    {this.renderPage()}
+                    {itemPageArr}
 
                 </ScrollView>
                 {this.renderDisplay()}
 
                 <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl}
                               onCancel={()=>{
-                    this.setState({
-                    showMusicControl:false,
-                    });
-                }}/>
+                                  this.setState({
+                                      showMusicControl:false,
+                                  });
+                              }}/>
 
                 {constants.renderAudioPlay(()=>{
                     this.setState({
@@ -138,10 +148,11 @@ var One = React.createClass({
                     positionValue={height * 0.4}
                     textStyle={{color: 'white'}}
                 />
-
+                <GuideView  isVisible={this.state.showGuide}
+                            onCancel={() => {this.setState({showGuide: false})}}/>
             </View>
         );
-    },
+    }
 
 
     /**
@@ -158,11 +169,8 @@ var One = React.createClass({
                         isVisible={this.state.showDisplay}
                         onCancel={() => {this.setState({showDisplay: false})}}/>
         )
-    },
+    }
 
-    renderPage() {
-        return itemPageArr;
-    },
 
     /**
      * 滚动回调
@@ -205,9 +213,8 @@ var One = React.createClass({
                 showDate: DateUtil.getNextDate(this.state.showDate,curPage-currentPage)
             });
         }
-
         curPage=currentPage;
-    },
+    }
 
 
     addEmptyView(){
@@ -217,27 +224,8 @@ var One = React.createClass({
         {
             key++
         }
-    },
-    /**
-     * 添加下一页
-     */
-    // addPage(oneData) {
-    //     itemPageArr.pop();
-    //     key--;
-    //     itemPageArr.push(
-    //         <ScrollView key={key}  onScroll={this.onScroll}>
-    //
-    //             {this.renderAllItem(oneData)}
-    //
-    //         </ScrollView>
-    //     );
-    //     {
-    //         key++
-    //     }
-    // },
-    // /**
-    //  * 添加下一页
-    //  */
+    }
+
     addPage(oneData) {
         itemPageArr.pop();
         key--;
@@ -252,7 +240,7 @@ var One = React.createClass({
         {
             key++
         }
-    },
+    }
 
     /**
      * scrollview滑动回调
@@ -272,7 +260,7 @@ var One = React.createClass({
                 showArrow: false
             });
         }
-    },
+    }
 
     /**
      * 回到今天
@@ -286,7 +274,7 @@ var One = React.createClass({
         this.setState({
             showDate: constants.curDate
         });
-    },
+    }
 
     /**
      * 列表item渲染
@@ -395,8 +383,7 @@ var One = React.createClass({
             );
             return itemArr;
         }
-
-    },
+    }
 
 
     /**
@@ -437,7 +424,7 @@ var One = React.createClass({
 
             </View>
         );
-    },
+    }
 
     /**
      * 天气绘制
@@ -456,8 +443,7 @@ var One = React.createClass({
                 </Text>
             );
         }
-
-    },
+    }
 
     /**
      * 搜索按钮绘制
@@ -472,9 +458,7 @@ var One = React.createClass({
                 </TouchableOpacity>
             );
         }
-    },
-
-
+    }
 
     /**
      * 跳转到搜索页
@@ -487,8 +471,7 @@ var One = React.createClass({
                 component: Search
             }
         )
-    },
-
+    }
 
     /**
      * 渲染左边今天按钮
@@ -505,7 +488,7 @@ var One = React.createClass({
                 </View>
             )
         }
-    },
+    }
 
     /**
      * 初始化载入页面
@@ -516,14 +499,13 @@ var One = React.createClass({
         this.loadFirstPage(() => {
             this.addEmptyView();
             this.getOneList((result) => {
-                console.log('获取到第二页'+JSON.stringify(result));
                 this.setState({
                     nextOneData: result,
                 });
 
             },false);
         });
-    },
+    }
 
     /**
      * 第一页获取
@@ -544,8 +526,7 @@ var One = React.createClass({
             this.addPage(this.state.curOneData.data);
             loadFirstSuccess();
         },false);
-    },
-
+    }
 
     /**
      * 获取内容列表
@@ -577,8 +558,7 @@ var One = React.createClass({
         }, (error) => {
             toast.showMsg('error' + error,toast.SHORT)
         });
-
-    },
+    }
 
 
     /**
@@ -590,10 +570,9 @@ var One = React.createClass({
         var climate = this.state.curOneData.data.weather.climate;
         var temperature = this.state.curOneData.data.weather.temperature;
         return cityName + '  ' + climate + '  ' + temperature;
-    },
+    }
+}
 
-
-});
 
 const styles = StyleSheet.create({
     container: {
@@ -683,4 +662,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = One;
+export default One;

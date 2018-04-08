@@ -1,7 +1,7 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
- * @flow
+ * @flow 主界面分页－所有－顶部水平滚动列表
  */
 
 import React, {Component} from 'react';
@@ -16,12 +16,11 @@ import {
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
-
+import Read from '../read/Read';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 var TimerMixin = require('react-timer-mixin');
 var ServerApi=require('../ServerApi');
-var Read=require('../read/Read');
 var AllListBanner = React.createClass({
     getDefaultProps() {
         return {
@@ -105,7 +104,7 @@ var AllListBanner = React.createClass({
         NetUtils.get(ServerApi.AllBanner, null, (result) => {
             this.setState({
                 banner: result,
-            })
+            });
             // console.log(result);
             //开启定时器
             this.startTimer();
