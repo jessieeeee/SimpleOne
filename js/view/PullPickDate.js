@@ -16,29 +16,16 @@ import {
 } from 'react-native';
 import PickDateView from '../view/PickDate';
 import constants from '../Constants';
-var TimerMixin = require('react-timer-mixin');
 var {width, height} = constants.ScreenWH;
-var PullPickDate=React.createClass({
-    //注册计时器
-    mixins: [TimerMixin],
-
-    getDefaultProps() {
-        return {
-            onSure:null,
-            onCancel:null,
-            onShow:false,
-            year:'',
-            month:'',
-        }
-    },
-
-    getInitialState() {
-        return {
+class PullPickDate extends Component{
+    constructor(props){
+        super(props);
+        this.onLayout=this.onLayout.bind(this);
+        this.state={
             expanded: false,
             animation : new Animated.Value()
-        }
-    },
-
+        };
+    }
     showAnimation(height){
         var maxHeight=height;
         var minHeight=0;
@@ -57,8 +44,7 @@ var PullPickDate=React.createClass({
             },
             5000
         );
-
-    },
+    }
 
     toggle(finalValue) { //Step 1
 
@@ -68,7 +54,7 @@ var PullPickDate=React.createClass({
                 toValue: finalValue
             }
         ).start(); //Step 5
-    },
+    }
 
     render() {
         return (
@@ -99,17 +85,15 @@ var PullPickDate=React.createClass({
 
                         }}
                         style={{width: '100%', flex: 0.42,}}/>
-                     <TouchableOpacity style={{flex:0.58}} onPress={() => this.props.onCancel()}/>
+                    <TouchableOpacity style={{flex:0.58}} onPress={() => this.props.onCancel()}/>
                 </View>
             </Modal>
         );
-    },
+    }
 
     onLayout(event){
-      this.showAnimation(event.nativeEvent.layout.height);
+        this.showAnimation(event.nativeEvent.layout.height);
     }
-});
+}
 
-
-
-module.exports=PullPickDate;
+export default PullPickDate;

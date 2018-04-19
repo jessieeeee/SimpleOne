@@ -14,30 +14,19 @@ import {
     TouchableOpacity
 } from 'react-native';
 import MyImage from '../view/MyImage';
+let page;
+let flag = 0;
 
-var flag = 0;
-var TimerMixin = require('react-timer-mixin');
-var FrameAnimationView = React.createClass({
-    loadingIndex: 0,
-    //注册计时器
-    mixins: [TimerMixin],
+class FrameAnimationView extends Component{
 
-    getDefaultProps() {
-        return {
-            width: 0,
-            height: 0,
-            loading: false, //是否在加载
-            style: null,
-            loadingArr: null,
-            clickEvent: null,//点击事件回调
-            refreshTime:0 //刷新频率
-        }
-    },
-    getInitialState() {
-        return {
-            rotate: this.props.loading,
-        }
-    },
+    constructor(props){
+        super(props);
+        this.state={
+            rotate: this.props.loading
+        };
+        this.loadingIndex=0;
+        page=this;
+    }
 
     render() {
         if (this.state.rotate) {
@@ -46,7 +35,7 @@ var FrameAnimationView = React.createClass({
                     this.props.clickEvent()
                 }}>
                     <MyImage ref={"img"} source={{uri: this.props.loadingArr[this.loadingIndex]}}
-                             style={[{width: this.props.width, height: this.props.height}]}/>
+                             style={[{width: this.props.width, height: this.props.height }]}/>
                 </TouchableOpacity>
             )
         } else {
@@ -54,17 +43,17 @@ var FrameAnimationView = React.createClass({
                 <View/>
             );
         }
-    },
+    }
 
-   componentDidMount(){
-       if (!this.props.loading) {
-           console.log('停止动画');
-           this.stopTimer()
-       } else {
-           console.log('开始动画');
-           this.startTimer()
-       }
-   },
+    componentDidMount(){
+        if (!this.props.loading) {
+            console.log('停止动画');
+            this.stopTimer()
+        } else {
+            console.log('开始动画');
+            this.startTimer()
+        }
+    }
 
     /**
      * 父组件传参变化回调
@@ -82,54 +71,62 @@ var FrameAnimationView = React.createClass({
         this.setState({
             rotate: nextProps.loading,
         });
-    },
-
+    }
 
     /**
      * 开启计时器
      */
     startTimer() {
         this.stopTimer();
-        this.timer = this.setInterval(function () {
-            if (this.state.rotate) {
+        this.timer = setInterval(function () {
+            if (page.state.rotate) {
                 requestAnimationFrame(() => {
                     //移动下标
                     flag++;
-                    if(flag>this.props.refreshTime){
-                        if (this.refs.img + '' != 'undefined'&& this.loadingIndex>=0&&this.loadingIndex<this.props.loadingArr.length) {
-                            this.refs.img.setNativeProps({
-                                source:{uri: this.props.loadingArr[this.loadingIndex]},
+                    if(flag > page.props.refreshTime){
+                        if (page.refs.img + '' != 'undefined' && page.loadingIndex >= 0 && page.loadingIndex < page.props.loadingArr.length) {
+                            page.refs.img.setNativeProps({
+                                source:{uri: page.props.loadingArr[page.loadingIndex]},
                             });
-                            console.log('刷新下标' + this.props.loadingArr[this.loadingIndex]);
-                            this.loadingIndex++;
-                            if(this.loadingIndex>=this.props.loadingArr.length){
-                                this.loadingIndex=0;
+                            console.log('刷新下标' + page.props.loadingArr[page.loadingIndex]);
+                            page.loadingIndex++;
+                            if(page.loadingIndex >= page.props.loadingArr.length){
+                                page.loadingIndex=0;
                             }
                         }
-                        flag=0;
+                        flag = 0;
                     }
 
                 });
 
             } else {
-                this.stopTimer();
+                page.stopTimer();
             }
 
         }, 10);
-    },
+    }
 
     /**
      * 停止计时器
      */
     stopTimer() {
         if (this.timer != null) {
-            this.clearInterval(this.timer);
+            clearInterval(this.timer);
         }
-
-    },
-
-
-});
+    }
 
 
-module.exports = FrameAnimationView;
+    componentWillUnmount() {
+        // 如果存在this.timer，则使用clearTimeout清空。
+        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+        this.timer && clearInterval(this.timer);
+    }
+}
+FrameAnimationView.propTypes={
+    width: React.PropTypes.number.isRequired,
+    height:React.PropTypes.number.isRequired,
+    loading: React.PropTypes.bool.isRequired, //是否在加载
+    refreshTime:React.PropTypes.number.isRequired //刷新频率
+};
+
+export default FrameAnimationView;

@@ -20,8 +20,8 @@ import {
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import MusicControl from '../musiccontrol/MusicControl';
-var PullPickDate = require('../view/PullPickDate');
-var PullMenu = require('../view/PullMenu');
+import PullMenu from '../view/PullMenu';
+import PullPickDate from '../view/PullPickDate';
 var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');

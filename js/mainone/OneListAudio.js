@@ -20,10 +20,10 @@ import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 import Share from '../share/Share';
+import FrameAnimation from '../view/FrameAnimationView';
 var {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
-var FrameAnimation =require('../view/FrameAnimationView');
 class OneListAudio extends Component{
     constructor(props){
         super(props);

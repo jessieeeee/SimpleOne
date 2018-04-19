@@ -21,12 +21,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import constants from '../Constants';
+import OneListTop from '../mainone/OneListTop';
+import OneListCommon from '../mainone/OneListCommon';
+import OneListMusic from '../mainone/OneListMusic';
+import OneListMovie from '../mainone/OneListMovie';
+import OneListAudio from '../mainone/OneListAudio';
+
 var ServerApi = require('../ServerApi');
-var OneListTop = require('../mainone/OneListTop');
-var OneListCommon = require('../mainone/OneListCommon');
-var OneListMusic = require('../mainone/OneListMusic');
-var OneListMovie = require('../mainone/OneListMovie');
-var OneListAudio = require('../mainone/OneListAudio');
 var {width, height} = constants.ScreenWH;
 
 var itemArr = [];

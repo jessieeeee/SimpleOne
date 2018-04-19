@@ -16,34 +16,20 @@ import {
     Modal
 } from 'react-native';
 import constants from '../Constants';
-var TimerMixin = require('react-timer-mixin');
 var {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
     waitForInteraction: true,
 };
-
-var PullMenu = React.createClass({
-    //注册计时器
-    mixins: [TimerMixin],
-    getDefaultProps() {
-        return {
-            menuData: null,
-            onSure: null,
-            onCancel: null,
-            onShow: false,
-            select: '',
-
-        }
-    },
-
-    getInitialState() {
-        return {
+class PullMenu extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             expanded: false,
             animation : new Animated.Value()
         }
-    },
+    }
 
     componentDidMount(){
         var maxHeight=width * 0.14*this.props.menuData.length;
@@ -63,8 +49,7 @@ var PullMenu = React.createClass({
             },
             2000
         );
-
-    },
+    }
 
     render() {
         return (
@@ -98,9 +83,7 @@ var PullMenu = React.createClass({
 
             </Modal>
         );
-    },
-
-
+    }
 
     toggle(finalValue) { //Step 1
 
@@ -110,7 +93,7 @@ var PullMenu = React.createClass({
                 toValue: finalValue
             }
         ).start(); //Step 5
-    },
+    }
 
     // 单个item返回 线性布局
     renderRow(rowData) {
@@ -125,8 +108,7 @@ var PullMenu = React.createClass({
                 </TouchableOpacity>
             )
         }
-
-    },
+    }
 
     renderItem(rowData) {
         var color = '#808080';
@@ -137,7 +119,8 @@ var PullMenu = React.createClass({
             <Text style={[styles.menu, {color: color}]}>{rowData.item.value}</Text>
         );
     }
-});
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -159,4 +142,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = PullMenu;
+export default PullMenu;

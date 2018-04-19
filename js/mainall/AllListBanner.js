@@ -14,39 +14,29 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import Read from '../read/Read';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
-var TimerMixin = require('react-timer-mixin');
-var ServerApi=require('../ServerApi');
-var AllListBanner = React.createClass({
-    getDefaultProps() {
-        return {
-            duration: 4000,
-            // 外层回调函数参
-            refreshView: false, //刷新
-        }
-    },
-
-    getInitialState() {
-        return {
+let {width, height} = constants.ScreenWH;
+let ServerApi=require('../ServerApi');
+let page;
+class AllListBanner extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             curPage: '0',
             banner: null,
         };
-
-    },
-
-    //注册计时器
-    mixins: [TimerMixin],
+        page=this;
+    }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
         this.getBannerData();
-    },
+    }
 
     /**
      * 父组件传参变化回调
@@ -56,44 +46,44 @@ var AllListBanner = React.createClass({
         if(nextProps.refreshView){
             this.getBannerData();
         }
-    },
+    }
 
     /**
      * 开启计时器
      */
     startTimer() {
         //获得scrollView
-        var scrollView = this.refs.sv_banner;
+        let scrollView = this.refs.sv_banner;
         this.stopTimer();
-        this.timer = this.setInterval(function () {
+        this.timer = setInterval(function () {
             //计算当前所在页数
-            var activePage;
+            let activePage;
             // console.log("curPage:" + this.state.curPage);
-            if (this.state.banner!== 'undefined' && this.state.curPage + 1 >= this.state.banner.data.length) {
+            if (page.state.banner!== 'undefined' && page.state.curPage + 1 >= page.state.banner.data.length) {
                 activePage = 0;
             } else {
-                activePage = parseInt(this.state.curPage + 1);
+                activePage = parseInt(page.state.curPage + 1);
             }
             // console.log("activePage:" + activePage);
             //更新
-            this.setState({
+            page.setState({
                 curPage: activePage
             });
             //设置偏移量，实现滚动
-            var offsetx = activePage * width;
+            let offsetx = activePage * width;
             // console.log("offsetx:" + offsetx);
             scrollView.scrollResponderScrollTo({x: offsetx, y: 0, animated: true});
         }, this.props.duration);
-    },
+    }
 
     /**
      * 停止计时器
      */
     stopTimer() {
         if(this.timer!=null){
-            this.clearInterval(this.timer);
+            clearInterval(this.timer);
         }
-    },
+    }
 
     /**
      * 获取banner列表
@@ -111,7 +101,7 @@ var AllListBanner = React.createClass({
         }, (error) => {
             this.refs.toast.show('error' + error, 500)
         });
-    },
+    }
 
     render() {
         return (
@@ -148,8 +138,7 @@ var AllListBanner = React.createClass({
                 />
             </View>
         );
-    },
-
+    }
 
     /**
      * 渲染banner图片
@@ -171,8 +160,7 @@ var AllListBanner = React.createClass({
             }
             return allchild;
         }
-
-    },
+    }
 
     /**
      * 渲染顶部圆点
@@ -192,7 +180,7 @@ var AllListBanner = React.createClass({
             }
             return indicatorArr;
         }
-    },
+    }
 
     /**
      * 根据状态渲染当前圆点
@@ -205,7 +193,7 @@ var AllListBanner = React.createClass({
         } else {
             return '○';
         }
-    },
+    }
 
     /**
      * 滚动回调
@@ -220,7 +208,7 @@ var AllListBanner = React.createClass({
         this.setState({
             curPage: currentPage
         });
-    },
+    }
 
     /**
      * 跳转到阅读页
@@ -242,9 +230,19 @@ var AllListBanner = React.createClass({
         }else{
             this.refs.toast.show('这是一个广告跳转', 500);
         }
+    }
 
-    },
-});
+    componentWillUnmount() {
+        // 如果存在this.timer，则使用clearTimeout清空。
+        // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+        this.timer && clearInterval(this.timer);
+    }
+}
+AllListBanner.defaultProps={
+    duration: 4000,
+    // 外层回调函数参
+    refreshView: false, //刷新
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -271,4 +269,5 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = AllListBanner;
+export default AllListBanner;
+

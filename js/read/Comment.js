@@ -17,20 +17,15 @@ import {
 import Login from '../login/Login';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
-var Comment = React.createClass({
-
-    getDefaultProps() {
-        return {
-            data: null,
-            bgColor: 'white'
-        }
-    },
-    getInitialState() {
-        return {
+class Comment extends Component{
+    constructor(props){
+        super(props);
+        this.state={
             praise: false,
             praiseNum: this.props.data.praisenum,
         }
-    },
+    }
+
     render() {
         return (
             <View style={[styles.container,{backgroundColor:this.props.bgColor}]}>
@@ -49,7 +44,7 @@ var Comment = React.createClass({
                             <Image source={{uri: 'comment_image'}} style={styles.icon}/>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.iconPraise}onPress={() => {
-                             this.praiseClick()
+                            this.praiseClick()
                         }}>
                             {this.renderPraise()}
                         </TouchableOpacity>
@@ -58,7 +53,7 @@ var Comment = React.createClass({
                 </View>
             </View>
         );
-    },
+    }
 
     praiseClick(){
         this.setState({
@@ -66,7 +61,8 @@ var Comment = React.createClass({
             praise: !this.state.praise,
         });
 
-    },
+    }
+
     renderPraise() {
         if (this.state.praise) {
             return (
@@ -77,7 +73,7 @@ var Comment = React.createClass({
                 <Image source={{uri: 'comment_laud'}} style={styles.icon}/>
             );
         }
-    },
+    }
     /**
      * 跳转到登录
      * @param url
@@ -91,8 +87,13 @@ var Comment = React.createClass({
                 params: {}
             }
         )
-    },
-});
+    }
+}
+Component.defaultProps={
+    bgColor: 'white'
+};
+
+
 
 const styles = StyleSheet.create({
         container: {
@@ -163,4 +164,4 @@ const styles = StyleSheet.create({
     }
 );
 
-module.exports = Comment;
+export default Comment;

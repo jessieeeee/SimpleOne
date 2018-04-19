@@ -26,11 +26,11 @@ import AllListTopic from './AllListTopic';// 专题列表
 import AllCategoryGuide from './AllCategoryGuide';// 分类导航
 import AllListAuthor from './AllListAuthor';// 热门作者
 import AllListQuestion from './AllListQuestion';// 问所有人
-var {width, height} = constants.ScreenWH;
+import AllListBanner from './AllListBanner'; //顶部banner
+let {width, height} = constants.ScreenWH;
 // 顶部的banner
-var AllListBanner = require('./AllListBanner');
-var key = 9;
-var bottomList = [];
+let key = 9;
+let bottomList = [];
 class All extends Component{
     constructor(props){
         super(props);

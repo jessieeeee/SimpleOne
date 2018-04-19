@@ -25,6 +25,8 @@ import Login from '../login/Login';
 import SingleChoiceDialog from '../view/SingleChoiceDialog';
 import MusicControl from '../musiccontrol/MusicControl';
 import Share from '../share/Share';
+import FrameAnimation from '../view/FrameAnimationView';
+import Comment from './Comment';
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -33,11 +35,8 @@ const VIEWABILITY_CONFIG = {
 
 let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
-
-var FrameAnimation = require('../view/FrameAnimationView');
 var WEBVIEW_REF = 'webview';
 var serverApi = require('../ServerApi');
-var Comment = require('./Comment');
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
     `
@@ -368,7 +367,7 @@ class Read extends Component{
             <FrameAnimation
                 loadingArr={this.getLoadingIcon()}
                 width={width * 0.14} height={width * 0.14}
-                loading={this.state.loading} style={{
+                loading={this.state.loading} refreshTime={0} style={{
                 position: 'absolute',
                 top: height * 0.4 - width * 0.07,
                 left: width / 2 - width * 0.07

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import ShowPlayMusic from './view/ShowPlayMusic';
-var FrameAnimation = require('./view/FrameAnimationView');
 var Dimensions = require('Dimensions');
 
 import {
