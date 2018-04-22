@@ -5,7 +5,7 @@
  */
 
 import React, {Component} from 'react';
-import {PullView} from 'react-native-pull';
+import PullScollView from '../view/PullScollView';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import NetUtil from '../util/NetUtil';
 import AuthorHead from './AuthorHead';
@@ -39,6 +39,7 @@ class AuthorPage extends Component{
     constructor(props){
         super(props);
         this.onScroll=this.onScroll.bind(this);
+        this.onPullRelease=this.onPullRelease.bind(this);
         this.state={
             loading: false,
             isEnd: false//是否到末尾标记
@@ -89,14 +90,14 @@ class AuthorPage extends Component{
             <View style={styles.container}>
                 {this.renderNavBar()}
 
-                <PullView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
+                <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
                           style={{width: width, backgroundColor: 'white'}}>
                     <AuthorHead data={this.props.route.params.authorData}/>
                     <View style={styles.bottomLine}/>
 
                     {this.renderAllItem()}
                     {this.renderLoading()}
-                </PullView>
+                </PullScollView>
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'gray'}}
