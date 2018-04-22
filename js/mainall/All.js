@@ -17,7 +17,7 @@ import {
 
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-import {PullView} from 'react-native-pull';
+import PullScollView from '../view/PullScollView';
 import constants from "../Constants";
 import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
@@ -64,12 +64,12 @@ class All extends Component{
         return (
             <View style={styles.container}>
                 {this.renderNavBar()}
-                <PullView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
+                <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
                     {this.renderAllItem()}
                     {this.renderLoadMoreList()}
                     {this.renderLoading()}
-                </PullView>
+                </PullScollView>
                 {constants.renderAudioPlay(()=>{
                     this.setState({
                         showMusicControl:true,

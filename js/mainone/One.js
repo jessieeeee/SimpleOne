@@ -21,7 +21,7 @@ import {
     Easing
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-import {PullView} from 'react-native-pull';
+import PullScollView from '../view/PullScollView';
 import DateUtil from "../util/DateUtil";
 import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
@@ -230,12 +230,12 @@ class One extends Component{
         itemPageArr.pop();
         key--;
         itemPageArr.push(
-            <PullView key={key} onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
+            <PullScollView key={key} onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
                 {this.renderAllItem(oneData,key)}
 
 
-            </PullView>
+            </PullScollView>
         );
         {
             key++
