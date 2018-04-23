@@ -10,12 +10,12 @@ import {
 
 import {Navigator} from 'react-native-deprecated-custom-components';
 import LaunchImage from './js/launchImage';
-
+import Test from './js/store/Test';
 class SimpleOne extends React.Component {
   render() {
     return (
         <Navigator
-            initialRoute={{name:'启动页',component:LaunchImage}}
+            initialRoute={{name:'启动页',component:Test}}
             configureScene={()=>{
                 return Navigator.SceneConfigs.PushFromRight;
             }}
