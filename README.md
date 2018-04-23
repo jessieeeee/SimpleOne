@@ -19,7 +19,7 @@ current rendering：
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
 
-# api interface list
+# api list
 
 Here is a record of the extracted api interface, I intend to learn and hope readers don't use any commercial project, the current listed interface is based on the android version of 4.3.4：
 
@@ -97,7 +97,7 @@ Here is a record of the extracted api interface, I intend to learn and hope read
 8. Author page
   `http://v3.wufazhuce.com:8000/api/author/works?page_num={page_num}&author_id={author_id}&version=4.3.4`
 
-# functional list：
+# function list：
 
 android 4.3.4：
 
@@ -135,7 +135,7 @@ Reading interface interaction animation
 
 One paging flip title animation
 
-# Currently used technology:
+# technical points:
 
 Most of the previous use of ES5, most of the current use of ES6, the use of mixin in the project, because the mixin doesn't support ES6, that part still use ES5, there is time to replace the old components
 
