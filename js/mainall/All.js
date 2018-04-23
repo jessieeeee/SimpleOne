@@ -50,7 +50,7 @@ class All extends Component{
     onPullRelease(resolve) {
         //更改刷新状态
         this.setState({isRefreshing: true});
-        //do something
+        //刷新完毕，重置下拉刷新，再次更新刷新和加载更多状态
         setTimeout(() => {
             resolve();
             this.setState({
@@ -115,7 +115,7 @@ class All extends Component{
                         lastId: this.state.startId,
                     });
                     bottomList.push(
-                        <AllListTopic key={key} showNum={5} startId={this.state.startId} loading={this.state.loading}
+                        <AllListTopic key={key} showNum={5} startId={this.state.startId}
                                       getEndId={(endId, end) => {
                                           console.log('回调了' + endId + end);
                                           this.setState({
@@ -126,7 +126,7 @@ class All extends Component{
 
                                       }}/>
                     );
-                    //设置正在加载和更多列表标记
+                    //设置正在加载和显示更多标记
                     this.setState({
                         loadMore: true,
                         loading: true,

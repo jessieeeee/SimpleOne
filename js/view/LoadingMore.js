@@ -45,7 +45,9 @@ class LoadingMore extends Component{
 LoadingMore.defaultProps={
     loading: false, //加载更多
 };
-
+LoadingMore.propTypes={
+    loading: React.PropTypes.bool.isRequired
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
