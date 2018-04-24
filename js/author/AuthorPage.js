@@ -26,8 +26,7 @@ import OneListCommon from '../mainone/OneListCommon';
 import OneListMusic from '../mainone/OneListMusic';
 import OneListMovie from '../mainone/OneListMovie';
 import OneListAudio from '../mainone/OneListAudio';
-
-var ServerApi = require('../ServerApi');
+import ServerApi from '../ServerApi';
 var {width, height} = constants.ScreenWH;
 
 var itemArr = [];

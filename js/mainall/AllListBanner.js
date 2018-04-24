@@ -18,8 +18,8 @@ import Toast from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import Read from '../read/Read';
 import constants from '../Constants';
+import ServerApi from '../ServerApi';
 let {width, height} = constants.ScreenWH;
-let ServerApi=require('../ServerApi');
 let page;
 class AllListBanner extends Component{
     constructor(props){

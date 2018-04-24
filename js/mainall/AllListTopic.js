@@ -18,7 +18,7 @@ import Read from '../read/Read';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
-var ServerApi = require('../ServerApi');
+import ServerApi from '../ServerApi';
 var {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,

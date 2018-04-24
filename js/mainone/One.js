@@ -35,15 +35,13 @@ import OneListMusic from './OneListMusic';
 import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
 import MyStorage from '../util/MySorage';
-
+import ServerApi from '../ServerApi';
 let toast = NativeModules.ToastNative;
-
 var {width, height} = constants.ScreenWH;
-var ServerApi = require('../ServerApi');
 var key = 1;
 var date= '0'; //请求的日期
 var itemPageArr = []; //分页数组
-var  curPage= 0;//当前页数
+var curPage= 0;//当前页数
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
 class One extends Component{
     constructor(props){

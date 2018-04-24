@@ -27,6 +27,7 @@ import MusicControl from '../musiccontrol/MusicControl';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
 import Comment from './Comment';
+import ServerApi from '../ServerApi';
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -36,7 +37,7 @@ const VIEWABILITY_CONFIG = {
 let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
-var serverApi = require('../ServerApi');
+
 var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
     `
@@ -145,25 +146,25 @@ class Read extends Component{
         }
         switch (parseInt(contentType)) {
             case 1:
-                return serverApi.EssayComment;
+                return ServerApi.EssayComment;
                 break;
             case 3:
-                return serverApi.QuestionComment;
+                return ServerApi.QuestionComment;
                 break;
             case 2:
-                return serverApi.SerialContentComment;
+                return ServerApi.SerialContentComment;
                 break;
             case 4:
-                return serverApi.MusicComment;
+                return ServerApi.MusicComment;
                 break;
             case 5:
-                return serverApi.MovieComment;
+                return ServerApi.MovieComment;
                 break;
             case 8:
-                return serverApi.RadioComment;
+                return ServerApi.RadioComment;
                 break;
             case 11:
-                return serverApi.TopicComment;
+                return ServerApi.TopicComment;
                 break;
         }
     }
@@ -177,19 +178,19 @@ class Read extends Component{
         }
         switch (parseInt(contentType)) {
             case 1:
-                return serverApi.Essay;
+                return ServerApi.Essay;
             case 3:
-                return serverApi.Question;
+                return ServerApi.Question;
             case 2:
-                return serverApi.SerialContent;
+                return ServerApi.SerialContent;
             case 4:
-                return serverApi.Music;
+                return ServerApi.Music;
             case 5:
-                return serverApi.Movie;
+                return ServerApi.Movie;
             case 8:
-                return serverApi.Radio;
+                return ServerApi.Radio;
             case 11:
-                return serverApi.Topic;
+                return ServerApi.Topic;
         }
     }
 

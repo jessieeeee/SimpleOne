@@ -24,7 +24,7 @@ import PullMenu from '../view/PullMenu';
 import PullPickDate from '../view/PullPickDate';
 var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
-var serverApi = require('../ServerApi');
+import ServerApi from '../ServerApi';
 
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
@@ -59,7 +59,7 @@ class SearchCategory extends Component{
     }
 
     getCategory(categoryId){
-        var url = serverApi.SearchCategory.replace('{category_id}', categoryId);
+        var url = ServerApi.SearchCategory.replace('{category_id}', categoryId);
         NetUtils.get(url, null, (result) => {
             this.setState({
                 HTML: result.html_content,

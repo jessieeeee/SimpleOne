@@ -19,8 +19,8 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 import Read from '../read/Read';
+import ServerApi from '../ServerApi';
 var {width, height} = constants.ScreenWH;
-var ServerApi=require('../ServerApi');
 
 class  AllListQuestion extends Component{
     constructor(props){

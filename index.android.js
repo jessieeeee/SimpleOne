@@ -15,7 +15,7 @@ class SimpleOne extends React.Component {
   render() {
     return (
         <Navigator
-            initialRoute={{name:'启动页',component:Test}}
+            initialRoute={{name:'启动页',component:LaunchImage}}
             configureScene={()=>{
                 return Navigator.SceneConfigs.PushFromRight;
             }}
@@ -27,16 +27,6 @@ class SimpleOne extends React.Component {
     )
   }
 }
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  hello: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
+
 // console.disableYellowBox = true; 忽略警告弹窗
 AppRegistry.registerComponent('SimpleOne', () => SimpleOne);

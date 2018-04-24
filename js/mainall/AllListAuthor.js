@@ -19,8 +19,10 @@ import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from '../Constants';
 import AuthorPage from '../author/AuthorPage';
+import ServerApi from '../ServerApi';
 var {width, height} = constants.ScreenWH;
-var serverApi=require('../ServerApi');
+
+
 //设置数据源
 var ds = new ListView.DataSource({
     //返回条件，任意两条不等
@@ -151,7 +153,7 @@ class AllListAuthor extends Component{
 
     // 请求专题数据
     getHotAuthorData() {
-        NetUtils.get(serverApi.HotAuthor, null, (result) => {
+        NetUtils.get(ServerApi.HotAuthor, null, (result) => {
             this.setState({
                 author: result,
             });
