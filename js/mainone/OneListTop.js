@@ -15,7 +15,6 @@ import {
     TouchableOpacity
 } from 'react-native';
 import Remark from '../remark/Remark';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import Login from '../login/Login';
 import constants from '../Constants';
 import Share from '../share/Share';
@@ -114,13 +113,6 @@ class OneListTop extends Component{
 
                 </View>
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }

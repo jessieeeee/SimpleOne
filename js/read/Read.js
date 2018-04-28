@@ -23,11 +23,11 @@ import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import Login from '../login/Login';
 import SingleChoiceDialog from '../view/SingleChoiceDialog';
-import MusicControl from '../musiccontrol/MusicControl';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
 import Comment from './Comment';
 import ServerApi from '../ServerApi';
+import {BaseComponent} from '../view/BaseComponent';
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -35,10 +35,9 @@ const VIEWABILITY_CONFIG = {
 };
 
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
-var WEBVIEW_REF = 'webview';
-
-var itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
+let {width, height} = constants.ScreenWH;
+let WEBVIEW_REF = 'webview';
+let itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
 const BaseScript =
     `
     (function () {
@@ -70,7 +69,6 @@ class Read extends Component{
             like: false,
             likeNum: 0,
             readData: null,
-
             backButtonEnabled: false,
             forwardButtonEnabled: false,
             url: '',
@@ -82,13 +80,12 @@ class Read extends Component{
             isVisible: false,
             curItem: null,
             loading: true,
-            showMusicControl:false,
         }
     }
 
     componentDidMount() {
         let url;
-        if (this.props.route.params.entry == constants.AllRead) {
+        if (this.props.route.params.entry === constants.AllRead) {
             url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId);
         } else {
             url = this.getContentUrl().replace('{content_id}', this.props.route.params.data.content_id);
@@ -100,7 +97,7 @@ class Read extends Component{
                 likeNum: result.data.praisenum,
             });
             let bgColor;
-            if (result.data.category == 11) {
+            if (result.data.category === 11) {
                 bgColor = result.data.bg_color;
             } else {
                 bgColor = 'white';
@@ -120,7 +117,7 @@ class Read extends Component{
      */
     getComments() {
         let url;
-        if (this.props.route.params.entry == constants.AllRead) {
+        if (this.props.route.params.entry === constants.AllRead) {
             url = this.getCommentUrl().replace('{content_id}', this.props.route.params.contentId);
         } else {
             url = this.getCommentUrl().replace('{content_id}', this.props.route.params.data.content_id);
@@ -139,7 +136,7 @@ class Read extends Component{
 
     getCommentUrl() {
         let contentType;
-        if (this.props.route.params.entry == constants.AllRead) {
+        if (this.props.route.params.entry === constants.AllRead) {
             contentType = this.props.route.params.contentType;
         } else {
             contentType = this.props.route.params.data.content_type;
@@ -147,31 +144,24 @@ class Read extends Component{
         switch (parseInt(contentType)) {
             case 1:
                 return ServerApi.EssayComment;
-                break;
             case 3:
                 return ServerApi.QuestionComment;
-                break;
             case 2:
                 return ServerApi.SerialContentComment;
-                break;
             case 4:
                 return ServerApi.MusicComment;
-                break;
             case 5:
                 return ServerApi.MovieComment;
-                break;
             case 8:
                 return ServerApi.RadioComment;
-                break;
             case 11:
                 return ServerApi.TopicComment;
-                break;
         }
     }
 
     getContentUrl() {
         let contentType;
-        if (this.props.route.params.entry == constants.AllRead) {
+        if (this.props.route.params.entry === constants.AllRead) {
             contentType = this.props.route.params.contentType;
         } else {
             contentType = this.props.route.params.data.content_type;
@@ -210,7 +200,7 @@ class Read extends Component{
 
     render() {
         return (
-            <View style={[styles.container, {backgroundColor: this.state.bgColor}]}>
+            <View style={{backgroundColor: this.state.bgColor}}>
 
                 {this.renderNavBar()}
                 <ScrollView style={{width: width, height: height - width * 0.1 - 0.08 * width}}
@@ -240,24 +230,9 @@ class Read extends Component{
 
                 </ScrollView>
 
-
-
                 {this.renderBottomBar()}
                 {this.renderSingleChoiceDialog()}
                 {this.renderLoading()}
-
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
-
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-
 
             </View>
         );
@@ -340,7 +315,7 @@ class Read extends Component{
      * @param option
      */
     doSelected(option) {
-        if (option.value == '1') {
+        if (option.value === '1') {
             this.pushToLogin();
         } else {
             this.setClipboardContent();
@@ -354,7 +329,7 @@ class Read extends Component{
     async setClipboardContent() {
         Clipboard.setString(this.state.curItem.content);
         try {
-            var content = await Clipboard.getString();
+            let content = await Clipboard.getString();
             toast.showMsg('已复制到剪切板', toast.SHORT);
             this.setState({content: content});
         } catch (e) {
@@ -486,15 +461,15 @@ class Read extends Component{
      */
     getCategory() {
         let contentType;
-        if (this.props.route.params.entry == constants.MenuRead) {
-            var tag = this.props.route.params.data.tag;
+        if (this.props.route.params.entry === constants.MenuRead) {
+            let tag = this.props.route.params.data.tag;
             contentType = this.props.route.params.data.content_type;
             if (tag != null) {
                 return tag.title;
             }
         }
-        if (this.props.route.params.entry == constants.OneRead) {
-            var tagList = this.props.route.params.data.tag_list;
+        if (this.props.route.params.entry === constants.OneRead) {
+            let tagList = this.props.route.params.data.tag_list;
             contentType = this.props.route.params.data.content_type;
             if (tagList != null && tagList.length > 0) {
                 return tagList[0].title;
@@ -503,28 +478,28 @@ class Read extends Component{
             contentType = this.props.route.params.contentType;
         }
 
-        if (contentType == 1) {
+        if (contentType === 1) {
             return '阅读';
         }
-        else if (contentType == 3) {
+        else if (contentType === 3) {
             return '问答';
         }
-        else if (contentType == 1) {
+        else if (contentType === 1) {
             return '阅读';
         }
-        else if (contentType == 2) {
+        else if (contentType === 2) {
             return '连载';
         }
-        else if (contentType == 4) {
+        else if (contentType === 4) {
             return '音乐';
         }
-        else if (contentType == 5) {
+        else if (contentType === 5) {
             return '影视';
         }
-        else if (contentType == 8) {
+        else if (contentType === 8) {
             return '电台';
         }
-        else if (contentType == 11) {
+        else if (contentType === 11) {
             return '专题';
         }
     }
@@ -597,18 +572,15 @@ class Read extends Component{
         )
     }
 }
-Read.defaultProps={
-    duration: 10,
-    // 外层回调函数参
-    refreshView: false, //刷新
-};
+
+
+// Read.defaultProps={
+//     duration: 10,
+//     // 外层回调函数参
+//     refreshView: false, //刷新
+// };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     bottomView: {
         height: width * 0.14,
         width: width,
@@ -667,4 +639,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Read;
+export default Readp= BaseComponent(Read);

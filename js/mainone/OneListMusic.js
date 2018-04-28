@@ -20,7 +20,6 @@ import {
     Alert
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import DateUtil from "../util/DateUtil";
 import constants from '../Constants';
 import Read from '../read/Read';
@@ -28,8 +27,9 @@ import Share from '../share/Share';
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 
-var {width, height} = constants.ScreenWH;
-var rotate;
+let {width, height} = constants.ScreenWH;
+let rotate;
+
 class OneListMusic extends Component{
     constructor(props){
         super(props);
@@ -52,14 +52,14 @@ class OneListMusic extends Component{
             }
         );
 
-        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
+        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
             //当前显示的等于当前播放的歌曲转起来
             if (!rotate && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.MUSIC_TYPE) {
                 console.log("调用旋转");
                 this.spin();
                 rotate=true;
-                constants.playMusic = true;
-                this.props.onShow();
+                constants.appState.startPlay();
+                // this.props.onShow();
                 this.setState({
                     isPlay: true
                 });
@@ -197,13 +197,6 @@ class OneListMusic extends Component{
                     </View>
                 </View>
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
             </TouchableOpacity>
         );
     }
@@ -213,16 +206,17 @@ class OneListMusic extends Component{
         console.log('播放地址' + this.props.data.audio_url);
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.MUSIC_TYPE;
-        if (this.props.data.audio_platform != 1) {
-            // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
-            media.addMusicList(this.props.data.audio_url);
-            media.start(this.props.data.audio_url);
-            this.setState({
-                isPlay: true
-            });
-        } else {
-            toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
-        }
+        constants.appState.startPlay();
+        // if (this.props.data.audio_platform != 1) {
+        //     // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
+        //     media.addMusicList(this.props.data.audio_url);
+        //     media.start(this.props.data.audio_url);
+        //     this.setState({
+        //         isPlay: true
+        //     });
+        // } else {
+        //     toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
+        // }
     }
 
     stopMusic() {

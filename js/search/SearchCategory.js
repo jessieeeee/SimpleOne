@@ -12,20 +12,20 @@ import {
     View,
     Platform,
     ActivityIndicator,
-    Modal,
     TouchableOpacity,
     WebView,
-    Image
+    Image,
+    NativeModules,
 } from 'react-native';
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
-import MusicControl from '../musiccontrol/MusicControl';
 import PullMenu from '../view/PullMenu';
 import PullPickDate from '../view/PullPickDate';
 var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
 import ServerApi from '../ServerApi';
-
+import {BaseComponent} from "../view/BaseComponent";
+let toast = NativeModules.ToastNative;
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
 class SearchCategory extends Component{
@@ -50,7 +50,6 @@ class SearchCategory extends Component{
             curMonth: 0, //当前月
             curTime: 0,   //当前时间
             curMenuId:this.props.route.params.categoryId+'',  //当前菜单
-            showMusicControl:false,
         }
     }
 
@@ -65,9 +64,8 @@ class SearchCategory extends Component{
                 HTML: result.html_content,
             });
 
-            // console.log(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.show('error' + error, toast.SHORT);
         });
     }
 
@@ -105,16 +103,7 @@ class SearchCategory extends Component{
 
                 {this.renderPullMenu()}
                 {this.renderProgressBar()}
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
+
             </View>
         );
     }
@@ -198,7 +187,6 @@ class SearchCategory extends Component{
                     flexDirection: 'row',
                     justifyContent: 'center', alignItems: 'center'
                 }} onPress={() => {
-                    console.log()
                     this.setState({
                         showMenu: true
                     });
@@ -212,7 +200,7 @@ class SearchCategory extends Component{
     }
 
     renderArrow(show){
-        var arrowUri='';
+        let arrowUri='';
         if(show){
             arrowUri='arrow_up_black';
         }else{
@@ -229,7 +217,7 @@ class SearchCategory extends Component{
      */
     getTitle() {
         for(var i=0;i<menuArr.length;i++){
-            if(menuArr[i].key==this.state.curMenuId){
+            if(menuArr[i].key===this.state.curMenuId){
                 console.log('当前类型'+menuArr[i].value);
                 return menuArr[i].value;
             }
@@ -294,4 +282,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default SearchCategory;
+export default SearchCategoryPage = BaseComponent(SearchCategory);

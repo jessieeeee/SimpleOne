@@ -12,12 +12,13 @@ import {
     View,
     Image,
     TouchableOpacity,
+    NativeModules,
 } from 'react-native';
 import constants from '../Constants';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import SearchCategory from '../search/SearchCategory';
-var {width, height} = constants.ScreenWH;
-var key=0;
+let toast = NativeModules.ToastNative;
+let {width, height} = constants.ScreenWH;
+let key=0;
 class AllCategoryGuide extends Component{
     render() {
         return (
@@ -28,13 +29,6 @@ class AllCategoryGuide extends Component{
 
                 {this.renderItem()}
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }
@@ -116,7 +110,7 @@ class AllCategoryGuide extends Component{
         key++;
         return (
             <TouchableOpacity
-                onPress={() => this.refs.toast.show('click', DURATION.LENGTH_LONG)}>
+                onPress={() =>    toast.showMsg('click',toast.SHORT)}>
                 <Image source={{uri: iconName}} style={styles.iconSpan2} key={key}/>
             </TouchableOpacity>
         );

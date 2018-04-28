@@ -20,10 +20,10 @@ import {
     Animated,
     Easing
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+
 import PullScollView from '../view/PullScollView';
 import DateUtil from "../util/DateUtil";
-import MusicControl from '../musiccontrol/MusicControl';
+
 import Search from '../search/Search';
 import GuideView from './GuideView';
 import DisplayImg from '../display/DisplayImg';
@@ -36,16 +36,19 @@ import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
 import MyStorage from '../util/MySorage';
 import ServerApi from '../ServerApi';
+import {BaseComponent} from "../view/BaseComponent";
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
-var key = 1;
-var date= '0'; //请求的日期
-var itemPageArr = []; //分页数组
-var curPage= 0;//当前页数
+let {width, height} = constants.ScreenWH;
+let key = 1;
+let date= '0'; //请求的日期
+let itemPageArr = []; //分页数组
+let curPage= 0;//当前页数
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
+
 class One extends Component{
     constructor(props){
         super(props);
+        console.log('one----' + BaseComponent(One));
         this.onMomentumScrollEnd=this.onMomentumScrollEnd.bind(this);
         this.onPullRelease=this.onPullRelease.bind(this);
         this.onScroll=this.onScroll.bind(this);
@@ -56,7 +59,6 @@ class One extends Component{
             showSearch: false,//是否显示搜索按钮
             showArrow: false,//是否显示箭头
             showDisplay:false,//是否显示大图
-            showMusicControl:false,//是否显示音乐控制板
             showDate:'0',//显示的日期
             showGuide:false,//显示引导
         };
@@ -108,14 +110,14 @@ class One extends Component{
         ).start(() => this.animateLastDay())
     }
 
+
     /**
      * 界面绘制
      * @returns {XML}
      */
     render() {
         return (
-            <View style={styles.container}>
-
+            <View >
                 {this.renderNavBar()}
                 <ScrollView horizontal={true} ref='sv_one' pagingEnabled={true}
                             scrollEnabled={true} showsHorizontalScrollIndicator={false}
@@ -127,25 +129,6 @@ class One extends Component{
                 </ScrollView>
                 {this.renderDisplay()}
 
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl}
-                              onCancel={()=>{
-                                  this.setState({
-                                      showMusicControl:false,
-                                  });
-                              }}/>
-
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.4}
-                    textStyle={{color: 'white'}}
-                />
                 <GuideView  isVisible={this.state.showGuide}
                             onCancel={() => {this.setState({showGuide: false})}}/>
             </View>
@@ -335,7 +318,7 @@ class One extends Component{
                                           });
                                       }}
                                       todayRadio={() => {
-                                          toast.showMsg('今晚22:30主播在这里等你',toast.SHORT)
+                                          toast.showMsg('今晚22:30主播在这里等你',toast.SHORT);
                                       }}/>
                     );
                 }
@@ -388,12 +371,7 @@ class One extends Component{
      * 顶部导航bar
      */
     renderNavBar() {
-        // const movingMargin = this.state.animatedValue.interpolate({
-        //     inputRange: [0, 0.5],
-        //     outputRange: [0, height*0.06]
-        // });
-        {/*<Animated.Text style={[styles.dateText,{marginBottom:movingMargin}]} >{this.state.curOneData === null ? '' : this.getDateDay()}</Animated.Text>*/
-        }
+
 
         return (
             <View style={styles.outNav}>
@@ -573,12 +551,6 @@ class One extends Component{
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#eeeeee',
-    },
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
         backgroundColor: 'white',
@@ -660,4 +632,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default One;
+export default OnePage = BaseComponent(One);

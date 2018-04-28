@@ -5,6 +5,7 @@ var Dimensions = require('Dimensions');
 import {
     Text,
 } from 'react-native';
+import AppState from "./store/AppState";
 
 const object = {
 
@@ -42,32 +43,10 @@ const object = {
     AUDIO_TYPE: 1,
     CURRENT_TYPE: 0,
 
-
     /**
-     * 音频播放绘制
+     * 数据管理器
      */
-    renderAudioPlay(clickEvent) {
-        if(this.playMusic){
-            return(
-                <ShowPlayMusic
-                    onChange={(obj) => {
-                        console.log('onSure收到事件'+obj.nativeEvent.msg+"目标id"+obj.nativeEvent.target);
-                        clickEvent();
-                    }}
-                    style={{
-                        position: 'absolute',
-                        top: this.ScreenWH.height * 0.17,
-                        right: 0,
-                        zIndex: 100,
-                        width:this.ScreenWH.width * 0.11,
-                        height:this.ScreenWH.width * 0.1
-                    }}
-                />
-            );
-        }
-
-    },
-
+    appState : new AppState(),
 
     /**
      * 渲染喜欢数量

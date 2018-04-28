@@ -17,13 +17,14 @@ import {
     DeviceEventEmitter
 } from 'react-native';
 import Read from '../read/Read';
-import Toast, {DURATION} from 'react-native-easy-toast'
+
 import constants from '../Constants';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
 var {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
+
 class OneListAudio extends Component{
     constructor(props){
         super(props);
@@ -37,13 +38,12 @@ class OneListAudio extends Component{
     }
 
     componentDidMount() {
-        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
-            if (this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.AUDIO_TYPE) {
+        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
+            if (this.props.page === constants.curPage && constants.CURRENT_TYPE === constants.AUDIO_TYPE) {
                 this.setState({
                     loading:true
                 });
-                constants.playMusic = true;
-                this.props.onShow();
+                constants.appState.startPlay();
             }else{ //不是播放的页面，播放按钮重置
                 if(this.state.isPlay){
                     this.setState({
@@ -55,7 +55,7 @@ class OneListAudio extends Component{
 
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
             console.log('当前状态' + reminder.state);
-            if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
+            if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state === constants.PLAY_COMPLETE) {
                 this.setState({
                     isPlay: false,
                     loading:false
@@ -101,13 +101,6 @@ class OneListAudio extends Component{
                         </View>
                     </View>
 
-                    <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'gray'}}
-                        position='top'
-                        positionValue={height * 0.24}
-                        textStyle={{color: 'white'}}
-                    />
                 </View>
             </TouchableOpacity>
         );
@@ -115,7 +108,7 @@ class OneListAudio extends Component{
 
     renderLeftView() {
         //播出过有音频，渲染带图的
-        if (this.props.data.author.user_name + '' != 'undefined') {
+        if (this.props.data.author.user_name + '' !== 'undefined') {
             return (
                 <View style={{
                     flexDirection: 'row',
@@ -211,7 +204,7 @@ class OneListAudio extends Component{
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
-        if (this.props.data.default_audios != undefined && this.props.data.default_audios.length>0) {
+        if (this.props.data.default_audios !== undefined && this.props.data.default_audios.length>0) {
             media.start(this.props.data.default_audios[0]);
             this.setState({
                 isPlay: true
@@ -242,7 +235,7 @@ class OneListAudio extends Component{
      * @param url
      */
     pushToRead() {
-        if (this.props.data.content_type == 8 && this.props.page ==0) {
+        if (this.props.data.content_type === 8 && this.props.page === 0) {
             this.props.todayRadio();
             return;
         }

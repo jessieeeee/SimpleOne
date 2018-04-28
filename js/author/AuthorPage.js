@@ -6,7 +6,6 @@
 
 import React, {Component} from 'react';
 import PullScollView from '../view/PullScollView';
-import Toast, {DURATION} from 'react-native-easy-toast';
 import NetUtil from '../util/NetUtil';
 import AuthorHead from './AuthorHead';
 // 加载更多的view
@@ -19,6 +18,7 @@ import {
     Image,
     Platform,
     TouchableOpacity,
+    NativeModules,
 } from 'react-native';
 import constants from '../Constants';
 import OneListTop from '../mainone/OneListTop';
@@ -27,12 +27,12 @@ import OneListMusic from '../mainone/OneListMusic';
 import OneListMovie from '../mainone/OneListMovie';
 import OneListAudio from '../mainone/OneListAudio';
 import ServerApi from '../ServerApi';
-var {width, height} = constants.ScreenWH;
-
-var itemArr = [];
-var key = 0;
-var pageNum = 0;
-var workList=[];
+let toast = NativeModules.ToastNative;
+let {width, height} = constants.ScreenWH;
+let itemArr = [];
+let key = 0;
+let pageNum = 0;
+let workList=[];
 
 class AuthorPage extends Component{
     constructor(props){
@@ -80,7 +80,7 @@ class AuthorPage extends Component{
             }
             console.log('当前数量' + workList.length);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 
@@ -97,13 +97,6 @@ class AuthorPage extends Component{
                     {this.renderAllItem()}
                     {this.renderLoading()}
                 </PullScollView>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.4}
-                    textStyle={{color: 'white'}}
-                />
             </View>
 
         );

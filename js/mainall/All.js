@@ -16,17 +16,16 @@ import {
     Platform,
 
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import PullScollView from '../view/PullScollView';
 import constants from "../Constants";
-import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
 import LoadingMore from  '../view/LoadingMore';// 加载更多的view
 import AllListTopic from './AllListTopic';// 专题列表
 import AllCategoryGuide from './AllCategoryGuide';// 分类导航
 import AllListAuthor from './AllListAuthor';// 热门作者
 import AllListQuestion from './AllListQuestion';// 问所有人
-import AllListBanner from './AllListBanner'; //顶部banner
+import AllListBanner from './AllListBanner';
+import {BaseComponent} from "../view/BaseComponent";
 let {width, height} = constants.ScreenWH;
 // 顶部的banner
 let key = 9;
@@ -62,7 +61,7 @@ class All extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View>
                 {this.renderNavBar()}
                 <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
@@ -70,24 +69,6 @@ class All extends Component{
                     {this.renderLoadMoreList()}
                     {this.renderLoading()}
                 </PullScollView>
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
-
             </View>
         );
     }
@@ -245,12 +226,6 @@ class All extends Component{
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#eeeeee',
-    },
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
         backgroundColor: 'white',
@@ -281,4 +256,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default All;
+export default AllPage = BaseComponent(All);

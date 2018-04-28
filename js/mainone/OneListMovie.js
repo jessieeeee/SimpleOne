@@ -15,7 +15,6 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 import DateUtil from "../util/DateUtil";
 import Share from '../share/Share';
@@ -76,13 +75,6 @@ class OneListMovie extends Component{
                         </View>
                     </View>
 
-                    <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'gray'}}
-                        position='top'
-                        positionValue={height * 0.24}
-                        textStyle={{color: 'white'}}
-                    />
                 </View>
             </TouchableOpacity>
         );

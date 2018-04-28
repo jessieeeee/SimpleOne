@@ -14,7 +14,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import constants from '../../Constants';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import Read from '../../read/Read';
 var {width, height} = constants.ScreenWH;
 
@@ -35,14 +34,6 @@ class MenuItem extends Component{
                               ellipsizeMode='tail'>{this.props.title}</Text>
                     </View>
                 </View>
-
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
             </TouchableOpacity>
         );
     }

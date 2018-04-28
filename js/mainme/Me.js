@@ -12,23 +12,20 @@ import {
     View,
     Image,
     TouchableOpacity,
-
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+import {BaseComponent} from "../view/BaseComponent";
 import constants from "../Constants";
 import Login from '../login/Login';
-import MusicControl from '../musiccontrol/MusicControl';
 import Setting from '../setting/Setting';
 
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 
 class Me extends Component{
     constructor(props){
         super(props);
         this.state={
-            play:true,
-            showMusicControl:false,
+            play:true
         }
     }
 
@@ -69,24 +66,8 @@ class Me extends Component{
                     </Text>
                 </TouchableOpacity>
 
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
+
             </View>
         );
     }
@@ -125,7 +106,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     loginText: {
         color: 'white',
@@ -134,4 +114,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Me;
+export default MePage = BaseComponent(Me);

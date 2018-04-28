@@ -15,11 +15,10 @@ import {
     Image,
 } from 'react-native';
 import Read from '../read/Read';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 import ServerApi from '../ServerApi';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -54,14 +53,6 @@ class AllListTopic extends Component{
         return (
             <View>
                 {this.renderList()}
-
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }
@@ -158,7 +149,7 @@ class AllListTopic extends Component{
             });
 
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 

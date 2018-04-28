@@ -13,14 +13,15 @@ import {
     Image,
     ListView,
     TouchableOpacity,
+    NativeModules,
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from '../Constants';
 import AuthorPage from '../author/AuthorPage';
 import ServerApi from '../ServerApi';
-var {width, height} = constants.ScreenWH;
+let toast = NativeModules.ToastNative;
+let {width, height} = constants.ScreenWH;
 
 
 //设置数据源
@@ -84,13 +85,7 @@ class AllListAuthor extends Component{
                     </View>
 
                 </View>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
+
             </View>
         );
     }
@@ -136,7 +131,7 @@ class AllListAuthor extends Component{
                 <TouchableOpacity
                     style={styles.follow}
                     activeOpacity={0.5}
-                    onPress={() => this.refs.toast.show('点击了' + rowID + '行', DURATION.LENGTH_LONG)}>
+                    onPress={() => toast.showMsg('点击了' + rowID + '行',toast.SHORT)}>
 
                     <Text style={{
                         textAlign: 'center',
@@ -168,7 +163,7 @@ class AllListAuthor extends Component{
             });
             // console.log(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 

@@ -13,14 +13,15 @@ import {
     View,
     Image,
     TouchableOpacity,
+    NativeModules,
 } from 'react-native';
-import Toast from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import Read from '../read/Read';
 import constants from '../Constants';
 import ServerApi from '../ServerApi';
 let {width, height} = constants.ScreenWH;
 let page;
+let toast = NativeModules.ToastNative;
 class AllListBanner extends Component{
     constructor(props){
         super(props);
@@ -99,7 +100,7 @@ class AllListBanner extends Component{
             //开启定时器
             this.startTimer();
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 
@@ -129,13 +130,7 @@ class AllListBanner extends Component{
                 <View style={styles.pageView}>
                     {this.renderPageCircle()}
                 </View>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
+
             </View>
         );
     }
@@ -228,7 +223,7 @@ class AllListBanner extends Component{
                 }
             )
         }else{
-            this.refs.toast.show('这是一个广告跳转', 500);
+            toast.showMsg('这是一个广告跳转',toast.SHORT);
         }
     }
 

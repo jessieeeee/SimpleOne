@@ -16,10 +16,8 @@ import {
 } from 'react-native';
 import DateUtil from "../util/DateUtil";
 import Read from '../read/Read';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 import Share from '../share/Share';
-import Login from "../login/Login";
 var {width, height} = constants.ScreenWH;
 
 class OneListCommon extends Component{
@@ -67,13 +65,6 @@ class OneListCommon extends Component{
                         </View>
                     </View>
 
-                    <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'gray'}}
-                        position='top'
-                        positionValue={height * 0.24}
-                        textStyle={{color: 'white'}}
-                    />
                 </View>
             </TouchableOpacity>
         );
