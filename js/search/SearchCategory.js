@@ -25,6 +25,7 @@ var {width, height} = constants.ScreenWH;
 var WEBVIEW_REF = 'webview';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from "../view/BaseComponent";
+import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 
@@ -175,12 +176,12 @@ class SearchCategory extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 {/*左边按钮*/}
-                <TouchableOpacity style={styles.leftBtn}
+                <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => this.props.navigator.pop()}>
-                    <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
+                    <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{
@@ -259,25 +260,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'absolute',
         top: height * 0.4,
-    },
-
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.024,
-    },
-    navLeftBar: {
-        width: height * 0.04,
-        height: height * 0.05,
     },
 
 });

@@ -7,6 +7,7 @@
 import React, {Component} from 'react';
 import NetUtil from '../util/NetUtil';
 import constants from '../Constants';
+import CommStyles from '../CommStyles';
 import {
     AppRegistry,
     StyleSheet,
@@ -14,7 +15,6 @@ import {
     View,
     ScrollView,
     Image,
-    Platform,
     TouchableOpacity,
     NativeModules,
     Animated,
@@ -48,7 +48,6 @@ let curPage= 0;//当前页数
 class One extends Component{
     constructor(props){
         super(props);
-        console.log('one----' + BaseComponent(One));
         this.onMomentumScrollEnd=this.onMomentumScrollEnd.bind(this);
         this.onPullRelease=this.onPullRelease.bind(this);
         this.onScroll=this.onScroll.bind(this);
@@ -333,7 +332,7 @@ class One extends Component{
                 key++;
                 if (i !== 0) {
                     itemArr.push(
-                        <View key={key} style={styles.bottomLine}/>
+                        <View key={key} style={CommStyles.bottomLine}/>
                     )
                 } else {
                     itemArr.push(
@@ -374,13 +373,13 @@ class One extends Component{
 
 
         return (
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
                 {/*左边按钮*/}
                 {this.renderToday()}
 
 
                 {/*中间标题*/}
-                <View style={styles.centerTitle}>
+                <View style={CommStyles.centerTitle}>
                     {/*上面日期*/}
                     <View style={styles.date}>
                         <Text
@@ -428,9 +427,9 @@ class One extends Component{
     renderSearch() {
         if (this.state.showSearch) {
             return (
-                <TouchableOpacity style={styles.rightBtn}
+                <TouchableOpacity style={CommStyles.rightBtn}
                                   onPress={() => this.pushToSearch()}>
-                    <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
+                    <Image source={{uri: 'search_night'}} style={CommStyles.navRightBar}/>
                 </TouchableOpacity>
             );
         }
@@ -551,16 +550,6 @@ class One extends Component{
 
 
 const styles = StyleSheet.create({
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
     weatherText: {
         textAlign: 'center',
         color: '#BFBFBF',
@@ -576,11 +565,6 @@ const styles = StyleSheet.create({
         top: width * 0.01,
         height: height * 0.05,
     },
-    centerTitle: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     dateText: {
         textAlign: 'center',
         fontSize: width * 0.05,
@@ -590,28 +574,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.05,
         color: '#AFAFAF',
         marginBottom: width * 0.02
-    },
-    navLeftBar: {
-        width: width * 0.05 * 2.15,
-        height: width * 0.05,
-
-    },
-    navRightBar: {
-        width: width * 0.05,
-        height: width * 0.05,
-    },
-    rightBtn: {
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.038,
-    },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.024,
-        width: width
     },
     menuLine: {
         backgroundColor: '#EEEEEE',
@@ -629,7 +591,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: width * 0.5,
     },
+    navLeftBar: {
+        width: width * 0.05 * 2.15,
+        height: width * 0.05,
 
+    },
+    leftBtn: {
+        position: 'absolute',
+        left: width * 0.038,
+    },
 });
 
 export default OnePage = BaseComponent(One);

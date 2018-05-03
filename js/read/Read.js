@@ -28,6 +28,7 @@ import FrameAnimation from '../view/FrameAnimationView';
 import Comment from './Comment';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from '../view/BaseComponent';
+import CommStyles from "../CommStyles";
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -410,11 +411,11 @@ class Read extends Component{
             <View style={[styles.outNav, {backgroundColor: this.state.bgColor}]}>
 
                 {/*左边按钮*/}
-                <TouchableOpacity style={styles.leftBtn}
+                <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => {
                                       this.props.navigator.pop();
                                   }}>
-                    <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
+                    <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
                 <Text style={styles.title}>{this.getCategory()}</Text>
@@ -617,14 +618,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderBottomColor: '#dddddd',
         borderBottomWidth: constants.divideLineWidth
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.024,
-    },
-    navLeftBar: {
-        width: height * 0.04,
-        height: height * 0.05,
     },
 
     rightBtnIcon: {

@@ -17,13 +17,13 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    Alert
 } from 'react-native';
 
 import DateUtil from "../util/DateUtil";
 import constants from '../Constants';
 import Read from '../read/Read';
 import Share from '../share/Share';
+import CommStyles from "../CommStyles";
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 
@@ -118,14 +118,14 @@ class OneListMusic extends Component{
         });
 
         return (
-            <TouchableOpacity style={styles.container} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
+            <TouchableOpacity style={CommStyles.containerItem} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
 
-                <Text style={styles.category}>
+                <Text style={CommStyles.categoryItem}>
                     - 音乐 -
                 </Text>
                 {/*标题*/}
 
-                <Text style={styles.title}>{this.props.data.title}</Text>
+                <Text style={CommStyles.titleItem}>{this.props.data.title}</Text>
 
                 {/*用户*/}
                 <Text style={styles.author}>{this.getAuthor()}</Text>
@@ -177,14 +177,14 @@ class OneListMusic extends Component{
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{DateUtil.showDate(this.props.data.post_date)}</Text>
+                    <Text style={CommStyles.dateItem}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                     {/*右边的按钮*/}
-                    <View style={styles.rightBtn}>
+                    <View style={CommStyles.rightBtnItem}>
                         <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
                             <TouchableOpacity
                                 onPress={() => this.likeClick()}>
-                                <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                                <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
                             </TouchableOpacity>
 
                             {constants.renderlikeNum(this.state.likeNum)}
@@ -192,7 +192,7 @@ class OneListMusic extends Component{
                         </View>
                         <TouchableOpacity
                             onPress={() => this.pushToShare()}>
-                            <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
+                            <Image source={{uri: 'share_image'}} style={CommStyles.barRightBtnsIconItem2}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -304,24 +304,6 @@ class OneListMusic extends Component{
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-    category: {
-        marginTop: width * 0.03,
-        fontSize: width * 0.032,
-        color: '#8B8B8B'
-    },
-    title: {
-        fontSize: width * 0.056,
-        color: '#333333',
-        width: width,
-        paddingLeft: width * 0.05,
-        marginTop: width * 0.03,
-    },
     author: {
         width: width,
         marginTop: width * 0.03,
@@ -351,28 +333,7 @@ const styles = StyleSheet.create({
         width: width,
         height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
     },
-    date: {
 
-        fontSize: 12,
-        color: '#B6B6B6',
-        flexDirection: 'row',
-        position: 'absolute',
-        left: width * 0.05,
-    },
-    rightBtn: {
-        flexDirection: 'row',
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    barRightBtnsIcon1: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    barRightBtnsIcon2: {
-        width: width * 0.045,
-        height: width * 0.045,
-
-    },
     musicInfo: {
         paddingLeft: width * 0.05,
         width: width,

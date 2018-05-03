@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import SearchCategory from '../search/SearchCategory';
+import CommStyles from "../CommStyles";
 var {width, height} = constants.ScreenWH;
 
 class Search extends Component{
@@ -110,7 +111,7 @@ class Search extends Component{
      */
     renderNavBar() {
         return (
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 <TextInput
                     underlineColorAndroid='transparent'
@@ -145,15 +146,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-    },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: '#f8f8f8',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        borderBottomWidth: width * 0.00046,
-        borderBottomColor: 'gray'
     },
     menu: {
         fontSize: width * 0.038,

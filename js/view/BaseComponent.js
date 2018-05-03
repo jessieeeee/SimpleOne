@@ -15,8 +15,8 @@ import MusicControl from '../musiccontrol/MusicControl';
 @observer
 export const BaseComponent = (WrapComponent) => {
     return class HOC extends Component {
+
         constructor(props) {
-            console.log('BaseComponent----constructor');
             super(props);
             // 公共状态
             this.state = {
@@ -59,6 +59,7 @@ export const BaseComponent = (WrapComponent) => {
                               }}/>
             )
         }
+
 
         render() {
             return (

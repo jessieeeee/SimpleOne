@@ -26,6 +26,7 @@ import AllListAuthor from './AllListAuthor';// 热门作者
 import AllListQuestion from './AllListQuestion';// 问所有人
 import AllListBanner from './AllListBanner';
 import {BaseComponent} from "../view/BaseComponent";
+import CommStyles from "../CommStyles";
 let {width, height} = constants.ScreenWH;
 // 顶部的banner
 let key = 9;
@@ -151,14 +152,14 @@ class All extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 <Image source={{uri: 'one_is_all'}} style={styles.allTitle}/>
 
                 {/*右边按钮*/}
-                <TouchableOpacity style={styles.rightBtn}
+                <TouchableOpacity style={CommStyles.rightBtn}
                                   onPress={() => this.pushToSearch()}>
-                    <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
+                    <Image source={{uri: 'search_night'}} style={CommStyles.navRightBar}/>
                 </TouchableOpacity>
             </View>
         );
@@ -185,14 +186,14 @@ class All extends Component{
             <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
         itemArr.push(
-            <View key={1} style={styles.bottomLine}/>
+            <View key={1} style={CommStyles.bottomLineAll}/>
         );
         // 渲染分类导航
         itemArr.push(
             <AllCategoryGuide key={2} navigator={this.props.navigator} />
         );
         itemArr.push(
-            <View key={3} style={styles.bottomLine}/>
+            <View key={3} style={CommStyles.bottomLineAll}/>
         );
         // 渲染专题列表
         itemArr.push(
@@ -210,7 +211,7 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={6} style={styles.bottomLine}/>
+            <View key={6} style={CommStyles.bottomLineAll}/>
         );
 
         //问所有人
@@ -219,41 +220,18 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={8} style={styles.bottomLine}/>
+            <View key={8} style={CommStyles.bottomLineAll}/>
         );
         return itemArr;
     }
 }
 
 const styles = StyleSheet.create({
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor:'#dddddd',
-        borderBottomWidth:constants.divideLineWidth
-    },
-
-    navRightBar: {
-        width: width * 0.05,
-        height: width * 0.05,
-    },
-    rightBtn: {
-        position: 'absolute',
-        right: width * 0.05,
-    },
     allTitle: {
         width: width * 0.36,
         height: width * 0.04,
     },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.028,
-        width: width
-    },
+
 });
 
 export default AllPage = BaseComponent(All);

@@ -27,6 +27,7 @@ import OneListMusic from '../mainone/OneListMusic';
 import OneListMovie from '../mainone/OneListMovie';
 import OneListAudio from '../mainone/OneListAudio';
 import ServerApi from '../ServerApi';
+import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 let {width, height} = constants.ScreenWH;
 let itemArr = [];
@@ -92,7 +93,7 @@ class AuthorPage extends Component{
                 <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
                           style={{width: width, backgroundColor: 'white'}}>
                     <AuthorHead data={this.props.route.params.authorData}/>
-                    <View style={styles.bottomLine}/>
+                    <View style={CommStyles.bottomLine}/>
 
                     {this.renderAllItem()}
                     {this.renderLoading()}
@@ -196,7 +197,7 @@ class AuthorPage extends Component{
                 }
                 key++;
                 itemArr.push(
-                    <View key={key} style={styles.bottomLine}/>
+                    <View key={key} style={CommStyles.bottomLine}/>
                 );
 
                 key++;
@@ -222,12 +223,12 @@ class AuthorPage extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 {/*左边按钮*/}
-                <TouchableOpacity style={styles.leftBtn}
+                <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => this.props.navigator.pop()}>
-                    <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
+                    <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
                 <Text style={styles.title}>{this.props.route.params.authorData.user_name}</Text>
@@ -243,33 +244,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.024,
-    },
-    navLeftBar: {
-        width: height * 0.04,
-        height: height * 0.05,
-    },
+
     title: {
         fontSize: width * 0.04,
         color: '#414141',
         fontWeight: 'bold'
-    },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.024,
-        width: width
     },
 });
 

@@ -21,6 +21,7 @@ import Read from '../read/Read';
 import constants from '../Constants';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
+import CommStyles from "../CommStyles";
 var {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
@@ -74,9 +75,7 @@ class OneListAudio extends Component{
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={styles.container}>
-
-
+                <View style={CommStyles.containerItem}>
                     {this.renderContent()}
                     {/*最下面的bar*/}
                     <View
@@ -84,11 +83,11 @@ class OneListAudio extends Component{
                         {this.renderLeftView()}
 
                         {/*右边的按钮*/}
-                        <View style={styles.rightBtn}>
+                        <View style={CommStyles.rightBtnItem}>
                             <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
                                 <TouchableOpacity
                                     onPress={() => this.likeClick()}>
-                                    <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                                    <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
                                 </TouchableOpacity>
 
                                 {constants.renderlikeNum(this.state.likeNum)}
@@ -96,7 +95,7 @@ class OneListAudio extends Component{
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.pushToShare()}>
-                                <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
+                                <Image source={{uri: 'share_image'}} style={CommStyles.barRightBtnsIconItem2}/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -299,13 +298,6 @@ OneListAudio.defaultProps={
     onShow: null,
 };
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-
     title: {
         fontSize: width * 0.034,
         color: '#c3c2c7',
@@ -335,20 +327,6 @@ const styles = StyleSheet.create({
         marginLeft: width * 0.04,
         width: width * 0.06,
         height: width * 0.06,
-    },
-    rightBtn: {
-        flexDirection: 'row',
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    barRightBtnsIcon1: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    barRightBtnsIcon2: {
-        width: width * 0.045,
-        height: width * 0.045,
-
     },
     playView: {
         width: width,

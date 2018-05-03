@@ -18,6 +18,7 @@ import {
     Clipboard,
 } from 'react-native';
 import constants from '../Constants';
+import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
 let UShare = NativeModules.UShare;
@@ -148,7 +149,7 @@ class Share extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav2}>
                 <View style={styles.rightBtnBar}>
                     <TouchableOpacity onPress={() => this.props.navigator.pop()}>
                         <Image style={styles.rightBtn} source={{uri: 'close_gray'}}/>
@@ -164,13 +165,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#fafafa',
-    },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.062 : height * 0.1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
     },
 
     rightBtn: {
