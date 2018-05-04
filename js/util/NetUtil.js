@@ -23,6 +23,7 @@ export default class NetUtils extends Component{
      * @param {*} callback  成功后的回调
      */
     static get(url,params,callbackSuccess,callbackError){
+        console.log('NetUtil----'+url);
         fetch(url,{
             method:'GET',
             body:params

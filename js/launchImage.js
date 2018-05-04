@@ -15,6 +15,7 @@ import {
 import DateUtils from "./util/DateUtil";
 import constants from './Constants';
 import Main from './Main';
+
 var {width, height} = constants.ScreenWH;
 class LaunchImage extends Component{
     constructor(props){

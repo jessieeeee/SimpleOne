@@ -108,8 +108,8 @@ class AllListTopic extends Component{
 
     // 请求专题数据
     getTopicData() {
-        var itemArr = []; //把显示数据放到一个数组里
-        var url = ServerApi.AllTopic.replace('{id}', this.props.startId);
+        let itemArr = []; //把显示数据放到一个数组里
+        let url = ServerApi.AllTopic.replace('{id}', this.props.startId);
 
         NetUtils.get(url, null, (result) => {
             console.log(JSON.stringify(result));

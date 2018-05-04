@@ -11,30 +11,44 @@ import {
     Text,
     View,
     Image,
-    TextInput,
     Platform,
     TouchableOpacity
 
 } from 'react-native';
 import constants from '../Constants';
 import SearchCategory from '../search/SearchCategory';
-import CommStyles from "../CommStyles";
+import SearchBar from './SearchBar';
+import SearchResult from './SearchResult';
 var {width, height} = constants.ScreenWH;
 
 class Search extends Component{
     constructor(props){
         super(props);
         this.state={
-            curText: '<No Event>',
-            prevText: '<No Event>',
-            prev2Text: '<No Event>',
+            curText: '',
+
         }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                {this.renderNavBar()}
+                <SearchBar
+                    onFocus={()=>{
+
+                    }}
+                    onBlur={()=>{
+
+                    }}
+                    onChange={(event)=>{
+                        this.updateText(event.nativeEvent.text)
+                }} onEndEditing={(event)=>{
+                    this.updateText(event.nativeEvent.text)
+                }} onSubmitEditing={(event) => {
+                    this.updateText(event.nativeEvent.text);
+                    this.pushToSearchResult();
+                }}/>
+
                 <TouchableOpacity activeOpacity={0.5} onPress={() => this.pushToSearchCategory(0)}>
                     <Text style={[styles.menu, {marginTop: width * 0.149}]}>
                         图文
@@ -96,49 +110,27 @@ class Search extends Component{
         )
     }
 
+    /**
+     * 跳转到搜索结果
+     */
+    pushToSearchResult(){
+        this.props.navigator.push(
+            {
+                component:SearchResult,
+                title:'搜索结果',
+                params:{
+                    searchKey:this.state.curText
+                }
+            }
+        )
+    }
+
     updateText(text) {
-        this.setState((state) => {
-            return {
-                curText: text,
-                prevText: state.curText,
-                prev2Text: state.prevText,
-            };
+        this.setState({
+            curText: text,
         });
     }
 
-    /**
-     * 顶部导航bar
-     */
-    renderNavBar() {
-        return (
-            <View style={CommStyles.outNav}>
-
-                <TextInput
-                    underlineColorAndroid='transparent'
-                    autoCapitalize="none"
-                    placeholder="在这里写下你想寻找的"
-                    autoCorrect={false}
-                    onFocus={() => this.updateText('onFocus')}
-                    onBlur={() => this.updateText('onBlur')}
-                    onChange={(event) => this.updateText(
-                        'onChange text: ' + event.nativeEvent.text
-                    )}
-                    onEndEditing={(event) => this.updateText(
-                        'onEndEditing text: ' + event.nativeEvent.text
-                    )}
-                    onSubmitEditing={(event) => this.updateText(
-                        'onSubmitEditing text: ' + event.nativeEvent.text
-                    )}
-                    style={styles.singleLine}
-                />
-                {/*右边按钮*/}
-                <TouchableOpacity style={styles.rightBtn}
-                                  onPress={() => this.props.navigator.pop()}>
-                    <Text style={styles.cancel}>取消</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
 }
 
 
@@ -152,26 +144,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: width * 0.05,
     },
-    singleLine: {
-        fontSize: width * 0.04,
-        padding: 4,
-        width: width * 0.82,
-        color: '#b1b1b1',
-        backgroundColor: 'white',
-        position: 'absolute',
-        left: width * 0.03,
-        height: Platform.OS == 'ios' ? height * 0.04 : height * 0.05,
-    },
-    cancel: {
-        fontSize: width * 0.04,
-        color: '#808080',
-        textAlign: 'center',
-    },
-    rightBtn: {
-        width: width * 0.1,
-        position: 'absolute',
-        right: width * 0.03,
-    },
+
+
+
 });
 
 export default Search;
