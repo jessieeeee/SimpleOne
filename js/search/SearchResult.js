@@ -17,7 +17,7 @@ import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 import SearchBar from './SearchBar';
 import Read from "../read/Read";
-
+import SearchHpDetail from './SearchHpDetail';
 let {width, height} = constants.ScreenWH;
 
 class SearchResult extends Component{
@@ -60,7 +60,7 @@ class SearchResult extends Component{
                 return 'radio';
             case 5:
                 return 'author';
-        }
+        }this.props.route
     }
 
     /**
@@ -126,7 +126,7 @@ class SearchResult extends Component{
 
                     let itemResult=this.state.result[this.curPage][i];
                     this.itemArr[indexPage].push(
-                        <TouchableOpacity key={this.itemId} style={styles.itemView} activeOpacity={1} onPress={() => this.pushToRead(itemResult)}>
+                        <TouchableOpacity key={this.itemId} style={styles.itemView} activeOpacity={1} onPress={() => this.pushToDetail(itemResult)}>
                             {this.renderLeftImg(itemResult)}
                             <View style={styles.itemText}>
                                 <Text style={styles.itemTitle} numberOfLines={1} ellipsizeMode='tail'>{itemResult.title}</Text>
@@ -141,6 +141,29 @@ class SearchResult extends Component{
 
 
         return this.itemArr[indexPage];
+    }
+
+    /***
+     * 跳转到详情
+     */
+    pushToDetail(itemResult){
+        switch (this.curPage){
+            case 0:
+                this.pushToHpDetail(itemResult.content_id);
+                break;
+        }
+    }
+    /**
+     * 跳转到详情
+     */
+    pushToHpDetail(contentId){
+        this.props.navigator.push({
+            component:SearchHpDetail,
+            title:'图文详情',
+            params:{
+                contentId:contentId
+            }
+        })
     }
 
     /**
