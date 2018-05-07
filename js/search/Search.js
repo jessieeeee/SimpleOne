@@ -34,6 +34,7 @@ class Search extends Component{
         return (
             <View style={styles.container}>
                 <SearchBar
+                    navigator={this.props.navigator}
                     onFocus={()=>{
 
                     }}

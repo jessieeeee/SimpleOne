@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ShowPlayMusic from './view/ShowPlayMusic';
+import FrameAnimation from './view/FrameAnimationView';
 var Dimensions = require('Dimensions');
 
 import {
@@ -48,6 +48,39 @@ const object = {
      */
     appState : new AppState(),
 
+    /**
+     * 渲染载入view
+     * @returns {*}
+     */
+    renderLoading(loading) {
+        return (
+            <FrameAnimation
+                loadingArr={this.getLoadingIcon()}
+                width={this.ScreenWH.width * 0.14} height={this.ScreenWH.width * 0.14}
+                loading={loading} refreshTime={0} style={{
+                position: 'absolute',
+                top: this.ScreenWH.height * 0.4 - this.ScreenWH.width * 0.07,
+                left: this.ScreenWH.width / 2 - this.ScreenWH.width * 0.07
+            }}/>
+        );
+    },
+
+    /**
+     * 载入图标名称初始化
+     */
+    getLoadingIcon() {
+        var loadingArr=[];
+        for (var i = 0; i < 30; i++) {
+            var postfix;
+            if(i<10){
+                postfix='0'+i;
+            }else{
+                postfix=i;
+            }
+            loadingArr.push(('webview_loading_' + postfix).toString());
+        }
+        return loadingArr;
+    },
     /**
      * 渲染喜欢数量
      */

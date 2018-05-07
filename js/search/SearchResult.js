@@ -17,50 +17,130 @@ import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 import SearchBar from './SearchBar';
 import Read from "../read/Read";
+
 let {width, height} = constants.ScreenWH;
+
 class SearchResult extends Component{
     constructor(props){
         super(props);
         this.state={
-            result:'',
+            result:[],
             curText: '',
+            loading:true
         };
-        this.itemArr=[];
-
+        this.itemArr=[]; // 展示列表缓存为二维数组
+        this.scrollArr=[]; // 滚动布局数组
+        this.curPage=0;//当前第几页
+        this.pageTitle=['图文','阅读','音乐','影视','深夜电台','作者/音乐人'];//初始化页面标题
+        this.itemId=this.pageTitle.length;//item的id
     }
 
     componentDidMount(){
+        this.setState({
+            curText:this.props.route.params.searchKey,
+            loading:false
+        });
         this.searchKey(this.props.route.params.searchKey);
     }
 
+    /**
+     * 获取搜索类型
+     */
+    getSearchType(){
+        switch (this.curPage){
+            case 0:
+                return 'hp';
+            case 1:
+                return 'reading';
+            case 2:
+                return 'music';
+            case 3:
+                return 'movie';
+            case 4:
+                return 'radio';
+            case 5:
+                return 'author';
+        }
+    }
+
+    /**
+     * 关键词搜索
+     * @param key
+     */
     searchKey(key){
-        let url='http://v3.wufazhuce.com:8000/api/search/hp/'+ encodeURI(key);
+        this.setState({
+            loading:true
+        });
+        let url='http://v3.wufazhuce.com:8000/api/search/'+this.getSearchType()+'/'+ encodeURI(key)+'/0?version=4.3.4';
         NetUtils.get(url,null,(result) => {
-            console.log('result'+JSON.stringify(result));
+            this.state.result[this.curPage]=result.data.list;
             this.setState({
-                result:result.data
-            })
+                loading:false
+            });
         })
     }
 
     /**
-     * 渲染单个item
-     * @returns {*}
+     * 渲染多个分页滚动界面
      */
-    renderItem(){
-        for(let i=0;i<this.state.result.length;i++){
-            let itemResult=this.state.result[i];
-            this.itemArr.push(
-                <TouchableOpacity key={i} style={styles.itemView} activeOpacity={1} onPress={() => this.pushToRead(itemResult)}>
-                    <Image style={styles.itemImg} source={{uri:itemResult.hp_img_url}}/>
-                    <View style={styles.itemText}>
-                        <Text style={styles.itemTitle} numberOfLines={1} ellipsizeMode='tail'>{itemResult.hp_content}</Text>
-                        <Text style={styles.itemOrder}>{itemResult.hp_title}</Text>
-                    </View>
-                </TouchableOpacity>
+    renderScrollView(){
+        this.scrollArr=[];
+       for(let i=0;i<this.pageTitle.length;i++){
+          this.scrollArr.push(
+              <ScrollView key={i} tabLabel={this.pageTitle[i]} style={{flex:1,backgroundColor:'white'}}>
+                  {this.renderItem(i)}
+              </ScrollView>
+          )
+       }
+       return this.scrollArr;
+    }
+
+    /**
+     * 渲染左边的图片
+     */
+    renderLeftImg(itemResult){
+        // 当前页是作者/音乐人
+        if(this.pageTitle[this.curPage] === '作者/音乐人'){
+           return(
+               <Image style={styles.itemHead} source={{uri:itemResult.cover}}/>
+           )
+        }
+        else {
+            return(
+                <Image style={styles.itemImg} source={{uri:itemResult.cover}}/>
             );
         }
-        return this.itemArr;
+    }
+    /**
+     * 渲染第几页的单个item
+     * @returns {*}
+     */
+    renderItem(indexPage){
+        this.itemArr[indexPage]=[];
+        // 如果当前没有加载
+        if(!this.state.loading){
+            // 如果该页请求了数据
+            if(this.state.result[this.curPage]!==undefined){
+                // 把该页的所有数据渲染出来
+                for(let i=0;i<this.state.result[this.curPage].length;i++){
+
+                    let itemResult=this.state.result[this.curPage][i];
+                    this.itemArr[indexPage].push(
+                        <TouchableOpacity key={this.itemId} style={styles.itemView} activeOpacity={1} onPress={() => this.pushToRead(itemResult)}>
+                            {this.renderLeftImg(itemResult)}
+                            <View style={styles.itemText}>
+                                <Text style={styles.itemTitle} numberOfLines={1} ellipsizeMode='tail'>{itemResult.title}</Text>
+                                <Text style={styles.itemOrder}>{itemResult.subtitle}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    );
+                    this.itemId++;
+                }
+            }
+        }
+
+
+        return this.itemArr[indexPage];
     }
 
     /**
@@ -91,6 +171,7 @@ class SearchResult extends Component{
         return(
           <View style={styles.container}>
               <SearchBar
+                  navigator={this.props.navigator}
                   searchKey={this.props.route.params.searchKey}
                   onFocus={()=>{
 
@@ -108,9 +189,10 @@ class SearchResult extends Component{
               }}/>
               <ScrollableTabView
                   style={{flex:1}}
-                  page={1}
+                  page={this.curPage}
                   onChangeTab={(currentPage)=>{
-                      console.log(currentPage.i);
+                      this.curPage=currentPage.i;
+                      this.searchKey(this.state.curText);
                   }}
                   renderTabBar={
                       () => <ScrollableTabBar
@@ -126,15 +208,10 @@ class SearchResult extends Component{
                           }}/>}
 
               >
-                  <ScrollView tabLabel='图文' style={{flex:1,backgroundColor:'white'}}>
-                      {this.renderItem()}
-                  </ScrollView>
-                  <ScrollView tabLabel='阅读'/>
-                  <ScrollView tabLabel='音乐'/>
-                  <ScrollView tabLabel='影视'/>
-                  <ScrollView tabLabel='深夜电台'/>
-                  <ScrollView tabLabel='作者/音乐人'/>
+                  {this.renderScrollView()}
+
               </ScrollableTabView>
+              {constants.renderLoading(this.state.loading)}
           </View>
         );
     }
@@ -169,6 +246,13 @@ const styles = StyleSheet.create({
         width:width*0.1,
         height:width*0.1,
         marginLeft:width*0.04,
+        resizeMode: 'stretch',
+    },
+    itemHead:{
+        width:width*0.1,
+        height:width*0.1,
+        marginLeft:width*0.04,
+        borderRadius: width * 0.6,
         resizeMode: 'stretch',
     }
 });

@@ -24,7 +24,6 @@ import NetUtils from "../util/NetUtil";
 import Login from '../login/Login';
 import SingleChoiceDialog from '../view/SingleChoiceDialog';
 import Share from '../share/Share';
-import FrameAnimation from '../view/FrameAnimationView';
 import Comment from './Comment';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from '../view/BaseComponent';
@@ -233,7 +232,7 @@ class Read extends Component{
 
                 {this.renderBottomBar()}
                 {this.renderSingleChoiceDialog()}
-                {this.renderLoading()}
+                {constants.renderLoading(this.state.loading)}
 
             </View>
         );
@@ -338,19 +337,6 @@ class Read extends Component{
         }
     }
 
-
-    renderLoading() {
-        return (
-            <FrameAnimation
-                loadingArr={this.getLoadingIcon()}
-                width={width * 0.14} height={width * 0.14}
-                loading={this.state.loading} refreshTime={0} style={{
-                position: 'absolute',
-                top: height * 0.4 - width * 0.07,
-                left: width / 2 - width * 0.07
-            }}/>
-        );
-    }
 
     onShouldStartLoadWithRequest(event) {
         // Implement any custom loading logic here, don't forget to return!
@@ -524,22 +510,7 @@ class Read extends Component{
         )
     }
 
-    /**
-     * 载入图标名称初始化
-     */
-    getLoadingIcon() {
-        var loadingArr=[];
-        for (var i = 0; i < 30; i++) {
-            var postfix;
-            if(i<10){
-                postfix='0'+i;
-            }else{
-                postfix=i;
-            }
-            loadingArr.push(('webview_loading_' + postfix).toString());
-        }
-        return loadingArr;
-    }
+
 
     //点击喜欢
     likeClick() {
