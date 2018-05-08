@@ -23,6 +23,7 @@ const object={
     Topic:server_host+'/topic/htmlcontent/{content_id}',//专题
     TopicComment:server_host+'/comment/praiseandtime/topic/{content_id}/0',
     AuthorPage:server_host+'/author/works?page_num={page_num}&author_id={author_id}&version=4.3.4',//作者页
+    AuthorHead:server_host+'/author/info?&author_id={author_id}&version=4.3.4',//作者页头部
 };
 
 export default object;

@@ -15,22 +15,37 @@ import {
 
 } from 'react-native';
 import constants from '../Constants';
+import NetUtils from "../util/NetUtil";
+import ServerApi from '../ServerApi';
 var {width, height} = constants.ScreenWH;
 
 class AuthorHead extends Component{
     constructor(props){
         super(props);
+        this.state={
+            result:''
+        }
     }
+
+    componentDidMount(){
+        let url= ServerApi.AuthorHead.replace('{author_id}', this.props.authorId);
+        NetUtils.get(url,null,(result) => {
+            this.setState({
+                result:result.data
+            });
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <Image source={{uri:this.props.data.web_url}} style={styles.avatar}/>
-                <Text style={styles.name}>{this.props.data.user_name} </Text>
-                <Text style={styles.summary}>{this.props.data.summary}</Text>
+                <Image source={{uri:this.state.result.web_url}} style={styles.avatar}/>
+                <Text style={styles.name}>{this.state.result.user_name} </Text>
+                <Text style={styles.summary}>{this.state.result.summary}</Text>
                 <TouchableOpacity onPress={() => this.followAuthor()}>
                     <Text style={styles.follow}>关注</Text>
                 </TouchableOpacity>
-                <Text style={styles.followNum}>{this.props.data.fans_total+'关注'}</Text>
+                <Text style={styles.followNum}>{this.state.result.fans_total+'关注'}</Text>
             </View>
         );
     }

@@ -59,7 +59,7 @@ class AuthorPage extends Component{
     }
 
     getWorkList() {
-        var url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorData.user_id);
+        var url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorId);
         url = url.replace('{page_num}', pageNum);
         console.log('加载页数' + pageNum);
         console.log("地址" + url);
@@ -92,7 +92,7 @@ class AuthorPage extends Component{
 
                 <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
                           style={{width: width, backgroundColor: 'white'}}>
-                    <AuthorHead data={this.props.route.params.authorData}/>
+                    <AuthorHead authorId={this.props.route.params.authorId}/>
                     <View style={CommStyles.bottomLine}/>
 
                     {this.renderAllItem()}
@@ -231,7 +231,7 @@ class AuthorPage extends Component{
                     <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>{this.props.route.params.authorData.user_name}</Text>
+                <Text style={styles.title}>{this.props.route.params.authorName}</Text>
 
             </View>
         );

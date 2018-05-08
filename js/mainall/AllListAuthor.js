@@ -111,7 +111,7 @@ class AllListAuthor extends Component{
         return (
             <View style={styles.contentContainer}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
-                                  onPress={() => this.pushToRead(rowData)}>
+                                  onPress={() => this.pushToAuthor(rowData)}>
                     {/*左边头像*/}
                     <Image source={{uri: rowData.web_url}} style={styles.leftImage}>
                     </Image>
@@ -171,13 +171,14 @@ class AllListAuthor extends Component{
      * 跳转到作者页
      * @param url
      */
-    pushToRead(itemData) {
+    pushToAuthor(itemData) {
         this.props.navigator.push(
             {
                 component: AuthorPage,
                 title:'作者页',
                 params:{
-                    authorData:itemData
+                    authorId:itemData.user_id,
+                    authorName:itemData.user_name
                 }
             }
         )

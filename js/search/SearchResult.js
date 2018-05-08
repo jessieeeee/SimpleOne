@@ -18,6 +18,7 @@ import constants from "../Constants";
 import SearchBar from './SearchBar';
 import Read from "../read/Read";
 import SearchHpDetail from './SearchHpDetail';
+import AuthorPage from "../author/AuthorPage";
 let {width, height} = constants.ScreenWH;
 
 class SearchResult extends Component{
@@ -88,7 +89,7 @@ class SearchResult extends Component{
        for(let i=0;i<this.pageTitle.length;i++){
           this.scrollArr.push(
               <ScrollView key={i} tabLabel={this.pageTitle[i]} style={{flex:1,backgroundColor:'white'}}>
-                  {this.renderItem(i)}
+                  {this.renderItems(i)}
               </ScrollView>
           )
        }
@@ -115,12 +116,21 @@ class SearchResult extends Component{
      * 渲染第几页的单个item
      * @returns {*}
      */
-    renderItem(indexPage){
+    renderItems(indexPage){
         this.itemArr[indexPage]=[];
         // 如果当前没有加载
         if(!this.state.loading){
+            // 当前没有搜到数据
+            if(this.state.result[this.curPage].length===0){
+                console.log('当前没有数据');
+                return(
+                    <View style={{flex:1,alignItems:'center',justifyContent:'center',width:width,height:height*0.6}}>
+                        <Image source={{uri:'no_search_result'}} style={styles.noResultImg}/>
+                    </View>
+                )
+            }
             // 如果该页请求了数据
-            if(this.state.result[this.curPage]!==undefined){
+            else if(this.state.result[this.curPage]!==undefined && this.state.result[this.curPage].length>0){
                 // 把该页的所有数据渲染出来
                 for(let i=0;i<this.state.result[this.curPage].length;i++){
 
@@ -136,11 +146,12 @@ class SearchResult extends Component{
                     );
                     this.itemId++;
                 }
+                return this.itemArr[indexPage];
             }
         }
 
 
-        return this.itemArr[indexPage];
+
     }
 
     /***
@@ -151,8 +162,34 @@ class SearchResult extends Component{
             case 0:
                 this.pushToHpDetail(itemResult.content_id);
                 break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                this.pushToRead(itemResult);
+                break;
+            case 5:
+                this.pushToAuthorDetail(itemResult);
+                break;
         }
     }
+
+    /**
+     * 跳转到作者详情
+     */
+    pushToAuthorDetail(rowData){
+        this.props.navigator.push(
+            {
+                component: AuthorPage,
+                title:'作者页',
+                params:{
+                    authorId:rowData.content_id,
+                    authorName:rowData.title
+                }
+            }
+        )
+    }
+
     /**
      * 跳转到详情
      */
@@ -176,8 +213,8 @@ class SearchResult extends Component{
                 component: Read,
                 title:'阅读',
                 params:{
-                    contentId:rowData.hpcontent_id,
-                    contentType:rowData.template_category,
+                    contentId:rowData.content_id,
+                    contentType:rowData.category,
                     entry:constants.AllRead
                 }
             }
@@ -277,6 +314,10 @@ const styles = StyleSheet.create({
         marginLeft:width*0.04,
         borderRadius: width * 0.6,
         resizeMode: 'stretch',
+    },
+    noResultImg:{
+        width:width*0.4,
+        height:width*0.51
     }
 });
 export default SearchResult;

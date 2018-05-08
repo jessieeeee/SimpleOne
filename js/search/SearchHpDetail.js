@@ -83,6 +83,7 @@ class SearchHpDetail extends Component {
                 <Text
                     style={styles.title}>{this.state.result === '' ? '' : this.state.result.post_date.substring(0, 10)}</Text>
 
+                {/*右边分享*/}
                 <TouchableOpacity style={CommStyles.rightBtn}
                                   onPress={() => this.pushToShare()}>
 
