@@ -112,7 +112,6 @@ class AllListTopic extends Component{
         let url = ServerApi.AllTopic.replace('{id}', this.props.startId);
 
         NetUtils.get(url, null, (result) => {
-            console.log(JSON.stringify(result));
             this.setState({
                 topic: result,
             });

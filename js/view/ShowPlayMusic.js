@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {requireNativeComponent, View} from 'react-native';
 
 
@@ -7,7 +8,7 @@ let iface = {
     propTypes: {
 
         //回调
-        onChange: React.PropTypes.func,
+        onChange: PropTypes.func,
         ...View.propTypes  //支持View组件的所有属性
     }
 }

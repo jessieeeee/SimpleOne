@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import constants from '../Constants';
-
+import PropTypes from 'prop-types';
 var {width, height} = constants.ScreenWH;
 const pointsNum = 3; //点数量
 
@@ -119,7 +119,7 @@ LoadingMore.defaultProps = {
     loading: false, //加载更多
 };
 LoadingMore.propTypes = {
-    loading: React.PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired
 };
 const styles = StyleSheet.create({
     container: {

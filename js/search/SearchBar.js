@@ -13,6 +13,7 @@ import {
     Platform
 } from 'react-native'
 import constants from "../Constants";
+import PropTypes from 'prop-types';
 var {width, height} = constants.ScreenWH;
 
 class SearchBar extends Component{
@@ -42,12 +43,12 @@ class SearchBar extends Component{
     }
 }
 SearchBar.propsType={
-    onFocus:React.PropTypes.func.isRequired,
-    onBlur:React.PropTypes.func.isRequired,
-    onChange:React.PropTypes.func.isRequired,
-    onEndEditing:React.PropTypes.func.isRequired,
-    onSubmitEditing:React.PropTypes.func.isRequired,
-    searchKey:React.PropTypes.string
+    onFocus:PropTypes.func.isRequired,
+    onBlur:PropTypes.func.isRequired,
+    onChange:PropTypes.func.isRequired,
+    onEndEditing:PropTypes.func.isRequired,
+    onSubmitEditing:PropTypes.func.isRequired,
+    searchKey:PropTypes.string
 };
 
 const styles=StyleSheet.create({

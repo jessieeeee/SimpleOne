@@ -14,6 +14,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import MyImage from '../view/MyImage';
+import PropTypes from 'prop-types';
 let page;
 let flag = 0;
 
@@ -123,10 +124,10 @@ class FrameAnimationView extends Component{
     }
 }
 FrameAnimationView.propTypes={
-    width: React.PropTypes.number.isRequired,
-    height:React.PropTypes.number.isRequired,
-    loading: React.PropTypes.bool.isRequired, //是否在加载
-    refreshTime:React.PropTypes.number.isRequired //刷新频率
+    width: PropTypes.number.isRequired,
+    height:PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired, //是否在加载
+    refreshTime: PropTypes.number.isRequired //刷新频率
 };
 
 export default FrameAnimationView;
