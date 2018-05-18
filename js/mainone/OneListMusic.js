@@ -17,19 +17,19 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    Alert
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import DateUtil from "../util/DateUtil";
 import constants from '../Constants';
 import Read from '../read/Read';
 import Share from '../share/Share';
+import CommStyles from "../CommStyles";
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 
-var {width, height} = constants.ScreenWH;
-var rotate;
+let {width, height} = constants.ScreenWH;
+let rotate;
+
 class OneListMusic extends Component{
     constructor(props){
         super(props);
@@ -52,14 +52,14 @@ class OneListMusic extends Component{
             }
         );
 
-        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
+        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
             //当前显示的等于当前播放的歌曲转起来
             if (!rotate && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.MUSIC_TYPE) {
                 console.log("调用旋转");
                 this.spin();
                 rotate=true;
-                constants.playMusic = true;
-                this.props.onShow();
+                constants.appState.startPlay();
+                // this.props.onShow();
                 this.setState({
                     isPlay: true
                 });
@@ -118,14 +118,14 @@ class OneListMusic extends Component{
         });
 
         return (
-            <TouchableOpacity style={styles.container} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
+            <TouchableOpacity style={CommStyles.containerItem} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
 
-                <Text style={styles.category}>
+                <Text style={CommStyles.categoryItem}>
                     - 音乐 -
                 </Text>
                 {/*标题*/}
 
-                <Text style={styles.title}>{this.props.data.title}</Text>
+                <Text style={CommStyles.titleItem}>{this.props.data.title}</Text>
 
                 {/*用户*/}
                 <Text style={styles.author}>{this.getAuthor()}</Text>
@@ -177,14 +177,14 @@ class OneListMusic extends Component{
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={styles.date}>{DateUtil.showDate(this.props.data.post_date)}</Text>
+                    <Text style={CommStyles.dateItem}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                     {/*右边的按钮*/}
-                    <View style={styles.rightBtn}>
+                    <View style={CommStyles.rightBtnItem}>
                         <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
                             <TouchableOpacity
                                 onPress={() => this.likeClick()}>
-                                <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                                <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
                             </TouchableOpacity>
 
                             {constants.renderlikeNum(this.state.likeNum)}
@@ -192,18 +192,11 @@ class OneListMusic extends Component{
                         </View>
                         <TouchableOpacity
                             onPress={() => this.pushToShare()}>
-                            <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
+                            <Image source={{uri: 'share_image'}} style={CommStyles.barRightBtnsIconItem2}/>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
             </TouchableOpacity>
         );
     }
@@ -213,16 +206,17 @@ class OneListMusic extends Component{
         console.log('播放地址' + this.props.data.audio_url);
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.MUSIC_TYPE;
-        if (this.props.data.audio_platform != 1) {
-            // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
-            media.addMusicList(this.props.data.audio_url);
-            media.start(this.props.data.audio_url);
-            this.setState({
-                isPlay: true
-            });
-        } else {
-            toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
-        }
+        constants.appState.startPlay();
+        // if (this.props.data.audio_platform != 1) {
+        //     // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
+        //     media.addMusicList(this.props.data.audio_url);
+        //     media.start(this.props.data.audio_url);
+        //     this.setState({
+        //         isPlay: true
+        //     });
+        // } else {
+        //     toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
+        // }
     }
 
     stopMusic() {
@@ -310,24 +304,6 @@ class OneListMusic extends Component{
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-    category: {
-        marginTop: width * 0.03,
-        fontSize: width * 0.032,
-        color: '#8B8B8B'
-    },
-    title: {
-        fontSize: width * 0.056,
-        color: '#333333',
-        width: width,
-        paddingLeft: width * 0.05,
-        marginTop: width * 0.03,
-    },
     author: {
         width: width,
         marginTop: width * 0.03,
@@ -357,28 +333,7 @@ const styles = StyleSheet.create({
         width: width,
         height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
     },
-    date: {
 
-        fontSize: 12,
-        color: '#B6B6B6',
-        flexDirection: 'row',
-        position: 'absolute',
-        left: width * 0.05,
-    },
-    rightBtn: {
-        flexDirection: 'row',
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    barRightBtnsIcon1: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    barRightBtnsIcon2: {
-        width: width * 0.045,
-        height: width * 0.045,
-
-    },
     musicInfo: {
         paddingLeft: width * 0.05,
         width: width,

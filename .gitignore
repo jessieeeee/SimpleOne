@@ -7,3 +7,4 @@
 /captures
 .externalNativeBuild
 local.properties
+package-lock.json

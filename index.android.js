@@ -10,7 +10,8 @@ import {
 
 import {Navigator} from 'react-native-deprecated-custom-components';
 import LaunchImage from './js/launchImage';
-
+// import Test from './js/store/Test';
+// import Test from './js/view/Test';
 class SimpleOne extends React.Component {
   render() {
     return (
@@ -27,16 +28,6 @@ class SimpleOne extends React.Component {
     )
   }
 }
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  hello: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
+
 // console.disableYellowBox = true; 忽略警告弹窗
 AppRegistry.registerComponent('SimpleOne', () => SimpleOne);

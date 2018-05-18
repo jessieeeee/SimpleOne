@@ -19,7 +19,7 @@ current rendering：
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
 
-# api interface list
+# api list
 
 Here is a record of the extracted api interface, I intend to learn and hope readers don't use these api in any commercial project, the current listed interface is based on the android version of 4.3.4：
 
@@ -125,7 +125,7 @@ search
 
 Third-party platform sharing, login sdk docking
 
-## todo list:
+# todo list:
 
 Reading interface js callback (including music player) night mode
 
@@ -135,7 +135,7 @@ Reading interface interaction animation
 
 One paging flip title animation
 
-# Currently used technology:
+# technical points:
 
 Most of the previous use of ES5, Currently  have used ES6 , the use of mixin in the project and mixin doesn't support ES6, so I use high order component instead it.
 

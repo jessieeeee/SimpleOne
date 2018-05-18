@@ -12,15 +12,17 @@ import {
     Dimensions,
 } from 'react-native';
 
-
-// const padding = 2; //scrollview与外面容器的距离
-const pullOkMargin = 100; //下拉到ok状态时topindicator距离顶部的距离
+const pullOkMargin = 100; //下拉到位状态时距离顶部的高度
 const defaultDuration = 300; //默认时长
-const defaultTopRefreshHeight = 50; //顶部刷新指示器的高度
-const defaultFlag = {pulling: false, pullok: false, pullrelease: false}; //默认状态
-const flagPulling = {pulling: true, pullok: false, pullrelease: false}; //下拉状态
-const flagPullok = {pulling: false, pullok: true, pullrelease: false}; //下拉到位状态
-const flagPullrelease = {pulling: false, pullok: false, pullrelease: true}; //释放下拉状态
+const defaultTopRefreshHeight = 50; //顶部刷新视图的高度
+/**
+ * 提示文字的显示状态
+ * @type {{pulling: boolean, pullok: boolean, pullrelease: boolean}}
+ */
+const defaultState = {pulling: false, pullok: false, pullrelease: false}; //默认状态
+const statePulling = {pulling: true, pullok: false, pullrelease: false}; //正在下拉状态
+const statePullok = {pulling: false, pullok: true, pullrelease: false}; //下拉到位状态
+const statePullrelease = {pulling: false, pullok: false, pullrelease: true}; //下拉释放状态
 //向下手势
 const isDownGesture = (x, y) => {
     return y > 0 && (y > Math.abs(x));
@@ -38,20 +40,16 @@ export default class PullScollView extends Component {
 
     constructor(props) {
         super(props);
-        this.defaultScrollEnabled = false; //!(this.props.onPulling || this.props.onPullOk || this.props.onPullRelease); //定义onPull***属性时scrollEnabled为false
+        this.defaultScrollEnabled = false;
         this.topRefreshHeight = this.props.topRefreshHeight ? this.props.topRefreshHeight : defaultTopRefreshHeight;
         this.defaultXY = {x: 0, y: this.topRefreshHeight * -1};
         this.pullOkMargin = this.props.pullOkMargin ? this.props.pullOkMargin : pullOkMargin;
-        this.duration = this.props.duration ? this.props.duration : defaultDuration;
         this.state = Object.assign({}, props, {
             pullPan: new Animated.ValueXY(this.defaultXY), //下拉区域
             scrollEnabled: this.defaultScrollEnabled, //滚动启动
-            flag: defaultFlag,
             height: 0,
             spinValue : new Animated.Value(0), //旋转值
         });
-        // 手势坐标
-        this.gesturePosition = {x: 0, y: 0};
         // 滚动监听
         this.onScroll = this.onScroll.bind(this);
         // 布局监听
@@ -62,7 +60,6 @@ export default class PullScollView extends Component {
         this.resetDefaultXYHandler = this.resetDefaultXYHandler.bind(this);
         // 数据加载完，重置归位
         this.resolveHandler = this.resolveHandler.bind(this);
-        this.setFlag = this.setFlag.bind(this);
         // 顶部绘制
         this.renderTopRefresh = this.renderTopRefresh.bind(this);
         // 默认顶部绘制
@@ -76,12 +73,21 @@ export default class PullScollView extends Component {
             onPanResponderRelease: this.onPanResponderRelease.bind(this),//用户放开了所有的触摸点，且此时视图已经成为了响应者。
             onPanResponderTerminate: this.onPanResponderRelease.bind(this),// 另一个组件已经成为了新的响应者，所以当前手势将被取消。
         });
-        this.setFlag(defaultFlag);
-
+        this.setPullState(defaultState);// 设置提示文字的默认状态
+        // 初始化刷新视图中的转圈动画
+        this.animation=Animated.timing(
+            this.state.spinValue,
+            {
+                toValue: 1,
+                duration: 3000,
+                easing: Easing.linear
+            }
+        );
     }
-    // 是否响应回调
+
+    // 手势响应回调，是否处理
     onShouldSetPanResponder(e, gesture) {
-        //非垂直手势不响应
+        //非垂直手势不处理
         if (!isVerticalGesture(gesture.dx, gesture.dy)) {
             return false;
         }
@@ -93,47 +99,45 @@ export default class PullScollView extends Component {
         }
     }
 
+    // 手势移动的处理
     onPanResponderMove(e, gesture) {
-        this.gesturePosition = {x: this.defaultXY.x, y: gesture.dy};
-        if (isUpGesture(gesture.dx, gesture.dy)) { //向上滑动
-            // 处于下拉状态重置
+        if (isUpGesture(gesture.dx, gesture.dy)) { //向上手势
+            // 如果处于下拉状态，重置
             if(this.isPullState()) {
                 this.resetDefaultXYHandler();
-            } else if(this.props.onPushing && this.props.onPushing(this.gesturePosition)) {
-                // do nothing, handling by this.props.onPushing
             } else { // 恢复到默认位置
                 this.scroll.scrollTo({x:0, y: gesture.dy * -1});
             }
             return;
-        } else if (isDownGesture(gesture.dx, gesture.dy)) { //下拉
+        } else if (isDownGesture(gesture.dx, gesture.dy)) { //向下手势
             // 设置下拉区域
             this.state.pullPan.setValue({x: this.defaultXY.x, y: this.lastY + gesture.dy / 2});
             if (gesture.dy < this.topRefreshHeight + this.pullOkMargin) { //正在下拉
-                // 之前状态不是下拉状态，调用下拉回调
-                if (!this.flag.pulling) {
+                // 之前状态不是正在下拉状态，调用正在下拉回调
+                if (!this.curState.pulling) {
                     this.props.onPulling && this.props.onPulling();
                 }
                 // 记录当前为下拉状态
-                this.setFlag(flagPulling);
+                this.setPullState(statePulling);
             } else { //下拉到位
                 // 之前状态不是下拉到位状态，调用下拉到位回调
                 if (!this.state.pullok) {
                     this.props.onPullOk && this.props.onPullOk();
                 }
                 // 记录当前为下拉到位状态
-                this.setFlag(flagPullok);
+                this.setPullState(statePullok);
             }
         }
     }
 
     // 手势释放
-    onPanResponderRelease(e, gesture) {
-        if (this.flag.pulling) { // 之前是下拉状态
+    onPanResponderRelease() {
+        if (this.curState.pulling) { // 之前是下拉状态
             this.resetDefaultXYHandler(); //重置状态
         }
-        if (this.flag.pullok) { // 之前是下拉到位状态
+        if (this.curState.pullok) { // 之前是下拉到位状态
             // 之前没有松开
-            if (!this.flag.pullrelease) {
+            if (!this.curState.pullrelease) {
                 // 之前是刷新中，调用数据处理回调
                 if (this.props.onPullRelease) {
                     this.props.onPullRelease(this.resolveHandler);
@@ -141,46 +145,42 @@ export default class PullScollView extends Component {
                     setTimeout(() => {this.resetDefaultXYHandler()}, 3000);
                 }
             }
-            this.setFlag(flagPullrelease); //记录当前状态为完成下拉，已松开
+            this.setPullState(statePullrelease); //记录当前状态为完成下拉，已松开
             // 刷新view 的下拉动画开启
             Animated.timing(this.state.pullPan, {
                 toValue: {x: 0, y: 0},
                 easing: Easing.linear,
-                duration: this.duration
+                duration: defaultDuration
             }).start();
             console.log('调用下拉');
-            // 刷新view 的下拉动画开启
-            Animated.timing(this.state.pullPan, {
-                toValue: {x: 0, y: 0},
-                easing: Easing.linear,
-                duration: this.duration
-            }).start();
-            console.log('调用下拉');
-            // 初始化loading 旋转动画
-            this.setState({
-                spinValue : new Animated.Value(0),
-            });
-            // loading 旋转
+
+            // 刷新视图中的转圈动画开启
             this.spin();
         }
     }
 
-    // 旋转动画
+    // 转圈动画
     spin () {
-        Animated.timing(
-            this.state.spinValue,
-            {
-                toValue: 1,
-                duration: 3000,
-                easing: Easing.linear
+      this.animation.start((result)=>{
+            //正常转完1周,继续转
+            if (Boolean(result.finished)) {
+                this.animation = Animated.timing(
+                    this.state.spinValue,
+                    {
+                        toValue: 1,
+                        duration: 3000,
+                        easing: Easing.linear
+                    }
+                );
+                this.state.spinValue.setValue(0);// 每次转完都要重置
+                this.spin();
             }
-        ).start(() => this.spin())
+        });
     }
 
     // scrollview 的滚动回调
     onScroll(e) {
-        // 默认状态不允许滚动
-        if (e.nativeEvent.contentOffset.y <= 0) {
+        if (e.nativeEvent.contentOffset.y <= 0) { //临界状态，此时已经到列表顶部，但是还没触发下拉刷新状态
             this.setState({scrollEnabled: this.defaultScrollEnabled});
         } else if(!this.isPullState()) {  //当前不是下拉状态允许滚动
             this.setState({scrollEnabled: true});
@@ -189,42 +189,45 @@ export default class PullScollView extends Component {
         this.props.onScroll && this.props.onScroll(e);
     }
 
-    //处于下拉状态
+    //处于下拉过程判断
     isPullState() {
-        return this.flag.pulling || this.flag.pullok || this.flag.pullrelease;
+        return this.curState.pulling || this.curState.pullok || this.curState.pullrelease;
     }
 
-    setFlag(flag) {
-        if (this.flag != flag) {
-            this.flag = flag;
+    // 设置当前的下拉状态
+    setPullState(pullState) {
+        if (this.curState !== pullState) {
+            this.curState = pullState;
             this.renderTopRefresh();
-
         }
     }
 
-    /** 数据加载完成后调用此方法进行重置归位
-     */
+    /** 数据加载完成后调用此方法进行重置归位*/
     resolveHandler() {
-        if (this.flag.pullrelease) { //仅触摸松开时才触发
+        if (this.curState.pullrelease) { //仅触摸松开时才触发
             this.resetDefaultXYHandler();
         }
     }
 
     // 重置下拉
     resetDefaultXYHandler() {
-        this.flag = defaultFlag;
+        this.curState = defaultState;
         this.state.pullPan.setValue(this.defaultXY);
+        this.state.spinValue.stopAnimation(value => {
+            console.log('剩余时间' + (1 - value) * 3000);
+            //计算角度比例
+            this.animation = Animated.timing(this.state.spinValue, {
+                toValue: 1,
+                duration: (1 - value) * 3000,
+                easing: Easing.linear,
+            });
+        });
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if (nextProps.isPullEnd && this.state.pullrelease) {
-            this.resetDefaultXYHandler();
-        }
-    }
 
-    // 获得测量的宽高
+    // 获得测量的宽高，动态设置
     onLayout(e) {
-        if (this.state.width != e.nativeEvent.layout.width || this.state.height != e.nativeEvent.layout.height) {
+        if (this.state.width !== e.nativeEvent.layout.width || this.state.height !== e.nativeEvent.layout.height) {
             this.scrollContainer.setNativeProps({style: {width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height}});
             this.width = e.nativeEvent.layout.width;
             this.height = e.nativeEvent.layout.height;
@@ -236,7 +239,7 @@ export default class PullScollView extends Component {
     render() {
         return (
             <View style={[styles.wrap, this.props.style]} onLayout={this.onLayout}>
-                <Animated.View ref={(c) => {this.ani = c;}} style={[this.state.pullPan.getLayout()]}>
+                <Animated.View style={[this.state.pullPan.getLayout()]}>
                     {/*绘制下拉刷新view*/}
                     {this.renderTopRefresh()}
                     {/*绘制里面的子view*/}
@@ -252,7 +255,7 @@ export default class PullScollView extends Component {
 
     // 绘制下拉刷新
     renderTopRefresh() {
-        let { pulling, pullok, pullrelease } = this.flag;
+        let { pulling, pullok, pullrelease } = this.curState;
         return this.defaultTopRefreshRender(pulling, pullok, pullrelease);
     }
 
@@ -304,12 +307,12 @@ export default class PullScollView extends Component {
         );
     }
 }
-// 提示文本
+// 默认提示文本
 const tipText = {
     pulling: "下拉刷新...",
     pullok: "松开刷新......",
     pullrelease: "刷新中......"
-}
+};
 
 // 自带样式
 const styles = StyleSheet.create({

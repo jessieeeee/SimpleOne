@@ -15,11 +15,11 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import constants from '../Constants';
 import DateUtil from "../util/DateUtil";
 import Share from '../share/Share';
 import Read from '../read/Read';
+import CommStyles from "../CommStyles";
 var {width, height} = constants.ScreenWH;
 class OneListMovie extends Component{
     constructor(props){
@@ -34,12 +34,12 @@ class OneListMovie extends Component{
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={styles.container}>
-                    <Text style={styles.category}>
+                <View style={CommStyles.containerItem}>
+                    <Text style={CommStyles.categoryItem}>
                         - 影视 -
                     </Text>
                     {/*标题*/}
-                    <Text style={styles.title}>{this.props.data.title}</Text>
+                    <Text style={CommStyles.titleItem}>{this.props.data.title}</Text>
                     {/*用户名*/}
                     <Text style={styles.author}>{this.getAuthor()}</Text>
                     <View style={styles.centerImgBg}>
@@ -56,14 +56,14 @@ class OneListMovie extends Component{
                     {/*最下面的bar*/}
                     <View style={styles.bar}>
                         {/*左边的按钮*/}
-                        <Text style={styles.date}>{DateUtil.showDate(this.props.data.post_date)}</Text>
+                        <Text style={CommStyles.dateItem}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                         {/*右边的按钮*/}
-                        <View style={styles.rightBtn}>
+                        <View style={CommStyles.rightBtnItem}>
                             <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
                                 <TouchableOpacity
                                     onPress={() => this.likeClick()}>
-                                    <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                                    <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
                                 </TouchableOpacity>
 
                                 {constants.renderlikeNum(this.state.likeNum)}
@@ -71,18 +71,11 @@ class OneListMovie extends Component{
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.pushToShare()}>
-                                <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
+                                <Image source={{uri: 'share_image'}} style={CommStyles.barRightBtnsIconItem2}/>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'gray'}}
-                        position='top'
-                        positionValue={height * 0.24}
-                        textStyle={{color: 'white'}}
-                    />
                 </View>
             </TouchableOpacity>
         );
@@ -160,24 +153,7 @@ class OneListMovie extends Component{
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-    category: {
-        marginTop: width * 0.03,
-        fontSize: width * 0.032,
-        color: '#8B8B8B'
-    },
-    title: {
-        fontSize: width * 0.056,
-        color: '#333333',
-        width: width,
-        paddingLeft: width * 0.05,
-        marginTop: width * 0.03,
-    },
+
     subtitle: {
         fontSize: width * 0.038,
         color: '#808080',
@@ -219,28 +195,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: width,
         height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
-    },
-    date: {
-
-        fontSize: 12,
-        color: '#B6B6B6',
-        flexDirection: 'row',
-        position: 'absolute',
-        left: width * 0.05,
-    },
-    rightBtn: {
-        flexDirection: 'row',
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    barRightBtnsIcon1: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    barRightBtnsIcon2: {
-        width: width * 0.045,
-        height: width * 0.045,
-
     },
 
 });

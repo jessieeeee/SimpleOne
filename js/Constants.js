@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import ShowPlayMusic from './view/ShowPlayMusic';
+import FrameAnimation from './view/FrameAnimationView';
 var Dimensions = require('Dimensions');
 
 import {
     Text,
 } from 'react-native';
+import AppState from "./store/AppState";
 
 const object = {
 
@@ -42,33 +43,44 @@ const object = {
     AUDIO_TYPE: 1,
     CURRENT_TYPE: 0,
 
+    /**
+     * 数据管理器
+     */
+    appState : new AppState(),
 
     /**
-     * 音频播放绘制
+     * 渲染载入view
+     * @returns {*}
      */
-    renderAudioPlay(clickEvent) {
-        if(this.playMusic){
-            return(
-                <ShowPlayMusic
-                    onChange={(obj) => {
-                        console.log('onSure收到事件'+obj.nativeEvent.msg+"目标id"+obj.nativeEvent.target);
-                        clickEvent();
-                    }}
-                    style={{
-                        position: 'absolute',
-                        top: this.ScreenWH.height * 0.17,
-                        right: 0,
-                        zIndex: 100,
-                        width:this.ScreenWH.width * 0.11,
-                        height:this.ScreenWH.width * 0.1
-                    }}
-                />
-            );
-        }
-
+    renderLoading(loading) {
+        return (
+            <FrameAnimation
+                loadingArr={this.getLoadingIcon()}
+                width={this.ScreenWH.width * 0.14} height={this.ScreenWH.width * 0.14}
+                loading={loading} refreshTime={0} style={{
+                position: 'absolute',
+                top: this.ScreenWH.height * 0.4 - this.ScreenWH.width * 0.07,
+                left: this.ScreenWH.width / 2 - this.ScreenWH.width * 0.07
+            }}/>
+        );
     },
 
-
+    /**
+     * 载入图标名称初始化
+     */
+    getLoadingIcon() {
+        var loadingArr=[];
+        for (var i = 0; i < 30; i++) {
+            var postfix;
+            if(i<10){
+                postfix='0'+i;
+            }else{
+                postfix=i;
+            }
+            loadingArr.push(('webview_loading_' + postfix).toString());
+        }
+        return loadingArr;
+    },
     /**
      * 渲染喜欢数量
      */

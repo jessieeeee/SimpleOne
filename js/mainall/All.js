@@ -16,17 +16,17 @@ import {
     Platform,
 
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import PullScollView from '../view/PullScollView';
 import constants from "../Constants";
-import MusicControl from '../musiccontrol/MusicControl';
 import Search from '../search/Search';
 import LoadingMore from  '../view/LoadingMore';// 加载更多的view
 import AllListTopic from './AllListTopic';// 专题列表
 import AllCategoryGuide from './AllCategoryGuide';// 分类导航
 import AllListAuthor from './AllListAuthor';// 热门作者
 import AllListQuestion from './AllListQuestion';// 问所有人
-import AllListBanner from './AllListBanner'; //顶部banner
+import AllListBanner from './AllListBanner';
+import {BaseComponent} from "../view/BaseComponent";
+import CommStyles from "../CommStyles";
 let {width, height} = constants.ScreenWH;
 // 顶部的banner
 let key = 9;
@@ -50,7 +50,7 @@ class All extends Component{
     onPullRelease(resolve) {
         //更改刷新状态
         this.setState({isRefreshing: true});
-        //do something
+        //刷新完毕，重置下拉刷新，再次更新刷新和加载更多状态
         setTimeout(() => {
             resolve();
             this.setState({
@@ -62,7 +62,7 @@ class All extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View>
                 {this.renderNavBar()}
                 <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
 
@@ -70,24 +70,6 @@ class All extends Component{
                     {this.renderLoadMoreList()}
                     {this.renderLoading()}
                 </PullScollView>
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl} onCancel={()=>{
-                    this.setState({
-                        showMusicControl:false,
-                    });
-                }}/>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
-
             </View>
         );
     }
@@ -115,7 +97,7 @@ class All extends Component{
                         lastId: this.state.startId,
                     });
                     bottomList.push(
-                        <AllListTopic key={key} showNum={5} startId={this.state.startId} loading={this.state.loading}
+                        <AllListTopic key={key} showNum={5} startId={this.state.startId}
                                       getEndId={(endId, end) => {
                                           console.log('回调了' + endId + end);
                                           this.setState({
@@ -126,7 +108,7 @@ class All extends Component{
 
                                       }}/>
                     );
-                    //设置正在加载和更多列表标记
+                    //设置正在加载和显示更多标记
                     this.setState({
                         loadMore: true,
                         loading: true,
@@ -170,14 +152,14 @@ class All extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 <Image source={{uri: 'one_is_all'}} style={styles.allTitle}/>
 
                 {/*右边按钮*/}
-                <TouchableOpacity style={styles.rightBtn}
+                <TouchableOpacity style={CommStyles.rightBtn}
                                   onPress={() => this.pushToSearch()}>
-                    <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
+                    <Image source={{uri: 'search_night'}} style={CommStyles.navRightBar}/>
                 </TouchableOpacity>
             </View>
         );
@@ -204,14 +186,14 @@ class All extends Component{
             <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
         itemArr.push(
-            <View key={1} style={styles.bottomLine}/>
+            <View key={1} style={CommStyles.bottomLineAll}/>
         );
         // 渲染分类导航
         itemArr.push(
             <AllCategoryGuide key={2} navigator={this.props.navigator} />
         );
         itemArr.push(
-            <View key={3} style={styles.bottomLine}/>
+            <View key={3} style={CommStyles.bottomLineAll}/>
         );
         // 渲染专题列表
         itemArr.push(
@@ -229,7 +211,7 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={6} style={styles.bottomLine}/>
+            <View key={6} style={CommStyles.bottomLineAll}/>
         );
 
         //问所有人
@@ -238,47 +220,18 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={8} style={styles.bottomLine}/>
+            <View key={8} style={CommStyles.bottomLineAll}/>
         );
         return itemArr;
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#eeeeee',
-    },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor:'#dddddd',
-        borderBottomWidth:constants.divideLineWidth
-    },
-
-    navRightBar: {
-        width: width * 0.05,
-        height: width * 0.05,
-    },
-    rightBtn: {
-        position: 'absolute',
-        right: width * 0.05,
-    },
     allTitle: {
         width: width * 0.36,
         height: width * 0.04,
     },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.028,
-        width: width
-    },
+
 });
 
-export default All;
+export default AllPage = BaseComponent(All);

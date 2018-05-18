@@ -7,6 +7,7 @@
 import React, {Component} from 'react';
 import NetUtil from '../util/NetUtil';
 import constants from '../Constants';
+import CommStyles from '../CommStyles';
 import {
     AppRegistry,
     StyleSheet,
@@ -14,16 +15,15 @@ import {
     View,
     ScrollView,
     Image,
-    Platform,
     TouchableOpacity,
     NativeModules,
     Animated,
     Easing
 } from 'react-native';
-import Toast, {DURATION} from 'react-native-easy-toast'
+
 import PullScollView from '../view/PullScollView';
 import DateUtil from "../util/DateUtil";
-import MusicControl from '../musiccontrol/MusicControl';
+
 import Search from '../search/Search';
 import GuideView from './GuideView';
 import DisplayImg from '../display/DisplayImg';
@@ -35,16 +35,16 @@ import OneListMusic from './OneListMusic';
 import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
 import MyStorage from '../util/MySorage';
-
+import ServerApi from '../ServerApi';
+import {BaseComponent} from "../view/BaseComponent";
 let toast = NativeModules.ToastNative;
-
-var {width, height} = constants.ScreenWH;
-var ServerApi = require('../ServerApi');
-var key = 1;
-var date= '0'; //请求的日期
-var itemPageArr = []; //分页数组
-var  curPage= 0;//当前页数
+let {width, height} = constants.ScreenWH;
+let key = 1;
+let date= '0'; //请求的日期
+let itemPageArr = []; //分页数组
+let curPage= 0;//当前页数
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
+
 class One extends Component{
     constructor(props){
         super(props);
@@ -58,7 +58,6 @@ class One extends Component{
             showSearch: false,//是否显示搜索按钮
             showArrow: false,//是否显示箭头
             showDisplay:false,//是否显示大图
-            showMusicControl:false,//是否显示音乐控制板
             showDate:'0',//显示的日期
             showGuide:false,//显示引导
         };
@@ -110,14 +109,14 @@ class One extends Component{
         ).start(() => this.animateLastDay())
     }
 
+
     /**
      * 界面绘制
      * @returns {XML}
      */
     render() {
         return (
-            <View style={styles.container}>
-
+            <View >
                 {this.renderNavBar()}
                 <ScrollView horizontal={true} ref='sv_one' pagingEnabled={true}
                             scrollEnabled={true} showsHorizontalScrollIndicator={false}
@@ -129,25 +128,6 @@ class One extends Component{
                 </ScrollView>
                 {this.renderDisplay()}
 
-                <MusicControl navigator={this.props.navigator} isVisible={this.state.showMusicControl}
-                              onCancel={()=>{
-                                  this.setState({
-                                      showMusicControl:false,
-                                  });
-                              }}/>
-
-                {constants.renderAudioPlay(()=>{
-                    this.setState({
-                        showMusicControl:true,
-                    });
-                })}
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.4}
-                    textStyle={{color: 'white'}}
-                />
                 <GuideView  isVisible={this.state.showGuide}
                             onCancel={() => {this.setState({showGuide: false})}}/>
             </View>
@@ -337,7 +317,7 @@ class One extends Component{
                                           });
                                       }}
                                       todayRadio={() => {
-                                          toast.showMsg('今晚22:30主播在这里等你',toast.SHORT)
+                                          toast.showMsg('今晚22:30主播在这里等你',toast.SHORT);
                                       }}/>
                     );
                 }
@@ -352,7 +332,7 @@ class One extends Component{
                 key++;
                 if (i !== 0) {
                     itemArr.push(
-                        <View key={key} style={styles.bottomLine}/>
+                        <View key={key} style={CommStyles.bottomLine}/>
                     )
                 } else {
                     itemArr.push(
@@ -390,21 +370,16 @@ class One extends Component{
      * 顶部导航bar
      */
     renderNavBar() {
-        // const movingMargin = this.state.animatedValue.interpolate({
-        //     inputRange: [0, 0.5],
-        //     outputRange: [0, height*0.06]
-        // });
-        {/*<Animated.Text style={[styles.dateText,{marginBottom:movingMargin}]} >{this.state.curOneData === null ? '' : this.getDateDay()}</Animated.Text>*/
-        }
+
 
         return (
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
                 {/*左边按钮*/}
                 {this.renderToday()}
 
 
                 {/*中间标题*/}
-                <View style={styles.centerTitle}>
+                <View style={CommStyles.centerTitle}>
                     {/*上面日期*/}
                     <View style={styles.date}>
                         <Text
@@ -452,9 +427,9 @@ class One extends Component{
     renderSearch() {
         if (this.state.showSearch) {
             return (
-                <TouchableOpacity style={styles.rightBtn}
+                <TouchableOpacity style={CommStyles.rightBtn}
                                   onPress={() => this.pushToSearch()}>
-                    <Image source={{uri: 'search_night'}} style={styles.navRightBar}/>
+                    <Image source={{uri: 'search_night'}} style={CommStyles.navRightBar}/>
                 </TouchableOpacity>
             );
         }
@@ -575,22 +550,6 @@ class One extends Component{
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#eeeeee',
-    },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
     weatherText: {
         textAlign: 'center',
         color: '#BFBFBF',
@@ -606,11 +565,6 @@ const styles = StyleSheet.create({
         top: width * 0.01,
         height: height * 0.05,
     },
-    centerTitle: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     dateText: {
         textAlign: 'center',
         fontSize: width * 0.05,
@@ -620,28 +574,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.05,
         color: '#AFAFAF',
         marginBottom: width * 0.02
-    },
-    navLeftBar: {
-        width: width * 0.05 * 2.15,
-        height: width * 0.05,
-
-    },
-    navRightBar: {
-        width: width * 0.05,
-        height: width * 0.05,
-    },
-    rightBtn: {
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.038,
-    },
-    bottomLine: {
-        backgroundColor: '#EEEEEE',
-        height: width * 0.024,
-        width: width
     },
     menuLine: {
         backgroundColor: '#EEEEEE',
@@ -659,7 +591,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: width * 0.5,
     },
+    navLeftBar: {
+        width: width * 0.05 * 2.15,
+        height: width * 0.05,
 
+    },
+    leftBtn: {
+        position: 'absolute',
+        left: width * 0.038,
+    },
 });
 
-export default One;
+export default OnePage = BaseComponent(One);

@@ -15,11 +15,10 @@ import {
     Image,
 } from 'react-native';
 import Read from '../read/Read';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
-var ServerApi = require('../ServerApi');
-var {width, height} = constants.ScreenWH;
+import ServerApi from '../ServerApi';
+let {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -54,14 +53,6 @@ class AllListTopic extends Component{
         return (
             <View>
                 {this.renderList()}
-
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }
@@ -117,8 +108,8 @@ class AllListTopic extends Component{
 
     // 请求专题数据
     getTopicData() {
-        var itemArr = []; //把显示数据放到一个数组里
-        var url = ServerApi.AllTopic.replace('{id}', this.props.startId);
+        let itemArr = []; //把显示数据放到一个数组里
+        let url = ServerApi.AllTopic.replace('{id}', this.props.startId);
 
         NetUtils.get(url, null, (result) => {
             this.setState({
@@ -144,7 +135,7 @@ class AllListTopic extends Component{
                 }
                 end = true;
                 this.setState({
-                    endId: this.state.topic.data[this.props.showNum - 1].id
+                    endId: this.state.topic.data[this.state.topic.data.length - 1].id
                 });
                 // console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
                 this.props.getEndId(this.state.topic.data[this.state.topic.data.length - 1].id, end);
@@ -157,7 +148,7 @@ class AllListTopic extends Component{
             });
 
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 
@@ -182,7 +173,6 @@ class AllListTopic extends Component{
 AllListTopic.defaultProps={
     showNum: 10,//展示个数
     refreshView: false, //刷新
-    loading: false, //加载更多
     startId: 0,  //请求起始id
     endId: 0,
     // 外层回调函数参

@@ -17,13 +17,15 @@ import {
     DeviceEventEmitter
 } from 'react-native';
 import Read from '../read/Read';
-import Toast, {DURATION} from 'react-native-easy-toast'
+
 import constants from '../Constants';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
+import CommStyles from "../CommStyles";
 var {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
+
 class OneListAudio extends Component{
     constructor(props){
         super(props);
@@ -37,13 +39,12 @@ class OneListAudio extends Component{
     }
 
     componentDidMount() {
-        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
-            if (this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.AUDIO_TYPE) {
+        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
+            if (this.props.page === constants.curPage && constants.CURRENT_TYPE === constants.AUDIO_TYPE) {
                 this.setState({
                     loading:true
                 });
-                constants.playMusic = true;
-                this.props.onShow();
+                constants.appState.startPlay();
             }else{ //不是播放的页面，播放按钮重置
                 if(this.state.isPlay){
                     this.setState({
@@ -55,7 +56,7 @@ class OneListAudio extends Component{
 
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
             console.log('当前状态' + reminder.state);
-            if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
+            if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state === constants.PLAY_COMPLETE) {
                 this.setState({
                     isPlay: false,
                     loading:false
@@ -74,9 +75,7 @@ class OneListAudio extends Component{
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={styles.container}>
-
-
+                <View style={CommStyles.containerItem}>
                     {this.renderContent()}
                     {/*最下面的bar*/}
                     <View
@@ -84,11 +83,11 @@ class OneListAudio extends Component{
                         {this.renderLeftView()}
 
                         {/*右边的按钮*/}
-                        <View style={styles.rightBtn}>
+                        <View style={CommStyles.rightBtnItem}>
                             <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
                                 <TouchableOpacity
                                     onPress={() => this.likeClick()}>
-                                    <Image source={{uri: this.showLikeIcon()}} style={styles.barRightBtnsIcon1}/>
+                                    <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
                                 </TouchableOpacity>
 
                                 {constants.renderlikeNum(this.state.likeNum)}
@@ -96,18 +95,11 @@ class OneListAudio extends Component{
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.pushToShare()}>
-                                <Image source={{uri: 'share_image'}} style={styles.barRightBtnsIcon2}/>
+                                <Image source={{uri: 'share_image'}} style={CommStyles.barRightBtnsIconItem2}/>
                             </TouchableOpacity>
                         </View>
                     </View>
 
-                    <Toast
-                        ref="toast"
-                        style={{backgroundColor: 'gray'}}
-                        position='top'
-                        positionValue={height * 0.24}
-                        textStyle={{color: 'white'}}
-                    />
                 </View>
             </TouchableOpacity>
         );
@@ -115,7 +107,7 @@ class OneListAudio extends Component{
 
     renderLeftView() {
         //播出过有音频，渲染带图的
-        if (this.props.data.author.user_name + '' != 'undefined') {
+        if (this.props.data.author.user_name + '' !== 'undefined') {
             return (
                 <View style={{
                     flexDirection: 'row',
@@ -211,7 +203,7 @@ class OneListAudio extends Component{
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.AUDIO_TYPE;
         console.log('播放地址'+this.props.data.audio_url);
-        if (this.props.data.default_audios != undefined && this.props.data.default_audios.length>0) {
+        if (this.props.data.default_audios !== undefined && this.props.data.default_audios.length>0) {
             media.start(this.props.data.default_audios[0]);
             this.setState({
                 isPlay: true
@@ -242,7 +234,7 @@ class OneListAudio extends Component{
      * @param url
      */
     pushToRead() {
-        if (this.props.data.content_type == 8 && this.props.page ==0) {
+        if (this.props.data.content_type === 8 && this.props.page === 0) {
             this.props.todayRadio();
             return;
         }
@@ -306,13 +298,6 @@ OneListAudio.defaultProps={
     onShow: null,
 };
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
-
     title: {
         fontSize: width * 0.034,
         color: '#c3c2c7',
@@ -342,20 +327,6 @@ const styles = StyleSheet.create({
         marginLeft: width * 0.04,
         width: width * 0.06,
         height: width * 0.06,
-    },
-    rightBtn: {
-        flexDirection: 'row',
-        position: 'absolute',
-        right: width * 0.05,
-    },
-    barRightBtnsIcon1: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    barRightBtnsIcon2: {
-        width: width * 0.045,
-        height: width * 0.045,
-
     },
     playView: {
         width: width,

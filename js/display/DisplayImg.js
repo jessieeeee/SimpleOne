@@ -14,7 +14,7 @@ import {
     Modal,
     TouchableOpacity
 } from 'react-native';
-
+import PropTypes from 'prop-types';
 import constants from '../Constants';
 var {width, height} = constants.ScreenWH;
 
@@ -52,9 +52,9 @@ class DisplayImg extends Component{
 }
 
 DisplayImg.propTypes ={
-    topText:React.PropTypes.string,
-    imgUrl:React.PropTypes.string,
-    bottomText:React.PropTypes.string,
+    topText:PropTypes.string,
+    imgUrl:PropTypes.string,
+    bottomText:PropTypes.string,
 };
 
 DisplayImg.defaultProps={

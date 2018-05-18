@@ -1,14 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {requireNativeComponent, View} from 'react-native';
 
 
 let iface = {
     name: 'PickDateView',
     propTypes: {
-        setYear: React.PropTypes.string,
-        setMonth: React.PropTypes.string,
+        setYear: PropTypes.string,
+        setMonth: PropTypes.string,
         //回调
-        onChange: React.PropTypes.func,
+        onChange: PropTypes.func,
         ...View.propTypes  //支持View组件的所有属性
     }
 }

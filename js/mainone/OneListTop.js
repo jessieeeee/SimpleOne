@@ -15,10 +15,10 @@ import {
     TouchableOpacity
 } from 'react-native';
 import Remark from '../remark/Remark';
-import Toast, {DURATION} from 'react-native-easy-toast'
 import Login from '../login/Login';
 import constants from '../Constants';
 import Share from '../share/Share';
+import CommStyles from "../CommStyles";
 var {width, height} = constants.ScreenWH;
 
 class OneListTop extends Component{
@@ -54,7 +54,7 @@ class OneListTop extends Component{
     //渲染
     render() {
         return (
-            <View style={styles.container}>
+            <View style={CommStyles.containerItem}>
 
                 {/*顶部大图*/}
                 <TouchableOpacity onPress={() => this.pushToDisplay()}>
@@ -114,13 +114,6 @@ class OneListTop extends Component{
 
                 </View>
 
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.24}
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }
@@ -131,7 +124,7 @@ class OneListTop extends Component{
     renderlikeNum(){
         if(this.state.likeNum>0){
             return(
-                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, color:'#A7A7A7'}}>
+                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, color:'#A7A7A7',marginRight:width*0.04}}>
                     {this.state.likeNum}
                 </Text>
             );
@@ -241,12 +234,6 @@ class OneListTop extends Component{
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    },
     imgAuthor: {
         marginTop: width * 0.02,
         color: '#808080',
@@ -291,7 +278,7 @@ const styles = StyleSheet.create({
         height: width * 0.045,
     },
     rightBtnIconCenter: {
-        marginRight: width * 0.1,
+        marginRight: width * 0.04,
         width: width * 0.045,
         height: width * 0.045,
     },

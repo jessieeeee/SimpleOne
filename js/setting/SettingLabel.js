@@ -48,25 +48,4 @@ const styles = StyleSheet.create({
 });
 
 
-// var SettingLabel=React.createClass({
-//     getDefaultProps(){
-//         return {
-//             text: '',
-//         }
-//     },
-//
-//     render() {
-//         return (
-//             <View style={styles.container}>
-//                 <Text style={styles.label}>
-//                     {this.props.text}
-//                 </Text>
-//             </View>
-//         );
-//     },
-//
-//
-// });
-
-
 export default SettingLabel;

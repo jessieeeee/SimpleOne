@@ -13,14 +13,17 @@ import {
     Image,
     ListView,
     TouchableOpacity,
+    NativeModules,
 } from 'react-native';
 
-import Toast, {DURATION} from 'react-native-easy-toast'
 import NetUtils from "../util/NetUtil";
 import constants from '../Constants';
 import AuthorPage from '../author/AuthorPage';
-var {width, height} = constants.ScreenWH;
-var serverApi=require('../ServerApi');
+import ServerApi from '../ServerApi';
+let toast = NativeModules.ToastNative;
+let {width, height} = constants.ScreenWH;
+
+
 //设置数据源
 var ds = new ListView.DataSource({
     //返回条件，任意两条不等
@@ -82,13 +85,7 @@ class AllListAuthor extends Component{
                     </View>
 
                 </View>
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'gray'}}
-                    position='top'
-                    positionValue={height * 0.1}
-                    textStyle={{color: 'white'}}
-                />
+
             </View>
         );
     }
@@ -114,7 +111,7 @@ class AllListAuthor extends Component{
         return (
             <View style={styles.contentContainer}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
-                                  onPress={() => this.pushToRead(rowData)}>
+                                  onPress={() => this.pushToAuthor(rowData)}>
                     {/*左边头像*/}
                     <Image source={{uri: rowData.web_url}} style={styles.leftImage}>
                     </Image>
@@ -134,7 +131,7 @@ class AllListAuthor extends Component{
                 <TouchableOpacity
                     style={styles.follow}
                     activeOpacity={0.5}
-                    onPress={() => this.refs.toast.show('点击了' + rowID + '行', DURATION.LENGTH_LONG)}>
+                    onPress={() => toast.showMsg('点击了' + rowID + '行',toast.SHORT)}>
 
                     <Text style={{
                         textAlign: 'center',
@@ -151,7 +148,7 @@ class AllListAuthor extends Component{
 
     // 请求专题数据
     getHotAuthorData() {
-        NetUtils.get(serverApi.HotAuthor, null, (result) => {
+        NetUtils.get(ServerApi.HotAuthor, null, (result) => {
             this.setState({
                 author: result,
             });
@@ -166,7 +163,7 @@ class AllListAuthor extends Component{
             });
             // console.log(result);
         }, (error) => {
-            this.refs.toast.show('error' + error, 500)
+            toast.showMsg('error' + error,toast.SHORT);
         });
     }
 
@@ -174,13 +171,14 @@ class AllListAuthor extends Component{
      * 跳转到作者页
      * @param url
      */
-    pushToRead(itemData) {
+    pushToAuthor(itemData) {
         this.props.navigator.push(
             {
                 component: AuthorPage,
                 title:'作者页',
                 params:{
-                    authorData:itemData
+                    authorId:itemData.user_id,
+                    authorName:itemData.user_name
                 }
             }
         )

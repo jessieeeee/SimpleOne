@@ -22,6 +22,7 @@ import DateUtil from "../util/DateUtil";
 import Login from '../login/Login';
 import ChangeImg from './ChangeImg';
 import Share from '../share/Share';
+import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 var {width, height} = constants.ScreenWH;
 
@@ -46,7 +47,7 @@ class Remark extends Component{
                 {this.renderNavBar()}
                 <ScrollView>
                     {/*中间标题*/}
-                    <View style={styles.centerTitle}>
+                    <View style={CommStyles.centerTitle}>
                         {/*上面日期*/}
                         <View style={styles.date}>
                             <Text
@@ -193,12 +194,12 @@ class Remark extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={styles.outNav}>
+            <View style={CommStyles.outNav}>
 
                 {/*左边按钮*/}
-                <TouchableOpacity style={styles.leftBtn}
+                <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => this.props.navigator.pop()}>
-                    <Image source={{uri: 'icon_back'}} style={styles.navLeftBar}/>
+                    <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
                 <Text style={styles.title}>小记</Text>
@@ -260,11 +261,6 @@ const styles = StyleSheet.create({
         color: '#333333',
         backgroundColor: 'white',
     },
-    centerTitle: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.097,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     weatherText: {
         textAlign: 'center',
         color: '#414141',
@@ -281,30 +277,11 @@ const styles = StyleSheet.create({
         height: height * 0.055,
     },
     dateText: {
-        marginTop: width * 0.02,
         textAlign: 'center',
         fontSize: width * 0.056,
         color: '#525252',
-        fontFamily: 'hp-title'
     },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.062 : height * 0.072,
-        backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
-    leftBtn: {
-        position: 'absolute',
-        left: width * 0.024,
-    },
-    navLeftBar: {
-        width: height * 0.04,
-        height: height * 0.05,
-    },
+
     title: {
         fontSize: width * 0.04,
         color: '#414141',
