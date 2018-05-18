@@ -21,7 +21,7 @@ current rendering：
 
 # api interface list
 
-Here is a record of the extracted api interface, I intend to learn and hope readers don't use any commercial project, the current listed interface is based on the android version of 4.3.4：
+Here is a record of the extracted api interface, I intend to learn and hope readers don't use these api in any commercial project, the current listed interface is based on the android version of 4.3.4：
 
 1. one（first page,date=0,more page date=yyyy-MM-dd）
 
@@ -61,7 +61,7 @@ Here is a record of the extracted api interface, I intend to learn and hope read
      article comment
      `http://v3.wufazhuce.com:8000/api/comment/praiseandtime/essay/{content_id}/0`
 
-6.  Search classification jump（category_id，0Graphic 3Question and answer 1read 2Serial 5Movie 4Music 8Radio）
+6.  Search classification jump（category_id，0:Graphic 3:Question and answer 1:read 2:Serial 5:Movie 4:Music 8:Radio）
 
     `http://v3.wufazhuce.com:8000/api/all/list/{category_id}`
 
@@ -97,7 +97,7 @@ Here is a record of the extracted api interface, I intend to learn and hope read
 8. Author page
   `http://v3.wufazhuce.com:8000/api/author/works?page_num={page_num}&author_id={author_id}&version=4.3.4`
 
-# functional list：
+# feature list：
 
 android 4.3.4：
 
@@ -137,7 +137,7 @@ One paging flip title animation
 
 # Currently used technology:
 
-Most of the previous use of ES5, most of the current use of ES6, the use of mixin in the project, because the mixin doesn't support ES6, that part still use ES5, there is time to replace the old components
+Most of the previous use of ES5, Currently  have used ES6 , the use of mixin in the project and mixin doesn't support ES6, so I use high order component instead it.
 
 React-native encapsulates native components.
 
