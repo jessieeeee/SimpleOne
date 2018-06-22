@@ -15,7 +15,7 @@ import {
 
 } from 'react-native';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 class SettingLabel extends Component{
     render() {
         return (

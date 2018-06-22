@@ -59,7 +59,7 @@ class AuthorPage extends Component{
     }
 
     getWorkList() {
-        var url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorId);
+        let url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorId);
         url = url.replace('{page_num}', pageNum);
         console.log('加载页数' + pageNum);
         console.log("地址" + url);
@@ -154,12 +154,12 @@ class AuthorPage extends Component{
     }
 
     loadMoreView() {
-        if (workList.length != 0) {
-            for (var i = 0; i < workList.length; i++) {
+        if (workList.length !== 0) {
+            for (let i = 0; i < workList.length; i++) {
                 //取出每一条数据
-                var data = workList[i];
+                let data = workList[i];
                 //最顶部的摄影和一句话
-                if (data.category == 0) {
+                if (data.category === 0) {
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
@@ -170,19 +170,19 @@ class AuthorPage extends Component{
                 }
 
                 //音乐
-                else if (data.category == 4) {
+                else if (data.category === 4) {
                     itemArr.push(
                         <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电影
-                else if (data.category == 5) {
+                else if (data.category === 5) {
                     itemArr.push(
                         <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电台
-                else if (data.category == 8) {
+                else if (data.category === 8) {
                     itemArr.push(
                         <OneListAudio key={key} data={data} navigator={this.props.navigator}/>
                     );

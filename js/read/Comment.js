@@ -16,7 +16,7 @@ import {
 
 import Login from '../login/Login';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 class Comment extends Component{
     constructor(props){
         super(props);

@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import constants from "../Constants";
 import PropTypes from 'prop-types';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class SearchBar extends Component{
     render(){

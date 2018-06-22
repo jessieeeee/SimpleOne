@@ -19,7 +19,7 @@ import NetUtils from "../util/NetUtil";
 import constants from "../Constants";
 import Read from '../read/Read';
 import ServerApi from '../ServerApi';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 let toast = NativeModules.ToastNative;
 class  AllListQuestion extends Component{
     constructor(props){
@@ -65,12 +65,12 @@ class  AllListQuestion extends Component{
     renderAllItem() {
         if(this.state.questions!==undefined){
             //定义组件数组
-            var itemArr = [];
+            let itemArr = [];
             //取出数据
-            var questionData = this.state.questions.data;
-            for (var i = 0; i < questionData.length; i++) {
+            let questionData = this.state.questions.data;
+            for (let i = 0; i < questionData.length; i++) {
                 //取出单个数据
-                var data = questionData[i];
+                let data = questionData[i];
                 //创建组件装入数组
                 itemArr.push(
                     <QuestionItem key={i} data={data} navigator={this.props.navigator}/>

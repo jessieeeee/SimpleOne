@@ -25,7 +25,7 @@ let {width, height} = constants.ScreenWH;
 
 
 //设置数据源
-var ds = new ListView.DataSource({
+let ds = new ListView.DataSource({
     //返回条件，任意两条不等
     rowHasChanged: (r1, r2) => r1 != r2
 
@@ -153,7 +153,7 @@ class AllListAuthor extends Component{
                 author: result,
             });
 
-            var itemArr = [];
+            let itemArr = [];
             for (var i = 0; i < 3; i++) {
                 itemArr.push(this.state.author.data[i]);
             }

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import {
     View,
     Text,
@@ -7,7 +8,7 @@ import {
     ScrollView
 } from 'react-native';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 export default class SingleChoiceDialog extends Component {
     static propTypes = {
@@ -62,7 +63,7 @@ export default class SingleChoiceDialog extends Component {
     }
 
     renderOptionsList() {
-        var key = 0;
+        let key = 0;
         return this.props.dataSource.map(option => {
             key++;
             return (

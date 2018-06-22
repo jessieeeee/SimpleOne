@@ -108,7 +108,6 @@ export default class PullScollView extends Component {
             } else { // 恢复到默认位置
                 this.scroll.scrollTo({x:0, y: gesture.dy * -1});
             }
-            return;
         } else if (isDownGesture(gesture.dx, gesture.dy)) { //向下手势
             // 设置下拉区域
             this.state.pullPan.setValue({x: this.defaultXY.x, y: this.lastY + gesture.dy / 2});

@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class DisplayImg extends Component{
   constructor(props){
@@ -46,7 +46,7 @@ class DisplayImg extends Component{
 
     //按图片宽度缩放
     getHeight(w, h) {
-        var ratio = (width * 0.8) / w;
+        let ratio = (width * 0.8) / w;
         return h * ratio;
     }
 }

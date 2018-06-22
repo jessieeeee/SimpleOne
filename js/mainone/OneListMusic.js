@@ -54,7 +54,7 @@ class OneListMusic extends Component{
 
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
             //当前显示的等于当前播放的歌曲转起来
-            if (!rotate && this.props.page == constants.curPage && constants.CURRENT_TYPE== constants.MUSIC_TYPE) {
+            if (!rotate && this.props.page === constants.curPage && constants.CURRENT_TYPE === constants.MUSIC_TYPE) {
                 console.log("调用旋转");
                 this.spin();
                 rotate=true;
@@ -68,7 +68,7 @@ class OneListMusic extends Component{
 
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
             console.log('当前状态' + reminder.state);
-            if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
+            if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
                 this.setState({
                     isPlay: false,
                 });
@@ -167,7 +167,7 @@ class OneListMusic extends Component{
                         </TouchableOpacity>
                     </View>
 
-                    <Image source={{uri: this.props.data.audio_platform == 1 ? 'xiami_right' : 'one_right'}}
+                    <Image source={{uri: this.props.data.audio_platform === 1 ? 'xiami_right' : 'one_right'}}
                            style={styles.iconXia}/>
                 </View>
                 {/*音乐封面下的音乐名称，作者和专辑*/}
@@ -274,9 +274,13 @@ class OneListMusic extends Component{
      * @returns {*}
      */
     getAuthor() {
-        var tempStr = new Array();
-        tempStr = this.props.data.author.user_name.split(' ');
-        return '文 / ' + tempStr[0];
+        if (this.props.data.author.user_name !== undefined){
+            let tempStr = this.props.data.author.user_name.split(' ');
+            return '文 / ' + tempStr[0];
+        } else {
+           return '';
+        }
+
     }
 
     /**

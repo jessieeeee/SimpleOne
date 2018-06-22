@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import constants from '../../Constants';
 import Read from '../../read/Read';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class MenuItem extends Component{
     constructor(props){
@@ -44,7 +44,7 @@ class MenuItem extends Component{
      * @param url
      */
     pushToRead() {
-        if(this.props.data.content_type==8 && this.props.date === constants.curDate ){
+        if(this.props.data.content_type === 8 && this.props.date === constants.curDate ){
             this.props.todayRadio();
             return;
         }

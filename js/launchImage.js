@@ -16,7 +16,7 @@ import DateUtils from "./util/DateUtil";
 import constants from './Constants';
 import Main from './Main';
 
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 class LaunchImage extends Component{
     constructor(props){
         super(props);
@@ -36,7 +36,7 @@ class LaunchImage extends Component{
 
     //返回当前星期对应的图片名称
     getOpenImg(){
-        var str;
+        let str;
         switch (DateUtils.getweek()){
             case 0:
                 str='opening_sunday';

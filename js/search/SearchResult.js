@@ -61,7 +61,7 @@ class SearchResult extends Component{
                 return 'radio';
             case 5:
                 return 'author';
-        }this.props.route
+        }
     }
 
     /**

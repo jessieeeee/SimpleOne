@@ -22,7 +22,7 @@ import {
 import Login from '../login/Login';
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class MusicControl extends Component{
    constructor(props){
@@ -40,7 +40,7 @@ class MusicControl extends Component{
             console.log('当前进度' + reminder.currentPosition);
             console.log('总长度' + reminder.totalDuration);
             if(this.props.isVisible){
-                if(this.state.total==0){
+                if(this.state.total === 0){
                     this.setState({
                         total:(reminder.totalDuration/1000/60).toFixed(2),
                         totalMsec:reminder.totalDuration
@@ -61,7 +61,7 @@ class MusicControl extends Component{
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
             console.log('当前状态' + reminder.state);
             if(this.props.isVisible){
-                if (reminder.state == constants.STOP_PLAY_MEDIA || reminder.state == constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
+                if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
                     this.setState({
                         isPlay: false,
                     });

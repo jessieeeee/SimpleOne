@@ -24,7 +24,7 @@ import ChangeImg from './ChangeImg';
 import Share from '../share/Share';
 import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class Remark extends Component{
     constructor(props){
@@ -102,8 +102,8 @@ class Remark extends Component{
     }
 
     renderImg() {
-        var uri = '';
-        if (this.state.imgUri != '') {
+        let uri = '';
+        if (this.state.imgUri !== '') {
             uri = this.state.imgUri;
         } else {
             uri = this.props.route.params.imgUrl;
@@ -184,7 +184,7 @@ class Remark extends Component{
 
     //按图片宽度缩放
     getHeight(w, h) {
-        var ratio = width / w;
+        let ratio = width / w;
         return h * ratio;
     }
 
@@ -225,8 +225,8 @@ class Remark extends Component{
      * @returns {string}
      */
     getWeatherInfo() {
-        var cityName = this.props.route.params.weather.city_name;
-        var climate = this.props.route.params.weather.climate;
+        let cityName = this.props.route.params.weather.city_name;
+        let climate = this.props.route.params.weather.climate;
         return cityName + '  ' + climate;
     }
 }

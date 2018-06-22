@@ -19,7 +19,7 @@ import Read from '../read/Read';
 import constants from '../Constants';
 import Share from '../share/Share';
 import CommStyles from "../CommStyles";
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class OneListCommon extends Component{
     constructor(props){
@@ -72,7 +72,7 @@ class OneListCommon extends Component{
     }
 
     renderImg() {
-        if (this.props.data.img_url != '') {
+        if (this.props.data.img_url !== '') {
             return (
                 <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
             );
@@ -122,13 +122,13 @@ class OneListCommon extends Component{
         if (this.props.data.tag_list != null && this.props.data.tag_list.length > 0) {
             return '- ' + this.props.data.tag_list[0].title + ' -';
         }
-        else if (this.props.data.category == 1) {
+        else if (this.props.data.category === 1) {
             return '- 阅读 -';
         }
-        else if (this.props.data.category == 2) {
+        else if (this.props.data.category === 2) {
             return '- 连载 -';
         }
-        else if (this.props.data.category == 3) {
+        else if (this.props.data.category === 3) {
             return '- 问答 -';
         }
         else {
@@ -141,12 +141,17 @@ class OneListCommon extends Component{
      * @returns {*}
      */
     getAuthor() {
-        var tempStr = new Array();
-        tempStr = this.props.data.author.user_name.split(' ');
-        if (this.props.data.category == 1) {
-            return '文 / ' + tempStr[0];
+        if (this.props.data.author.user_name !== undefined){
+            let tempStr
+            tempStr = this.props.data.author.user_name.split(' ');
+            if (this.props.data.category === 1) {
+                return '文 / ' + tempStr[0];
+            }
+            return tempStr[0];
+        } else{
+            return '';
         }
-        return tempStr[0];
+
     }
 
     /**

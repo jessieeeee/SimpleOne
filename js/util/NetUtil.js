@@ -49,7 +49,7 @@ export default class NetUtils extends Component{
      */
     static post(url,params,callbackSuccess,callbackError){
         //添加公共参数
-        var newParams = this.getNewParams(params);//接口自身的规范，可以忽略
+        let newParams = this.getNewParams(params);//接口自身的规范，可以忽略
 
         fetch(url,{
             method:'POST',
@@ -102,34 +102,34 @@ export default class NetUtils extends Component{
      * 获取当前系统时间 yyyyMMddHHmmss
      */
     static getCurrentDate(){
-        var space = "";
-        var dates = new Date();
-        var years = dates.getFullYear();
-        var months = dates.getMonth()+1;
+        let space = "";
+        let dates = new Date();
+        let years = dates.getFullYear();
+        let months = dates.getMonth()+1;
         if(months<10){
             months = "0"+months;
         }
 
-        var days = dates.getDate();
+        let days = dates.getDate();
         if(days<10){
             days = "0"+days;
         }
 
-        var hours = dates.getHours();
+        let hours = dates.getHours();
         if(hours<10){
             hours = "0"+hours;
         }
 
-        var mins =dates.getMinutes();
+        let mins =dates.getMinutes();
         if(mins<10){
             mins = "0"+mins;
         }
 
-        var secs = dates.getSeconds();
+        let secs = dates.getSeconds();
         if(secs<10){
             secs = "0"+secs;
         }
-        var time = years+space+months+space+days+space+hours+space+mins+space+secs;
+        let time = years+space+months+space+days+space+hours+space+mins+space+secs;
         return time;
     };
 
@@ -139,9 +139,8 @@ export default class NetUtils extends Component{
      * @return 新的参数
      */
     static getNewParams(oldParams){
-        var newParams = "";
-        var currentDate = this.getCurrentDate();
-        newParams = oldParams+"&timestamp="+currentDate;
+        let currentDate = this.getCurrentDate();
+        let newParams = oldParams+"&timestamp="+currentDate;
         return newParams;
     };
 

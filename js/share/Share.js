@@ -20,7 +20,7 @@ import {
 import constants from '../Constants';
 import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 let UShare = NativeModules.UShare;
 
 class Share extends Component{
@@ -59,9 +59,9 @@ class Share extends Component{
      * @param platform
      */
     platformShare(platform) {
-        var title='',content='',image='',url='';
+        let title='',content='',image='',url='';
         if(this.props.route.params.shareList !== undefined){
-            var data;
+            let data;
             switch(platform){
                 case constants.PlatformWeChatMoments:
                     data=this.props.route.params.shareList.wx_timeline;
@@ -76,22 +76,22 @@ class Share extends Component{
                     data=this.props.route.params.shareList.qq;
                     break;
             }
-            if(data.title==null||data.title==""){
+            if(data.title==null||data.title === ""){
                 title=this.props.route.params.shareInfo.title;
             }else{
                 title=data.title;
             }
-            if(data.desc==null||data.desc==""){
+            if(data.desc==null||data.desc === ""){
                 content=this.props.route.params.shareInfo.content;
             }else{
                 content=data.desc;
             }
-            if(data.imgUrl==null||data.imgUrl==""){
+            if(data.imgUrl==null||data.imgUrl === ""){
                 image=this.props.route.params.shareInfo.image;
             }else{
                 image=data.imgUrl;
             }
-            if(data.link==null||data.link==""){
+            if(data.link==null||data.link === ""){
                 url=this.props.route.params.shareInfo.url;
             }else{
                 url=data.link;
@@ -121,7 +121,7 @@ class Share extends Component{
         if(this.props.route.params.shareInfo!==undefined){
             Clipboard.setString(this.props.route.params.shareInfo.url);
             try {
-                var content = await Clipboard.getString();
+                let content = await Clipboard.getString();
                 this.setState({content: content});
                 toast.showMsg('已复制到剪切板',toast.SHORT);
             } catch (e) {

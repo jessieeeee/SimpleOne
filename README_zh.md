@@ -17,6 +17,11 @@
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
 
+# 如何运行
+确保的你编译设备和运行设备在同一网络下,并且配置开发设置中的主机ip和端口号(Dev settings -> Debug server host & port for device)
+1. 在命令行输入, react-native start
+2. 选择你的运行设备, run app
+
 # api接口清单
 
 这里对提取出的api接口做个记录，本人以学习为目的，希望读者也不要用于任何商业项目中，目前列出的接口是基于4.3.4的android版：
@@ -137,7 +142,7 @@ one分页翻页标题动画
 
 # 目前用到的技术：
 
-以前大部分使用ES5，目前大部分改为使用ES6，项目中使用到了mixin，由于mixin不支持ES6，所以用到了的地方仍保持ES5，有时间把这个旧的组件替换掉
+以前大部分使用ES5，目前已全部改为ES6
 
 react-native对原生组件进行了封装。
 

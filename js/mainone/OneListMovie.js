@@ -20,7 +20,7 @@ import DateUtil from "../util/DateUtil";
 import Share from '../share/Share';
 import Read from '../read/Read';
 import CommStyles from "../CommStyles";
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 class OneListMovie extends Component{
     constructor(props){
         super(props);
@@ -122,9 +122,13 @@ class OneListMovie extends Component{
      * @returns {*}
      */
     getAuthor() {
-        var tempStr = new Array();
-        tempStr = this.props.data.author.user_name.split(' ');
-        return '文 / ' + tempStr[0];
+        if (this.props.data.author.user_name !== undefined){
+            let tempStr = this.props.data.author.user_name.split(' ');
+            return '文 / ' + tempStr[0];
+        } else {
+            return '';
+        }
+
 
     }
 

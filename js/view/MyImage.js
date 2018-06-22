@@ -16,12 +16,6 @@ import {
 } from 'react-native';
 import resolveAssetSource from 'resolveAssetSource';
 class MyImage extends Image {
-    viewConfig = Object.assign({} , this.viewConfig, {
-        validAttributes: Object.assign(
-            {},
-            this.viewConfig.validAttributes,
-            {[Platform.OS === 'ios' ? 'source' : 'src']: true})
-    });
 
     constructor() {
         super();

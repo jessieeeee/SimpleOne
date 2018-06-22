@@ -15,7 +15,7 @@ import {
 
 } from 'react-native';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class SettingItem extends Component{
     render() {
@@ -31,25 +31,25 @@ class SettingItem extends Component{
     }
 
     renderRight() {
-        if(this.props.rightStyle==0){
+        if(this.props.rightStyle === 0){
             return (
                 <Image style={styles.iconArrow} source={{uri:'arrow_right'}}/>
             );
-        }else if(this.props.rightStyle==1){
+        }else if(this.props.rightStyle === 1){
             return(
                 <View style={styles.checkBoxView}>
 
                     <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
                 </View>
             );
-        }else if(this.props.rightStyle==2){
+        }else if(this.props.rightStyle === 2){
             return (
                 <View style={styles.checkBoxView}>
                     <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
                     <Image source={{uri:'checkbox_click'}} style={{width:width*0.05,height:width*0.04,position:'absolute',top:width*0.01}}/>
                 </View>
             );
-        }else if(this.props.rightStyle==3){
+        }else if(this.props.rightStyle === 3){
             return (
                 <Text style={styles.rightText}>
                     4.3.4

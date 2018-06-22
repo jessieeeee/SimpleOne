@@ -141,11 +141,11 @@ class AllListBanner extends Component{
      */
     renderChildView() {
         if (this.state.banner != null) {
-            var allchild = [];
-            var itemDatas = this.state.banner.data;
+            let allchild = [];
+            let itemDatas = this.state.banner.data;
 
-            for (var i = 0; i < itemDatas.length; i++) {
-                var itemData = itemDatas[i];
+            for (let i = 0; i < itemDatas.length; i++) {
+                let itemData = itemDatas[i];
                 allchild.push(
                     <TouchableOpacity key={i}
                                       onPress={() => this.pushToRead()}>
@@ -164,8 +164,8 @@ class AllListBanner extends Component{
     renderPageCircle() {
         if (this.state.banner != null) {
             //定义一个数组放置所有的圆点
-            var indicatorArr = [];
-            for (var i = 0; i < this.state.banner.data.length; i++) {
+            let indicatorArr = [];
+            for (let i = 0; i < this.state.banner.data.length; i++) {
                 indicatorArr.push(
                     <Text key={i}
                           style={[{fontSize: width * 0.04}, {color: 'white'}, {marginLeft: width * 0.02}, {color: 'white'}]}>
@@ -183,7 +183,7 @@ class AllListBanner extends Component{
      * @returns {*}
      */
     renderCicle(index) {
-        if (index == this.state.curPage) {
+        if (index === this.state.curPage) {
             return '●';
         } else {
             return '○';
@@ -196,9 +196,9 @@ class AllListBanner extends Component{
      */
     onAnimationEnd(e) {
         //水平方向偏移量
-        var offset = e.nativeEvent.contentOffset.x;
+        let offset = e.nativeEvent.contentOffset.x;
         //当前页数
-        var currentPage = Math.floor(offset / width);
+        let currentPage = Math.floor(offset / width);
 
         this.setState({
             curPage: currentPage
@@ -210,7 +210,7 @@ class AllListBanner extends Component{
      * @param url
      */
     pushToRead() {
-        if(this.state.banner.data[this.state.curPage].category!=14){
+        if(this.state.banner.data[this.state.curPage].category !== 14){
             this.props.navigator.push(
                 {
                     component: Read,

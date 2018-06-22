@@ -14,7 +14,7 @@ let iface = {
     }
 }
 
-var RCTPickDateView = requireNativeComponent('PickDateView', iface);
+let RCTPickDateView = requireNativeComponent('PickDateView', iface);
 
 
 export default RCTPickDateView;

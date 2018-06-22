@@ -21,8 +21,8 @@ import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import PullMenu from '../view/PullMenu';
 import PullPickDate from '../view/PullPickDate';
-var {width, height} = constants.ScreenWH;
-var WEBVIEW_REF = 'webview';
+let {width, height} = constants.ScreenWH;
+let WEBVIEW_REF = 'webview';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from "../view/BaseComponent";
 import CommStyles from "../CommStyles";
@@ -59,7 +59,7 @@ class SearchCategory extends Component{
     }
 
     getCategory(categoryId){
-        var url = ServerApi.SearchCategory.replace('{category_id}', categoryId);
+        let url = ServerApi.SearchCategory.replace('{category_id}', categoryId);
         NetUtils.get(url, null, (result) => {
             this.setState({
                 HTML: result.html_content,
@@ -217,7 +217,7 @@ class SearchCategory extends Component{
      * 获得标题
      */
     getTitle() {
-        for(var i=0;i<menuArr.length;i++){
+        for(let i=0;i<menuArr.length;i++){
             if(menuArr[i].key===this.state.curMenuId){
                 console.log('当前类型'+menuArr[i].value);
                 return menuArr[i].value;

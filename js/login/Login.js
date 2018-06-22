@@ -20,7 +20,7 @@ import constants from '../Constants';
 import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 let ULogin = NativeModules.ULogin;
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class Login extends Component{
     render() {

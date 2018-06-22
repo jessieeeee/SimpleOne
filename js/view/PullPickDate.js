@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import PickDateView from '../view/PickDate';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 class PullPickDate extends Component{
     constructor(props){
         super(props);
@@ -27,8 +27,8 @@ class PullPickDate extends Component{
         };
     }
     showAnimation(height){
-        var maxHeight=height;
-        var minHeight=0;
+        let maxHeight=height;
+        let minHeight=0;
         let initialValue = this.state.expanded ? maxHeight + minHeight : minHeight,
             finalValue= this.state.expanded ? minHeight : maxHeight + minHeight;
         this.setState({
@@ -74,10 +74,10 @@ class PullPickDate extends Component{
                         onChange={(obj) => {
                             console.log('onSure收到事件' + obj.nativeEvent.msg + "目标id" + obj.nativeEvent.msg.year);
                             //当此回调被onSure调用时
-                            var year = obj.nativeEvent.msg.year + '';
-                            var month = obj.nativeEvent.msg.month + '';
-                            var time= obj.nativeEvent.msg.time + '';
-                            if (year != 'undefined' && month != 'undefined') {
+                            let year = obj.nativeEvent.msg.year + '';
+                            let month = obj.nativeEvent.msg.month + '';
+                            let time= obj.nativeEvent.msg.time + '';
+                            if (year !== 'undefined' && month !== 'undefined') {
                                 this.props.onCancel();
                             }else{
                                 this.props.onSure(year,month,time);

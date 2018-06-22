@@ -22,7 +22,7 @@ import constants from '../Constants';
 import Share from '../share/Share';
 import FrameAnimation from '../view/FrameAnimationView';
 import CommStyles from "../CommStyles";
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 let media = NativeModules.MediaPlayer;
 let toast = NativeModules.ToastNative;
 
@@ -151,7 +151,7 @@ class OneListAudio extends Component{
      */
     renderContent() {
         //播出过有音频，渲染带图的
-        if (this.props.data.author.user_name + '' != 'undefined') {
+        if (this.props.data.author.user_name + '' !== 'undefined') {
             return (
                 <View>
                     <Image source={{uri: this.props.data.img_url}} style={styles.bg}/>
@@ -190,8 +190,8 @@ class OneListAudio extends Component{
      * 载入图标名称初始化
      */
     getLoadingIcon() {
-        var loadingArr=[];
-        for (var i = 0; i < 3; i++) {
+        let loadingArr=[];
+        for (let i = 0; i < 3; i++) {
             loadingArr.push(('voice_fm_0' + i).toString());
         }
         return loadingArr;

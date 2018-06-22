@@ -55,7 +55,7 @@ class AllCategoryGuide extends Component{
      * @param url
      */
     pushToSearchCategory(iconName){
-        var id=0;
+        let id=0;
         switch (iconName){
             case 'img_text':
                 id=0;

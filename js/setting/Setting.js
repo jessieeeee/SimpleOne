@@ -24,7 +24,7 @@ import SettingLabel from './SettingLabel';
 import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
 
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class Setting extends Component{
     constructor(props){

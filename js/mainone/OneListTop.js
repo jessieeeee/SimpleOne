@@ -19,7 +19,7 @@ import Login from '../login/Login';
 import constants from '../Constants';
 import Share from '../share/Share';
 import CommStyles from "../CommStyles";
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class OneListTop extends Component{
     constructor(props){

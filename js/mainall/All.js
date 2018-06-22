@@ -88,9 +88,9 @@ class All extends Component{
         if (y + height >= contentHeight - 20) {
             console.log('触发加载更多');
             //如果列表没有结束
-            if (this.state.isEnd != true) {
+            if (this.state.isEnd !== true) {
                 //如果最后一次请求起始id为0或者当前请求起始id不等于最后一次请求起始id,添加更多列表
-                if (this.state.lastId == 0 || (this.state.lastId !== 0 && this.state.lastId !== this.state.startId)) {
+                if (this.state.lastId === 0 || (this.state.lastId !== 0 && this.state.lastId !== this.state.startId)) {
                     //放入长度为5的列表
                     key++;
                     this.setState({
@@ -125,14 +125,11 @@ class All extends Component{
      */
     renderLoadMoreList() {
         //如果当前列表无数据直接返回
-        if (this.state.oneData === null) {
-            return;
-        } else {
+        if (this.state.oneData !== null) {
             //如果正在加载更多,添加这个专题列表
             if (this.state.loadMore) {
                 console.log('最底部列表起始id' + this.state.startId);
                 return bottomList;
-
             }
         }
     }
@@ -181,7 +178,7 @@ class All extends Component{
      * 渲染所有的item
      */
     renderAllItem() {
-        var itemArr = [];
+        let itemArr = [];
         itemArr.push(
             <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );

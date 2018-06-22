@@ -14,11 +14,11 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-var ImagePicker = require('react-native-image-picker');
+let ImagePicker = require('react-native-image-picker');
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
-var options = {
+let options = {
     title: 'Select Avatar',
     customButtons: [
         {name: 'fb', title: 'Choose Photo from Facebook'},

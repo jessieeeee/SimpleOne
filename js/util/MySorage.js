@@ -12,15 +12,15 @@ import {
     AsyncStorage
 } from 'react-native';
 
-var storage;//返回存储对象
-var defaultExpires = null;      // 数据过期时间，默认一整天（1000 * 3600 * 24 毫秒），设为null则永不过期
-var size = 1000; // 最大容量，默认值1000条数据循环存储
+let storage;//返回存储对象
+let defaultExpires = null;      // 数据过期时间，默认一整天（1000 * 3600 * 24 毫秒），设为null则永不过期
+let size = 1000; // 最大容量，默认值1000条数据循环存储
 
 export default class MySorage extends Component{
 
     //初始化数据库
     static initStorage(){
-        if(storage==undefined){
+        if(storage === undefined){
             storage = new Storage({
                 size: size,
                 // 存储引擎
@@ -110,7 +110,7 @@ export default class MySorage extends Component{
      * 是否初始化检查
      */
     static isInit(){
-        if(storage==undefined){
+        if(storage === undefined){
             throw "请先调用初始化";
         }
     }

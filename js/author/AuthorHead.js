@@ -17,7 +17,7 @@ import {
 import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import ServerApi from '../ServerApi';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class AuthorHead extends Component{
     constructor(props){

@@ -16,7 +16,7 @@ import {
     Modal
 } from 'react-native';
 import constants from '../Constants';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -32,8 +32,8 @@ class PullMenu extends Component{
     }
 
     componentDidMount(){
-        var maxHeight=width * 0.14*this.props.menuData.length;
-        var minHeight=0;
+        let maxHeight=width * 0.14*this.props.menuData.length;
+        let minHeight=0;
         let initialValue = this.state.expanded ? maxHeight + minHeight : minHeight,
             finalValue= this.state.expanded ? minHeight : maxHeight + minHeight;
         this.setState({
@@ -111,8 +111,8 @@ class PullMenu extends Component{
     }
 
     renderItem(rowData) {
-        var color = '#808080';
-        if (this.props.select == rowData.item.value) {
+        let color = '#808080';
+        if (this.props.select === rowData.item.value) {
             color = '#333333';
         }
         return (

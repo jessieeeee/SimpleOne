@@ -85,7 +85,7 @@ class FrameAnimationView extends Component{
                     //移动下标
                     flag++;
                     if(flag > page.props.refreshTime){
-                        if (page.refs.img + '' != 'undefined' && page.loadingIndex >= 0 && page.loadingIndex < page.props.loadingArr.length) {
+                        if (page.refs.img + '' !== 'undefined' && page.loadingIndex >= 0 && page.loadingIndex < page.props.loadingArr.length) {
                             page.refs.img.setNativeProps({
                                 source:{uri: page.props.loadingArr[page.loadingIndex]},
                             });

@@ -115,9 +115,9 @@ class AllListTopic extends Component{
             this.setState({
                 topic: result,
             });
-            var end = false;
+            let end = false;
             if (this.state.topic.data.length >= this.props.showNum) {
-                for (var i = 0; i < this.props.showNum; i++) {
+                for (let i = 0; i < this.props.showNum; i++) {
                     // console.log(this.state.topic.data[i]);
                     itemArr.push(this.state.topic.data[i]);
                 }
@@ -129,7 +129,7 @@ class AllListTopic extends Component{
             }
             //如果专题的数据数量小于显示数量，直接全部放进去
             else {
-                for (var i = 0; i < this.state.topic.data.length; i++) {
+                for (let i = 0; i < this.state.topic.data.length; i++) {
                     // console.log(this.state.topic.data[i]);
                     itemArr.push(this.state.topic.data[i]);
                 }

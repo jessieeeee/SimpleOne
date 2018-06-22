@@ -23,10 +23,10 @@ import ONE from './mainone/One';
 import ALL from './mainall/All';
 import ME from './mainme/Me';
 let toast = NativeModules.ToastNative;
-var {width, height} = constants.ScreenWH;
-var barHeight = height * 0.082;
+let {width, height} = constants.ScreenWH;
+let barHeight = height * 0.082;
 
-var lastBackPressed=0;
+let lastBackPressed=0;
 class Main extends Component{
     constructor(props){
         super(props);
@@ -64,7 +64,7 @@ class Main extends Component{
      * @param isShow
      */
     setNavigatorShow(isShow) {
-        var updateHeight;
+        let updateHeight
         if (isShow) {
             updateHeight = barHeight;
         } else {
@@ -84,7 +84,7 @@ class Main extends Component{
                 onPress={() => {
                     this.setState({selectedTab: selectedTab})
                 }}
-                selected={this.state.selectedTab == selectedTab}
+                selected={this.state.selectedTab === selectedTab}
                 selectedTitleStyle={styles.selectedTitleStyle}
             >
 

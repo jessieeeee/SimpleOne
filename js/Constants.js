@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import FrameAnimation from './view/FrameAnimationView';
-var Dimensions = require('Dimensions');
+let Dimensions = require('Dimensions');
 
 import {
     Text,
@@ -69,9 +69,9 @@ const object = {
      * 载入图标名称初始化
      */
     getLoadingIcon() {
-        var loadingArr=[];
-        for (var i = 0; i < 30; i++) {
-            var postfix;
+        let loadingArr=[];
+        for (let i = 0; i < 30; i++) {
+            let postfix;
             if(i<10){
                 postfix='0'+i;
             }else{

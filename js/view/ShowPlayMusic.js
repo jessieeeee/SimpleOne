@@ -13,7 +13,7 @@ let iface = {
     }
 }
 
-var RCTShowPlayMusicView = requireNativeComponent('ShowPlayView', iface);
+let RCTShowPlayMusicView = requireNativeComponent('ShowPlayView', iface);
 
 
 export default RCTShowPlayMusicView;

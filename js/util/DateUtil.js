@@ -16,19 +16,19 @@ export default class DateUtil extends Component{
      * 获取当前系统时间 yyyyMMdd
      */
     static getCurrentDateFormat(){
-        var space = "-";
-        var dates = new Date();
-        var years = dates.getFullYear();
-        var months = dates.getMonth()+1;
+        let space = "-";
+        let dates = new Date();
+        let years = dates.getFullYear();
+        let months = dates.getMonth()+1;
         if(months<10){
             months = "0"+months;
         }
 
-        var days = dates.getDate();
+        let days = dates.getDate();
         if(days<10){
             days = "0"+days;
         }
-        var time = years+space+months+space+days;
+        let time = years+space+months+space+days;
         return time;
     };
 
@@ -38,11 +38,11 @@ export default class DateUtil extends Component{
      * @returns {string}
      */
     static getCurrentDateChinese() {
-        var dates = new Date();
-        var years = dates.getFullYear();
-        var months = dates.getMonth() + 1;
-        var days = dates.getDate();
-        var time = this.getYearChinese(years) + '年' +this.getMonthChinese(months) +'月'+ this.getDayChinese(days)+'日';
+        let dates = new Date();
+        let years = dates.getFullYear();
+        let months = dates.getMonth() + 1;
+        let days = dates.getDate();
+        let time = this.getYearChinese(years) + '年' +this.getMonthChinese(months) +'月'+ this.getDayChinese(days)+'日';
         return time;
     }
 
@@ -52,8 +52,8 @@ export default class DateUtil extends Component{
      * @returns {string}
      */
     static getYearChinese(year) {
-        var str = year.toString();
-        for(var i=0;i<10;i++){
+        let str = year.toString();
+        for(let i=0;i<10;i++){
             str = str.replace(i+'', this.chnNumChar[i]);
         }
 
@@ -67,7 +67,7 @@ export default class DateUtil extends Component{
      */
     static getMonthChinese(month){
         if(month/10>1 ){
-            var numStr='';
+            let numStr='';
             if(month%10!==0){
                 numStr=this.chnNumChar[month%10];
             }
@@ -84,8 +84,8 @@ export default class DateUtil extends Component{
      */
     static getDayChinese(day){
         if(day/10>=1){
-            var numStr='';
-            var numFirstStr='';
+            let numStr='';
+            let numFirstStr='';
             if(day%10!==0){
                 numStr=this.chnNumChar[day%10];
             }
@@ -103,8 +103,8 @@ export default class DateUtil extends Component{
      * @returns {*}
      */
     static getweek() {
-        var dates = new Date();
-        var d = dates.getDay();
+        let dates = new Date();
+        let d = dates.getDay();
         return d;
     }
 
@@ -114,10 +114,9 @@ export default class DateUtil extends Component{
      * @returns {*}
      */
     static showDate(curdate) {
-        var tempStr = new Array();
-        tempStr = curdate.split(' ');
+        let tempStr = curdate.split(' ');
         //是今天
-        if (DateUtil.getCurrentDateFormat() == tempStr[0]) {
+        if (DateUtil.getCurrentDateFormat() === tempStr[0]) {
             return '今天';
         } else {
             return tempStr[0];
@@ -129,12 +128,12 @@ export default class DateUtil extends Component{
      * @param curDate
      * @returns {string}
      */
-    static getNextDate(curDate,num){
+    static getNextDate(curDate, num){
         // console.log('当前curDate'+curDate);
-        var array =  curDate.split("-");
-        var dt = new Date(array[0], array[1]-1, array[2]);
-        var dateStr;
-        if(arguments.length==1){
+        let array =  curDate.split("-");
+        let dt = new Date(array[0], array[1]-1, array[2]);
+        let dateStr;
+        if(arguments.length === 1){
             dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, 1));//设置天数 -1 天
         }else{
             dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, num));//设置天数 num 天
@@ -146,12 +145,12 @@ export default class DateUtil extends Component{
      * 获取前一天日期
      * @param curDate 当前日期string
      */
-    static getLastDate(curDate,num){
+    static getLastDate(curDate, num){
         // console.log('当前日期'+curDate);
-        var array =  curDate.split("-");
-        var dt = new Date(array[0], array[1]-1, array[2]);
-        var dateStr;
-        if(arguments.length==1){
+        let array =  curDate.split("-");
+        let dt = new Date(array[0], array[1]-1, array[2]);
+        let dateStr;
+        if(arguments.length === 1){
             dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, -1));//设置天数 -1 天
         }else{
             dateStr  = DateUtil.dateConverStr(DateUtil.getDateForAddDay(dt, -num));//设置天数 num 天
@@ -164,7 +163,7 @@ export default class DateUtil extends Component{
      * @param AddDayCount 加减参数
      * @returns {Date}
      */
-    static getDateForAddDay(date,AddDayCount) {
+    static getDateForAddDay(date, AddDayCount) {
         date.setDate(date.getDate()+AddDayCount);//获取AddDayCount天后的日期
         return date;
     }
@@ -176,14 +175,14 @@ export default class DateUtil extends Component{
      */
     static dateConverStr(date){
         // console.log(date);
-        var y = date.getFullYear();
-        var m = date.getMonth()+1;//获取当前月份的日期
-        var d = date.getDate();
+        let y = date.getFullYear();
+        let m = date.getMonth()+1;//获取当前月份的日期
+        let d = date.getDate();
         // console.log(y+"-"+m+"-"+d);
-        if(m<10){
+        if(m < 10) {
             m='0'+m;
         }
-        if(d<10){
+        if(d < 10) {
             d="0"+d;
         }
         return y+"-"+m+"-"+d;

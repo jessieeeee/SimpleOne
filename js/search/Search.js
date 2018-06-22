@@ -19,7 +19,7 @@ import constants from '../Constants';
 import SearchCategory from '../search/SearchCategory';
 import SearchBar from './SearchBar';
 import SearchResult from './SearchResult';
-var {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH;
 
 class Search extends Component{
     constructor(props){

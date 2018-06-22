@@ -158,10 +158,10 @@ class One extends Component{
      */
     onMomentumScrollEnd(e) {
         //水平方向偏移量
-        var offset = e.nativeEvent.contentOffset.x;
+        let offset = e.nativeEvent.contentOffset.x
         console.log(':'+offset+'宽度'+width);
         //当前页数
-        var currentPage = Math.round(offset / width);
+        let currentPage = Math.round(offset / width)
         console.log(':'+currentPage+'缓存页数'+this.state.cachePage);
         //往后翻
         if (currentPage > curPage) {
@@ -170,7 +170,7 @@ class One extends Component{
             });
             console.log('往后翻:'+currentPage+'缓存页数'+this.state.cachePage);
             //添加下一页缓存
-            if(currentPage==this.state.cachePage){
+            if(currentPage === this.state.cachePage){
                 console.log('添加下一页缓存');
                 //设置当前页数
                 this.setState({
@@ -214,7 +214,6 @@ class One extends Component{
 
                 {this.renderAllItem(oneData,key)}
 
-
             </PullScollView>
         );
         {
@@ -247,7 +246,7 @@ class One extends Component{
      */
     backToday() {
         //获得scrollView
-        var scrollView = this.refs.sv_one;
+        let scrollView = this.refs.sv_one
         // console.log("offsetx:" + offsetx);
         scrollView.scrollResponderScrollTo({x: 0, y: 0, animated: true});
         curPage= 0;
@@ -261,15 +260,15 @@ class One extends Component{
      * @param oneData
      * @returns {Array}
      */
-    renderAllItem(oneData,page) {
+    renderAllItem(oneData, page) {
         if (oneData !== null) {
-            var itemArr = [];
-            var key = 0;
-            for (var i = 0; i < oneData.content_list.length; i++) {
+            let itemArr = []
+            let key = 0
+            for (let i = 0; i < oneData.content_list.length; i++) {
                 //取出每一条数据
-                var data = oneData.content_list[i];
+                let data = oneData.content_list[i]
                 //最顶部的摄影和一句话
-                if (data.category == 0) {
+                if (data.category === 0) {
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
@@ -292,7 +291,7 @@ class One extends Component{
                 }
 
                 //音乐
-                else if (data.category == 4) {
+                else if (data.category === 4) {
                     itemArr.push(
                         <OneListMusic key={key} page={page} data={data} navigator={this.props.navigator} onShow={()=>{
                             this.setState({
@@ -302,13 +301,13 @@ class One extends Component{
                     );
                 }
                 //电影
-                else if (data.category == 5) {
+                else if (data.category === 5) {
                     itemArr.push(
                         <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电台
-                else if (data.category == 8) {
+                else if (data.category === 8) {
                     itemArr.push(
                         <OneListAudio key={key} page={page} data={data} navigator={this.props.navigator} date={this.state.showDate}
                                       onShow={()=>{
@@ -340,7 +339,7 @@ class One extends Component{
                     )
                 }
                 key++;
-                if (key == 2) {
+                if (key === 2) {
                     key = key + 2;
                 }
             }
@@ -370,8 +369,6 @@ class One extends Component{
      * 顶部导航bar
      */
     renderNavBar() {
-
-
         return (
             <View style={CommStyles.outNav}>
                 {/*左边按钮*/}
@@ -383,13 +380,13 @@ class One extends Component{
                     {/*上面日期*/}
                     <View style={styles.date}>
                         <Text
-                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(0, 4)}</Text>
-                        <Text style={styles.dividerText}>{this.state.showDate == '0' ? '' : '    /    '}</Text>
+                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)}</Text>
+                        <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
                         <Text
-                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(5, 7)}</Text>
-                        <Text style={styles.dividerText}>{this.state.showDate == '0' ? '' : '    /    '}</Text>
+                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)}</Text>
+                        <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
                         <Text
-                            style={styles.dateText}>{this.state.showDate == '0' ? '' : this.state.showDate.substring(8, 10)}</Text>
+                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)}</Text>
                     </View>
                     {this.renderWeather()}
 
@@ -452,7 +449,7 @@ class One extends Component{
      * 渲染左边今天按钮
      */
     renderToday() {
-        if (curPage != 0) {
+        if (curPage !== 0) {
             return (
                 <View style={styles.leftBtn}>
                     {/*左边按钮*/}
@@ -507,10 +504,10 @@ class One extends Component{
      * 获取内容列表
      * @param onSuccess
      */
-    getOneList(onSuccess,refresh) {
+    getOneList(onSuccess, refresh) {
         console.log('请求date'+date);
-        var requestDate;
-        if(date == '0'){
+        let requestDate;
+        if(date === '0'){
             requestDate= '0';
         }else{
             if(refresh){
@@ -520,7 +517,7 @@ class One extends Component{
             }
         }
 
-        var url = ServerApi.OneList.replace('{date}',  requestDate);
+        let url = ServerApi.OneList.replace('{date}',  requestDate);
 
         console.log('请求日期date'+requestDate);
 
@@ -541,9 +538,9 @@ class One extends Component{
      * @returns {string}
      */
     getWeatherInfo() {
-        var cityName = this.state.curOneData.data.weather.city_name;
-        var climate = this.state.curOneData.data.weather.climate;
-        var temperature = this.state.curOneData.data.weather.temperature;
+        let cityName = this.state.curOneData.data.weather.city_name;
+        let climate = this.state.curOneData.data.weather.climate;
+        let temperature = this.state.curOneData.data.weather.temperature;
         return cityName + '  ' + climate + '  ' + temperature;
     }
 }
