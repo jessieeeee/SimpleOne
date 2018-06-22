@@ -19,6 +19,11 @@ current rendering：
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone13.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
 
+# how to run
+Make sure that your compiled device and running device are on the same network,and configure Dev settings -> Debug server host & port for device
+1. Enter at the command line, react-native start
+2. select your running device && install app && run
+
 # api list
 
 Here is a record of the extracted api interface, I intend to learn and hope readers don't use these api in any commercial project, the current listed interface is based on the android version of 4.3.4：
