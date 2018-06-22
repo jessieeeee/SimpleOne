@@ -268,7 +268,7 @@ class One extends Component{
                 //取出每一条数据
                 let data = oneData.content_list[i]
                 //最顶部的摄影和一句话
-                if (data.category === 0) {
+                if (data.category === constants.CategoryGraphic) {
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
@@ -291,7 +291,7 @@ class One extends Component{
                 }
 
                 //音乐
-                else if (data.category === 4) {
+                else if (data.category === constants.CategoryMusic) {
                     itemArr.push(
                         <OneListMusic key={key} page={page} data={data} navigator={this.props.navigator} onShow={()=>{
                             this.setState({
@@ -301,13 +301,13 @@ class One extends Component{
                     );
                 }
                 //电影
-                else if (data.category === 5) {
+                else if (data.category === constants.CategoryMovie) {
                     itemArr.push(
                         <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电台
-                else if (data.category === 8) {
+                else if (data.category === constants.CategoryRadio) {
                     itemArr.push(
                         <OneListAudio key={key} page={page} data={data} navigator={this.props.navigator} date={this.state.showDate}
                                       onShow={()=>{
@@ -320,8 +320,8 @@ class One extends Component{
                                       }}/>
                     );
                 }
-                //普通item
-                else {
+                //排除广告的普通item
+                else if (data.category !== constants.CategoryAd){
                     itemArr.push(
                         <OneListCommon key={key}
                                        navigator={this.props.navigator}

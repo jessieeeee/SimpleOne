@@ -9,7 +9,16 @@ import AppState from "./store/AppState";
 
 const object = {
 
-
+    CategoryGraphic: "0",
+    CategoryQuestion: "3",
+    CategoryRead:  "1",
+    CategorySerial: "2",
+    CategoryMovie: "5",
+    CategoryMusic: "4",
+    CategoryRadio: "8",
+    CategoryBannerAd: "14",
+    CategoryAd: "6",
+    CategoryReadBg: "11",
     playMusic: false,
     ScreenWH: Dimensions.get('window'),
     curDate: '',

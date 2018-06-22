@@ -110,7 +110,7 @@ one level ui：
 
 welcome, Weekly display of different welcome screens
 
-one is homepage,Show today list（illustration，one-story, Question and answer,Article,Movie,Music,Radio）,Collapse menu,Page down to view the previous list,Each page, view the contents of the previous day, the list header can be refreshed.
+one is homepage,Show today list（Graphic，one-story, Question and answer,Article,Movie,Music,Radio）,Collapse menu,Page down to view the previous list,Each page, view the contents of the previous day, the list header can be refreshed.
 
 All paging, long list display, top banner, category navigation, topic list (down to the bottom, can be loaded more), the list header can be refreshed.
 
@@ -142,7 +142,7 @@ One paging flip title animation
 
 # technical points:
 
-Most of the previous use of ES5, Currently  have used ES6 , the use of mixin in the project and mixin doesn't support ES6, so I use high order component instead it.
+Most of the previous use of ES5, has now all been changed to ES6
 
 React-native encapsulates native components.
 

@@ -122,13 +122,13 @@ class OneListCommon extends Component{
         if (this.props.data.tag_list != null && this.props.data.tag_list.length > 0) {
             return '- ' + this.props.data.tag_list[0].title + ' -';
         }
-        else if (this.props.data.category === 1) {
+        else if (this.props.data.category === constants.CategoryRead) {
             return '- 阅读 -';
         }
-        else if (this.props.data.category === 2) {
+        else if (this.props.data.category === constants.CategorySerial) {
             return '- 连载 -';
         }
-        else if (this.props.data.category === 3) {
+        else if (this.props.data.category === constants.CategoryQuestion) {
             return '- 问答 -';
         }
         else {
@@ -144,7 +144,7 @@ class OneListCommon extends Component{
         if (this.props.data.author.user_name !== undefined){
             let tempStr
             tempStr = this.props.data.author.user_name.split(' ');
-            if (this.props.data.category === 1) {
+            if (this.props.data.category === constants.CategoryRead) {
                 return '文 / ' + tempStr[0];
             }
             return tempStr[0];

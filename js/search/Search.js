@@ -50,43 +50,43 @@ class Search extends Component{
                     this.pushToSearchResult();
                 }}/>
 
-                <TouchableOpacity activeOpacity={0.5} onPress={() => this.pushToSearchCategory(0)}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryGraphic))}>
                     <Text style={[styles.menu, {marginTop: width * 0.149}]}>
                         图文
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(3)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryQuestion))}>
                     <Text style={styles.menu}>
                         问答
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(1)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryRead))}>
                     <Text style={styles.menu}>
                         阅读
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(2)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategorySerial))}>
                     <Text style={styles.menu}>
                         连载
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(5)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryMovie))}>
                     <Text style={styles.menu}>
                         影视
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(4)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryMusic))}>
                     <Text style={styles.menu}>
                         音乐
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
-                                  onPress={() => this.pushToSearchCategory(8)}>
+                                  onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryRadio))}>
                     <Text style={styles.menu}>
                         电台
                     </Text>

@@ -159,7 +159,7 @@ class AuthorPage extends Component{
                 //取出每一条数据
                 let data = workList[i];
                 //最顶部的摄影和一句话
-                if (data.category === 0) {
+                if (data.category === constants.CategoryGraphic) {
                     //组件绑定数组
                     itemArr.push(
                         <OneListTop key={key}
@@ -170,19 +170,19 @@ class AuthorPage extends Component{
                 }
 
                 //音乐
-                else if (data.category === 4) {
+                else if (data.category === constants.CategoryMusic) {
                     itemArr.push(
                         <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电影
-                else if (data.category === 5) {
+                else if (data.category === constants.CategoryMovie) {
                     itemArr.push(
                         <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
                     );
                 }
                 //电台
-                else if (data.category === 8) {
+                else if (data.category === constants.CategoryRadio) {
                     itemArr.push(
                         <OneListAudio key={key} data={data} navigator={this.props.navigator}/>
                     );

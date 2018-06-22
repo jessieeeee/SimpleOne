@@ -210,7 +210,7 @@ class AllListBanner extends Component{
      * @param url
      */
     pushToRead() {
-        if(this.state.banner.data[this.state.curPage].category !== 14){
+        if(this.state.banner.data[this.state.curPage].category !== constants.CategoryBannerAd){
             this.props.navigator.push(
                 {
                     component: Read,

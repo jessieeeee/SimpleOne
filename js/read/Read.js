@@ -97,7 +97,7 @@ class Read extends Component{
                 likeNum: result.data.praisenum,
             });
             let bgColor;
-            if (result.data.category === 11) {
+            if (result.data.category === constants.CategoryReadBg) {
                 bgColor = result.data.bg_color;
             } else {
                 bgColor = 'white';
