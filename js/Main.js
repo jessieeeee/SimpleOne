@@ -43,7 +43,7 @@ class Main extends Component{
     render() {
         return (
 
-            <TabNavigator tabBarStyle={{height: this.state.curBarHeight, backgroundColor: 'white'}}
+            <TabNavigator animationEnabled={true} tabBarStyle={{height: this.state.curBarHeight, backgroundColor: 'white'}}
                           sceneStyle={{paddingBottom: this.state.curBarHeight}}>
                 {/*首页*/}
                 {this.renderTabBarItem('one', 'ONE', ONE, 'one_line', 'one_fill')}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
         bottom: -8,
         width: Platform.OS == 'ios' ? barHeight * 0.6 : barHeight * 0.8,
         height: Platform.OS == 'ios' ? barHeight * 0.6 : barHeight * 0.8,
+
     },
     selectedTitleStyle: {
         color: '#555555'

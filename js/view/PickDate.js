@@ -1,3 +1,10 @@
+/**
+ * @date : 6/28/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 选择日期调用native接口
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import {requireNativeComponent, View} from 'react-native';

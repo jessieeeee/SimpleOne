@@ -36,6 +36,7 @@ import OneListMovie from './OneListMovie';
 import OneListTop from './OneListTop';
 import MyStorage from '../util/MySorage';
 import ServerApi from '../ServerApi';
+import Ticker from '../view/Ticker'
 import {BaseComponent} from "../view/BaseComponent";
 let toast = NativeModules.ToastNative;
 let {width, height} = constants.ScreenWH;
@@ -96,19 +97,6 @@ class One extends Component{
             resolve();
         }, 3000);
     }
-
-    //动画
-    animateLastDay() {
-        Animated.timing(
-            this.state.animatedValue,
-            {
-                toValue: 1,
-                duration: 2000,
-                easing: Easing.linear
-            }
-        ).start(() => this.animateLastDay())
-    }
-
 
     /**
      * 界面绘制
@@ -379,14 +367,19 @@ class One extends Component{
                 <View style={CommStyles.centerTitle}>
                     {/*上面日期*/}
                     <View style={styles.date}>
-                        <Text
-                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)}</Text>
+                        {/*<Text*/}
+                            {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)}</Text>*/}
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)} textStyle={styles.dateText} rotateTime={1000} />
+
                         <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
-                        <Text
-                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)}</Text>
+                        {/*<Text*/}
+                            {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)}</Text>*/}
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)} textStyle={styles.dateText} rotateTime={1000} />
                         <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
-                        <Text
-                            style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)}</Text>
+                        {/*<Text*/}
+                            {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)}</Text>*/}
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)} textStyle={styles.dateText} rotateTime={1000} />
+
                     </View>
                     {this.renderWeather()}
 

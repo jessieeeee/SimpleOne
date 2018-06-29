@@ -1,3 +1,10 @@
+/**
+ * @date : 6/28/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 单选菜单
+ */
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {

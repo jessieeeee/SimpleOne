@@ -1,4 +1,10 @@
-'use strict';
+/**
+ * @date : 6/28/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 下拉刷新,上拉加载更多
+ */
+
 
 import React, { Component } from 'react';
 import {

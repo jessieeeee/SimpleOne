@@ -1,7 +1,8 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * @date : 6/28/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 下拉菜单
  */
 
 import React, {Component} from 'react';

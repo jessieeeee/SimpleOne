@@ -18,7 +18,7 @@
  ![image](http://oqujmbgen.bkt.clouddn.com/simpleone14.jpg?imageView2/2/w/500/h/500/q/100|imageslim)
 
 # 如何运行
-确保的你编译设备和运行设备在同一网络下,并且配置开发设置中的主机ip和端口号(Dev settings -> Debug server host & port for device)
+确保你的编译设备和运行设备在同一网络下,并且配置开发设置中的主机ip和端口号(Dev settings -> Debug server host & port for device)
 1. 在命令行输入, react-native start
 2. 选择你的运行设备, run app
 
@@ -103,7 +103,7 @@
 # 功能模块：
 
 根据android 4.3.4整理：
-
+不打算支持登录后的评论,  分享,  点赞操作
 一级界面：
 
 欢迎界面，按星期几展示不同的欢迎界面
@@ -138,8 +138,6 @@ me分页，个人资料页，未登录时，为登录界面入口和设置入口
 
 阅读界面交互动画
 
-one分页翻页标题动画
-
 # 目前用到的技术：
 
 以前大部分使用ES5，目前已全部改为ES6
@@ -148,7 +146,7 @@ react-native对原生组件进行了封装。
 
 1. 基本控件的使用 View，Text，Image，ScrollView，ListView，WebView，Clipboard，Platform，TouchableOpacity，ActivityIndicator，StatusBar，SliderBar。
 2. 动画的调用，Animated，Easing
-3. 计时器的使用，react-timer-mixin
+3. 计时器的使用，~~react-timer-mixin~~ 改为ES6语法，该模块移除
 4. react-native调用原生模块（原生toast，调android第三方分享sdk）
 5. 底部导航栏TabNavigator，页面导航Navigator
 6. 子组件的封装，调用以及回调
@@ -164,3 +162,6 @@ react-native对原生组件进行了封装。
 16. 调用基于Android原生封装的ui控件
 17. 在Android原生项目的基础上引入react-native框架进行混合开发
 18. 音乐专辑封面旋转动画（解决动画循环播放中的暂停与播放事件），通过直接修改属性setNativeProps实现帧动画提高性能
+19. 加入mobx实现多界面同时刷新（2018.5.2更新）
+20. 利用高阶组件封装base组件，实现组件的公共逻辑（2018.5.2更新）
+21. 实现one分页标题(日期数字)切换动画 (2018.6.28更新)
