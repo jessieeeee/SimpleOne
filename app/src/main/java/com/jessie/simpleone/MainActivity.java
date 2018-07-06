@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone;
+package com.jessie.simpleone;
 
 import android.content.Intent;
 import android.os.Build;
@@ -17,6 +17,7 @@ import com.imagepicker.ImagePickerPackage;
 import com.jessie.u_share.ULogin;
 import com.jessie.u_share.UShare;
 import com.umeng.socialize.UMShareAPI;
+
 
 public class MainActivity extends AppCompatActivity
         implements DefaultHardwareBackBtnHandler {

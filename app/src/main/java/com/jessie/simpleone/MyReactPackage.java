@@ -1,18 +1,18 @@
-package simpleone.jessie.com.simpleone;
+package com.jessie.simpleone;
 
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.jessie.simpleone.animation.ShowPlayViewManager;
 import com.jessie.u_share.ULoginModule;
 import com.jessie.u_share.UShareModule;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import simpleone.jessie.com.simpleone.animation.ShowPlayViewManager;
-import simpleone.jessie.com.simpleone.view.PickDateViewManager;
+import com.jessie.simpleone.view.PickDateViewManager;
 
 
 /**

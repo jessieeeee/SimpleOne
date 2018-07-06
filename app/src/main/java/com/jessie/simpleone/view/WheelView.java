@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone.view;
+package com.jessie.simpleone.view;
 
 /**
  * @author JessieK
@@ -22,12 +22,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.jessie.simpleone.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import simpleone.jessie.com.simpleone.R;
 
 public class WheelView extends View {
 

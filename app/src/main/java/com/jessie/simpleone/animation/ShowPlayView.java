@@ -1,10 +1,10 @@
-package simpleone.jessie.com.simpleone.animation;
+package com.jessie.simpleone.animation;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
 
-import simpleone.jessie.com.simpleone.R;
+import com.jessie.simpleone.R;
 
 
 /**

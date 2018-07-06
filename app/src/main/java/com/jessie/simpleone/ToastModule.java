@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone;
+package com.jessie.simpleone;
 
 import android.widget.Toast;
 

@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone.view;
+package com.jessie.simpleone.view;
 
 /**
  * @author JessieK

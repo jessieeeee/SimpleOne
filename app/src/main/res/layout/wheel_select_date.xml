@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <simpleone.jessie.com.simpleone.view.WheelView
+        <com.jessie.simpleone.view.WheelView
             android:id="@+id/select_date_wheel_year_wheel"
             android:layout_width="fill_parent"
             android:layout_height="150dp"
             android:layout_weight="1" />
 
-        <simpleone.jessie.com.simpleone.view.WheelView
+        <com.jessie.simpleone.view.WheelView
             android:id="@+id/select_date_month_wheel"
             android:layout_width="fill_parent"
             android:layout_height="150dp"

@@ -1,11 +1,12 @@
-package simpleone.jessie.com.simpleone.view;
+package com.jessie.simpleone.view;
 
 import android.content.Context;
+
+import com.jessie.simpleone.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import simpleone.jessie.com.simpleone.R;
 
 /**
  * @author JessieK

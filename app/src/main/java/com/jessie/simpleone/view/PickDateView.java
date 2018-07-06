@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone.view;
+package com.jessie.simpleone.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,9 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.jessie.simpleone.R;
+
 import java.util.Calendar;
 
-import simpleone.jessie.com.simpleone.R;
 
 
 /**

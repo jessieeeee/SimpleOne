@@ -1,9 +1,10 @@
-package simpleone.jessie.com.simpleone;
+package com.jessie.simpleone;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
+
 
 /**
  * @author JessieK

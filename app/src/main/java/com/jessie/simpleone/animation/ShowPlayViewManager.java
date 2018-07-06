@@ -1,4 +1,4 @@
-package simpleone.jessie.com.simpleone.animation;
+package com.jessie.simpleone.animation;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
