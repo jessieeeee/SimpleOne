@@ -20,8 +20,8 @@ let {width, height} = constants.ScreenWH;
 class SettingItem extends Component{
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.item}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode ? '#484848':'white',borderBottomColor:constants.nightMode? '#272727':'#dddddd',}]}>
+                <Text style={[styles.item,{color:constants.nightMode ? '#e9e9e9':'#383838'}]}>
                     {this.props.text}
                 </Text>
 
@@ -33,28 +33,34 @@ class SettingItem extends Component{
     renderRight() {
         if(this.props.rightStyle === 0){
             return (
-                <Image style={styles.iconArrow} source={{uri:'arrow_right'}}/>
+                constants.nightMode ? <Image style={styles.iconArrow} source={{uri:'arrow_right_white'}}/>
+                : <Image style={styles.iconArrow} source={{uri:'arrow_right'}}/>
             );
         }else if(this.props.rightStyle === 1){
-            return(
-                <View style={styles.checkBoxView}>
-
+            return (
+                <View style={styles.checkBoxView} >
                     <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
+                    {this.renderSelected()}
                 </View>
             );
         }else if(this.props.rightStyle === 2){
-            return (
-                <View style={styles.checkBoxView}>
-                    <Image source={{uri:'checkbox_bg'}} style={{width:width*0.064,height:width*0.06}}/>
-                    <Image source={{uri:'checkbox_click'}} style={{width:width*0.05,height:width*0.04,position:'absolute',top:width*0.01}}/>
-                </View>
-            );
-        }else if(this.props.rightStyle === 3){
             return (
                 <Text style={styles.rightText}>
                     4.3.4
                 </Text>
             );
+        }
+    }
+
+    /**
+     * 渲染选中
+     * @returns {*}
+     */
+    renderSelected(){
+        if(this.props.selected){
+            return (
+                <Image source={{uri:'checkbox_click'}} style={{width:width*0.05,height:width*0.04,position:'absolute',top:width*0.01}}/>
+            )
         }
     }
 }
@@ -66,16 +72,14 @@ SettingItem.defaultProps={
 const styles = StyleSheet.create({
     container: {
         justifyContent:'center',
-        backgroundColor: 'white',
         height:width*0.1384,
-        borderBottomColor:'#dddddd',
         borderBottomWidth: constants.divideLineWidth
     },
     item: {
         fontSize: width*0.04,
         width:width,
         marginLeft:width*0.12,
-        color:'#383838',
+
     },
     rightText:{
         position:'absolute',

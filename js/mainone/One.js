@@ -80,6 +80,16 @@ class One extends Component{
            });
             MyStorage.save('isFirst',false);
         });
+
+        //检查界面渲染模式
+        MyStorage.loadByKey('nightMode', (result) => {
+            console.log("查询夜间模式" + result)
+            constants.nightMode = result
+        }, (err) => {
+            //第一次设置，默认为正常模式
+            MyStorage.save('nightMode', false)
+        })
+
         this.loadPage();
     }
 
@@ -358,7 +368,7 @@ class One extends Component{
      */
     renderNavBar() {
         return (
-            <View style={CommStyles.outNav}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
                 {/*左边按钮*/}
                 {this.renderToday()}
 

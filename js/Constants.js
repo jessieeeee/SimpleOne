@@ -9,6 +9,11 @@ import AppState from "./store/AppState";
 
 const object = {
 
+    nightMode:false,  // 夜间模式
+
+    /**
+     * 内容分类
+     */
     CategoryGraphic: "0",
     CategoryQuestion: "3",
     CategoryRead:  "1",
@@ -19,10 +24,11 @@ const object = {
     CategoryBannerAd: "14",
     CategoryAd: "6",
     CategoryReadBg: "11",
-    playMusic: false,
-    ScreenWH: Dimensions.get('window'),
-    curDate: '',
-    curPage: 0,
+
+    playMusic: false,  //是否播放音乐
+    ScreenWH: Dimensions.get('window'), // 窗口宽高获取
+    curDate: '', // 当前日期
+    curPage: 0, // 当前页数
     /**
      * 分享平台
      */

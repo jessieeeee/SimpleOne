@@ -14,12 +14,10 @@ let {width, height} = constants.ScreenWH;
 const styles = StyleSheet.create({
     outNav: {
         height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         width: width,
         justifyContent: 'center',
-        borderBottomColor: '#dddddd',
         borderBottomWidth: constants.divideLineWidth
     },
 

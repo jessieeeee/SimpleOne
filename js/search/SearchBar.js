@@ -14,12 +14,13 @@ import {
 } from 'react-native'
 import constants from "../Constants";
 import PropTypes from 'prop-types';
+import CommStyles from "../CommStyles"
 let {width, height} = constants.ScreenWH;
 
 class SearchBar extends Component{
     render(){
         return (
-            <View style={styles.outNav}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
 
                 <TextInput
                     underlineColorAndroid='transparent'

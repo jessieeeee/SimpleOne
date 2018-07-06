@@ -19,8 +19,8 @@ let {width, height} = constants.ScreenWH;
 class SettingLabel extends Component{
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.label}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode ? '#272727':'#f8f8f8',}]}>
+                <Text style={[styles.label,{color: constants.nightMode ? '#fcfcfc':'#9c9c9c',}]}>
                     {this.props.text}
                 </Text>
             </View>
@@ -35,14 +35,12 @@ SettingLabel.defaultProps={
 const styles = StyleSheet.create({
     container: {
         justifyContent:'center',
-        backgroundColor: '#f8f8f8',
         height:width*0.1,
     },
     label: {
         fontSize: width*0.034,
         width:width,
         marginLeft:width*0.12,
-        color:'#9c9c9c',
     },
 
 });

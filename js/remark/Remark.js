@@ -194,7 +194,7 @@ class Remark extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={CommStyles.outNav}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}
