@@ -36,13 +36,11 @@ const styles = StyleSheet.create({
     },
 
     bottomLine: {
-        backgroundColor: '#EEEEEE',
         height: width * 0.024,
         width: width
     },
 
     bottomLineAll: {
-        backgroundColor: '#EEEEEE',
         height: width * 0.028,
         width: width
     },
@@ -68,24 +66,20 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
     },
 
     categoryItem: {
         marginTop: width * 0.03,
         fontSize: width * 0.032,
-        color: '#8B8B8B'
     },
     titleItem: {
         fontSize: width * 0.056,
-        color: '#333333',
         width: width,
         paddingLeft: width * 0.05,
         marginTop: width * 0.03,
     },
     dateItem: {
         fontSize: 12,
-        color: '#B6B6B6',
         flexDirection: 'row',
         position: 'absolute',
         left: width * 0.05,

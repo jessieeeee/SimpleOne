@@ -42,8 +42,7 @@ class Remark extends Component{
 
     render() {
         return (
-
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
                 {this.renderNavBar()}
                 <ScrollView>
                     {/*中间标题*/}
@@ -51,16 +50,16 @@ class Remark extends Component{
                         {/*上面日期*/}
                         <View style={styles.date}>
                             <Text
-                                style={styles.dateText}>{DateUtil.getNextDate(this.props.route.params.date).substring(0, 4)}</Text>
-                            <Text style={styles.dividerText}>{'    /    '}</Text>
+                                style={[styles.dateText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{DateUtil.getNextDate(this.props.route.params.date).substring(0, 4)}</Text>
+                            <Text style={[styles.dividerText, {color: constants.nightMode ? 'white': constants.normalTextColor} ]}>{'    /    '}</Text>
                             <Text
-                                style={styles.dateText}>{DateUtil.getNextDate(this.props.route.params.date).substring(5, 7)}</Text>
-                            <Text style={styles.dividerText}>{'    /    '}</Text>
+                                style={[styles.dateText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{DateUtil.getNextDate(this.props.route.params.date).substring(5, 7)}</Text>
+                            <Text style={[styles.dividerText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{'    /    '}</Text>
                             <Text
-                                style={styles.dateText}>{DateUtil.getNextDate(this.props.route.params.date).substring(8, 10)}</Text>
+                                style={[styles.dateText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{DateUtil.getNextDate(this.props.route.params.date).substring(8, 10)}</Text>
                         </View>
                         {/*下面天气*/}
-                        <Text style={styles.weatherText}>
+                        <Text style={[styles.weatherText,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
                             {this.getWeatherInfo()}
                         </Text>
 
@@ -71,14 +70,15 @@ class Remark extends Component{
                         }}>
                         {this.renderImg()}
                     </TouchableOpacity>
-                    <Text style={styles.showText}>{this.props.route.params.bottomText}</Text>
+                    <Text style={[styles.showText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{this.props.route.params.bottomText}</Text>
 
-                    <View style={styles.editView}>
+                    <View style={[styles.editView, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white', borderColor: constants.nightMode ? constants.nightModeGrayLight : constants.bottomDivideColor}]}>
                         <TextInput
                             underlineColorAndroid='transparent'
                             autoCapitalize="none"
                             multiline={true}
                             placeholder={this.props.route.params.forward}
+                            placeholderTextColor={constants.nightMode ? 'white': constants.normalTextColor}
                             autoCorrect={false}
                             onFocus={() => this.updateText('onFocus')}
                             onBlur={() => this.updateText('onBlur')}
@@ -91,10 +91,10 @@ class Remark extends Component{
                             onSubmitEditing={(event) => this.updateText(
                                 'onSubmitEditing text: ' + event.nativeEvent.text
                             )}
-                            style={styles.editRemark}/>
+                            style={[styles.editRemark, {color: constants.nightMode ? 'white': constants.normalTextColor}]}/>
                     </View>
                     <Text
-                        style={[styles.showText, {marginBottom: width * 0.14}]}>{this.props.route.params.wordsInfo}</Text>
+                        style={[styles.showText, {color: constants.nightMode ? 'white': constants.normalTextColor,marginBottom: width * 0.14}]}>{this.props.route.params.wordsInfo}</Text>
                 </ScrollView>
             </View>
 
@@ -202,7 +202,7 @@ class Remark extends Component{
                     <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>小记</Text>
+                <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>小记</Text>
 
                 <View style={styles.rightBtnBar}>
                     <TouchableOpacity
@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'white',
     },
     showText: {
         fontSize: width * 0.032,
@@ -251,15 +250,12 @@ const styles = StyleSheet.create({
         marginBottom: width * 0.012,
         borderRadius: width * 0.02,
         borderWidth: width * 0.002,
-        borderColor: '#dddddd'
     },
     editRemark: {
         width: width * 0.82,
         height: width * 0.41,
         fontSize: width * 0.04,
         padding: 4,
-        color: '#333333',
-        backgroundColor: 'white',
     },
     weatherText: {
         textAlign: 'center',
@@ -279,12 +275,10 @@ const styles = StyleSheet.create({
     dateText: {
         textAlign: 'center',
         fontSize: width * 0.056,
-        color: '#525252',
     },
 
     title: {
         fontSize: width * 0.04,
-        color: '#414141',
         fontWeight: 'bold'
     },
     rightBtn1: {

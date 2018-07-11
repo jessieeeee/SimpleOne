@@ -69,13 +69,13 @@ class Panel extends Component{
         }
         return (
             <Animated.View
-                style={[styles.container, {height: this.state.animation}]}>
+                style={[styles.container, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight: 'white',height: this.state.animation}]}>
 
                 <TouchableOpacity
                     style={styles.titleContainer}
                     onPress={this.toggle}
                     underlayColor="#f1f1f1">
-                    <Text style={styles.title}>{this.state.title}</Text>
+                    <Text style={[styles.title, {color:constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.state.title}</Text>
                     <Image
                         style={styles.buttonImage}
                         source={{uri: icon}}
@@ -97,7 +97,6 @@ Panel.defaultProps={
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         overflow: 'hidden',
     },
     titleContainer: {
@@ -108,7 +107,6 @@ const styles = StyleSheet.create({
         paddingBottom: width * 0.02,
     },
     title: {
-        color: '#808080',
         textAlign: 'center',
         fontSize: width * 0.036,
     },

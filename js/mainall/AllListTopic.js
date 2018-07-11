@@ -83,10 +83,10 @@ class AllListTopic extends Component{
             return (
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToRead(rowData.item)}>
-                    <View style={styles.contentContainer}>
+                    <View style={[styles.contentContainer, { backgroundColor: constants.nightMode? constants.nightModeGrayLight:'white',borderBottomColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}>
                         {this.renderImage(rowData)}
                         {/*下面的文字*/}
-                        <Text style={styles.bottomText}>
+                        <Text style={[styles.bottomText,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                             {rowData.item.title}
                         </Text>
                     </View>
@@ -182,11 +182,8 @@ AllListTopic.defaultProps={
 const styles = StyleSheet.create({
 
     contentContainer: {
-        backgroundColor: 'white',
         justifyContent: 'center',
-        borderBottomColor: '#EEEEEE',
         borderBottomWidth: width * 0.028,
-
     },
 
     TopImage: {
@@ -199,7 +196,6 @@ const styles = StyleSheet.create({
         marginRight: width * 0.045,
         marginTop: width * 0.01,
         marginBottom: width * 0.04,
-        color: '#333333',
         fontSize: width * 0.042
     }
 });

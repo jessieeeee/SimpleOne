@@ -75,7 +75,7 @@ class OneListAudio extends Component{
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={CommStyles.containerItem}>
+                <View style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
                     {this.renderContent()}
                     {/*最下面的bar*/}
                     <View

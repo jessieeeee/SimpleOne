@@ -93,7 +93,7 @@ class AuthorPage extends Component{
                 <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
                           style={{width: width, backgroundColor: 'white'}}>
                     <AuthorHead authorId={this.props.route.params.authorId}/>
-                    <View style={CommStyles.bottomLine}/>
+                    <View style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
 
                     {this.renderAllItem()}
                     {this.renderLoading()}
@@ -197,7 +197,7 @@ class AuthorPage extends Component{
                 }
                 key++;
                 itemArr.push(
-                    <View key={key} style={CommStyles.bottomLine}/>
+                    <View key={key} style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
                 );
 
                 key++;

@@ -16,6 +16,8 @@ const object = {
     normalTextColor: '#666666', // 正常文字颜色
     bottomDivideColor:'#dddddd', //底部分割线
     labelBgColor: '#f8f8f8', // 标签项背景色
+    normalTextLightColor: '#8B8B8B', // 正常文字亮颜色
+    itemDividerColor: '#EEEEEE', // one分页分割线的颜色
     /**
      * 内容分类
      */

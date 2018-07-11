@@ -34,29 +34,29 @@ class OneListMovie extends Component{
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={CommStyles.containerItem}>
-                    <Text style={CommStyles.categoryItem}>
+                <View style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
+                    <Text style={[CommStyles.categoryItem,{ color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
                         - 影视 -
                     </Text>
                     {/*标题*/}
-                    <Text style={CommStyles.titleItem}>{this.props.data.title}</Text>
+                    <Text style={[CommStyles.titleItem,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.props.data.title}</Text>
                     {/*用户名*/}
-                    <Text style={styles.author}>{this.getAuthor()}</Text>
+                    <Text style={[styles.author,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.getAuthor()}</Text>
                     <View style={styles.centerImgBg}>
                         <Image source={{uri: 'feeds_movie'}} style={{width: width * 0.9, height: width * 0.56,}}/>
                         {/*用户名下面的插图*/}
                         <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
                     </View>
                     {/*插图下面的那句话*/}
-                    <Text style={styles.forward}>{this.props.data.forward}</Text>
+                    <Text style={[styles.forward,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.props.data.forward}</Text>
                     <View style={{width:width}}>
                         {/*那句话右边的副标题*/}
-                        <Text style={styles.subtitle}>{'-- 《' + this.props.data.subtitle + '》'}</Text>
+                        <Text style={[styles.subtitle,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{'-- 《' + this.props.data.subtitle + '》'}</Text>
                     </View>
                     {/*最下面的bar*/}
                     <View style={styles.bar}>
                         {/*左边的按钮*/}
-                        <Text style={CommStyles.dateItem}>{DateUtil.showDate(this.props.data.post_date)}</Text>
+                        <Text style={[CommStyles.dateItem,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                         {/*右边的按钮*/}
                         <View style={CommStyles.rightBtnItem}>
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
 
     subtitle: {
         fontSize: width * 0.038,
-        color: '#808080',
         position:'absolute',
         right:width * 0.05,
     },
@@ -169,7 +168,6 @@ const styles = StyleSheet.create({
         marginTop: width * 0.03,
         paddingLeft: width * 0.05,
         fontSize: width * 0.038,
-        color: '#808080'
     },
     centerImgBg: {
         marginTop: width * 0.02,
@@ -190,7 +188,6 @@ const styles = StyleSheet.create({
         paddingRight: width * 0.05,
         marginTop: width * 0.02,
         fontSize: width * 0.038,
-        color: '#808080',
         lineHeight: parseInt(width * 0.08)
     },
     bar: {

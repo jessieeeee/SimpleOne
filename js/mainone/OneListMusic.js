@@ -118,17 +118,17 @@ class OneListMusic extends Component{
         });
 
         return (
-            <TouchableOpacity style={CommStyles.containerItem} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
+            <TouchableOpacity style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
 
-                <Text style={CommStyles.categoryItem}>
+                <Text style={[CommStyles.categoryItem,{ color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
                     - 音乐 -
                 </Text>
                 {/*标题*/}
 
-                <Text style={CommStyles.titleItem}>{this.props.data.title}</Text>
+                <Text style={[CommStyles.titleItem,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.props.data.title}</Text>
 
                 {/*用户*/}
-                <Text style={styles.author}>{this.getAuthor()}</Text>
+                <Text style={[styles.author,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.getAuthor()}</Text>
                 <View style={styles.centerView}>
 
                     {/*音乐封面的背景*/}
@@ -173,11 +173,11 @@ class OneListMusic extends Component{
                 {/*音乐封面下的音乐名称，作者和专辑*/}
                 <Text style={styles.musicInfo}>{this.getMusicInfo()}</Text>
                 {/*音乐描述*/}
-                <Text style={styles.forward}>{this.props.data.forward}</Text>
+                <Text style={[styles.forward,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.props.data.forward}</Text>
                 {/*最下面的bar*/}
                 <View style={styles.bar}>
                     {/*左边的按钮*/}
-                    <Text style={CommStyles.dateItem}>{DateUtil.showDate(this.props.data.post_date)}</Text>
+                    <Text style={[CommStyles.dateItem,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{DateUtil.showDate(this.props.data.post_date)}</Text>
 
                     {/*右边的按钮*/}
                     <View style={CommStyles.rightBtnItem}>
@@ -313,7 +313,6 @@ const styles = StyleSheet.create({
         marginTop: width * 0.03,
         paddingLeft: width * 0.05,
         fontSize: width * 0.038,
-        color: '#808080'
     },
     centerImg: {
         width: width * 0.54,
@@ -327,7 +326,6 @@ const styles = StyleSheet.create({
         paddingRight: width * 0.05,
         marginTop: width * 0.02,
         fontSize: width * 0.038,
-        color: '#808080',
         lineHeight: parseInt(width * 0.08)
     },
     bar: {

@@ -46,8 +46,8 @@ class  AllListQuestion extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>
+            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+                <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                     所有人问所有人
                 </Text>
                 <ScrollView style={styles.scrollview} horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white',
     },
     scrollview: {
         margin:width*0.05,
@@ -165,7 +164,6 @@ const styles = StyleSheet.create({
         top:0
     },
     title:{
-        color:'#333333',
         fontSize:width*0.04,
         marginTop:width*0.03,
         marginLeft:width*0.05,

@@ -54,7 +54,7 @@ class OneListTop extends Component{
     //渲染
     render() {
         return (
-            <View style={CommStyles.containerItem}>
+            <View style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
 
                 {/*顶部大图*/}
                 <TouchableOpacity onPress={() => this.pushToDisplay()}>
@@ -63,15 +63,15 @@ class OneListTop extends Component{
                     }}/>
                 </TouchableOpacity>
                 {/*标题和作者*/}
-                <Text style={styles.imgAuthor}>
+                <Text style={[CommStyles.imgAuthor,{ color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
                     {this.props.data.title + ' | ' + this.props.data.pic_info}
                 </Text>
                 {/*一句话*/}
-                <Text style={styles.textForward}>
+                <Text style={[styles.textForward,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                     {this.props.data.forward}
                 </Text>
                 {/*一句话的作者*/}
-                <Text style={styles.textAuthor}>
+                <Text style={[CommStyles.textAuthor,{ color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
                     {this.props.data.words_info}
                 </Text>
                 {/*底部小按钮bar*/}
@@ -85,6 +85,7 @@ class OneListTop extends Component{
                             <Text style={{
                                 fontSize: width * 0.034,
                                 marginLeft: width * 0.01,
+                                color: constants.nightMode ? 'white' : constants.normalTextLightColor
                             }}>小记</Text>
                         </View>
                     </TouchableOpacity>
@@ -236,19 +237,16 @@ class OneListTop extends Component{
 const styles = StyleSheet.create({
     imgAuthor: {
         marginTop: width * 0.02,
-        color: '#808080',
         fontSize: width * 0.035,
     },
     textForward: {
         width: width * 0.8,
         marginTop: width * 0.06,
-        color: '#333333',
         fontSize: width * 0.04,
         lineHeight: parseInt(width * 0.08)
     },
     textAuthor: {
         marginTop: width * 0.08,
-        color: '#808080',
         fontSize: width * 0.035,
     },
     bottomBtnsBar: {

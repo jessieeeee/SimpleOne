@@ -183,14 +183,14 @@ class All extends Component{
             <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
         );
         itemArr.push(
-            <View key={1} style={CommStyles.bottomLineAll}/>
+            <View key={1} style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
         );
         // 渲染分类导航
         itemArr.push(
             <AllCategoryGuide key={2} navigator={this.props.navigator} />
         );
         itemArr.push(
-            <View key={3} style={CommStyles.bottomLineAll}/>
+            <View key={3} style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
         );
         // 渲染专题列表
         itemArr.push(
@@ -208,7 +208,7 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={6} style={CommStyles.bottomLineAll}/>
+            <View key={6} style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
         );
 
         //问所有人
@@ -217,7 +217,7 @@ class All extends Component{
         );
 
         itemArr.push(
-            <View key={8} style={CommStyles.bottomLineAll}/>
+            <View key={8} style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
         );
         return itemArr;
     }

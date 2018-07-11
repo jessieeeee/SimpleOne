@@ -29,8 +29,8 @@ class MenuItem extends Component{
                 <View style={styles.container}>
                     <Image source={{uri: 'arrow_right'}} style={styles.menuButton}/>
                     <View style={styles.titleView}>
-                        <Text style={styles.category}>{this.props.category}</Text>
-                        <Text style={styles.title}  numberOfLines={1}
+                        <Text style={[styles.category, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.props.category}</Text>
+                        <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}  numberOfLines={1}
                               ellipsizeMode='tail'>{this.props.title}</Text>
                     </View>
                 </View>
@@ -87,11 +87,9 @@ const styles = StyleSheet.create({
         marginLeft:width*0.04
     },
     category: {
-        color: '#333333',
         fontSize: width * 0.032
     },
     title: {
-        color: '#333333',
         fontSize: width * 0.038,
         width:width*0.8
     }

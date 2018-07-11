@@ -22,8 +22,8 @@ let key=0;
 class AllCategoryGuide extends Component{
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.categoryTitle}>
+            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+                <Text style={[styles.categoryTitle,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                     分类导航
                 </Text>
 
@@ -121,12 +121,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white',
     },
     categoryTitle: {
         marginLeft:width*0.07,
         fontSize: width * 0.04,
-        color: '#333333',
         marginTop:width*0.03,
     },
     itemsView:{

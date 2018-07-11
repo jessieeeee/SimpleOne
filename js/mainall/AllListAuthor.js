@@ -56,9 +56,9 @@ class AllListAuthor extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                 <Text style={{
-                    color: '#373737',
+                    color: constants.nightMode ? 'white' : constants.normalTextColor,
                     fontSize: width * 0.04,
                     marginTop: width * 0.016,
                     marginLeft: width * 0.06
@@ -78,7 +78,7 @@ class AllListAuthor extends Component{
                         <Text style={{
                             textAlign: 'center',
                             fontSize: width * 0.034,
-                            color: '#333333'
+                            color: constants.nightMode ? 'white' : constants.normalTextColor
                         }}>
                             换一换
                         </Text>
@@ -109,7 +109,7 @@ class AllListAuthor extends Component{
     renderRow(rowData, sectionID, rowID, highlightRow) {
         // console.log(rowData);
         return (
-            <View style={styles.contentContainer}>
+            <View style={[styles.contentContainer, {  backgroundColor: constants.nightMode? constants.nightModeGrayLight:'white',borderBottomColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
                                   onPress={() => this.pushToAuthor(rowData)}>
                     {/*左边头像*/}
@@ -118,11 +118,11 @@ class AllListAuthor extends Component{
                     {/*右边文字*/}
                     <View style={styles.rightContainer}>
                         {/*上面名字*/}
-                        <Text style={styles.topText}>
+                        <Text style={[styles.topText, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                             {rowData.user_name}
                         </Text>
                         {/*下面介绍*/}
-                        <Text style={styles.bottomText} numberOfLines={1}>
+                        <Text style={[styles.bottomText, {color: constants.nightMode ? 'white' : constants.normalTextLightColor}]} numberOfLines={1}>
                             {rowData.desc}
                         </Text>
                     </View>
@@ -136,7 +136,7 @@ class AllListAuthor extends Component{
                     <Text style={{
                         textAlign: 'center',
                         fontSize: width * 0.034,
-                        color: '#5c5c5c'
+                        color: constants.nightMode ? 'white' : constants.normalTextLightColor
                     }}>
                         关注
                     </Text>
@@ -190,7 +190,6 @@ AllListAuthor.defaultProps={
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
         justifyContent: 'center',
     },
     contentContainer: {
@@ -214,14 +213,11 @@ const styles = StyleSheet.create({
     },
     topText: {
         width: width * 0.54,
-        color: '#333333',
         fontSize: width * 0.04,
-
     },
     bottomText: {
         width: width * 0.54,
         marginTop: width * 0.004,
-        color: '#878787',
         fontSize: width * 0.034,
     },
 
