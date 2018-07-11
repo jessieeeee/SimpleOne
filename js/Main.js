@@ -46,11 +46,11 @@ class Main extends Component{
             <TabNavigator animationEnabled={true} tabBarStyle={{height: this.state.curBarHeight, backgroundColor: 'white'}}
                           sceneStyle={{paddingBottom: this.state.curBarHeight}}>
                 {/*首页*/}
-                {this.renderTabBarItem('one', 'ONE', ONE, 'one_line', 'one_fill')}
+                {this.renderTabBarItem('one', 'ONE', ONE, constants.nightMode ? 'one_line':'one_line', 'one_fill')}
                 {/*音乐影视*/}
-                {this.renderTabBarItem('all', 'ALL', ALL, 'all_line', 'all_fill')}
+                {this.renderTabBarItem('all', 'ALL', ALL, constants.nightMode ? 'all_line':'all_line', 'all_fill')}
                 {/*我的*/}
-                {this.renderTabBarItem('me', 'ME', ME, 'me_line', 'me_fill')}
+                {this.renderTabBarItem('me', 'ME', ME, constants.nightMode ? 'me_line':'me_line', 'me_fill')}
 
             </TabNavigator>
 

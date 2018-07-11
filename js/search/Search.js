@@ -32,7 +32,7 @@ class Search extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{ backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
                 <SearchBar
                     navigator={this.props.navigator}
                     onFocus={()=>{
@@ -51,43 +51,43 @@ class Search extends Component{
                 }}/>
 
                 <TouchableOpacity activeOpacity={0.5} onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryGraphic))}>
-                    <Text style={[styles.menu, {marginTop: width * 0.149}]}>
+                    <Text style={[styles.menu, {marginTop: width * 0.149, color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         图文
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryQuestion))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu,{color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         问答
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryRead))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu, {color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         阅读
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategorySerial))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu, {color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         连载
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryMovie))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu, {color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         影视
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryMusic))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu, {color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         音乐
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.5}
                                   onPress={() => this.pushToSearchCategory(parseInt(constants.CategoryRadio))}>
-                    <Text style={styles.menu}>
+                    <Text style={[styles.menu, {color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                         电台
                     </Text>
                 </TouchableOpacity>
@@ -138,7 +138,6 @@ class Search extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
     },
     menu: {
         fontSize: width * 0.038,

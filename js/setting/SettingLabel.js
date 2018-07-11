@@ -19,8 +19,8 @@ let {width, height} = constants.ScreenWH;
 class SettingLabel extends Component{
     render() {
         return (
-            <View style={[styles.container,{backgroundColor: constants.nightMode ? '#272727':'#f8f8f8',}]}>
-                <Text style={[styles.label,{color: constants.nightMode ? '#fcfcfc':'#9c9c9c',}]}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode ? constants.nightModeGrayDark: constants.labelBgColor}]}>
+                <Text style={[styles.label,{color: constants.nightMode ? constants.nightModeTextColor: constants.normalTextColor}]}>
                     {this.props.text}
                 </Text>
             </View>

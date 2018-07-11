@@ -10,7 +10,12 @@ import AppState from "./store/AppState";
 const object = {
 
     nightMode:false,  // 夜间模式
-
+    nightModeGrayLight:'#484848', // 浅灰
+    nightModeGrayDark:'#272727', // 深灰
+    nightModeTextColor:'#b1b1b1', //夜间模式文字颜色
+    normalTextColor: '#666666', // 正常文字颜色
+    bottomDivideColor:'#dddddd', //底部分割线
+    labelBgColor: '#f8f8f8', // 标签项背景色
     /**
      * 内容分类
      */

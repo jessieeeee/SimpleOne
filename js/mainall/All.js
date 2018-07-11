@@ -149,7 +149,7 @@ class All extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
 
                 <Image source={{uri: 'one_is_all'}} style={styles.allTitle}/>
 

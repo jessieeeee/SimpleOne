@@ -72,7 +72,7 @@ class SearchHpDetail extends Component {
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}

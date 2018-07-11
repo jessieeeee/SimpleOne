@@ -20,8 +20,8 @@ let {width, height} = constants.ScreenWH;
 class SettingItem extends Component{
     render() {
         return (
-            <View style={[styles.container,{backgroundColor: constants.nightMode ? '#484848':'white',borderBottomColor:constants.nightMode? '#272727':'#dddddd',}]}>
-                <Text style={[styles.item,{color:constants.nightMode ? '#e9e9e9':'#383838'}]}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white',borderBottomColor:constants.nightMode?constants.nightModeGrayLight:constants.bottomDivideColor,}]}>
+                <Text style={[styles.item,{color:constants.nightMode ? constants.nightModeTextColor:constants.normalTextColor}]}>
                     {this.props.text}
                 </Text>
 

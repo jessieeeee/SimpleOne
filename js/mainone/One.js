@@ -368,7 +368,7 @@ class One extends Component{
      */
     renderNavBar() {
         return (
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor ,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
                 {/*左边按钮*/}
                 {this.renderToday()}
 
@@ -379,16 +379,16 @@ class One extends Component{
                     <View style={styles.date}>
                         {/*<Text*/}
                             {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)}</Text>*/}
-                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)} textStyle={styles.dateText} rotateTime={1000} />
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(0, 4)} textStyle={[styles.dateText, {color: constants.nightMode ? 'white':constants.normalTextColor}]} rotateTime={1000} />
 
-                        <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
+                        <Text style={[styles.dividerText, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
                         {/*<Text*/}
                             {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)}</Text>*/}
-                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)} textStyle={styles.dateText} rotateTime={1000} />
-                        <Text style={styles.dividerText}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(5, 7)} textStyle={[styles.dateText, {color: constants.nightMode ? 'white':constants.normalTextColor}]} rotateTime={1000} />
+                        <Text style={[styles.dividerText, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.state.showDate === '0' ? '' : '    /    '}</Text>
                         {/*<Text*/}
                             {/*style={styles.dateText}>{this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)}</Text>*/}
-                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)} textStyle={styles.dateText} rotateTime={1000} />
+                        <Ticker text={this.state.showDate === '0' ? '' : this.state.showDate.substring(8, 10)} textStyle={[styles.dateText, {color: constants.nightMode ? 'white':constants.normalTextColor}]} rotateTime={1000} />
 
                     </View>
                     {this.renderWeather()}
@@ -568,12 +568,9 @@ const styles = StyleSheet.create({
     dateText: {
         textAlign: 'center',
         fontSize: width * 0.05,
-        color: '#525252',
     },
     dividerText: {
         fontSize: width * 0.05,
-        color: '#AFAFAF',
-        marginBottom: width * 0.02
     },
     menuLine: {
         backgroundColor: '#EEEEEE',

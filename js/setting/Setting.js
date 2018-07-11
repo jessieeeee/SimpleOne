@@ -38,7 +38,7 @@ class Setting extends Component {
 
     render() {
         return (
-            <ScrollView style={[styles.container,{backgroundColor: constants.nightMode? '#272727':'#f8f8f8'}]}>
+            <ScrollView style={[styles.container,{backgroundColor: constants.nightMode? constants.nightModeGrayDark: 'white'}]}>
                 <View >
                     {this.renderNavBar()}
                     <SettingLabel text={'设置'}/>
@@ -115,7 +115,7 @@ class Setting extends Component {
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}
@@ -127,7 +127,7 @@ class Setting extends Component {
                     }
                 </TouchableOpacity>
 
-                <Text style={[styles.title, {color: constants.nightMode ? '#fcfcfc' : '#414141'}]}> 设置</Text>
+                <Text style={[styles.title, {color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor}]}> 设置</Text>
 
             </View>
         );

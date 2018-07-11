@@ -20,11 +20,12 @@ let {width, height} = constants.ScreenWH;
 class SearchBar extends Component{
     render(){
         return (
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? '#484848':'#dddddd',backgroundColor: constants.nightMode ? '#484848':'white'}]}>
+            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayDark:'white'}]}>
 
                 <TextInput
                     underlineColorAndroid='transparent'
                     autoCapitalize="none"
+                    placeholderTextColor={constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor}
                     placeholder={this.props.searchKey?this.props.searchKey:"在这里写下你想寻找的"}
                     autoCorrect={false}
                     onFocus={() => this.props.onFocus()}
@@ -32,7 +33,7 @@ class SearchBar extends Component{
                     onChange={(event) => this.props.onChange(event)}
                     onEndEditing={(event) => this.props.onEndEditing(event)}
                     onSubmitEditing={(event) => this.props.onSubmitEditing(event)}
-                    style={styles.singleLine}
+                    style={[styles.singleLine,{backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}
                 />
                 {/*右边按钮*/}
                 <TouchableOpacity style={styles.rightBtn}
@@ -62,29 +63,15 @@ const styles=StyleSheet.create({
         fontSize: width * 0.04,
         padding: 4,
         width: width * 0.82,
-        color: '#b1b1b1',
-        backgroundColor: 'white',
         position: 'absolute',
         left: width * 0.03,
         height: Platform.OS == 'ios' ? height * 0.04 : height * 0.05,
     },
     cancel: {
         fontSize: width * 0.04,
-        color: '#808080',
+        color: '#b1b1b1',
         textAlign: 'center',
     },
-
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        backgroundColor: '#f8f8f8',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
-
 });
 
 export default SearchBar;
