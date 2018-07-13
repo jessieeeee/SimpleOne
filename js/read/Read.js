@@ -39,6 +39,28 @@ let toast = NativeModules.ToastNative;
 let {width, height} = constants.ScreenWH;
 let WEBVIEW_REF = 'webview';
 let itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
+const BaseScriptChangeColor =
+    `
+     (function () {
+        var height = null;
+        var tags = document.getElementsByTagName('*');
+        for(var i=0; i<tags.length; i++){
+           tags[i].style.color="white";
+        }
+        function changeHeight() {
+          if (document.body.scrollHeight != height) {
+            height = document.body.scrollHeight;
+            if (window.postMessage) {
+              window.postMessage(JSON.stringify({
+                type: 'setHeight',
+                height: height,
+              }))
+            }
+          }
+        }
+        setInterval(changeHeight, 100);
+    } ())
+    `;
 const BaseScript =
     `
     (function () {
@@ -213,7 +235,7 @@ class Read extends Component {
                     <WebView
                         ref={WEBVIEW_REF}
                         automaticallyAdjustContentInsets={true}
-                        injectedJavaScript={BaseScript}
+                        injectedJavaScript={constants.nightMode ? BaseScriptChangeColor : BaseScript}
                         style={{
                             width: width,
                             height: this.state.height,
