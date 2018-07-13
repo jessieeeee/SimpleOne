@@ -114,7 +114,8 @@ const object = {
                     left: this.ScreenWH.width * 0.003,
                     bottom: this.ScreenWH.width * 0.016,
                     fontSize: this.ScreenWH.width * 0.024,
-                    color: '#A7A7A7'
+                    color: '#A7A7A7',
+                    marginRight: this.ScreenWH.width * 0.003,
                 }}>
                     {likeNum}
                 </Text>

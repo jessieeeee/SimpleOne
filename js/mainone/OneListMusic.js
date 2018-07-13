@@ -181,7 +181,7 @@ class OneListMusic extends Component{
 
                     {/*右边的按钮*/}
                     <View style={CommStyles.rightBtnItem}>
-                        <View style={{flexDirection: 'row', width: width * 0.1, marginRight: width * 0.03}}>
+                        <View style={{flexDirection: 'row', justifyContent:'center', width: width * 0.1, marginRight: width * 0.03}}>
                             <TouchableOpacity
                                 onPress={() => this.likeClick()}>
                                 <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>

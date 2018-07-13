@@ -28,6 +28,7 @@ import Comment from './Comment';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from '../view/BaseComponent';
 import CommStyles from "../CommStyles";
+
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
@@ -57,15 +58,15 @@ const BaseScript =
     } ())
     `;
 
-class Read extends Component{
-    constructor(props){
+class Read extends Component {
+    constructor(props) {
         super(props);
-        this.onScroll=this.onScroll.bind(this);
-        this.renderRow=this.renderRow.bind(this);
-        this.onNavigationStateChange=this.onNavigationStateChange.bind(this);
-        this.onShouldStartLoadWithRequest=this.onShouldStartLoadWithRequest.bind(this);
-        this.onMessage=this.onMessage.bind(this);
-        this.state={
+        this.onScroll = this.onScroll.bind(this);
+        this.renderRow = this.renderRow.bind(this);
+        this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+        this.onShouldStartLoadWithRequest = this.onShouldStartLoadWithRequest.bind(this);
+        this.onMessage = this.onMessage.bind(this);
+        this.state = {
             like: false,
             likeNum: 0,
             readData: null,
@@ -203,7 +204,11 @@ class Read extends Component{
             <View style={{backgroundColor: this.state.bgColor}}>
 
                 {this.renderNavBar()}
-                <ScrollView style={{width: width, height: height - width * 0.1 - 0.08 * width}}
+                <ScrollView style={{
+                    width: width,
+                    height: height - width * 0.1 - 0.08 * width,
+                    backgroundColor: constants.nightMode ? constants.nightModeGrayLight : this.state.bgColor
+                }}
                             onScroll={this.onScroll}>
                     <WebView
                         ref={WEBVIEW_REF}
@@ -211,7 +216,8 @@ class Read extends Component{
                         injectedJavaScript={BaseScript}
                         style={{
                             width: width,
-                            height: this.state.height
+                            height: this.state.height,
+                            backgroundColor: constants.nightMode ? constants.nightModeGrayLight :this.state.bgColor
                         }}
                         source={{html: this.state.readData === null ? '' : this.state.readData.html_content}}
                         javaScriptEnabled={true}
@@ -349,7 +355,7 @@ class Read extends Component{
             forwardButtonEnabled: navState.canGoForward,
             url: navState.url,
             status: navState.title,
-            loading:navState.loading,
+            loading: navState.loading,
             scalesPageToFit: true
         });
     }
@@ -359,42 +365,48 @@ class Read extends Component{
      */
     renderBottomBar() {
         return (
-            <View style={[styles.bottomView, {backgroundColor: this.state.bgColor}]}>
+            <View
+                style={[styles.bottomView, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white',  borderTopColor: constants.nightMode ? constants.nightModeGrayLight: constants.itemDividerColor}]}>
 
                 <TouchableOpacity style={{position: 'absolute', left: width * 0.05,}}
                                   onPress={() => this.pushToLogin()}>
-                    <Text style={styles.textInput}>写一个评论..</Text>
+                    <Text style={[styles.textInput, {
+                        borderColor: constants.nightMode ? constants.nightModeGrayDark : constants.divideLineWidth,
+                        backgroundColor: constants.nightMode ? constants.nightModeGrayDark : 'white',
+                    }]}>写一个评论..</Text>
                 </TouchableOpacity>
 
                 <View style={styles.buttomBar}>
-                    <TouchableOpacity
-                        onPress={() => this.likeClick()}>
-                        <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIcon}/>
-                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row', justifyContent: 'center', width: width * 0.1,position: 'absolute', right: width * 0.38}}>
+                        <TouchableOpacity onPress={() => this.likeClick()}>
+                            <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIcon}/>
+                        </TouchableOpacity>
 
-                    {constants.renderlikeNum(this.state.likeNum)}
+                        {constants.renderlikeNum(this.state.likeNum)}
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'center', width: width * 0.1 ,position: 'absolute', right: width * 0.18}}>
+                        <TouchableOpacity onPress={() => {}} >
+                            <Image source={{uri: 'bottom_comment'}} style={styles.rightBtnIcon}/>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.rightBtnIconCenter}
-                                      onPress={() => {
-                                      }}>
-
-                        <Image source={{uri: 'bottom_comment'}} style={styles.rightBtnIcon}/>
-                    </TouchableOpacity>
-
-                    {this.renderCommentNum()}
-
+                        {this.renderCommentNum()}
+                    </View>
                     {this.renderShare()}
                 </View>
             </View>
         );
     }
+
     /**
      * 渲染顶部导航
      */
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:this.state.bgColor}]}>
+            <View style={[CommStyles.outNav, {
+                borderBottomColor: constants.nightMode ? constants.nightModeGrayLight : constants.bottomDivideColor,
+                backgroundColor: constants.nightMode ? constants.nightModeGrayLight : this.state.bgColor
+            }]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}
@@ -404,7 +416,7 @@ class Read extends Component{
                     <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>{this.getCategory()}</Text>
+                <Text style={[styles.title,{color:constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.getCategory()}</Text>
 
                 <TouchableOpacity
                     onPress={() => this.pushToLogin()} style={{position: 'absolute', right: width * 0.032}}>
@@ -414,10 +426,10 @@ class Read extends Component{
         );
     }
 
-    renderShare(){
-        if(this.props.route.params.data!==undefined){
-            return(
-                <TouchableOpacity style={styles.rightBtnIconRight}
+    renderShare() {
+        if (this.props.route.params.data !== undefined) {
+            return (
+                <TouchableOpacity style={{position: 'absolute', right: 0}}
                                   onPress={() => this.pushToShare()}>
 
                     <Image source={{uri: 'share_image'}} style={styles.rightBtnIcon}/>
@@ -434,8 +446,7 @@ class Read extends Component{
                     left: width * 0.003,
                     bottom: width * 0.016,
                     fontSize: width * 0.024,
-                    marginRight: width * 0.06,
-                    color: '#A7A7A7'
+                    color: '#A7A7A7',
                 }}>
                     {this.state.readData.commentnum}
                 </Text>
@@ -511,7 +522,6 @@ class Read extends Component{
     }
 
 
-
     //点击喜欢
     likeClick() {
         this.setState({
@@ -560,15 +570,15 @@ const styles = StyleSheet.create({
         bottom: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        borderTopColor: '#dddddd',
         borderTopWidth: 0.2
     },
     buttomBar: {
+        width: width * 0.5,
         height: width * 0.1,
         flexDirection: 'row',
         position: 'absolute',
         right: width * 0.05,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     textInput: {
         width: width * 0.36,
@@ -576,31 +586,20 @@ const styles = StyleSheet.create({
         color: '#a8a8a8',
         borderRadius: width * 0.01,
         borderWidth: 1,
-        borderColor: '#a6a6a6',
-        backgroundColor: 'white',
         textAlignVertical: 'center',
         paddingLeft: width * 0.03
     },
-    outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: width,
-        justifyContent: 'center',
-        borderBottomColor: '#dddddd',
-        borderBottomWidth: constants.divideLineWidth
-    },
-
     rightBtnIcon: {
         width: width * 0.06,
         height: width * 0.06,
     },
-
     rightBtn: {
         width: height * 0.035,
         height: height * 0.035,
-
+    },
+    title: {
+        fontSize: width * 0.038,
     }
 });
 
-export default Readp= BaseComponent(Read);
+export default Readp = BaseComponent(Read);

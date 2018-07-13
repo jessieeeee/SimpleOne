@@ -28,13 +28,13 @@ class Comment extends Component{
 
     render() {
         return (
-            <View style={[styles.container,{backgroundColor:this.props.bgColor}]}>
+            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : this.props.bgColor}]}>
                 <View style={styles.topView}>
                     <Image source={{uri: this.props.data.user.web_url}} style={styles.avatar}/>
-                    <Text style={styles.username}>{this.props.data.user.user_name}</Text>
-                    <Text style={styles.date}>{this.props.data.input_date.substring(0, 18)}</Text>
+                    <Text style={[styles.username,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.props.data.user.user_name}</Text>
+                    <Text style={[styles.date,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.props.data.input_date.substring(0, 18)}</Text>
                 </View>
-                <Text style={styles.content}>{this.props.data.content}</Text>
+                <Text style={[styles.content,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>{this.props.data.content}</Text>
                 <View
                     style={{width: width, height: width * 0.1, justifyContent: 'center', marginBottom: width * 0.03,}}>
                     <View style={styles.bottomView}>
@@ -48,7 +48,7 @@ class Comment extends Component{
                         }}>
                             {this.renderPraise()}
                         </TouchableOpacity>
-                        <Text style={styles.praiseNum}>{this.state.praiseNum}</Text>
+                        <Text style={[styles.praiseNum,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.state.praiseNum}</Text>
                     </View>
                 </View>
             </View>
@@ -119,11 +119,9 @@ const styles = StyleSheet.create({
         },
         username: {
             marginLeft: width * 0.02,
-            color: '#999999',
             fontSize: width * 0.04
         },
         date: {
-            color: '#8f8f8f',
             fontSize: width * 0.035,
             position: 'absolute',
             right: width * 0.02
@@ -156,7 +154,6 @@ const styles = StyleSheet.create({
             height: width * 0.046,
         },
         praiseNum: {
-            color: '#666666',
             fontSize: width * 0.03,
             position: 'relative',
             bottom: -width * 0.026

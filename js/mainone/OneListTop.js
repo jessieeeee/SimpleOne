@@ -92,24 +92,22 @@ class OneListTop extends Component{
 
                     {/*右边按钮区域*/}
                     <View style={styles.rightBtn}>
-
+                        <View style={{flexDirection: 'row', justifyContent:'center', width: width * 0.2}}>
                         <TouchableOpacity
                             onPress={() => this.likeClick()}>
-                            <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIconLeft}/>
+                            <Image source={{uri: this.showLikeIcon()}} style={styles.rightBtnIcon} />
                         </TouchableOpacity>
 
-                        {this.renderlikeNum()}
-
-                        <TouchableOpacity style={styles.rightBtnIconCenter}
-                                          onPress={() => this.pushToLogin()}>
-
-                            <Image source={{uri: 'stow_default'}} style={styles.rightBtnIconCenter}/>
+                        {constants.renderlikeNum(this.state.likeNum)}
+                        </View>
+                        <TouchableOpacity onPress={() => this.pushToLogin()}>
+                            <Image source={{uri: 'stow_default'}} style={[styles.rightBtnIcon,{marginRight: width * 0.04}]}/>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.rightBtnIconRight}
+                        <TouchableOpacity
                                           onPress={() => this.pushToShare()}>
 
-                            <Image source={{uri: 'share_image'}} style={styles.rightBtnIconRight}/>
+                            <Image source={{uri: 'share_image'}} style={styles.rightBtnIcon}/>
                         </TouchableOpacity>
                     </View>
 
@@ -117,19 +115,6 @@ class OneListTop extends Component{
 
             </View>
         );
-    }
-
-    /**
-     * 渲染喜欢数量
-     */
-    renderlikeNum(){
-        if(this.state.likeNum>0){
-            return(
-                <Text style={{position:'relative',left:width * 0.003,bottom:width * 0.016,fontSize: width * 0.024, color:'#A7A7A7',marginRight:width*0.04}}>
-                    {this.state.likeNum}
-                </Text>
-            );
-        }
     }
 
     /**
@@ -266,21 +251,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: width * 0.04,
     },
-
     bottomBtnsBarIcon: {
         width: width * 0.06,
         height: width * 0.06,
     },
-    rightBtnIconLeft: {
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    rightBtnIconCenter: {
-        marginRight: width * 0.04,
-        width: width * 0.045,
-        height: width * 0.045,
-    },
-    rightBtnIconRight: {
+    rightBtnIcon: {
         width: width * 0.045,
         height: width * 0.045,
     },

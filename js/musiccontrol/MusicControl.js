@@ -81,8 +81,8 @@ class MusicControl extends Component{
                     this.props.onCancel()
                 }}>
                 <View style={styles.container} >
-                    <View style={styles.bg}>
-                        <Text style={styles.title}> {constants.CURRENT_MUSIC_DATA!=null?constants.CURRENT_MUSIC_DATA.title:''}</Text>
+                    <View style={[styles.bg,{backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
+                        <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}> {constants.CURRENT_MUSIC_DATA!=null?constants.CURRENT_MUSIC_DATA.title:''}</Text>
                         <Slider
                             style={{width: width*0.92}}
                             trackStyle={{height:width*0.005}}
@@ -103,9 +103,9 @@ class MusicControl extends Component{
                             }}
                         />
                         <View style={{width:width,height:width*0.03,marginTop:-width*0.04}}>
-                            <Text style={styles.durationtext}>{this.state.total}''</Text>
+                            <Text style={[styles.durationtext,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>{this.state.total}''</Text>
                         </View>
-                        <Text style={styles.singer}> {constants.CURRENT_MUSIC_DATA!=null?constants.CURRENT_MUSIC_DATA.audio_author:''}</Text>
+                        <Text style={[styles.singer, {color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}> {constants.CURRENT_MUSIC_DATA!=null?constants.CURRENT_MUSIC_DATA.audio_author:''}</Text>
                         <View style={styles.btnsView}>
                             <TouchableOpacity style={ {position: 'absolute', left: width * 0.13}} onPress={() => {media.playPre();}}>
                                 <Image source={{uri: this.showLastUri()}} style={styles.controlBtn}/>
@@ -130,7 +130,7 @@ class MusicControl extends Component{
                             </TouchableOpacity>
                             <View style={styles.centerfrom}>
                                 <Image source={{uri: 'one_right'}} style={styles.bottomBtn}/>
-                                <Text style={styles.fromtext}>来自one一个</Text>
+                                <Text style={[styles.fromtext,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>来自one一个</Text>
                             </View>
                             <View style={{position: 'absolute', right: width * 0.04, flexDirection: 'row'}}>
                                 <TouchableOpacity style={{marginRight: width * 0.05}} onPress={() => {this.pushToLogin()}}>
@@ -231,11 +231,9 @@ const styles = StyleSheet.create({
     bg: {
         width: width,
         alignItems: 'center',
-        backgroundColor: 'white'
     },
     title: {
         marginTop: width * 0.03,
-        color: '#B3B3B3',
         fontSize: width * 0.04,
         width:width*0.8,
         textAlign:'center',
@@ -244,7 +242,6 @@ const styles = StyleSheet.create({
 
     singer: {
         marginTop: width * 0.01,
-        color: '#cfcfcf',
         fontSize: width * 0.03,
     },
     btnsView: {
@@ -276,12 +273,10 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     fromtext: {
-        color: '#cccccc',
         fontSize: width * 0.03,
-
+        marginLeft: width *0.02
     },
     durationtext: {
-        color: '#cccccc',
         fontSize: width * 0.026,
         position: 'absolute',
         right: width * 0.04
