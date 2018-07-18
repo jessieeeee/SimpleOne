@@ -25,7 +25,8 @@ const VIEWABILITY_CONFIG = {
 };
 class PullMenu extends Component{
     constructor(props){
-        super(props);
+        super(props)
+        this.renderRow = this.renderRow.bind(this)
         this.state={
             expanded: false,
             animation : new Animated.Value()
@@ -86,14 +87,14 @@ class PullMenu extends Component{
         );
     }
 
-    toggle(finalValue) { //Step 1
+    toggle(finalValue) {
 
-        Animated.spring( //Step 4
+        Animated.spring(
             this.state.animation,
             {
                 toValue: finalValue
             }
-        ).start(); //Step 5
+        ).start();
     }
 
     // 单个item返回 线性布局

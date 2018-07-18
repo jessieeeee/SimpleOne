@@ -48,14 +48,13 @@ class PullPickDate extends Component{
         );
     }
 
-    toggle(finalValue) { //Step 1
-
-        Animated.spring( //Step 4
+    toggle(finalValue) {
+        Animated.spring(
             this.state.animation,
             {
                 toValue: finalValue
             }
-        ).start(); //Step 5
+        ).start();
     }
 
     render() {

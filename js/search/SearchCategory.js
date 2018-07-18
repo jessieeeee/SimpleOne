@@ -21,14 +21,23 @@ import constants from '../Constants';
 import NetUtils from "../util/NetUtil";
 import PullMenu from '../view/PullMenu';
 import PullPickDate from '../view/PullPickDate';
-let {width, height} = constants.ScreenWH;
-let WEBVIEW_REF = 'webview';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from "../view/BaseComponent";
 import CommStyles from "../CommStyles";
 let toast = NativeModules.ToastNative;
+let {width, height} = constants.ScreenWH;
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
-
+const BaseScriptChangeColor =
+    `
+    (function () {
+        var height = null;
+        var tags = document.getElementsByTagName('*');
+        for(var i=0; i<tags.length; i++){
+           tags[i].style.color="white";
+           tags[i].style.backgroundColor="#484848";
+        }
+    } ())
+    `
 class SearchCategory extends Component{
     constructor(props){
         super(props);
@@ -72,15 +81,17 @@ class SearchCategory extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+                {/*渲染顶部导航标题*/}
                 {this.renderNavBar()}
-
-                <TouchableOpacity style={styles.dateBar} onPress={() => {
+                {/*渲染日期标题*/}
+                <TouchableOpacity style={[styles.dateBar, {backgroundColor:constants.nightMode ? constants.nightModeGrayDark:'white',
+                    borderBottomColor: constants.nightMode ? constants.nightModeGrayLight : constants.itemDividerColor,}]} onPress={() => {
                     this.setState({
                         isVisible: true,
                     });
                 }}>
-                    <Text>{constants.curDate.substring(0, 4) + '年' + constants.curDate.substring(5, 7) + '月'}</Text>
+                    <Text　style={{color: constants.nightMode ? 'white' : constants.normalTextLightColor}}>{constants.curDate.substring(0, 4) + '年' + constants.curDate.substring(5, 7) + '月'}</Text>
 
                     {this.renderArrow(this.state.isVisible)}
 
@@ -88,20 +99,21 @@ class SearchCategory extends Component{
 
 
                 <WebView
-                    ref={WEBVIEW_REF}
                     automaticallyAdjustContentInsets={false}
-                    style={styles.webView}
+                    style={[styles.webView]}
                     source={{html: this.state.HTML}}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
+                    injectedJavaScript={constants.nightMode ? BaseScriptChangeColor : ''}
                     decelerationRate="normal"
                     onNavigationStateChange={this.onNavigationStateChange}
                     onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                     startInLoadingState={true}
                     scalesPageToFit={this.state.scalesPageToFit}
                 />
+                {/*渲染日期选择下拉视图*/}
                 {this.renderPickDateView()}
-
+                {/*渲染标题处的下拉菜单*/}
                 {this.renderPullMenu()}
                 {this.renderProgressBar()}
 
@@ -192,7 +204,7 @@ class SearchCategory extends Component{
                         showMenu: true
                     });
                 }}>
-                    <Text style={styles.title}>{this.getTitle()}</Text>
+                    <Text style={{color: constants.nightMode ? 'white' : constants.normalTextColor}}>{this.getTitle()}</Text>
                     {this.renderArrow(this.state.showMenu)}
 
                 </TouchableOpacity>
@@ -233,10 +245,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
     },
     webView: {
-        backgroundColor: 'white',
         height: height * 0.4,
         width: width,
     },
@@ -251,8 +261,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fbfbfb',
-        borderBottomColor: '#dddddd',
         borderBottomWidth: constants.divideLineWidth
     },
     centering: {
