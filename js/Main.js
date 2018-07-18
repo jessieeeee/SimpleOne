@@ -41,16 +41,22 @@ class Main extends Component{
     }
 
     render() {
+        const one_line = constants.nightMode ? 'one_line_night':'one_line'
+        const one_fill = constants.nightMode ? 'one_fill_night':'one_fill'
+        const all_line = constants.nightMode ? 'all_line_night':'all_line'
+        const all_fill = constants.nightMode ? 'all_fill_night':'all_fill'
+        const me_line = constants.nightMode ? 'me_line_night':'me_line'
+        const me_fill = constants.nightMode ? 'me_fill_night':'me_fill'
         return (
 
-            <TabNavigator animationEnabled={true} tabBarStyle={{height: this.state.curBarHeight, backgroundColor: 'white'}}
+            <TabNavigator animationEnabled={true} tabBarStyle={{height: this.state.curBarHeight, backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}}
                           sceneStyle={{paddingBottom: this.state.curBarHeight}}>
                 {/*首页*/}
-                {this.renderTabBarItem('one', 'ONE', ONE, constants.nightMode ? 'one_line':'one_line', 'one_fill')}
+                {this.renderTabBarItem('one', 'ONE', ONE, one_line, one_fill)}
                 {/*音乐影视*/}
-                {this.renderTabBarItem('all', 'ALL', ALL, constants.nightMode ? 'all_line':'all_line', 'all_fill')}
+                {this.renderTabBarItem('all', 'ALL', ALL, all_line, all_fill)}
                 {/*我的*/}
-                {this.renderTabBarItem('me', 'ME', ME, constants.nightMode ? 'me_line':'me_line', 'me_fill')}
+                {this.renderTabBarItem('me', 'ME', ME, me_line, me_fill)}
 
             </TabNavigator>
 

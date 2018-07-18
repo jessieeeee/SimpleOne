@@ -121,9 +121,7 @@ class Setting extends Component {
                 <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => this.props.navigator.pop()}>
                     {
-                        constants.nightMode ?
-                            <Image source={{uri: 'icon_back_white'}} style={CommStyles.navLeftBack}/> :
-                            <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
+                        <Image source={{uri: constants.nightMode ?'icon_back_white':'icon_back'}} style={CommStyles.navLeftBack}/>
                     }
                 </TouchableOpacity>
 

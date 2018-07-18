@@ -164,9 +164,10 @@ React-native encapsulates native components.
 16. Call component based on Android native
 17. Integrate react-native framework for hybrid development based on Android native projects
 18. Music album cover rotation animation (solves pause and play events in animated loops), improves frame performance by directly modifying the property
-19. Add react-mobx to realize multiple page refresh at the same time (2018.5.2 update)
-20. Use high-order-component realize base component for the common logic of the component (2018.5.2 update)
-21. Add animation for refresh date when scroll page on one page's title (2018.6.28 update)
-
+19. Measure page height adaptation webview display by inject javascript
+20. Add react-mobx to realize multiple page refresh at the same time (2018.5.2 update)
+21. Use high-order-component realize base component for the common logic of the component (2018.5.2 update)
+22. Add animation for refresh date when scroll page on one page's title (2018.6.28 update)
+23. Modify the web page style in the webview to implement night mode by inject javascript (2018.7.18 update)
 
 [1]:https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md

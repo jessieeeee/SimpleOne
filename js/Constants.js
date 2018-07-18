@@ -91,17 +91,21 @@ const object = {
      * 载入图标名称初始化
      */
     getLoadingIcon() {
-        let loadingArr=[];
-        for (let i = 0; i < 30; i++) {
-            let postfix;
+        let loadingArr=[]
+        for (let i = 1; i < 30; i++) {
+            let postfix
             if(i<10){
-                postfix='0'+i;
+                postfix='0'+i
             }else{
-                postfix=i;
+                postfix=i
             }
-            loadingArr.push(('webview_loading_' + postfix).toString());
+            if (object.nightMode){
+              postfix += '_night'
+            }
+            console.log('webview_loading_' + postfix)
+            loadingArr.push(('webview_loading_' + postfix).toString())
         }
-        return loadingArr;
+        return loadingArr
     },
     /**
      * 渲染喜欢数量

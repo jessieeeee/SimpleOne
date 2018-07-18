@@ -33,8 +33,8 @@ class SettingItem extends Component{
     renderRight() {
         if(this.props.rightStyle === 0){
             return (
-                constants.nightMode ? <Image style={styles.iconArrow} source={{uri:'arrow_right_white'}}/>
-                : <Image style={styles.iconArrow} source={{uri:'arrow_right'}}/>
+                <Image style={styles.iconArrow} source={{uri: constants.nightMode ?'arrow_right_white':'arrow_right'}}/>
+
             );
         }else if(this.props.rightStyle === 1){
             return (

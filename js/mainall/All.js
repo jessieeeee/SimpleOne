@@ -151,7 +151,7 @@ class All extends Component{
             // 顶部导航bar
             <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
 
-                <Image source={{uri: 'one_is_all'}} style={styles.allTitle}/>
+                <Image source={{uri: constants.nightMode ? 'one_is_all_night':'one_is_all'}} style={styles.allTitle}/>
 
                 {/*右边按钮*/}
                 <TouchableOpacity style={CommStyles.rightBtn}
