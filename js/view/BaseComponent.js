@@ -26,7 +26,7 @@ export const BaseComponent = (WrapComponent) => {
 
         // 渲染音乐播放
         renderAudioPlay(){
-            if (constants.appState.playMusic) {
+            if (constants.appState.state) {
               return(
                   <ShowPlayMusic
                       onChange={(obj) => {

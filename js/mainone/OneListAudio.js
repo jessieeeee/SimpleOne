@@ -44,7 +44,9 @@ class OneListAudio extends Component{
                 this.setState({
                     loading:true
                 });
-                constants.appState.startPlay();
+                if (!constants.appState.state){
+                    constants.appState.startPlay();
+                }
             }else{ //不是播放的页面，播放按钮重置
                 if(this.state.isPlay){
                     this.setState({

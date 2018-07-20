@@ -3,7 +3,7 @@
  * @email : lyj1246505807@gmail.com
  * @description : mobx 列表数据管理
  */
-import {observable, action} from 'mobx';
+import {observable, action, computed} from 'mobx';
 import Item from './Item';
 export default class AppState {
 
@@ -29,6 +29,10 @@ export default class AppState {
         console.log('playMusic stop')
     };
 
+    @computed
+    get state() {
+        return this.playMusic;
+    }
     // 添加初始数据
     // @action
     // replace = (items) => {

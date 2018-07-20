@@ -36,7 +36,21 @@ class MusicControl extends Component{
    }
 
     componentDidMount(){
-        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, (reminder) => {
+        // this.addListener()
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.isVisible !== this.props.isVisible){
+          if (nextProps.isVisible) {
+              this.addListener()
+          } else {
+              this.removeListener()
+          }
+        }
+    }
+
+    addListener(){
+        this.progressListener = (reminder) => {
             console.log('当前进度' + reminder.currentPosition);
             console.log('总长度' + reminder.totalDuration);
             if(this.props.isVisible){
@@ -44,33 +58,40 @@ class MusicControl extends Component{
                     this.setState({
                         total:(reminder.totalDuration/1000/60).toFixed(2),
                         totalMsec:reminder.totalDuration
-                    });
+                    })
                 }
                 if(!this.state.isPlay){
                     this.setState({
                         isPlay:true
-                    });
+                    })
                 }
                 this.setState({
                     duration:parseFloat(reminder.currentPosition/reminder.totalDuration)
-                });
+                })
             }
 
-        });
+        }
+        DeviceEventEmitter.addListener(constants.PLAY_PROGRESS,this.progressListener)
 
-        DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
+        this.stateListener = (reminder) => {
             console.log('当前状态' + reminder.state);
             if(this.props.isVisible){
                 if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
                     this.setState({
                         isPlay: false,
-                    });
+                    })
                 }
             }
-
-        });
+        }
+        DeviceEventEmitter.addListener(constants.PLAY_STATE,this.stateListener)
+        console.log("监听开启")
     }
 
+    removeListener(){
+        DeviceEventEmitter.removeListener(constants.PLAY_PROGRESS,this.progressListener)
+        DeviceEventEmitter.removeListener(constants.PLAY_STATE,this.stateListener)
+        console.log("监听关闭")
+    }
     render() {
         return (
             <Modal

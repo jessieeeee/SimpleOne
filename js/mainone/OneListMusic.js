@@ -58,7 +58,9 @@ class OneListMusic extends Component{
                 console.log("调用旋转");
                 this.spin();
                 rotate=true;
-                constants.appState.startPlay();
+                if (!constants.appState.state){
+                    constants.appState.startPlay();
+                }
                 // this.props.onShow();
                 this.setState({
                     isPlay: true
@@ -206,7 +208,9 @@ class OneListMusic extends Component{
         console.log('播放地址' + this.props.data.audio_url);
         constants.CURRENT_MUSIC_DATA = this.props.data;
         constants.CURRENT_TYPE=constants.MUSIC_TYPE;
-        constants.appState.startPlay();
+        if (!constants.appState.state){
+            constants.appState.startPlay();
+        }
         // if (this.props.data.audio_platform != 1) {
         //     // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
         //     media.addMusicList(this.props.data.audio_url);
