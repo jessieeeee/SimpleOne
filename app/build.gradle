@@ -15,6 +15,10 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.jessie.simpleone"
         minSdkVersion 16

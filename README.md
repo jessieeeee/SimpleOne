@@ -21,8 +21,11 @@ current rendering：
 
 # how to run
 Make sure that your compiled device and running device are on the same network, and configure Dev settings -> Debug server host & port for device
-1. Enter at the command line, react-native start
-2. select your running device && install app && run
+1. cd project root dir && Enter at the command line, react-native start
+2. compile
+- command: gradle clean && gradle build
+- android studio gradle plugin
+3. select your running device && install app && run
 
 # API list
 

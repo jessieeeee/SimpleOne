@@ -8,7 +8,6 @@ import com.facebook.react.uimanager.ViewManager;
 import com.jessie.simpleone.animation.ShowPlayViewManager;
 import com.jessie.u_share.ULoginModule;
 import com.jessie.u_share.UShareModule;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +50,7 @@ public class MyReactPackage implements ReactPackage {
         modules.add(new ULoginModule(reactContext));
         modules.add(new ToastModule(reactContext));
         modules.add(new MediaPlayerModule(reactContext));
+        modules.add(new ClearCacheModule(reactContext));
         return modules;
     }
 }

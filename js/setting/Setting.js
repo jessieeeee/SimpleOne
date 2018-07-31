@@ -25,7 +25,7 @@ import CommStyles from "../CommStyles"
 import MyStorage from "../util/MySorage"
 
 let toast = NativeModules.ToastNative
-
+let clearCache = NativeModules.ClearCache
 let {width, height} = constants.ScreenWH
 
 class Setting extends Component {
@@ -36,7 +36,17 @@ class Setting extends Component {
         }
     }
 
+    componentDidMount(){
+        clearCache.getCacheSize((value,unit)=>{
+            this.setState({
+                cacheSize:value, //缓存大小
+                unit:unit  //缓存单位
+            })
+        });
+    }
+
     render() {
+        let tip = '确认要清除缓存?'
         return (
             <ScrollView style={[styles.container,{backgroundColor: constants.nightMode? constants.nightModeGrayDark: 'white'}]}>
                 <View >
@@ -62,11 +72,11 @@ class Setting extends Component {
                     <TouchableOpacity onPress={() => {
                         Alert.alert(
                             '',
-                            '确认要清除缓存?',
+                            tip,
                             [
                                 {
                                     text: '确定', onPress: () => {
-                                        toast.showMsg('清除缓存成功!', toast.SHORT)
+                                        this.clearCache()
                                     }
                                 },
                                 {
@@ -76,7 +86,7 @@ class Setting extends Component {
                             ]
                         )
                     }}>
-                        <SettingItem text={'清除缓存'} rightStyle={0}/>
+                        <SettingItem text={'清除缓存'+'('+this.state.cacheSize+this.state.unit+')'} rightStyle={0}/>
                     </TouchableOpacity>
 
                     <SettingLabel text={'反馈'}/>
@@ -129,6 +139,20 @@ class Setting extends Component {
 
             </View>
         );
+    }
+
+    clearCache(){
+        clearCache.runClearCache(()=>{
+            toast.showMsg('清除缓存成功!', toast.SHORT)
+            clearCache.getCacheSize((value,unit)=>{
+                this.setState({
+                    cacheSize:value, //缓存大小
+                    unit:unit  //缓存单位
+                })
+            });
+
+        });
+
     }
 
 }

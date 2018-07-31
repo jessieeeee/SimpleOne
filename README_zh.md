@@ -19,8 +19,11 @@
 
 # 如何运行
 确保你的编译设备和运行设备在同一网络下,并且配置开发设置中的主机ip和端口号(Dev settings -> Debug server host & port for device)
-1. 在命令行输入, react-native start
-2. 选择你的运行设备, run app
+1. 进入项目根目录, 在命令行输入, react-native start
+2. 编译
+- 使用命令, gradle clean && gradle build
+- android studio gradle插件
+3. 选择你的运行设备, 安装app运行
 
 # api接口清单
 
