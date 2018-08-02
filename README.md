@@ -133,16 +133,6 @@ search
 
 Third-party platform sharing, login SDK docking
 
-# todo list:
-
-Reading interface js callback (including music player) night mode
-
-Set up the module cache
-
-Reading interface interaction animation
-
-One paging flip title animation
-
 # technical points:
 
 Most of the previous use of ES5, have now all been changed to ES6
