@@ -11,7 +11,6 @@ import {
     Text,
     View,
     Image,
-    Platform,
     NativeModules,
     TouchableOpacity,
     DeviceEventEmitter
@@ -322,7 +321,7 @@ const styles = StyleSheet.create({
         width: width,
         borderTopColor: '#dddddd',
         borderTopWidth: constants.divideLineWidth,
-        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.07,
+        height: height * 0.07,
 
     },
     leftIcon: {

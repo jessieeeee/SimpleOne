@@ -7,12 +7,8 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
-    StyleSheet,
-    Text,
     Platform,
     Image,
-
 } from 'react-native';
 import resolveAssetSource from 'resolveAssetSource';
 class MyImage extends Image {

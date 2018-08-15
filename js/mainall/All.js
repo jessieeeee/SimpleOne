@@ -6,15 +6,10 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
-    Text,
     View,
     Image,
-    ActivityIndicator,
     TouchableOpacity,
-    Platform,
-
 } from 'react-native';
 import PullScollView from '../view/PullScollView';
 import constants from "../Constants";

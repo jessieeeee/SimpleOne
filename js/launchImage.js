@@ -14,13 +14,9 @@ import {
 } from 'react-native';
 import DateUtils from "./util/DateUtil";
 import constants from './Constants';
-import Main from './Main';
 // import Test from './view/Test'
 let {width, height} = constants.ScreenWH;
 class LaunchImage extends Component{
-    constructor(props){
-        super(props);
-    }
 
     render() {
         return (
@@ -70,11 +66,7 @@ class LaunchImage extends Component{
         return str;
     }
 
-    componentDidMount() {
-        setTimeout(() => {
-            this.props.navigator.replace({component:Main})
-        }, 2000);
-    }
+
 }
 const styles = StyleSheet.create({
     container: {
@@ -82,6 +74,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+        position:'absolute',
+        top:0,
+        left:0,
+        bottom:0,
+        right:0
     },
     date:{
         position:'absolute',

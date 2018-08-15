@@ -6,12 +6,10 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
-    Platform,
     TouchableOpacity
 } from 'react-native';
 import Remark from '../remark/Remark';
@@ -239,7 +237,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: width,
-        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.07,
+        height: height * 0.07,
     },
     leftBtn: {
         flexDirection: 'row',

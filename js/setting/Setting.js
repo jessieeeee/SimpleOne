@@ -11,7 +11,6 @@ import {
     Text,
     View,
     Image,
-    Platform,
     ScrollView,
     NativeModules,
     TouchableOpacity,

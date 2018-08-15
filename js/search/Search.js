@@ -10,8 +10,6 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
-    Platform,
     TouchableOpacity
 
 } from 'react-native';
@@ -26,7 +24,6 @@ class Search extends Component{
         super(props);
         this.state={
             curText: '',
-
         }
     }
 

@@ -1,3 +1,5 @@
+import queryString from 'query-string';
+
 /**
  * @author : JessieK
  * @email : lyj1246505807@gmail.com
@@ -12,21 +14,30 @@ export default class NetUtils {
      * @param {*} callbackSuccess  成功后的回调
      * @param {*} callbackError  失败后的回调
      */
-    static get(url,params,callbackSuccess,callbackError){
-        console.log('NetUtil----'+url);
-        fetch(url,{
-            method:'GET',
-            body:params
+    static get(url, params, callbackSuccess, callbackError) {
+        if (params) {
+            let paramsArray = [];
+            //拼接参数
+            Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
+            if (url.search(/\?/) === -1) {
+                url += '?' + paramsArray.join('&')
+            } else {
+                url += '&' + paramsArray.join('&')
+            }
+        }
+        console.log('server--------->' + url);
+        fetch(url, {
+            method: 'GET',
         })
             .then((response) => {
-                if(response.ok){//如果相应码为200
+                if (response.ok) {//如果相应码为200
                     return response.json(); //将字符串转换为json对象
                 }
             })
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            console.log(url+':'+error);
+            console.log(url + ':' + error);
             callbackError(error);
         });
     };
@@ -38,23 +49,24 @@ export default class NetUtils {
      * @param {*} callbackSuccess  成功后的回调
      * @param {*} callbackError  失败后的回调
      */
-    static post(url,params,callbackSuccess,callbackError){
-        fetch(url,{
-            method:'POST',
-            headers:{
+    static post(url, params, callbackSuccess, callbackError) {
+        console.log('server--------->' + url);
+        fetch(url, {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'//key-value形式
             },
-            body:params
+            body: queryString.stringify(params)
         })
             .then((response) => {
-                if(response.ok){
+                if (response.ok) {
                     return response.json();
                 }
             })
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            console.log(url+':'+error);
+            console.log(url + ':' + error);
             callbackError(error);
         });
     };
@@ -66,23 +78,24 @@ export default class NetUtils {
      * @param {*} callbackSuccess  成功后的回调
      * @param {*} callbackError  失败后的回调
      */
-    static postJson(url,jsonObj,callbackSuccess,callbackError){
-        fetch(url,{
-            method:'POST',
-            headers:{
+    static postJson(url, jsonObj, callbackSuccess, callbackError) {
+        console.log('server--------->' + url);
+        fetch(url, {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/json;charset=UTF-8'
             },
-            body:JSON.stringify(jsonObj),//json对象转换为string
+            body: JSON.stringify(jsonObj),//json对象转换为string
         })
             .then((response) => {
-                if(response.ok){
+                if (response.ok) {
                     return response.json();
                 }
             })
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            console.log(url+':'+error);
+            console.log(url + ':' + error);
             callbackError(error);
         });
     };

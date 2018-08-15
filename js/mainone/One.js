@@ -194,10 +194,9 @@ class One extends Component{
         curPage=currentPage;
     }
 
-
     addEmptyView(){
         itemPageArr.push(
-            <View key={key} style={{width:width,height:height}}/>
+            <View key={key} style={{width:width,height:height,backgroundColor:constants.nightMode?constants.nightModeGrayLight : 'white'}}/>
         );
         {
             key++

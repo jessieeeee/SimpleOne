@@ -1,22 +1,16 @@
 'use strict';
 
 import React from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-
+import {AppRegistry} from 'react-native';
 import {Navigator} from 'react-native-deprecated-custom-components';
-import LaunchImage from './js/launchImage';
+import Main from './js/Main';
 // import Test from './js/store/Test';
 // import Test from './js/view/Test';
 class SimpleOne extends React.Component {
   render() {
     return (
         <Navigator
-            initialRoute={{name:'启动页',component:LaunchImage}}
+            initialRoute={{name:'首页',component:Main}}
             configureScene={()=>{
                 return Navigator.SceneConfigs.PushFromRight;
             }}

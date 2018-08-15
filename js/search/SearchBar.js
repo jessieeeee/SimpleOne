@@ -9,8 +9,7 @@ import {
     TextInput,
     View,
     TouchableOpacity,
-    Text,
-    Platform
+    Text
 } from 'react-native'
 import constants from "../Constants";
 import PropTypes from 'prop-types';
@@ -65,7 +64,7 @@ const styles=StyleSheet.create({
         width: width * 0.82,
         position: 'absolute',
         left: width * 0.03,
-        height: Platform.OS == 'ios' ? height * 0.04 : height * 0.05,
+        height: height * 0.05,
     },
     cancel: {
         fontSize: width * 0.04,

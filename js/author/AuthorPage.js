@@ -16,7 +16,6 @@ import {
     Text,
     View,
     Image,
-    Platform,
     TouchableOpacity,
     NativeModules,
 } from 'react-native';

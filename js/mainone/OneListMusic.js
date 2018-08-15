@@ -6,13 +6,11 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
     DeviceEventEmitter,
-    Platform,
     NativeModules,
     TouchableOpacity,
     Animated,
@@ -337,7 +335,7 @@ const styles = StyleSheet.create({
         marginTop: width * 0.06,
         flexDirection: 'row',
         width: width,
-        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
+        height: height * 0.057,
     },
 
     musicInfo: {

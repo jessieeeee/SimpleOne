@@ -6,12 +6,10 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
-    Platform,
     TouchableOpacity
 } from 'react-native';
 import DateUtil from "../util/DateUtil";
@@ -203,7 +201,7 @@ const styles = StyleSheet.create({
         marginTop: width * 0.06,
         flexDirection: 'row',
         width: width,
-        height: Platform.OS == 'ios' ? height * 0.06 : height * 0.057,
+        height: height * 0.057,
     },
 });
 

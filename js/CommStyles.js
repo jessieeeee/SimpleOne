@@ -6,14 +6,13 @@
  */
 import {
     StyleSheet,
-    Platform
-} from 'react-native';
-import constants from "./Constants";
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from "./Constants"
+let {width, height} = constants.ScreenWH
 
 const styles = StyleSheet.create({
     outNav: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
+        height: height * 0.08,
         flexDirection: 'row',
         alignItems: 'center',
         width: width,
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     },
 
     outNav2: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
+        height:  height * 0.08,
         flexDirection: 'row',
         alignItems: 'center',
         width: width,
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     },
 
     centerTitle: {
-        height: Platform.OS == 'ios' ? height * 0.07 : height * 0.08,
+        height:  height * 0.08,
         alignItems: 'center',
         justifyContent: 'center',
     },
