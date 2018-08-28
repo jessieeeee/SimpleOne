@@ -111,7 +111,7 @@ class Setting extends Component {
                     }}>
                         <SettingItem text={'用户协议'} rightStyle={0}/>
                     </TouchableOpacity>
-                    <SettingItem text={'版本号'} rightStyle={1}/>
+                    <SettingItem text={'版本号'} rightStyle={2}/>
 
                 </View>
             </ScrollView>
