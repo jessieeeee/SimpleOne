@@ -38,14 +38,17 @@ class AuthorHead extends Component{
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{backgroundColor: constants.nightMode? constants.nightModeGrayLight:'white'}]}>
                 <Image source={{uri:this.state.result.web_url}} style={styles.avatar}/>
-                <Text style={styles.name}>{this.state.result.user_name} </Text>
-                <Text style={styles.summary}>{this.state.result.summary}</Text>
+                <Text style={[styles.name,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.user_name} </Text>
+                <Text style={[styles.summary,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.summary}</Text>
                 <TouchableOpacity onPress={() => this.followAuthor()}>
-                    <Text style={styles.follow}>关注</Text>
+                    <Text style={[styles.follow,
+                        {color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
+                            borderColor: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}
+                        ]}>关注</Text>
                 </TouchableOpacity>
-                <Text style={styles.followNum}>{this.state.result.fans_total+'关注'}</Text>
+                <Text style={[styles.followNum,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.fans_total+'关注'}</Text>
             </View>
         );
     }
@@ -62,7 +65,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
     },
     avatar:{
         resizeMode: 'stretch',
@@ -73,18 +75,14 @@ const styles = StyleSheet.create({
     },
     name:{
         marginTop:width*0.03,
-        color:'black',
         fontSize:width*0.05,
     },
     summary:{
         margin:width*0.04,
-        color:'black',
         fontSize:width*0.04,
     },
     follow:{
-        color:'#333333',
         fontSize:width*0.04,
-        borderColor:'#333333',
         borderWidth:width*0.002,
         borderRadius:width*0.006,
         textAlign:'center',
@@ -96,7 +94,6 @@ const styles = StyleSheet.create({
     },
     followNum:{
         marginTop:width*0.014,
-        color:'#a1a1a1',
         fontSize:width*0.026,
         marginBottom:width*0.04
     }

@@ -9,9 +9,8 @@ import PullScollView from '../view/PullScollView';
 import NetUtil from '../util/NetUtil';
 import AuthorHead from './AuthorHead';
 // 加载更多的view
-import LoadingMore from '../view/LoadingMore';
+import LoadingMore from '../view/LoadingMore'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -19,41 +18,42 @@ import {
     TouchableOpacity,
     NativeModules,
 } from 'react-native';
-import constants from '../Constants';
-import OneListTop from '../mainone/OneListTop';
-import OneListCommon from '../mainone/OneListCommon';
-import OneListMusic from '../mainone/OneListMusic';
-import OneListMovie from '../mainone/OneListMovie';
-import OneListAudio from '../mainone/OneListAudio';
-import ServerApi from '../ServerApi';
-import CommStyles from "../CommStyles";
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
-let itemArr = [];
-let key = 0;
-let pageNum = 0;
-let workList=[];
+import constants from '../Constants'
+import OneListTop from '../mainone/OneListTop'
+import OneListCommon from '../mainone/OneListCommon'
+import OneListMusic from '../mainone/OneListMusic'
+import OneListMovie from '../mainone/OneListMovie'
+import OneListAudio from '../mainone/OneListAudio'
+import ServerApi from '../ServerApi'
+import CommStyles from "../CommStyles"
 
-class AuthorPage extends Component{
-    constructor(props){
-        super(props);
-        this.onScroll=this.onScroll.bind(this);
-        this.onPullRelease=this.onPullRelease.bind(this);
-        this.state={
-            loading: false,
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
+let itemArr = []
+let key = 0
+let pageNum = 0
+let workList = []
+
+class AuthorPage extends Component {
+    constructor(props) {
+        super(props)
+        this.onLoadMore = this.onLoadMore.bind(this)
+        this.onPullRelease = this.onPullRelease.bind(this)
+        this.state = {
+            loadingState: LoadingMore.state.tip,//加载更多状态
             isEnd: false//是否到末尾标记
         }
     }
 
     componentDidMount() {
-        this.reset();
-        this.getWorkList();
+        this.reset()
+        this.getWorkList()
     }
 
-    reset(){
-        key=0;
-        itemArr = [];
-        workList= [];
+    reset() {
+        key = 0
+        itemArr = []
+        workList = []
         pageNum = 0;
     }
 
@@ -69,86 +69,69 @@ class AuthorPage extends Component{
             this.loadMoreView();
 
             this.setState({
-                loading: false,
+                loadingState: LoadingMore.state.tip,
 
-            });
+            })
 
-            if(result.data.length<10){
+            if (result.data.length < 10) {
                 this.setState({
                     isEnd: true,
-                });
+                })
             }
             console.log('当前数量' + workList.length);
         }, (error) => {
-            toast.showMsg('error' + error,toast.SHORT);
-        });
+            toast.showMsg('error' + error, toast.SHORT);
+        })
     }
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                 {this.renderNavBar()}
 
-                <PullScollView onPullRelease={this.onPullRelease} onScroll={this.onScroll}
-                          style={{width: width, backgroundColor: 'white'}}>
+                <PullScollView onPullRelease={this.onPullRelease}
+                               loadMoreState={this.state.loadingState}
+                               onLoadMore={this.onLoadMore}
+                               style={{width: width}}>
                     <AuthorHead authorId={this.props.route.params.authorId}/>
-                    <View style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
+                    <View
+                        style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
 
                     {this.renderAllItem()}
-                    {this.renderLoading()}
                 </PullScollView>
             </View>
-
-        );
+        )
     }
 
-    /**
-     * 显示正在加载
-     */
-    renderLoading() {
-
-        return (
-            <LoadingMore loading={this.state.loading}/>
-        );
-    }
 
     // 刷新释放回调
     onPullRelease(resolve) {
         //do something
-        console.log('作者页调刷新');
+        console.log('作者页调刷新')
         //发起请求
-        this.getWorkList();
+        this.getWorkList()
         setTimeout(() => {
-            resolve();
-        }, 3000);
-
+            resolve()
+        }, 3000)
     }
 
     /**
      * scrollview滑动回调
      */
-    onScroll(event) {
-        let y = event.nativeEvent.contentOffset.y;
-        // console.log('滑动距离' + y);
-        let height = event.nativeEvent.layoutMeasurement.height;
-        // console.log('列表高度' + height);
-        let contentHeight = event.nativeEvent.contentSize.height;
-        // console.log('内容高度' + contentHeight);
-        // console.log('判断条件' + (y + height));
-        if (y + height >= contentHeight - 20) {
-            console.log('触发加载更多');
-            if(!this.state.isEnd){
-                pageNum++;
+    onLoadMore() {
+        if (!this.state.isEnd) {
+            pageNum++
 
-                console.log('当前页数' + pageNum);
-                this.getWorkList();
-                //设置正在加载和更多列表标记
-                this.setState({
-                    loading: true,
-                });
-            }
-
-
+            console.log('当前页数' + pageNum)
+            this.getWorkList()
+            //设置正在加载和更多列表标记
+            this.setState({
+                loadingState: LoadingMore.state.loading,
+            })
+        }else{
+            this.setState({
+                loadingState: LoadingMore.state.noMore,
+            });
         }
     }
 
@@ -164,27 +147,25 @@ class AuthorPage extends Component{
                         <OneListTop key={key}
                                     data={data}
                                     navigator={this.props.navigator}/>
-                    );
-
+                    )
                 }
-
                 //音乐
                 else if (data.category === constants.CategoryMusic) {
                     itemArr.push(
                         <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
-                    );
+                    )
                 }
                 //电影
                 else if (data.category === constants.CategoryMovie) {
                     itemArr.push(
                         <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
-                    );
+                    )
                 }
                 //电台
                 else if (data.category === constants.CategoryRadio) {
                     itemArr.push(
                         <OneListAudio key={key} data={data} navigator={this.props.navigator}/>
-                    );
+                    )
                 }
                 //普通item
                 else {
@@ -192,18 +173,17 @@ class AuthorPage extends Component{
                         <OneListCommon key={key}
                                        navigator={this.props.navigator}
                                        data={data}/>
-                    );
+                    )
                 }
-                key++;
+                key++
                 itemArr.push(
-                    <View key={key} style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
-                );
+                    <View key={key}
+                          style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
+                )
 
-                key++;
-                console.log('渲染view' + itemArr.length);
-
+                key++
+                console.log('渲染view' + itemArr.length)
             }
-
         }
     }
 
@@ -213,7 +193,7 @@ class AuthorPage extends Component{
      * @returns {Array}
      */
     renderAllItem() {
-        return itemArr;
+        return itemArr
     }
 
     /**
@@ -222,7 +202,10 @@ class AuthorPage extends Component{
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor, backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
+            <View style={[CommStyles.outNav, {
+                borderBottomColor: constants.nightMode ? constants.nightModeGrayLight : constants.bottomDivideColor,
+                backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'
+            }]}>
 
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}
@@ -230,10 +213,11 @@ class AuthorPage extends Component{
                     <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
-                <Text style={styles.title}>{this.props.route.params.authorName}</Text>
+                <Text style={[styles.title,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
+                }]}>{this.props.route.params.authorName}</Text>
 
             </View>
-        );
+        )
     }
 }
 
@@ -241,14 +225,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+
     },
 
     title: {
         fontSize: width * 0.04,
-        color: '#414141',
         fontWeight: 'bold'
     },
-});
+})
 
-export default AuthorPage;
+export default AuthorPage

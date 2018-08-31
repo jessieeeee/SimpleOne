@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
+import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.common.LifecycleState;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
                 .addPackage(new MainReactPackage())
                 .addPackage(new MyReactPackage())
                 .addPackage(new ImagePickerPackage())// <-- add this line
+                .addPackage(new LottiePackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(mLifecycleState)
                 .build();
@@ -58,6 +60,37 @@ public class MainActivity extends AppCompatActivity
 
         UShare.init(this);
         ULogin.init(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mReactRootView.unmountReactApplication();
+        mReactRootView = null;
+
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.destroy();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent data) {
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onActivityResult(this, requestCode,
+                    resultCode, data);
+            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mReactInstanceManager != null) {
+            mReactInstanceManager.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -82,43 +115,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        mReactRootView.unmountReactApplication();
-        mReactRootView = null;
-
-        if (mReactInstanceManager != null) {
-            mReactInstanceManager.destroy();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent data) {
-        if (mReactInstanceManager != null) {
-            mReactInstanceManager.onActivityResult(this,requestCode,
-                    resultCode, data);
-            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
     //...省略部分代码
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        UShare.onRequestPermissionsResult(requestCode,permissions,grantResults);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mReactInstanceManager != null) {
-            mReactInstanceManager.onBackPressed();
-        }
-        else {
-            super.onBackPressed();
-        }
+        UShare.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

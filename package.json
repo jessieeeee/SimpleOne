@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "rn-start":"react-native start"
+    "rn-start": "react-native start"
   },
   "start": "node node_modules/react-native/local-cli/cli.js start",
   "author": "JessieKate",
   "license": "ISC",
   "dependencies": {
+    "lottie-react-native": "^2.5.8",
     "mobx": "^4.2.0",
     "mobx-react": "^5.0.0",
     "prop-types": "^15.6.1",

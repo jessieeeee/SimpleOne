@@ -16,24 +16,41 @@ import {
 
 import constants from '../Constants';
 import PropTypes from 'prop-types';
-var {width, height} = constants.ScreenWH;
+
+let {width, height} = constants.ScreenWH;
 const pointsNum = 3; //点数量
 
 class LoadingMore extends Component {
 
+    static state = {
+        hide: 0,
+        loading: 1,
+        noMore: 2,
+        tip: 3
+    }
+    static stateText = {
+        loading: '正在加载更多',
+        noMore: '没有更多了',
+        tip: '上拉加载更多',
+    }
+
     constructor(props) {
-        super(props);
+        super(props)
         // 初始化点的数量
-        this.arr = [];
+        this.arr = []
         for (let i = 0; i < pointsNum; i++) {
-            this.arr.push(i);
+            this.arr.push(i)
         }
         // 初始化动画
-        this.animatedValue = [];
+        this.animatedValue = []
         this.arr.forEach((value) => {
             this.animatedValue[value] = new Animated.Value(0)
-        });
+        })
+        this.state = {
+            curState: LoadingMore.state.tip
+        }
     }
+
 
     /**
      * 动画执行，逐个显示
@@ -51,67 +68,83 @@ class LoadingMore extends Component {
                     easing: Easing.linear
                 }
             )
-        });
-        this.loadingAnim = Animated.sequence(animations);
+        })
+        this.loadingAnim = Animated.sequence(animations)
         this.loadingAnim.start((result) => {
             if (Boolean(result.finished)) this.animate()
         })
-
-    }
-
-    componentDidMount() {
-        this.animate()
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                {this.loading()}
+            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+                { this.state.curState !== LoadingMore.state.hide ? this.renderLoad() : null}
             </View>
         );
     }
 
 
     componentWillReceiveProps(nextProps) {
-
-        if (nextProps.loading) {
-            console.log('callback---start');
-            this.animate();
-        } else {
-            console.log('callback---stop');
-            this.arr.forEach((item) => {
-                this.animatedValue[item].stopAnimation(value => {
-                    console.log('剩余时间' + (1 - value) * 200);
-                });
-            });
+        this.setState({
+            curState: nextProps.state
+        })
+        switch (nextProps.state) {
+            case LoadingMore.state.loading:
+//                console.log('callback---start')
+                this.animate()
+                break
+            case LoadingMore.state.hide:
+//                console.log('callback---stop');
+                this.arr.forEach((item) => {
+                    this.animatedValue[item].stopAnimation(value => {
+                        console.log('剩余时间' + (1 - value) * 200);
+                    });
+                })
+                break
+            case LoadingMore.state.noMore:
+                setTimeout(() => {
+                    this.setState({
+                        curState: LoadingMore.state.hide
+                    })
+                }, 3000)
+                break
         }
     }
 
-    loading() {
+    renderLoadText() {
+        switch (this.state.curState) {
+            case LoadingMore.state.loading:
+                return LoadingMore.stateText.loading
+            case LoadingMore.state.noMore:
+                return LoadingMore.stateText.noMore
+            case LoadingMore.state.tip:
+                return LoadingMore.stateText.tip
+        }
+    }
+
+    renderLoad() {
         const animations = this.arr.map((item) => {
             return (
                 <Animated.Text key={item} style={{
-                    opacity: this.animatedValue[item], fontSize: width * 0.06, color: 'gray', marginRight: width * 0.02
+                    opacity: this.animatedValue[item], fontSize: width * 0.06, color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor, marginRight: width * 0.02
                 }}>.</Animated.Text>
-            );
-        });
-
-        if (this.props.loading) {
+            )
+        })
             return (
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', height: width * 0.14,}}>
                     <Text style={{
-                        color: 'gray',
+                        color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
                         fontSize: width * 0.04,
-                        marginRight: width * 0.02
+                        marginRight: width * 0.02,
                     }}>
-                        正在加载中
+                        {this.renderLoadText()}
                     </Text>
-                    <View style={styles.pointsView}>
-                        {animations}
-                    </View>
+                    {this.state.curState === LoadingMore.state.loading ?
+                        <View style={styles.pointsView}>
+                            {animations}
+                        </View> : null}
                 </View>
-            );
-        }
+            )
     }
 }
 
@@ -126,7 +159,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
     },
     pointsView: {
         height: width * 0.14,
