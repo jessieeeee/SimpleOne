@@ -16,11 +16,10 @@ import {
     Animated,
     Easing,
 } from 'react-native'
+import PropTypes from 'prop-types'
 import LottieView from 'lottie-react-native'
 import LoadingMore from '../view/LoadingMore';// 加载更多的view
-const pullOkMargin = 100 //下拉到位状态时距离顶部的高度
 const defaultDuration = 300 //默认时长
-const defaultTopRefreshHeight = 50 //顶部刷新视图的高度
 /**
  * 提示文字的显示状态
  * @type {{pulling: boolean, pullok: boolean, pullrelease: boolean}}
@@ -44,12 +43,33 @@ const isVerticalGesture = (x, y) => {
 
 export default class PullScollView extends Component {
 
+    static defaultProps = {
+        topRefreshHeight: 50, //顶部刷新视图的高度
+        pullOkMargin:100 //下拉到位状态时距离顶部的高度
+    }
+
+    static propTypes = {
+        topRefreshHeight: PropTypes.number,
+        pullOkMargin: PropTypes.number,
+        onMove: PropTypes.func,
+        onRelease: PropTypes.func,
+        onPulling: PropTypes.func,
+        onPullOk: PropTypes.func,
+        onPullRelease: PropTypes.func,
+        onLoadMore: PropTypes.func,
+        onScroll: PropTypes.func,
+        children: PropTypes.array,
+        style: PropTypes.object,
+        loadMoreState: PropTypes.number,
+        onRetry: PropTypes.func,
+    }
+
     constructor(props) {
         super(props)
         this.defaultScrollEnabled = false
-        this.topRefreshHeight = this.props.topRefreshHeight ? this.props.topRefreshHeight : defaultTopRefreshHeight
+        this.topRefreshHeight = this.props.topRefreshHeight
         this.defaultXY = {x: 0, y: this.topRefreshHeight * -1}
-        this.pullOkMargin = this.props.pullOkMargin ? this.props.pullOkMargin : pullOkMargin
+        this.pullOkMargin = this.props.pullOkMargin
         this.state = Object.assign({}, props, {
             pullPan: new Animated.ValueXY(this.defaultXY), //下拉区域
             scrollEnabled: this.defaultScrollEnabled, //滚动启动
@@ -285,7 +305,7 @@ export default class PullScollView extends Component {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: defaultTopRefreshHeight
+                height: this.props.topRefreshHeight
             }}>
 
                 <Text ref={(c) => {
