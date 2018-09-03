@@ -164,5 +164,6 @@ React-native encapsulates native components.
 21. Use high-order-component realize base component for the common logic of the component (2018.5.2 update)
 22. Add animation for refresh date when scroll page on one page's title (2018.6.28 update)
 23. Modify the web page style in the webview to implement night mode by inject javascript (2018.7.18 update)
-
+24. update loadMore Prompt status (2018.9.3 update)
+25. fix bug of the sliding conflict of scrollview nesting (2018.9.3 update)
 [1]:https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md
