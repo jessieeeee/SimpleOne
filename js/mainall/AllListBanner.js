@@ -112,7 +112,7 @@ class AllListBanner extends Component{
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             pagingEnabled={true}
-                            scrollEnabled={true}
+                            scrollEnabled={this.props.scrollEnabled}
                             onScrollBeginDrag={
                                 (e) => this.stopTimer()
                             }
@@ -233,10 +233,12 @@ class AllListBanner extends Component{
         this.timer && clearInterval(this.timer);
     }
 }
+
 AllListBanner.defaultProps={
     duration: 4000,
     // 外层回调函数参
     refreshView: false, //刷新
+    scrollEnabled: true //解决滑动冲突外部控制
 };
 
 const styles = StyleSheet.create({

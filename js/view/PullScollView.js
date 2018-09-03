@@ -95,6 +95,8 @@ export default class PullScollView extends Component {
 
     // 手势移动的处理
     onPanResponderMove(e, gesture) {
+        // 解决滑动冲突，调用手势移动回调
+        this.props.onMove && this.props.onMove()
         if (isUpGesture(gesture.dx, gesture.dy)) { //向上手势
             // 如果处于下拉状态，重置
             if (this.isPullState()) {
@@ -125,6 +127,8 @@ export default class PullScollView extends Component {
 
     // 手势释放
     onPanResponderRelease() {
+        // 解决滑动冲突，调用释放回调
+        this.props.onRelease && this.props.onRelease()
         if (this.curState.pulling) { // 之前是下拉状态
             this.resetDefaultXYHandler(); //重置状态
         }
@@ -147,7 +151,6 @@ export default class PullScollView extends Component {
                 easing: Easing.linear,
                 duration: defaultDuration
             }).start()
-            console.log('调用下拉')
 
             // 刷新视图中的转圈动画开启
             this.spin()

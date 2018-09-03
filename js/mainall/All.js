@@ -42,6 +42,7 @@ class All extends Component {
             lastId: 0, //记录上一次请求id
             isEnd: false,//是否到末尾标记
             showMusicControl: false,
+            scrollEnabled: true
         };
     }
 
@@ -62,7 +63,20 @@ class All extends Component {
         return (
             <View>
                 {this.renderNavBar()}
-                <PullScollView onPullRelease={this.onPullRelease} onLoadMore={this.onLoadMore} loadMoreState={this.state.loadingState}>
+                <PullScollView
+                    onPullRelease={this.onPullRelease}
+                    onLoadMore={this.onLoadMore}
+                    loadMoreState={this.state.loadingState}
+                    onRelease={() => {
+                        this.setState({
+                            scrollEnabled: true
+                        })
+                    }}
+                    onMove={() => {
+                        this.setState({
+                            scrollEnabled: false
+                        })
+                    }}>
 
                     {this.renderAllItem()}
                     {this.renderLoadMoreList()}
@@ -171,9 +185,13 @@ class All extends Component {
      */
     renderAllItem() {
         let itemArr = [];
-        // itemArr.push(
-        //     <AllListBanner key={0} refreshView={this.state.isRefreshing} navigator={this.props.navigator}/>
-        // );
+        itemArr.push(
+            <AllListBanner
+                key={0}
+                refreshView={this.state.isRefreshing}
+                navigator={this.props.navigator}
+                scrollEnabled={this.state.scrollEnabled}/>
+        );
         itemArr.push(
             <View key={1}
                   style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
