@@ -148,7 +148,8 @@ class AllListTopic extends Component{
             });
 
         }, (error) => {
-            toast.showMsg('error' + error,toast.SHORT);
+            this.props.onError && this.props.onError(this.getTopicData)
+            toast.showMsg('error' + error,toast.SHORT)
         });
     }
 

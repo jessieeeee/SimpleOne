@@ -81,6 +81,9 @@ class AuthorPage extends Component {
             console.log('当前数量' + workList.length);
         }, (error) => {
             toast.showMsg('error' + error, toast.SHORT);
+            this.setState({
+                loadingState: LoadingMore.state.error,
+            });
         })
     }
 
@@ -90,6 +93,7 @@ class AuthorPage extends Component {
                 {this.renderNavBar()}
 
                 <PullScollView onPullRelease={this.onPullRelease}
+                               onRetry={() => {this.getWorkList()}}
                                loadMoreState={this.state.loadingState}
                                onLoadMore={this.onLoadMore}
                                style={{width: width}}>

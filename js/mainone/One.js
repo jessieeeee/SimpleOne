@@ -207,7 +207,11 @@ class One extends Component{
         itemPageArr.pop();
         key--;
         itemPageArr.push(
-            <PullScollView key={key} onPullRelease={this.onPullRelease} onScroll={this.onScroll}>
+            <PullScollView
+                key={key}
+                onPullRelease={this.onPullRelease}
+                onScroll={this.onScroll}
+                >
 
                 {this.renderAllItem(oneData,key)}
 

@@ -7,6 +7,7 @@
 
 import React, {Component} from 'react';
 import {
+    TouchableOpacity,
     StyleSheet,
     View,
     Text,
@@ -26,12 +27,14 @@ class LoadingMore extends Component {
         hide: 0,
         loading: 1,
         noMore: 2,
-        tip: 3
+        tip: 3,
+        error: 4,
     }
     static stateText = {
         loading: '正在加载更多',
         noMore: '没有更多了',
         tip: '上拉加载更多',
+        error: '加载失败'
     }
 
     constructor(props) {
@@ -108,6 +111,7 @@ class LoadingMore extends Component {
                     })
                 }, 3000)
                 break
+
         }
     }
 
@@ -119,6 +123,8 @@ class LoadingMore extends Component {
                 return LoadingMore.stateText.noMore
             case LoadingMore.state.tip:
                 return LoadingMore.stateText.tip
+            case LoadingMore.state.error:
+                return LoadingMore.stateText.error
         }
     }
 
@@ -131,7 +137,13 @@ class LoadingMore extends Component {
             )
         })
             return (
-                <View style={{flexDirection: 'row', alignItems: 'center', height: width * 0.14,}}>
+                <TouchableOpacity
+                    style={{flexDirection: 'row', alignItems: 'center', height: width * 0.14,}}
+                    onPress={() => {
+                        if (this.state.curState === LoadingMore.state.error){
+                            this.props.onRetry && this.props.onRetry()
+                        }
+                    }}>
                     <Text style={{
                         color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
                         fontSize: width * 0.04,
@@ -143,7 +155,7 @@ class LoadingMore extends Component {
                         <View style={styles.pointsView}>
                             {animations}
                         </View> : null}
-                </View>
+                </TouchableOpacity>
             )
     }
 }

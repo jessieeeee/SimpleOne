@@ -64,6 +64,7 @@ class All extends Component {
             <View>
                 {this.renderNavBar()}
                 <PullScollView
+                    onRetry={() => {this.errCallback()}}
                     onPullRelease={this.onPullRelease}
                     onLoadMore={this.onLoadMore}
                     loadMoreState={this.state.loadingState}
@@ -105,6 +106,12 @@ class All extends Component {
                 });
                 bottomList.push(
                     <AllListTopic key={key} showNum={5} startId={this.state.startId}
+                                  onError={(callback) => {
+                                      this.errCallback = callback
+                                      this.setState({
+                                          loadingState: LoadingMore.state.error,
+                                      });
+                                  }}
                                   getEndId={(endId, end) => {
                                       console.log('回调了' + endId + end);
                                       this.setState({

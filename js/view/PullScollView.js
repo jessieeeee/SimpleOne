@@ -241,7 +241,7 @@ export default class PullScollView extends Component {
                             this.scroll = c
                         }} scrollEnabled={this.state.scrollEnabled} onScroll={this.onScroll}>
                             {this.props.children}
-                            <LoadingMore state={this.props.loadMoreState}/>
+                            <LoadingMore state={this.props.loadMoreState} onRetry={() => this.props.onRetry()}/>
 
                         </ScrollView>
                     </View>

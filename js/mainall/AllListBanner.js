@@ -223,7 +223,7 @@ class AllListBanner extends Component{
                 }
             )
         }else{
-            toast.showMsg('这是一个广告跳转',toast.SHORT);
+            toast.showMsg('这是一个广告跳转',toast.SHORT)
         }
     }
 
