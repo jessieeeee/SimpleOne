@@ -8,7 +8,6 @@
 
 import React, {Component} from 'react';
 import {
-    StyleSheet,
     ScrollView,
     View,
     Text,
@@ -18,7 +17,8 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 import LottieView from 'lottie-react-native'
-import LoadingMore from '../view/LoadingMore';// 加载更多的view
+import LoadingMore from './LoadMore';// 加载更多的view
+import Refresh from './Refresh'
 const defaultDuration = 300 //默认时长
 /**
  * 提示文字的显示状态
@@ -249,7 +249,7 @@ export default class PullScollView extends Component {
 
     render() {
         return (
-            <View style={[styles.wrap, this.props.style]} onLayout={this.onLayout}>
+            <View style={[Refresh.styles.wrap, this.props.style]} onLayout={this.onLayout}>
                 <Animated.View style={[this.state.pullPan.getLayout()]}>
                     {/*绘制下拉刷新view*/}
                     {this.renderTopRefresh()}
@@ -285,17 +285,17 @@ export default class PullScollView extends Component {
         //控制下拉刷新提示文字显示状态
         setTimeout(() => {
             if (pulling) {
-                this.txtPulling && this.txtPulling.setNativeProps({style: styles.show})
-                this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide})
-                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide})
+                this.txtPulling && this.txtPulling.setNativeProps({style: Refresh.styles.show})
+                this.txtPullok && this.txtPullok.setNativeProps({style: Refresh.styles.hide})
+                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: Refresh.styles.hide})
             } else if (pullok) {
-                this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide})
-                this.txtPullok && this.txtPullok.setNativeProps({style: styles.show})
-                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide})
+                this.txtPulling && this.txtPulling.setNativeProps({style: Refresh.styles.hide})
+                this.txtPullok && this.txtPullok.setNativeProps({style: Refresh.styles.show})
+                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: Refresh.styles.hide})
             } else if (pullrelease) {
-                this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide})
-                this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide})
-                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.show})
+                this.txtPulling && this.txtPulling.setNativeProps({style: Refresh.styles.hide})
+                this.txtPullok && this.txtPullok.setNativeProps({style: Refresh.styles.hide})
+                this.txtPullrelease && this.txtPullrelease.setNativeProps({style: Refresh.styles.show})
             }
         }, 1)
 
@@ -310,13 +310,13 @@ export default class PullScollView extends Component {
 
                 <Text ref={(c) => {
                     this.txtPulling = c
-                }} style={styles.hide}>{tipText.pulling}</Text>
+                }} style={Refresh.styles.hide}>{Refresh.tipText.pulling}</Text>
                 <Text ref={(c) => {
                     this.txtPullok = c
-                }} style={styles.hide}>{tipText.pullok}</Text>
+                }} style={Refresh.styles.hide}>{Refresh.tipText.pullok}</Text>
                 <Text ref={(c) => {
                     this.txtPullrelease = c
-                }} style={styles.hide}>{tipText.pullrelease}</Text>
+                }} style={Refresh.styles.hide}>{Refresh.tipText.pullrelease}</Text>
 
                 <LottieView
                     style={{
@@ -332,27 +332,4 @@ export default class PullScollView extends Component {
         );
     }
 }
-// 默认提示文本
-const tipText = {
-    pulling: "下拉刷新",
-    pullok: "松开刷新",
-    pullrelease: "正在刷新"
-}
 
-// 自带样式
-const styles = StyleSheet.create({
-    wrap: {
-        flex: 1,
-        flexGrow: 1,
-        flexDirection: 'column',
-        zIndex: -999,
-    },
-    hide: {
-        position: 'absolute',
-        left: 10000
-    },
-    show: {
-        position: 'relative',
-        left: 0
-    }
-})

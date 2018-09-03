@@ -22,7 +22,7 @@ import AllListQuestion from './AllListQuestion';// 问所有人
 import AllListBanner from './AllListBanner';
 import {BaseComponent} from "../view/BaseComponent";
 import CommStyles from "../CommStyles";
-import LoadingMore from "../view/LoadingMore"
+import LoadMoreState from "../view/LoadMoreState"
 
 let {width, height} = constants.ScreenWH;
 // 顶部的banner
@@ -37,7 +37,7 @@ class All extends Component {
         this.state = {
             isRefreshing: false,
             loadMore: false, //底部是否显示更多列表
-            loadingState: LoadingMore.state.tip,//加载更多状态
+            loadingState: LoadMoreState.state.tip,//加载更多状态
             startId: 0, //主题请求开始id
             lastId: 0, //记录上一次请求id
             isEnd: false,//是否到末尾标记
@@ -93,7 +93,7 @@ class All extends Component {
         //设置正在加载和显示更多标记
         this.setState({
             loadMore: true,
-            loadingState: LoadingMore.state.loading,
+            loadingState: LoadMoreState.state.loading,
         });
         //如果列表没有结束
         if (this.state.isEnd !== true) {
@@ -109,14 +109,14 @@ class All extends Component {
                                   onError={(callback) => {
                                       this.errCallback = callback
                                       this.setState({
-                                          loadingState: LoadingMore.state.error,
+                                          loadingState: LoadMoreState.state.error,
                                       });
                                   }}
                                   getEndId={(endId, end) => {
                                       console.log('回调了' + endId + end);
                                       this.setState({
                                           startId: endId,
-                                          loadingState: LoadingMore.state.tip,
+                                          loadingState: LoadMoreState.state.tip,
                                           isEnd: end,
                                       });
 
@@ -125,13 +125,13 @@ class All extends Component {
                 //设置正在加载和显示更多标记
                 this.setState({
                     loadMore: true,
-                    loadingState: LoadingMore.state.loading,
+                    loadingState: LoadMoreState.state.loading,
                 });
             }
         }else{
             this.setState({
                 loadMore: true,
-                loadingState: LoadingMore.state.noMore,
+                loadingState: LoadMoreState.state.noMore,
             });
         }
     }

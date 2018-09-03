@@ -8,8 +8,7 @@ import React, {Component} from 'react';
 import PullScollView from '../view/PullScollView';
 import NetUtil from '../util/NetUtil';
 import AuthorHead from './AuthorHead';
-// 加载更多的view
-import LoadingMore from '../view/LoadingMore'
+import LoadMoreState from '../view/LoadMoreState'
 import {
     StyleSheet,
     Text,
@@ -40,7 +39,7 @@ class AuthorPage extends Component {
         this.onLoadMore = this.onLoadMore.bind(this)
         this.onPullRelease = this.onPullRelease.bind(this)
         this.state = {
-            loadingState: LoadingMore.state.tip,//加载更多状态
+            loadingState: LoadMoreState.state.tip,//加载更多状态
             isEnd: false//是否到末尾标记
         }
     }
@@ -69,7 +68,7 @@ class AuthorPage extends Component {
             this.loadMoreView();
 
             this.setState({
-                loadingState: LoadingMore.state.tip,
+                loadingState: LoadMoreState.state.tip,
 
             })
 
@@ -82,7 +81,7 @@ class AuthorPage extends Component {
         }, (error) => {
             toast.showMsg('error' + error, toast.SHORT);
             this.setState({
-                loadingState: LoadingMore.state.error,
+                loadingState: LoadMoreState.state.error,
             });
         })
     }
@@ -130,11 +129,11 @@ class AuthorPage extends Component {
             this.getWorkList()
             //设置正在加载和更多列表标记
             this.setState({
-                loadingState: LoadingMore.state.loading,
+                loadingState: LoadMoreState.state.loading,
             })
         }else{
             this.setState({
-                loadingState: LoadingMore.state.noMore,
+                loadingState: LoadMoreState.state.noMore,
             });
         }
     }

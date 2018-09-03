@@ -17,25 +17,11 @@ import {
 
 import constants from '../Constants';
 import PropTypes from 'prop-types';
-
+import LoadMoreState from './LoadMoreState'
 let {width, height} = constants.ScreenWH;
 const pointsNum = 3; //点数量
 
-class LoadingMore extends Component {
-
-    static state = {
-        hide: 0,
-        loading: 1,
-        noMore: 2,
-        tip: 3,
-        error: 4,
-    }
-    static stateText = {
-        loading: '正在加载更多',
-        noMore: '没有更多了',
-        tip: '上拉加载更多',
-        error: '加载失败'
-    }
+class LoadMore extends Component {
 
     constructor(props) {
         super(props)
@@ -50,7 +36,7 @@ class LoadingMore extends Component {
             this.animatedValue[value] = new Animated.Value(0)
         })
         this.state = {
-            curState: LoadingMore.state.tip
+            curState: LoadMoreState.state.tip
         }
     }
 
@@ -81,7 +67,7 @@ class LoadingMore extends Component {
     render() {
         return (
             <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
-                { this.state.curState !== LoadingMore.state.hide ? this.renderLoad() : null}
+                { this.state.curState !== LoadMoreState.state.hide ? this.renderLoad() : null}
             </View>
         );
     }
@@ -92,11 +78,11 @@ class LoadingMore extends Component {
             curState: nextProps.state
         })
         switch (nextProps.state) {
-            case LoadingMore.state.loading:
+            case LoadMoreState.state.loading:
 //                console.log('callback---start')
                 this.animate()
                 break
-            case LoadingMore.state.hide:
+            case LoadMoreState.state.hide:
 //                console.log('callback---stop');
                 this.arr.forEach((item) => {
                     this.animatedValue[item].stopAnimation(value => {
@@ -104,10 +90,10 @@ class LoadingMore extends Component {
                     });
                 })
                 break
-            case LoadingMore.state.noMore:
+            case LoadMoreState.state.noMore:
                 setTimeout(() => {
                     this.setState({
-                        curState: LoadingMore.state.hide
+                        curState: LoadMoreState.state.hide
                     })
                 }, 3000)
                 break
@@ -117,14 +103,14 @@ class LoadingMore extends Component {
 
     renderLoadText() {
         switch (this.state.curState) {
-            case LoadingMore.state.loading:
-                return LoadingMore.stateText.loading
-            case LoadingMore.state.noMore:
-                return LoadingMore.stateText.noMore
-            case LoadingMore.state.tip:
-                return LoadingMore.stateText.tip
-            case LoadingMore.state.error:
-                return LoadingMore.stateText.error
+            case LoadMoreState.state.loading:
+                return LoadMoreState.stateText.loading
+            case LoadMoreState.state.noMore:
+                return LoadMoreState.stateText.noMore
+            case LoadMoreState.state.tip:
+                return LoadMoreState.stateText.tip
+            case LoadMoreState.state.error:
+                return LoadMoreState.stateText.error
         }
     }
 
@@ -140,7 +126,7 @@ class LoadingMore extends Component {
                 <TouchableOpacity
                     style={{flexDirection: 'row', alignItems: 'center', height: width * 0.14,}}
                     onPress={() => {
-                        if (this.state.curState === LoadingMore.state.error){
+                        if (this.state.curState === LoadMoreState.state.error){
                             this.props.onRetry && this.props.onRetry()
                         }
                     }}>
@@ -151,7 +137,7 @@ class LoadingMore extends Component {
                     }}>
                         {this.renderLoadText()}
                     </Text>
-                    {this.state.curState === LoadingMore.state.loading ?
+                    {this.state.curState === LoadMoreState.state.loading ?
                         <View style={styles.pointsView}>
                             {animations}
                         </View> : null}
@@ -160,10 +146,10 @@ class LoadingMore extends Component {
     }
 }
 
-LoadingMore.defaultProps = {
+LoadMore.defaultProps = {
     loading: false, //加载更多
 };
-LoadingMore.propTypes = {
+LoadMore.propTypes = {
     loading: PropTypes.bool.isRequired
 };
 const styles = StyleSheet.create({
@@ -184,4 +170,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoadingMore;
+export default LoadMore;
