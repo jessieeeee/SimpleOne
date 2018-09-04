@@ -149,7 +149,7 @@ class AllListTopic extends Component{
 
         }, (error) => {
             this.props.onError && this.props.onError(this.getTopicData)
-            toast.showMsg('error' + error,toast.SHORT)
+            console.log('error' + error)
         });
     }
 

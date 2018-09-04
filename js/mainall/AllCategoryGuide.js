@@ -6,7 +6,6 @@
 
 import React, {Component} from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -16,7 +15,6 @@ import {
 } from 'react-native';
 import constants from '../Constants';
 import SearchCategory from '../search/SearchCategory';
-let toast = NativeModules.ToastNative;
 let {width, height} = constants.ScreenWH;
 let key=0;
 class AllCategoryGuide extends Component{
@@ -110,7 +108,7 @@ class AllCategoryGuide extends Component{
         key++;
         return (
             <TouchableOpacity
-                onPress={() =>    toast.showMsg('click',toast.SHORT)}>
+                onPress={() => this.pushToSearchCategory(iconName)}>
                 <Image source={{uri: iconName}} style={styles.iconSpan2} key={key}/>
             </TouchableOpacity>
         );

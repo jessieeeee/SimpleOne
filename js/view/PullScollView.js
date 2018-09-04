@@ -51,8 +51,6 @@ export default class PullScollView extends Component {
     static propTypes = {
         topRefreshHeight: PropTypes.number,
         pullOkMargin: PropTypes.number,
-        onMove: PropTypes.func,
-        onRelease: PropTypes.func,
         onPulling: PropTypes.func,
         onPullOk: PropTypes.func,
         onPullRelease: PropTypes.func,

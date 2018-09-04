@@ -100,7 +100,7 @@ class AllListBanner extends Component{
             //开启定时器
             this.startTimer();
         }, (error) => {
-            toast.showMsg('error' + error,toast.SHORT);
+            console.log('error' + error)
         });
     }
 

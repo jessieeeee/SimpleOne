@@ -22,7 +22,6 @@ import PullPickDate from '../view/PullPickDate';
 import ServerApi from '../ServerApi';
 import {BaseComponent} from "../view/BaseComponent";
 import CommStyles from "../CommStyles";
-let toast = NativeModules.ToastNative;
 let {width, height} = constants.ScreenWH;
 const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
 const BaseScriptChangeColor =
@@ -73,7 +72,7 @@ class SearchCategory extends Component{
             });
 
         }, (error) => {
-            toast.show('error' + error, toast.SHORT);
+            console.lo
         });
     }
 

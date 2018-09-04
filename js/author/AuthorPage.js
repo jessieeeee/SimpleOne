@@ -26,7 +26,6 @@ import OneListAudio from '../mainone/OneListAudio'
 import ServerApi from '../ServerApi'
 import CommStyles from "../CommStyles"
 
-let toast = NativeModules.ToastNative
 let {width, height} = constants.ScreenWH
 let itemArr = []
 let key = 0
@@ -79,7 +78,7 @@ class AuthorPage extends Component {
             }
             console.log('当前数量' + workList.length);
         }, (error) => {
-            toast.showMsg('error' + error, toast.SHORT);
+            console.log('error' + error);
             this.setState({
                 loadingState: LoadMoreState.state.error,
             });

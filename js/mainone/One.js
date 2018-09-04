@@ -531,7 +531,7 @@ class One extends Component{
             }
             onSuccess(result);
         }, (error) => {
-            toast.showMsg('error' + error,toast.SHORT)
+           console.log('error' + error)
         });
     }
 

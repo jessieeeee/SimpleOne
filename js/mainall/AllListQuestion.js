@@ -20,7 +20,7 @@ import constants from "../Constants";
 import Read from '../read/Read';
 import ServerApi from '../ServerApi';
 let {width, height} = constants.ScreenWH;
-let toast = NativeModules.ToastNative;
+
 class  AllListQuestion extends Component{
     constructor(props){
         super(props);
@@ -88,7 +88,7 @@ class  AllListQuestion extends Component{
             });
             // console.log(result);
         }, (error) => {
-            toast.showMsg('error' + error,toast.SHORT);
+            console.log('error' + error)
         });
     }
 }

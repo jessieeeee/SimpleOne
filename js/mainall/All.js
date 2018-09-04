@@ -54,7 +54,8 @@ class All extends Component {
             resolve();
             this.setState({
                 isRefreshing: false,
-                loadMore: false
+                loadMore: false,
+                scrollEnabled: true
             });
         }, 3000);
     }
@@ -68,12 +69,7 @@ class All extends Component {
                     onPullRelease={this.onPullRelease}
                     onLoadMore={this.onLoadMore}
                     loadMoreState={this.state.loadingState}
-                    onRelease={() => {
-                        this.setState({
-                            scrollEnabled: true
-                        })
-                    }}
-                    onMove={() => {
+                    onPulling={() => {
                         this.setState({
                             scrollEnabled: false
                         })
