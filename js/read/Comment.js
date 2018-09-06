@@ -4,22 +4,21 @@
  * @flow 阅读界面下面的评论
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     TouchableOpacity,
     Image,
-} from 'react-native';
+} from 'react-native'
 
-import Login from '../login/Login';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+import Login from '../login/Login'
+import constants from '../Constants'
+let {width, height} = constants.ScreenWH
 class Comment extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             praise: false,
             praiseNum: this.props.data.praisenum,
@@ -52,26 +51,25 @@ class Comment extends Component{
                     </View>
                 </View>
             </View>
-        );
+        )
     }
 
     praiseClick(){
         this.setState({
             praiseNum: this.state.praise?this.props.data.praisenum:this.props.data.praisenum + 1,
             praise: !this.state.praise,
-        });
-
+        })
     }
 
     renderPraise() {
         if (this.state.praise) {
             return (
                 <Image source={{uri: 'comment_laud_selected'}} style={styles.icon}/>
-            );
+            )
         } else {
             return (
                 <Image source={{uri: 'comment_laud'}} style={styles.icon}/>
-            );
+            )
         }
     }
     /**
@@ -79,7 +77,6 @@ class Comment extends Component{
      * @param url
      */
     pushToLogin() {
-
         this.props.navigator.push(
             {
                 component: Login,
@@ -91,9 +88,7 @@ class Comment extends Component{
 }
 Component.defaultProps={
     bgColor: 'white'
-};
-
-
+}
 
 const styles = StyleSheet.create({
         container: {

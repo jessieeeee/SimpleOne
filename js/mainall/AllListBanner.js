@@ -4,9 +4,8 @@
  * @flow 主界面分页－所有－顶部水平滚动列表
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     ScrollView,
     Text,
@@ -15,28 +14,29 @@ import {
     TouchableOpacity,
     NativeModules,
 } from 'react-native';
-import NetUtils from "../util/NetUtil";
-import Read from '../read/Read';
-import constants from '../Constants';
-import ServerApi from '../ServerApi';
-let {width, height} = constants.ScreenWH;
-let page;
-let toast = NativeModules.ToastNative;
+import NetUtils from "../util/NetUtil"
+import Read from '../read/Read'
+import constants from '../Constants'
+import ServerApi from '../ServerApi'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
+let page
+let toast = NativeModules.ToastNative
 class AllListBanner extends Component{
     constructor(props){
         super(props);
         this.state={
             curPage: '0',
             banner: null,
-        };
-        page=this;
+        }
+        page=this
     }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
-        this.getBannerData();
+        this.getBannerData()
     }
 
     /**
@@ -45,7 +45,7 @@ class AllListBanner extends Component{
      */
     componentWillReceiveProps(nextProps){
         if(nextProps.refreshView){
-            this.getBannerData();
+            this.getBannerData()
         }
     }
 
@@ -54,8 +54,8 @@ class AllListBanner extends Component{
      */
     startTimer() {
         //获得scrollView
-        let scrollView = this.refs.sv_banner;
-        this.stopTimer();
+        let scrollView = this.refs.sv_banner
+        this.stopTimer()
         this.timer = setInterval(function () {
             //计算当前所在页数
             let activePage;
@@ -73,8 +73,8 @@ class AllListBanner extends Component{
             //设置偏移量，实现滚动
             let offsetx = activePage * width;
             // console.log("offsetx:" + offsetx);
-            scrollView.scrollResponderScrollTo({x: offsetx, y: 0, animated: true});
-        }, this.props.duration);
+            scrollView.scrollResponderScrollTo({x: offsetx, y: 0, animated: true})
+        }, this.props.duration)
     }
 
     /**
@@ -82,7 +82,7 @@ class AllListBanner extends Component{
      */
     stopTimer() {
         if(this.timer!=null){
-            clearInterval(this.timer);
+            clearInterval(this.timer)
         }
     }
 
@@ -95,13 +95,14 @@ class AllListBanner extends Component{
         NetUtils.get(ServerApi.AllBanner, null, (result) => {
             this.setState({
                 banner: result,
-            });
-            // console.log(result);
+            })
+            this.props.onSuccess && this.props.onSuccess()
             //开启定时器
-            this.startTimer();
+            this.startTimer()
         }, (error) => {
             console.log('error' + error)
-        });
+            this.props.onError && this.props.onError()
+        })
     }
 
     render() {
@@ -132,7 +133,7 @@ class AllListBanner extends Component{
                 </View>
 
             </View>
-        );
+        )
     }
 
     /**
@@ -141,19 +142,19 @@ class AllListBanner extends Component{
      */
     renderChildView() {
         if (this.state.banner != null) {
-            let allchild = [];
-            let itemDatas = this.state.banner.data;
+            let allchild = []
+            let itemDatas = this.state.banner.data
 
             for (let i = 0; i < itemDatas.length; i++) {
-                let itemData = itemDatas[i];
+                let itemData = itemDatas[i]
                 allchild.push(
                     <TouchableOpacity key={i}
                                       onPress={() => this.pushToRead()}>
                         <Image source={{uri: itemData.cover}} style={styles.img}/>
                     </TouchableOpacity>
-                );
+                )
             }
-            return allchild;
+            return allchild
         }
     }
 
@@ -164,7 +165,7 @@ class AllListBanner extends Component{
     renderPageCircle() {
         if (this.state.banner != null) {
             //定义一个数组放置所有的圆点
-            let indicatorArr = [];
+            let indicatorArr = []
             for (let i = 0; i < this.state.banner.data.length; i++) {
                 indicatorArr.push(
                     <Text key={i}
@@ -173,7 +174,7 @@ class AllListBanner extends Component{
                     </Text>
                 )
             }
-            return indicatorArr;
+            return indicatorArr
         }
     }
 
@@ -184,9 +185,9 @@ class AllListBanner extends Component{
      */
     renderCicle(index) {
         if (index === this.state.curPage) {
-            return '●';
+            return '●'
         } else {
-            return '○';
+            return '○'
         }
     }
 
@@ -196,13 +197,13 @@ class AllListBanner extends Component{
      */
     onAnimationEnd(e) {
         //水平方向偏移量
-        let offset = e.nativeEvent.contentOffset.x;
+        let offset = e.nativeEvent.contentOffset.x
         //当前页数
         let currentPage = Math.floor(offset / width);
 
         this.setState({
             curPage: currentPage
-        });
+        })
     }
 
     /**
@@ -230,16 +231,23 @@ class AllListBanner extends Component{
     componentWillUnmount() {
         // 如果存在this.timer，则使用clearTimeout清空。
         // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
-        this.timer && clearInterval(this.timer);
+        this.timer && clearInterval(this.timer)
     }
 }
 
+AllListBanner.propTypes = {
+    onError: PropTypes.func,
+    onSuccess: PropTypes.func,
+    refreshView: PropTypes.bool,
+    duration: PropTypes.number,
+    scrollEnabled: PropTypes.bool
+}
 AllListBanner.defaultProps={
     duration: 4000,
     // 外层回调函数参
     refreshView: false, //刷新
     scrollEnabled: true //解决滑动冲突外部控制
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -264,7 +272,7 @@ const styles = StyleSheet.create({
         right: width * 0.02,
         alignItems: 'center'
     }
-});
+})
 
-export default AllListBanner;
+export default AllListBanner
 

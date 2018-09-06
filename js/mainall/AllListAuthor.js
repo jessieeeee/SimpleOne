@@ -4,9 +4,8 @@
  * @flow　主界面分页－所有－作者列表
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -14,34 +13,33 @@ import {
     ListView,
     TouchableOpacity,
     NativeModules,
-} from 'react-native';
-
-import NetUtils from "../util/NetUtil";
-import constants from '../Constants';
-import AuthorPage from '../author/AuthorPage';
-import ServerApi from '../ServerApi';
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import PropTypes from 'prop-types'
+import NetUtils from "../util/NetUtil"
+import constants from '../Constants'
+import AuthorPage from '../author/AuthorPage'
+import ServerApi from '../ServerApi'
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
 
 
 //设置数据源
 let ds = new ListView.DataSource({
     //返回条件，任意两条不等
     rowHasChanged: (r1, r2) => r1 != r2
-
-});
+})
 
 class AllListAuthor extends Component{
     constructor(props){
-        super(props);
-        this.state={};
-        this.renderRow=this.renderRow.bind(this);
+        super(props)
+        this.state={}
+        this.renderRow=this.renderRow.bind(this)
     }
     /**
      * 发起网络请求
      */
     componentDidMount() {
-        this.getHotAuthorData();
+        this.getHotAuthorData()
     }
 
     /**
@@ -50,7 +48,7 @@ class AllListAuthor extends Component{
      */
     componentWillReceiveProps(nextProps){
         if(nextProps.refreshView){
-            this.getHotAuthorData();
+            this.getHotAuthorData()
         }
     }
 
@@ -87,7 +85,7 @@ class AllListAuthor extends Component{
                 </View>
 
             </View>
-        );
+        )
     }
 
     // 热门作者列表
@@ -96,12 +94,9 @@ class AllListAuthor extends Component{
             // console.log(this.state.dataSource);
             return (
                 <ListView dataSource={this.state.dataSource}
-                          renderRow={this.renderRow}
-                >
-                    }
-
+                          renderRow={this.renderRow}>
                 </ListView>
-            );
+            )
         }
     }
 
@@ -149,22 +144,24 @@ class AllListAuthor extends Component{
     // 请求专题数据
     getHotAuthorData() {
         NetUtils.get(ServerApi.HotAuthor, null, (result) => {
+            this.props.onSuccess && this.props.onSuccess()
             this.setState({
                 author: result,
-            });
+            })
 
-            let itemArr = [];
+            let itemArr = []
             for (var i = 0; i < 3; i++) {
-                itemArr.push(this.state.author.data[i]);
+                itemArr.push(this.state.author.data[i])
             }
 
             this.setState({
                 dataSource: ds.cloneWithRows(itemArr),
-            });
+            })
             // console.log(result);
         }, (error) => {
             console.log('error' + error)
-        });
+            this.props.onError && this.props.onError()
+        })
     }
 
     /**
@@ -184,10 +181,14 @@ class AllListAuthor extends Component{
         )
     }
 }
-AllListAuthor.defaultProps={
+AllListAuthor.defaultProps = {
     refreshView: false, //刷新
-};
-
+}
+AllListAuthor.propTypes = {
+    refreshView: PropTypes.bool,
+    onError: PropTypes.func,
+    onSuccess: PropTypes.func
+}
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
@@ -231,6 +232,6 @@ const styles = StyleSheet.create({
         width: width * 0.14,
         height: width * 0.09,
     }
-});
+})
 
-export default AllListAuthor;
+export default AllListAuthor

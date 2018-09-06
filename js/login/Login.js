@@ -4,7 +4,7 @@
  * @flow 第三方登录页
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
     StyleSheet,
     Text,
@@ -13,12 +13,12 @@ import {
     NativeModules,
     TouchableOpacity,
     StatusBar
-} from 'react-native';
-import constants from '../Constants';
-import CommStyles from "../CommStyles";
-let toast = NativeModules.ToastNative;
-let ULogin = NativeModules.ULogin;
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import CommStyles from "../CommStyles"
+let toast = NativeModules.ToastNative
+let ULogin = NativeModules.ULogin
+let {width, height} = constants.ScreenWH
 
 class Login extends Component{
     render() {
@@ -53,7 +53,7 @@ class Login extends Component{
                 <Text style={[styles.description,{bottom:width*0.122}]}>创建账户即代表您同意</Text>
                 <Text style={[styles.description,{bottom:width*0.056}]}>使用条款和隐私政策</Text>
             </View>
-        );
+        )
     }
 
     /**
@@ -63,14 +63,14 @@ class Login extends Component{
     platformLogin(platform) {
         ULogin.login(platform,
             (platform) => {
-                console.log(platform + '成功');
+                console.log(platform + '成功')
             },
             (platform, msg) => {
-                console.log(platform + '失败' + msg);
+                console.log(platform + '失败' + msg)
             },
             (platform) => {
-                console.log(platform + '取消');
-            });
+                console.log(platform + '取消')
+            })
     }
 
     /**
@@ -90,7 +90,7 @@ class Login extends Component{
                 <Text style={styles.title}>登录ONE</Text>
 
             </View>
-        );
+        )
     }
 }
 
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         textDecorationLine:'underline',
         position:'absolute',
     }
-});
+})
 
 // module.exports=Login;
-export default Login;
+export default Login

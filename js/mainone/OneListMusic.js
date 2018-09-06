@@ -30,9 +30,12 @@ let {width, height} = constants.ScreenWH
 let rotate
 class OneListMusic extends Component{
 
+    static defaultProps = {
+        page: 0
+    }
     static propTypes = {
         data: PropTypes.object,
-        page: PropTypes.number.isRequired
+        page: PropTypes.number
     }
 
     constructor(props){

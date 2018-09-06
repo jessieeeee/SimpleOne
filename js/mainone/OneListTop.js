@@ -23,11 +23,12 @@ let {width, height} = constants.ScreenWH
 class OneListTop extends Component{
     static defaultProps = {
         date:'',
+        weather:null
     }
 
     static propTypes = {
         date: PropTypes.string,
-        weather: PropTypes.object.isRequired,
+        weather: PropTypes.object,
         data: PropTypes.object.isRequired,
         clickDisplay: PropTypes.func
     }

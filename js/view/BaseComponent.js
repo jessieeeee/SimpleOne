@@ -1,19 +1,20 @@
-import constants from "../Constants";
+
 
 /**
  * @author : JessieK
  * @email : lyj1246505807@gmail.com
  * @description : 高阶组件公共基类
  */
-import React, {Component} from 'react';
-import {View} from 'react-native';
-import {autorun} from 'mobx';
-import {observer} from "mobx-react/native";
-import ShowPlayMusic from '../view/ShowPlayMusic';
-import MusicControl from '../musiccontrol/MusicControl';
+import React, {Component} from 'react'
+import {View} from 'react-native'
+import {autorun} from 'mobx'
+import {observer} from "mobx-react/native"
+import ShowPlayMusic from '../view/ShowPlayMusic'
+import MusicControl from '../musiccontrol/MusicControl'
 import Status from '../util/Status'
 import NetUtil from '../util/NetUtil'
 import DefaultDisplay from '../view/DefaultDisplay'
+import constants from "../Constants"
 @observer
 export const BaseComponent = (WrapComponent) => {
     return class HOC extends Component {
@@ -148,7 +149,7 @@ export const BaseComponent = (WrapComponent) => {
         }
 
     }
-};
+}
 autorun(() => {
-    console.log('playmusic state change');
-});
+    console.log('playmusic state change')
+})

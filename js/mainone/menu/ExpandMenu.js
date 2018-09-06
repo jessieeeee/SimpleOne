@@ -15,9 +15,6 @@ import MenuItem from  './MenuItem'
 
 
 class ExpandMenu extends Component{
-    constructor(props){
-        super(props)
-    }
 
     render() {
         return (

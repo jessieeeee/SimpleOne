@@ -4,7 +4,7 @@
  * @flow　主界面分页－我的
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     AppRegistry,
     StyleSheet,
@@ -12,18 +12,18 @@ import {
     View,
     Image,
     TouchableOpacity,
-} from 'react-native';
-import {BaseComponent} from "../view/BaseComponent";
-import constants from "../Constants";
-import Login from '../login/Login';
-import Setting from '../setting/Setting';
+} from 'react-native'
+import {BaseComponent} from "../view/BaseComponent"
+import constants from "../Constants"
+import Login from '../login/Login'
+import Setting from '../setting/Setting'
 
-let {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH
 
 
 class Me extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             play:true
         }
@@ -66,10 +66,8 @@ class Me extends Component{
                     </Text>
                 </TouchableOpacity>
 
-
-
             </View>
-        );
+        )
     }
 
     /**
@@ -112,6 +110,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.044,
         marginTop: width * 0.012,
     }
-});
+})
 
-export default MePage = BaseComponent(Me);
+export default MePage = BaseComponent(Me)

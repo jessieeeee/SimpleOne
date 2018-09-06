@@ -4,19 +4,18 @@
  * @flow 中间分类导航
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity,
-    NativeModules,
-} from 'react-native';
-import constants from '../Constants';
-import SearchCategory from '../search/SearchCategory';
-let {width, height} = constants.ScreenWH;
-let key=0;
+} from 'react-native'
+import constants from '../Constants'
+import SearchCategory from '../search/SearchCategory'
+let {width, height} = constants.ScreenWH
+let key=0
 class AllCategoryGuide extends Component{
     render() {
         return (
@@ -24,11 +23,9 @@ class AllCategoryGuide extends Component{
                 <Text style={[styles.categoryTitle,{color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                     分类导航
                 </Text>
-
                 {this.renderItem()}
-
             </View>
-        );
+        )
     }
 
     /**
@@ -45,7 +42,7 @@ class AllCategoryGuide extends Component{
                 {this.renderItemSpan1('music')}
                 {this.renderItemSpan1('audio')}
             </View>
-        );
+        )
     }
 
     /**
@@ -53,29 +50,29 @@ class AllCategoryGuide extends Component{
      * @param url
      */
     pushToSearchCategory(iconName){
-        let id=0;
+        let id = 0
         switch (iconName){
             case 'img_text':
-                id=0;
+                id = 0
                 break;
             case 'qa':
-                id=3;
+                id = 3
                 break;
             case 'read':
-                id=1;
+                id = 1
                 break;
             case 'serialize':
-                id=2;
+                id = 2
                 break;
             case 'movie':
-                id=5;
+                id = 5
                 break;
             case 'music':
-                id=4;
-                break;
+                id = 4
+                break
             case 'audio':
-                id=8;
-                break;
+                id = 8
+                break
         }
         this.props.navigator.push(
             {
@@ -92,26 +89,26 @@ class AllCategoryGuide extends Component{
      * 单个跨度item
      */
     renderItemSpan1(iconName) {
-        key++;
+        key++
         return (
             <TouchableOpacity
                 onPress={() => this.pushToSearchCategory(iconName)}>
                 <Image source={{uri: iconName}} style={styles.iconSpan1} key={key}/>
             </TouchableOpacity>
-        );
+        )
     }
 
     /**
      * 两个跨度item
      */
     renderItemSpan2(iconName) {
-        key++;
+        key++
         return (
             <TouchableOpacity
                 onPress={() => this.pushToSearchCategory(iconName)}>
                 <Image source={{uri: iconName}} style={styles.iconSpan2} key={key}/>
             </TouchableOpacity>
-        );
+        )
     }
 }
 
@@ -146,6 +143,6 @@ const styles = StyleSheet.create({
         marginRight: width * 0.015,
         marginBottom: width * 0.015,
     }
-});
+})
 
-export default AllCategoryGuide;
+export default AllCategoryGuide

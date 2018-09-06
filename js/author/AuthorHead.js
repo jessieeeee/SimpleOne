@@ -4,36 +4,34 @@
  * @flow 作者信息的头部
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity,
-
-} from 'react-native';
-import constants from '../Constants';
-import NetUtils from "../util/NetUtil";
-import ServerApi from '../ServerApi';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import NetUtils from "../util/NetUtil"
+import ServerApi from '../ServerApi'
+let {width, height} = constants.ScreenWH
 
 class AuthorHead extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             result:''
         }
     }
 
     componentDidMount(){
-        let url= ServerApi.AuthorHead.replace('{author_id}', this.props.authorId);
+        let url= ServerApi.AuthorHead.replace('{author_id}', this.props.authorId)
         NetUtils.get(url,null,(result) => {
             this.setState({
                 result:result.data
-            });
-        });
+            })
+        })
     }
 
     render() {
@@ -50,11 +48,7 @@ class AuthorHead extends Component{
                 </TouchableOpacity>
                 <Text style={[styles.followNum,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.fans_total+'关注'}</Text>
             </View>
-        );
-    }
-
-    followAuthor(){
-
+        )
     }
 
 }
@@ -97,7 +91,7 @@ const styles = StyleSheet.create({
         fontSize:width*0.026,
         marginBottom:width*0.04
     }
-});
+})
 
-export default AuthorHead;
+export default AuthorHead
 

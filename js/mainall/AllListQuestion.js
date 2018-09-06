@@ -4,34 +4,35 @@
  * @flow 主界面分页－所有－问题列表
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     ScrollView,
     Image,
     TouchableOpacity,
-    NativeModules,
-} from 'react-native';
-import NetUtils from "../util/NetUtil";
-import constants from "../Constants";
-import Read from '../read/Read';
-import ServerApi from '../ServerApi';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import NetUtils from "../util/NetUtil"
+import constants from "../Constants"
+import Read from '../read/Read'
+import ServerApi from '../ServerApi'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 
 class  AllListQuestion extends Component{
-    constructor(props){
-        super(props);
-        this.state={};
-    }
 
+    constructor(props){
+        super(props)
+        this.state = {
+            questions:null
+        }
+    }
     /**
      * 发起网络请求
      */
     componentDidMount() {
-        this.getQuestionData();
+        this.getQuestionData()
     }
 
     /**
@@ -40,7 +41,7 @@ class  AllListQuestion extends Component{
      */
     componentWillReceiveProps(nextProps){
         if(nextProps.refreshView){
-            this.getQuestionData();
+            this.getQuestionData()
         }
     }
 
@@ -58,25 +59,25 @@ class  AllListQuestion extends Component{
 
 
             </View>
-        );
+        )
     }
 
     //返回所有的item
     renderAllItem() {
-        if(this.state.questions!==undefined){
+        if(this.state.questions){
             //定义组件数组
-            let itemArr = [];
+            let itemArr = []
             //取出数据
-            let questionData = this.state.questions.data;
+            let questionData = this.state.questions.data
             for (let i = 0; i < questionData.length; i++) {
                 //取出单个数据
-                let data = questionData[i];
+                let data = questionData[i]
                 //创建组件装入数组
                 itemArr.push(
                     <QuestionItem key={i} data={data} navigator={this.props.navigator}/>
-                );
+                )
             }
-            return itemArr;
+            return itemArr
         }
     }
 
@@ -85,24 +86,27 @@ class  AllListQuestion extends Component{
         NetUtils.get(ServerApi.AllQuestion, null, (result) => {
             this.setState({
                 questions: result,
-            });
+            })
             // console.log(result);
+            this.props.onSuccess && this.props.onSuccess()
         }, (error) => {
             console.log('error' + error)
-        });
+            this.props.onError && this.props.onError()
+        })
     }
 }
 
 AllListQuestion.defaultProps={
     refreshView: false, //刷新
-};
+}
+
+AllListQuestion.propTypes = {
+    refreshView: PropTypes.bool,
+    onError: PropTypes.func,
+    onSuccess: PropTypes.func,
+}
 
 export class QuestionItem extends Component{
-    constructor(props){
-        super(props);
-
-    }
-
     render() {
         return (
             <TouchableOpacity  onPress={() => this.pushToRead(this.props.data)}>
@@ -115,7 +119,7 @@ export class QuestionItem extends Component{
                     </View>
                 </View>
             </TouchableOpacity>
-        );
+        )
     }
 
     /**
@@ -168,6 +172,6 @@ const styles = StyleSheet.create({
         marginTop:width*0.03,
         marginLeft:width*0.05,
     }
-});
+})
 
-export default AllListQuestion;
+export default AllListQuestion

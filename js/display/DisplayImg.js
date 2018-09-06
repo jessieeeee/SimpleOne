@@ -4,24 +4,20 @@
  * @flow　显示大图详情
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
-    View,
     Image,
     Modal,
     TouchableOpacity
-} from 'react-native';
-import PropTypes from 'prop-types';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import PropTypes from 'prop-types'
+import constants from '../Constants'
+let {width, height} = constants.ScreenWH
 
 class DisplayImg extends Component{
-  constructor(props){
-      super(props);
-  }
+
     render() {
         return (
             <Modal
@@ -41,13 +37,12 @@ class DisplayImg extends Component{
                 </TouchableOpacity>
             </Modal>
         )
-            ;
     }
 
     //按图片宽度缩放
     getHeight(w, h) {
-        let ratio = (width * 0.8) / w;
-        return h * ratio;
+        let ratio = (width * 0.8) / w
+        return h * ratio
     }
 }
 
@@ -66,9 +61,7 @@ DisplayImg.defaultProps={
     bottomText:'',
     isVisible:false,
     onCancel:null,
-};
-
-
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -85,6 +78,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
     },
-});
+})
 
-export default DisplayImg;
+export default DisplayImg

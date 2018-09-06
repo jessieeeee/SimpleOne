@@ -4,7 +4,7 @@
  * @flow 主界面分页-one顶部图片的小记
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -14,28 +14,28 @@ import {
     ScrollView,
     NativeModules,
     TouchableOpacity
-} from 'react-native';
-import constants from '../Constants';
-import DateUtil from "../util/DateUtil";
-import Login from '../login/Login';
-import ChangeImg from './ChangeImg';
-import Share from '../share/Share';
-import CommStyles from "../CommStyles";
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import DateUtil from "../util/DateUtil"
+import Login from '../login/Login'
+import ChangeImg from './ChangeImg'
+import Share from '../share/Share'
+import CommStyles from "../CommStyles"
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
 
 class Remark extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             curText: '<No Event>',
             prevText: '<No Event>',
             prev2Text: '<No Event>',
             imgUri: ''
-        };
+        }
     }
     componentDidMount() {
-        toast.showMsg('您可以修改图片和文字来创建自己的小记', toast.SHORT);
+        toast.showMsg('您可以修改图片和文字来创建自己的小记', toast.SHORT)
     }
 
     render() {
@@ -56,11 +56,11 @@ class Remark extends Component{
                             <Text
                                 style={[styles.dateText, {color: constants.nightMode ? 'white': constants.normalTextColor}]}>{DateUtil.getNextDate(this.props.route.params.date).substring(8, 10)}</Text>
                         </View>
-                        {/*下面天气*/}
-                        <Text style={[styles.weatherText,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
-                            {this.getWeatherInfo()}
-                        </Text>
-
+                        { this.props.route.params.weather ?
+                            <Text style={[styles.weatherText,{color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}>
+                                {this.getWeatherInfo()}
+                            </Text> : null
+                        }
                     </View>
                     <TouchableOpacity
                         onPress={() => {
@@ -95,23 +95,22 @@ class Remark extends Component{
                         style={[styles.showText, {color: constants.nightMode ? 'white': constants.normalTextColor,marginBottom: width * 0.14}]}>{this.props.route.params.wordsInfo}</Text>
                 </ScrollView>
             </View>
-
-        );
+        )
     }
 
     renderImg() {
-        let uri = '';
+        let uri = ''
         if (this.state.imgUri !== '') {
-            uri = this.state.imgUri;
+            uri = this.state.imgUri
         } else {
-            uri = this.props.route.params.imgUrl;
+            uri = this.props.route.params.imgUrl
         }
         return (
             <Image style={{
                 width: width,
                 height: this.getHeight(this.props.route.params.originalW, this.props.route.params.originalH),
             }} source={{uri: uri}}/>
-        );
+        )
     }
 
     updateText(text) {
@@ -120,8 +119,8 @@ class Remark extends Component{
                 curText: text,
                 prevText: state.curText,
                 prev2Text: state.prevText,
-            };
-        });
+            }
+        })
     }
 
     /**
@@ -136,14 +135,14 @@ class Remark extends Component{
                     response: this.changeImgResponse
                 }
             }
-        );
+        )
     }
 
     changeImgResponse(response) {
-        console.log('receive = ', response);
+        console.log('receive = ', response)
         this.setState({
             imgUri: 'data:image/jpeg;base64,' + response.data
-        });
+        })
     }
 
     /**
@@ -151,7 +150,6 @@ class Remark extends Component{
      * @param url
      */
     pushToShare() {
-
         this.props.navigator.push(
             {
                 component: Share,
@@ -170,7 +168,6 @@ class Remark extends Component{
      * @param url
      */
     pushToLogin() {
-
         this.props.navigator.push(
             {
                 component: Login,
@@ -215,7 +212,7 @@ class Remark extends Component{
                     </TouchableOpacity>
                 </View>
             </View>
-        );
+        )
     }
 
     /**
@@ -223,9 +220,9 @@ class Remark extends Component{
      * @returns {string}
      */
     getWeatherInfo() {
-        let cityName = this.props.route.params.weather.city_name;
-        let climate = this.props.route.params.weather.climate;
-        return cityName + '  ' + climate;
+        let cityName = this.props.route.params.weather.city_name
+        let climate = this.props.route.params.weather.climate
+        return cityName + '  ' + climate
     }
 }
 
@@ -293,6 +290,5 @@ const styles = StyleSheet.create({
         right: width * 0.04,
         flexDirection: 'row'
     }
-});
-
-export default Remark;
+})
+export default Remark
