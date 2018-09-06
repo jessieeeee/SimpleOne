@@ -4,30 +4,42 @@
  * @flow 最顶部的item，摄影和一句话
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity
-} from 'react-native';
-import Remark from '../remark/Remark';
-import Login from '../login/Login';
-import constants from '../Constants';
-import Share from '../share/Share';
-import CommStyles from "../CommStyles";
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import Remark from '../remark/Remark'
+import Login from '../login/Login'
+import constants from '../Constants'
+import Share from '../share/Share'
+import CommStyles from "../CommStyles"
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 
 class OneListTop extends Component{
+    static defaultProps = {
+        date:'',
+    }
+
+    static propTypes = {
+        date: PropTypes.string,
+        weather: PropTypes.object.isRequired,
+        data: PropTypes.object.isRequired,
+        clickDisplay: PropTypes.func
+    }
+
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             like: false,
             likeNum:this.props.data.like_count,
             originalW: 0,
             originalH: 0,
-        };
+        }
     }
 
     /**
@@ -39,14 +51,14 @@ class OneListTop extends Component{
                     originalW:width,
                     originalH:height
                 }
-            );
-        });
+            )
+        })
     }
 
     //按图片宽度缩放
     getHeight(w, h){
-        var ratio=width/w;
-        return h*ratio;
+        let ratio = width / w
+        return h * ratio
     }
 
     //渲染
@@ -102,17 +114,13 @@ class OneListTop extends Component{
                             <Image source={{uri: 'stow_default'}} style={[styles.rightBtnIcon,{marginRight: width * 0.04}]}/>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
-                                          onPress={() => this.pushToShare()}>
-
+                        <TouchableOpacity onPress={() => this.pushToShare()}>
                             <Image source={{uri: 'share_image'}} style={styles.rightBtnIcon}/>
                         </TouchableOpacity>
                     </View>
-
                 </View>
-
             </View>
-        );
+        )
     }
 
     /**
@@ -120,11 +128,6 @@ class OneListTop extends Component{
      * @param url
      */
     pushToDisplay(){
-        // topText:this.props.data.volume,
-        // imgUrl:this.props.data.img_url,
-        //   bottomText:this.props.data.title + ' | ' + this.props.data.pic_info,
-        //   originalW:this.state.originalW,
-        //   originalH:this.state.originalH
         this.props.clickDisplay(
             this.props.data.volume,
             this.props.data.img_url,
@@ -165,14 +168,10 @@ class OneListTop extends Component{
      * @param url
      */
     pushToLogin(){
-
         this.props.navigator.push(
             {
                 component: Login,
                 title:'登录',
-                params:{
-
-                }
             }
         )
     }
@@ -182,7 +181,6 @@ class OneListTop extends Component{
      * @param url
      */
     pushToShare(){
-
         this.props.navigator.push(
             {
                 component: Share,
@@ -257,6 +255,6 @@ const styles = StyleSheet.create({
         width: width * 0.045,
         height: width * 0.045,
     },
-});
+})
 
-export default OneListTop;
+export default OneListTop

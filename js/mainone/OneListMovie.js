@@ -4,7 +4,7 @@
  * @flow 主界面分页－一个－视频item
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -13,19 +13,25 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import constants from '../Constants';
-import DateUtil from "../util/DateUtil";
-import Share from '../share/Share';
-import Read from '../read/Read';
-import CommStyles from "../CommStyles";
-let {width, height} = constants.ScreenWH;
+import constants from '../Constants'
+import DateUtil from "../util/DateUtil"
+import Share from '../share/Share'
+import Read from '../read/Read'
+import CommStyles from "../CommStyles"
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 class OneListMovie extends Component{
+
+    static propTypes = {
+        data: PropTypes.object
+    }
+
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             like: false,
             likeNum:this.props.data.like_count
-        };
+        }
     }
 
     //渲染
@@ -76,7 +82,7 @@ class OneListMovie extends Component{
 
                 </View>
             </TouchableOpacity>
-        );
+        )
     }
 
     /**
@@ -121,13 +127,11 @@ class OneListMovie extends Component{
      */
     getAuthor() {
         if (this.props.data.author.user_name !== undefined){
-            let tempStr = this.props.data.author.user_name.split(' ');
+            let tempStr = this.props.data.author.user_name.split(' ')
             return '文 / ' + tempStr[0];
         } else {
-            return '';
+            return ''
         }
-
-
     }
 
     /**
@@ -137,7 +141,7 @@ class OneListMovie extends Component{
         this.setState({
             likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
-        });
+        })
     }
 
     /**
@@ -147,9 +151,9 @@ class OneListMovie extends Component{
     showLikeIcon() {
         //喜欢
         if (this.state.like) {
-            return 'bubble_liked';
+            return 'bubble_liked'
         } else {
-            return 'bubble_like';
+            return 'bubble_like'
         }
     }
 }
@@ -196,6 +200,6 @@ const styles = StyleSheet.create({
         height: height * 0.057,
     },
 
-});
+})
 
-export default OneListMovie;
+export default OneListMovie

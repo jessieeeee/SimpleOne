@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     barRightBtnsIconItem2: {
         width: width * 0.045,
         height: width * 0.045,
-
     },
-});
-export default styles;
+
+})
+export default styles

@@ -35,9 +35,10 @@ export default class NetUtils {
                 }
             })
             .then((json) => {
+                console.log('server--------->',json)
                 callbackSuccess(json);
             }).catch(error => {
-            console.log(url + ':' + error);
+            console.log('server--------->', error);
             callbackError(error);
         });
     };

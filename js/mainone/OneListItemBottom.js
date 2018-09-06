@@ -4,27 +4,21 @@
  * @flow 主界面-one列表-最后一项
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-    AppRegistry,
     StyleSheet,
-    Text,
     View,
     Image
-} from 'react-native';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+let {width, height} = constants.ScreenWH
 class OneListItemBottom extends Component{
-    constructor(props){
-        super(props);
-    }
-
     render() {
         return (
             <View style={styles.container}>
                 <Image source={{uri:'feeds_bottom_image'}} style={{width:width*0.36,height:width*0.26}}/>
             </View>
-        );
+        )
     }
 }
 
@@ -37,6 +31,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#eeeeee',
     },
 
-});
+})
 
-export default OneListItemBottom;
+export default OneListItemBottom

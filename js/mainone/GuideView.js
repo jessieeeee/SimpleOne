@@ -3,22 +3,24 @@
  * @email :lyj1246505807@gmail.com
  * @description : 手势引导悬浮界面
  */
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
-    Text,
-    View,
     Image,
     Modal,
     TouchableOpacity
 } from 'react-native';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+import constants from '../Constants'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 
 class Guide extends Component{
-    constructor(props){
-        super(props);
+    static defaultProps= {
+        isVisible: false
+    }
+    static propTypes = {
+        isVisible: PropTypes.bool.isRequired,
+        onCancel: PropTypes.func
     }
     render(){
         return(
@@ -51,4 +53,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Guide;
+export default Guide

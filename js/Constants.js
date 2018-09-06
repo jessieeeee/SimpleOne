@@ -128,6 +128,6 @@ const object = {
     },
 
 
-};
+}
 
-export default object;
+export default object

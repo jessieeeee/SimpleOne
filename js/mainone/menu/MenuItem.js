@@ -4,22 +4,32 @@
  * @flow　主界面分页－一个－展开菜单列表项
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity,
-} from 'react-native';
-import constants from '../../Constants';
-import Read from '../../read/Read';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../../Constants'
+import Read from '../../read/Read'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 
 class MenuItem extends Component{
-    constructor(props){
-        super(props);
+    static defaultProps = {
+        category: '',
+        title: '',
+        data: null,
+        date: ''
+    }
+    static propTypes = {
+        category: PropTypes.string,
+        title: PropTypes.string,
+        data: PropTypes.object,
+        date: PropTypes.string,
+        todayRadio: PropTypes.func
     }
 
     render() {
@@ -35,7 +45,7 @@ class MenuItem extends Component{
                     </View>
                 </View>
             </TouchableOpacity>
-        );
+        )
     }
 
 
@@ -45,8 +55,8 @@ class MenuItem extends Component{
      */
     pushToRead() {
         if(this.props.data.content_type === 8 && this.props.date === constants.curDate ){
-            this.props.todayRadio();
-            return;
+            this.props.todayRadio()
+            return
         }
         this.props.navigator.push(
             {
@@ -60,13 +70,14 @@ class MenuItem extends Component{
         )
     }
 }
+
 MenuItem.defaultProps={
     category: '分类',
     title: '分类标题',
     data:null,
     date:'',
     todayRadio:null,
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -93,6 +104,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.038,
         width:width*0.8
     }
-});
+})
 
-export default MenuItem;
+export default MenuItem

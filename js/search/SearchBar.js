@@ -3,7 +3,7 @@
  * @email : lyj1246505807@gmail.com
  * @description : 搜索框
  */
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     TextInput,
@@ -11,10 +11,10 @@ import {
     TouchableOpacity,
     Text
 } from 'react-native'
-import constants from "../Constants";
-import PropTypes from 'prop-types';
+import constants from "../Constants"
+import PropTypes from 'prop-types'
 import CommStyles from "../CommStyles"
-let {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH
 
 class SearchBar extends Component{
     render(){
@@ -40,7 +40,7 @@ class SearchBar extends Component{
                     <Text style={styles.cancel}>取消</Text>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 }
 SearchBar.propsType={
@@ -50,7 +50,7 @@ SearchBar.propsType={
     onEndEditing:PropTypes.func.isRequired,
     onSubmitEditing:PropTypes.func.isRequired,
     searchKey:PropTypes.string
-};
+}
 
 const styles=StyleSheet.create({
     rightBtn: {
@@ -71,6 +71,6 @@ const styles=StyleSheet.create({
         color: '#b1b1b1',
         textAlign: 'center',
     },
-});
+})
 
-export default SearchBar;
+export default SearchBar

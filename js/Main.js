@@ -4,47 +4,46 @@
  * @flow 主界面
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     View,
     Image,
     BackHandler,
     NativeModules
-} from 'react-native';
+} from 'react-native'
 
-import {Navigator} from 'react-native-deprecated-custom-components';
-import constants from './Constants';
-import TabNavigator from 'react-native-tab-navigator';
-import ONE from './mainone/One';
-import ALL from './mainall/All';
-import ME from './mainme/Me';
+import {Navigator} from 'react-native-deprecated-custom-components'
+import constants from './Constants'
+import TabNavigator from 'react-native-tab-navigator'
+import ONE from './mainone/One'
+import ALL from './mainall/All'
+import ME from './mainme/Me'
 import LaunchImage from './launchImage'
 
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
-let barHeight = height * 0.082;
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
+let barHeight = height * 0.082
 
-let lastBackPressed = 0;
+let lastBackPressed = 0
 
 class Main extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.onBackAndroid = this.onBackAndroid.bind(this);
         this.state = {
             selectedTab: 'one',
             curBarHeight: 0,
             welcome: true
-        };
+        }
     }
 
     componentDidMount() {
-
         setTimeout(() => {
             this.setState({
                 welcome: false
             })
-        }, 2000);
+        }, 2000)
 
         BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid)
     }
@@ -73,7 +72,7 @@ class Main extends Component {
                 </TabNavigator>
                 {this.state.welcome ? <LaunchImage/> : null}
             </View>
-        );
+        )
 
     }
 
@@ -85,14 +84,14 @@ class Main extends Component {
     setNavigatorShow(isShow) {
         let updateHeight
         if (isShow) {
-            updateHeight = barHeight;
+            updateHeight = barHeight
         } else {
-            updateHeight = 0;
+            updateHeight = 0
         }
 
         this.setState({
             curBarHeight: updateHeight
-        });
+        })
     }
 
     renderTabBarItem(selectedTab, componentName, component, iconNormal, iconSelected) {
@@ -123,21 +122,21 @@ class Main extends Component {
     }
 
     onBackAndroid() {
-        console.log(this.props);
-        const nav = this.props.navigator;
-        const routers = nav.getCurrentRoutes();
+        console.log(this.props)
+        const nav = this.props.navigator
+        const routers = nav.getCurrentRoutes()
         if (routers.length > 1) {
             // 默认行为： 退出当前界面。
 
-            nav.pop();
-            return true;
+            nav.pop()
+            return true
         } else {
             if (lastBackPressed && lastBackPressed + 2000 >= Date.now()) {
                 //最近2秒内按过back键，可以退出应用。
                 return false;
             }
-            lastBackPressed = Date.now();
-            toast.showMsg('再按一次退出应用', toast.SHORT);
+            lastBackPressed = Date.now()
+            toast.showMsg('再按一次退出应用', toast.SHORT)
             return true;
         }
     }
@@ -156,6 +155,6 @@ const styles = StyleSheet.create({
     selectedTitleStyle: {
         color: '#555555'
     }
-});
+})
 
-export default Main;
+export default Main

@@ -4,28 +4,34 @@
  * @flow 主界面分页－一个－大多数item
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity
-} from 'react-native';
-import DateUtil from "../util/DateUtil";
-import Read from '../read/Read';
-import constants from '../Constants';
-import Share from '../share/Share';
-import CommStyles from "../CommStyles";
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import DateUtil from "../util/DateUtil"
+import Read from '../read/Read'
+import constants from '../Constants'
+import Share from '../share/Share'
+import CommStyles from "../CommStyles"
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 
 class OneListCommon extends Component{
+
+    static propTypes = {
+        data: PropTypes.object
+    }
+
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             like: false,
             likeNum:this.props.data.like_count
-        };
+        }
     }
 
     //渲染
@@ -66,14 +72,14 @@ class OneListCommon extends Component{
 
                 </View>
             </TouchableOpacity>
-        );
+        )
     }
 
     renderImg() {
         if (this.props.data.img_url !== '') {
             return (
                 <Image source={{uri: this.props.data.img_url}} style={styles.centerImg}/>
-            );
+            )
         }
     }
 
@@ -82,7 +88,6 @@ class OneListCommon extends Component{
      * @param url
      */
     pushToRead() {
-
         this.props.navigator.push(
             {
                 component: Read,
@@ -118,19 +123,19 @@ class OneListCommon extends Component{
      */
     getCategory() {
         if (this.props.data.tag_list != null && this.props.data.tag_list.length > 0) {
-            return '- ' + this.props.data.tag_list[0].title + ' -';
+            return '- ' + this.props.data.tag_list[0].title + ' -'
         }
         else if (this.props.data.category === constants.CategoryRead) {
-            return '- 阅读 -';
+            return '- 阅读 -'
         }
         else if (this.props.data.category === constants.CategorySerial) {
-            return '- 连载 -';
+            return '- 连载 -'
         }
         else if (this.props.data.category === constants.CategoryQuestion) {
-            return '- 问答 -';
+            return '- 问答 -'
         }
         else {
-            return '- 连载 -';
+            return '- 连载 -'
         }
     }
 
@@ -141,13 +146,13 @@ class OneListCommon extends Component{
     getAuthor() {
         if (this.props.data.author.user_name !== undefined){
             let tempStr
-            tempStr = this.props.data.author.user_name.split(' ');
+            tempStr = this.props.data.author.user_name.split(' ')
             if (this.props.data.category === constants.CategoryRead) {
-                return '文 / ' + tempStr[0];
+                return '文 / ' + tempStr[0]
             }
-            return tempStr[0];
+            return tempStr[0]
         } else{
-            return '';
+            return ''
         }
 
     }
@@ -159,7 +164,7 @@ class OneListCommon extends Component{
         this.setState({
             likeNum: this.state.like?this.props.data.like_count:this.props.data.like_count + 1,
             like: !this.state.like
-        });
+        })
     }
 
     /**
@@ -169,9 +174,9 @@ class OneListCommon extends Component{
     showLikeIcon() {
         //喜欢
         if (this.state.like) {
-            return 'bubble_liked';
+            return 'bubble_liked'
         } else {
-            return 'bubble_like';
+            return 'bubble_like'
         }
     }
 }
@@ -203,6 +208,6 @@ const styles = StyleSheet.create({
         width: width,
         height: height * 0.057,
     },
-});
+})
 
-export default OneListCommon;
+export default OneListCommon

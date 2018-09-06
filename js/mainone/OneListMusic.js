@@ -4,7 +4,7 @@
  * @flow　主界面分页－一个－音乐item
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -17,20 +17,26 @@ import {
     Easing,
 } from 'react-native';
 
-import DateUtil from "../util/DateUtil";
-import constants from '../Constants';
-import Read from '../read/Read';
-import Share from '../share/Share';
-import CommStyles from "../CommStyles";
-let media = NativeModules.MediaPlayer;
-let toast = NativeModules.ToastNative;
+import DateUtil from "../util/DateUtil"
+import constants from '../Constants'
+import Read from '../read/Read'
+import Share from '../share/Share'
+import CommStyles from "../CommStyles"
+import PropTypes from 'prop-types'
+let media = NativeModules.MediaPlayer
+let toast = NativeModules.ToastNative
 
-let {width, height} = constants.ScreenWH;
-let rotate;
-
+let {width, height} = constants.ScreenWH
+let rotate
 class OneListMusic extends Component{
+
+    static propTypes = {
+        data: PropTypes.object,
+        page: PropTypes.number.isRequired
+    }
+
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             like: false,
             likeNum: this.props.data.like_count,
@@ -40,7 +46,7 @@ class OneListMusic extends Component{
         }
     }
     componentDidMount() {
-        rotate=false;
+        rotate=false
         this.animation = Animated.timing(
             this.state.spinValue,
             {
@@ -48,48 +54,46 @@ class OneListMusic extends Component{
                 duration: 4000,
                 easing: Easing.linear
             }
-        );
+        )
 
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
             //当前显示的等于当前播放的歌曲转起来
             if (!rotate && this.props.page === constants.curPage && constants.CURRENT_TYPE === constants.MUSIC_TYPE) {
-                console.log("调用旋转");
-                this.spin();
-                rotate=true;
+                this.spin()
+                rotate=true
                 if (!constants.appState.state){
                     constants.appState.startPlay();
                 }
-                // this.props.onShow();
                 this.setState({
                     isPlay: true
-                });
+                })
             }
-        });
+        })
 
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
-            console.log('当前状态' + reminder.state);
+            console.log('当前状态' + reminder.state)
             if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state == constants.PLAY_COMPLETE) {
                 this.setState({
                     isPlay: false,
-                });
+                })
                 rotate=false;
                 this.state.spinValue.stopAnimation(value => {
-                    console.log('剩余时间' + (1 - value) * 4000);
+                    console.log('剩余时间' + (1 - value) * 4000)
                     //计算角度比例
                     this.animation = Animated.timing(this.state.spinValue, {
                         toValue: 1,
                         duration: (1 - value) * 4000,
                         easing: Easing.linear,
-                    });
-                });
+                    })
+                })
             }
-        });
+        })
     }
 
     componentWillUnmount() {
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS);
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE);
-        media.stop();
+        DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS)
+        DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE)
+        media.stop()
     }
 
     spin() {
@@ -103,9 +107,9 @@ class OneListMusic extends Component{
                         duration: 4000,
                         easing: Easing.linear
                     }
-                );
-                this.state.spinValue.setValue(0);
-                this.spin();
+                )
+                this.state.spinValue.setValue(0)
+                this.spin()
             }
         })
     }
@@ -115,7 +119,7 @@ class OneListMusic extends Component{
         const spinRange = this.state.spinValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '360deg']
-        });
+        })
 
         return (
             <TouchableOpacity style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]} activeOpacity={1} onPress={()=>{this.pushToRead()}}>
@@ -156,9 +160,9 @@ class OneListMusic extends Component{
                         <TouchableOpacity
                             onPress={() => {
                                 if (!this.state.isPlay) {
-                                    this.playMusic();
+                                    this.playMusic()
                                 } else {
-                                    this.stopMusic();
+                                    this.stopMusic()
                                 }
                             }}>
                             {/*播放按钮*/}
@@ -198,34 +202,36 @@ class OneListMusic extends Component{
                 </View>
 
             </TouchableOpacity>
-        );
+        )
     }
 
     playMusic() {
-        constants.curPage=this.props.page;
-        console.log('播放地址' + this.props.data.audio_url);
-        constants.CURRENT_MUSIC_DATA = this.props.data;
-        constants.CURRENT_TYPE=constants.MUSIC_TYPE;
+        console.log("调用播放")
+        constants.curPage=this.props.page
+        console.log('播放地址' + this.props.data.audio_url)
+        constants.CURRENT_MUSIC_DATA = this.props.data
+        constants.CURRENT_TYPE=constants.MUSIC_TYPE
         if (!constants.appState.state){
-            constants.appState.startPlay();
+            constants.appState.startPlay()
         }
-        // if (this.props.data.audio_platform != 1) {
-        //     // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
-        //     media.addMusicList(this.props.data.audio_url);
-        //     media.start(this.props.data.audio_url);
-        //     this.setState({
-        //         isPlay: true
-        //     });
-        // } else {
-        //     toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT);
-        // }
+
+        if (this.props.data.audio_platform !== 1) {
+            // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
+            media.addMusicList(this.props.data.audio_url)
+            media.start(this.props.data.audio_url)
+            this.setState({
+                isPlay: true
+            })
+        } else {
+            toast.showMsg('很抱歉，此歌曲已在虾米音乐下架，无法播放', toast.SHORT)
+        }
     }
 
     stopMusic() {
-        media.stop();
+        media.stop()
         this.setState({
             isPlay: false,
-        });
+        })
     }
 
     /**
@@ -268,7 +274,7 @@ class OneListMusic extends Component{
      * 获得歌曲信息
      */
     getMusicInfo() {
-        return this.props.data.music_name + ' · ' + this.props.data.audio_author + ' | ' + this.props.data.audio_album;
+        return this.props.data.music_name + ' · ' + this.props.data.audio_author + ' | ' + this.props.data.audio_album
     }
 
     /**
@@ -277,10 +283,10 @@ class OneListMusic extends Component{
      */
     getAuthor() {
         if (this.props.data.author.user_name !== undefined){
-            let tempStr = this.props.data.author.user_name.split(' ');
-            return '文 / ' + tempStr[0];
+            let tempStr = this.props.data.author.user_name.split(' ')
+            return '文 / ' + tempStr[0]
         } else {
-           return '';
+           return ''
         }
 
     }
@@ -292,7 +298,7 @@ class OneListMusic extends Component{
         this.setState({
             likeNum: this.state.like ? this.props.data.like_count : this.props.data.like_count + 1,
             like: !this.state.like
-        });
+        })
     }
 
     /**
@@ -302,9 +308,9 @@ class OneListMusic extends Component{
     showLikeIcon() {
         //喜欢
         if (this.state.like) {
-            return 'bubble_liked';
+            return 'bubble_liked'
         } else {
-            return 'bubble_like';
+            return 'bubble_like'
         }
     }
 }
@@ -367,6 +373,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
-});
+})
 
-export default OneListMusic;
+export default OneListMusic

@@ -86,11 +86,6 @@ class All extends Component {
      * scrollview滑动回调
      */
     onLoadMore() {
-        //设置正在加载和显示更多标记
-        this.setState({
-            loadMore: true,
-            loadingState: LoadMoreState.state.loading,
-        });
         //如果列表没有结束
         if (this.state.isEnd !== true) {
             //如果最后一次请求起始id为0或者当前请求起始id不等于最后一次请求起始id,添加更多列表

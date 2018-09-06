@@ -4,18 +4,17 @@
  * @flow 启动欢迎页面
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image
 } from 'react-native';
-import DateUtils from "./util/DateUtil";
-import constants from './Constants';
+import DateUtils from "./util/DateUtil"
+import constants from './Constants'
 // import Test from './view/Test'
-let {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH
 class LaunchImage extends Component{
 
     render() {
@@ -27,46 +26,37 @@ class LaunchImage extends Component{
                     {DateUtils.getCurrentDateChinese()}
                 </Text>
             </View>
-        );
+        )
     }
 
     //返回当前星期对应的图片名称
     getOpenImg(){
-        let str;
+        let str
         switch (DateUtils.getweek()){
             case 0:
-                str='opening_sunday';
-
-                break;
+                str='opening_sunday'
+                break
             case 1:
-                str='opening_monday';
-
-                break;
+                str='opening_monday'
+                break
             case 2:
-                str='opening_tuesday';
-
-                break;
+                str='opening_tuesday'
+                break
             case 3:
-                str='opening_wednesday';
-
-                break;
+                str='opening_wednesday'
+                break
             case 4:
-                str='opening_thursday';
-
-                break;
+                str='opening_thursday'
+                break
             case 5:
-                str='opening_friday';
-
-                break;
+                str='opening_friday'
+                break
             case 6:
-                str='opening_saturday';
-
-                break;
+                str='opening_saturday'
+                break
         }
-        return str;
+        return str
     }
-
-
 }
 const styles = StyleSheet.create({
     container: {
@@ -85,6 +75,6 @@ const styles = StyleSheet.create({
         bottom:width*0.04,
         right:width*0.04,
     }
-});
+})
 
-export default LaunchImage;
+export default LaunchImage

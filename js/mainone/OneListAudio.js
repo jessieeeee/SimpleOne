@@ -4,9 +4,8 @@
  * @flow　主界面分页－一个－广播item
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -14,81 +13,93 @@ import {
     NativeModules,
     TouchableOpacity,
     DeviceEventEmitter
-} from 'react-native';
-import Read from '../read/Read';
+} from 'react-native'
+import Read from '../read/Read'
+import constants from '../Constants'
+import Share from '../share/Share'
+import FrameAnimation from '../view/FrameAnimationView'
+import CommStyles from "../CommStyles"
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
+let media = NativeModules.MediaPlayer
+let toast = NativeModules.ToastNative
 
-import constants from '../Constants';
-import Share from '../share/Share';
-import FrameAnimation from '../view/FrameAnimationView';
-import CommStyles from "../CommStyles";
-let {width, height} = constants.ScreenWH;
-let media = NativeModules.MediaPlayer;
-let toast = NativeModules.ToastNative;
+class OneListAudio extends Component {
 
-class OneListAudio extends Component{
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             like: false,
             likeNum: this.props.data.like_count,
             isPlay: false,
             resizeMode: 'contain',
-            loading:false,
+            loading: false,
         }
     }
 
     componentDidMount() {
+        // 播放进度监听
         DeviceEventEmitter.addListener(constants.PLAY_PROGRESS, () => {
             if (this.props.page === constants.curPage && constants.CURRENT_TYPE === constants.AUDIO_TYPE) {
                 this.setState({
-                    loading:true
-                });
-                if (!constants.appState.state){
-                    constants.appState.startPlay();
+                    loading: true
+                })
+                if (!constants.appState.state) {
+                    constants.appState.startPlay()
                 }
-            }else{ //不是播放的页面，播放按钮重置
-                if(this.state.isPlay){
+            } else { //不是播放的页面，播放按钮重置
+                if (this.state.isPlay) {
                     this.setState({
-                        isPlay:false
-                    });
+                        isPlay: false
+                    })
                 }
             }
-        });
-
+        })
+        // 播放状态监听
         DeviceEventEmitter.addListener(constants.PLAY_STATE, (reminder) => {
-            console.log('当前状态' + reminder.state);
+            console.log('当前状态' + reminder.state)
             if (reminder.state === constants.STOP_PLAY_MEDIA || reminder.state === constants.PLAY_EXCEPTION || reminder.state === constants.PLAY_COMPLETE) {
                 this.setState({
                     isPlay: false,
-                    loading:false
-                });
+                    loading: false
+                })
             }
-        });
+        })
     }
 
+    // 组件卸载逻辑
     componentWillUnmount() {
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS);
-        DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE);
-        media.stop();
+        // 去除监听
+        DeviceEventEmitter.removeAllListeners(constants.PLAY_PROGRESS)
+        DeviceEventEmitter.removeAllListeners(constants.PLAY_STATE)
+        // 停止播放器
+        media.stop()
     }
 
     //渲染
     render() {
         return (
             <TouchableOpacity activeOpacity={1} onPress={() => this.pushToRead()}>
-                <View style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
+                <View
+                    style={[CommStyles.containerItem, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                     {this.renderContent()}
                     {/*最下面的bar*/}
                     <View
-                        style={[styles.bar, {backgroundColor: this.props.data.author.user_name + '' == 'undefined' ? 'transparent' : 'rgba(0, 0, 0, 0.5)'}]}>
+                        style={[styles.bar, {backgroundColor: this.props.data.author.user_name === undefined ? 'transparent' : 'rgba(0, 0, 0, 0.5)'}]}>
                         {this.renderLeftView()}
 
                         {/*右边的按钮*/}
                         <View style={CommStyles.rightBtnItem}>
-                            <View style={{flexDirection: 'row', justifyContent:'center', width: width * 0.1, marginRight: width * 0.03}}>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                width: width * 0.1,
+                                marginRight: width * 0.03
+                            }}>
                                 <TouchableOpacity
                                     onPress={() => this.likeClick()}>
-                                    <Image source={{uri: this.showLikeIcon()}} style={CommStyles.barRightBtnsIconItem1}/>
+                                    <Image source={{uri: this.showLikeIcon()}}
+                                           style={CommStyles.barRightBtnsIconItem1}/>
                                 </TouchableOpacity>
 
                                 {constants.renderlikeNum(this.state.likeNum)}
@@ -108,7 +119,7 @@ class OneListAudio extends Component{
 
     renderLeftView() {
         //播出过有音频，渲染带图的
-        if (this.props.data.author.user_name + '' !== 'undefined') {
+        if (this.props.data.author.user_name !== undefined) {
             return (
                 <View style={{
                     flexDirection: 'row',
@@ -119,10 +130,10 @@ class OneListAudio extends Component{
                     <Image style={styles.avatar} source={{uri: this.props.data.author.web_url}}/>
                     <Text style={styles.name}>{this.props.data.author.user_name}</Text>
                 </View>
-            );
-
+            )
         } else {
-            if(!this.state.isPlay){
+            // 没播放时，渲染播放按钮
+            if (!this.state.isPlay) {
                 return (
                     <TouchableOpacity
                         onPress={() => this.playMusic()}>
@@ -130,18 +141,18 @@ class OneListAudio extends Component{
                         <Image source={{uri: 'voice_fm_00'}} style={styles.leftIcon}/>
                     </TouchableOpacity>
                 );
-            }else{
-                return(
-                    <TouchableOpacity
-                        onPress={() => this.playMusic()}>
-                        {/*左边的按钮*/}
-                        <FrameAnimation
+            } else {
+                /*播放时，渲染动画按钮*/
+                return (
+                    <FrameAnimation
+                        clickEvent={() => {
+                            this.stopMusic()
+                        }}
                         loadingArr={this.getLoadingIcon()}
                         width={width * 0.06} height={width * 0.06}
                         refreshTime={30}
                         loading={this.state.isPlay} style={styles.leftIcon}/>
-                    </TouchableOpacity>
-                );
+                )
             }
 
         }
@@ -152,7 +163,7 @@ class OneListAudio extends Component{
      */
     renderContent() {
         //播出过有音频，渲染带图的
-        if (this.props.data.author.user_name + '' !== 'undefined') {
+        if (this.props.data.author.user_name !== undefined) {
             return (
                 <View>
                     <Image source={{uri: this.props.data.img_url}} style={styles.bg}/>
@@ -163,11 +174,13 @@ class OneListAudio extends Component{
                         <TouchableOpacity
                             onPress={() => {
                                 if (!this.state.isPlay) {
-                                    this.playMusic();
+                                    this.playMusic()
                                 } else {
-                                    this.stopMusic();
-                                }}}>
-                            <Image source={{uri: this.state.isPlay?'feeds_radio_pause':'feeds_radio_play'}} style={styles.playBtn}/>
+                                    this.stopMusic()
+                                }
+                            }}>
+                            <Image source={{uri: this.state.isPlay ? 'feeds_radio_pause' : 'feeds_radio_play'}}
+                                   style={styles.playBtn}/>
                         </TouchableOpacity>
                         <View style={styles.titles}>
                             <Text style={styles.volume}>{this.props.data.volume}</Text>
@@ -175,15 +188,14 @@ class OneListAudio extends Component{
                         </View>
                     </View>
                 </View>
-            );
+            )
         } else {
-
             return (
                 <View>
                     <Image source={{uri: this.props.data.img_url}} style={styles.bg}/>
                     <Text style={styles.title}>{this.props.data.title}</Text>
                 </View>
-            );
+            )
         }
     }
 
@@ -191,43 +203,45 @@ class OneListAudio extends Component{
      * 载入图标名称初始化
      */
     getLoadingIcon() {
-        let loadingArr=[];
+        let loadingArr = []
         for (let i = 0; i < 3; i++) {
-            loadingArr.push(('voice_fm_0' + i).toString());
+            loadingArr.push(('voice_fm_0' + i).toString())
         }
-        return loadingArr;
+        return loadingArr
     }
 
-
+    // 播放音乐逻辑
     playMusic() {
-        constants.curPage=this.props.page;
-        constants.CURRENT_MUSIC_DATA = this.props.data;
-        constants.CURRENT_TYPE=constants.AUDIO_TYPE;
-        console.log('播放地址'+this.props.data.audio_url);
-        if (this.props.data.default_audios !== undefined && this.props.data.default_audios.length>0) {
+        constants.curPage = this.props.page
+        constants.CURRENT_MUSIC_DATA = this.props.data
+        constants.CURRENT_TYPE = constants.AUDIO_TYPE
+
+        if (this.props.data.default_audios !== undefined && this.props.data.default_audios.length > 0) {
+            console.log('播放地址' , this.props.data.default_audios[0])
             media.start(this.props.data.default_audios[0]);
             this.setState({
                 isPlay: true
-            });
+            })
         } else {
-
             if (this.props.data.audio_url.toString().contains('http://music.wufazhuce.com/')) {
                 // media.start('http://music.wufazhuce.com/lmVsrwGEgqs8pQQE3066e4N_BFD4');
+                console.log('播放地址' , this.props.data.audio_url);
                 media.start(this.props.data.audio_url);
                 this.setState({
                     isPlay: true
-                });
-            }else{
+                })
+            } else {
                 toast.showMsg('今晚22:30主播在这里等你', toast.SHORT);
             }
         }
     }
 
+    // 停止播放
     stopMusic() {
-        media.stop();
+        media.stop()
         this.setState({
             isPlay: false,
-        });
+        })
     }
 
     /**
@@ -236,8 +250,8 @@ class OneListAudio extends Component{
      */
     pushToRead() {
         if (this.props.data.content_type === 8 && this.props.page === 0) {
-            this.props.todayRadio();
-            return;
+            this.props.todayRadio()
+            return
         }
         this.props.navigator.push(
             {
@@ -256,7 +270,6 @@ class OneListAudio extends Component{
      * @param url
      */
     pushToShare() {
-
         this.props.navigator.push(
             {
                 component: Share,
@@ -277,7 +290,7 @@ class OneListAudio extends Component{
         this.setState({
             likeNum: this.state.like ? this.props.data.like_count : this.props.data.like_count + 1,
             like: !this.state.like
-        });
+        })
     }
 
     /**
@@ -287,17 +300,19 @@ class OneListAudio extends Component{
     showLikeIcon() {
         //喜欢
         if (this.state.like) {
-            return 'bubble_liked';
+            return 'bubble_liked'
         } else {
-            return 'bubble_like';
+            return 'bubble_like'
         }
     }
 }
-OneListAudio.defaultProps={
-    data: null,
-    date: '',
-    onShow: null,
-};
+
+OneListAudio.propsType = {
+    data: PropTypes.object.isRequired,
+    page: PropTypes.number.isRequired,
+    todayRadio: PropTypes.func,
+}
+
 const styles = StyleSheet.create({
     title: {
         fontSize: width * 0.034,
@@ -370,6 +385,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.032,
         marginLeft: width * 0.02
     }
-});
+})
 
 export default OneListAudio;

@@ -25,7 +25,7 @@ import OneListMovie from '../mainone/OneListMovie'
 import OneListAudio from '../mainone/OneListAudio'
 import ServerApi from '../ServerApi'
 import CommStyles from "../CommStyles"
-
+let toast = NativeModules.ToastNative
 let {width, height} = constants.ScreenWH
 let itemArr = []
 let key = 0
@@ -166,7 +166,9 @@ class AuthorPage extends Component {
                 //电台
                 else if (data.category === constants.CategoryRadio) {
                     itemArr.push(
-                        <OneListAudio key={key} data={data} navigator={this.props.navigator}/>
+                        <OneListAudio key={key} data={data} navigator={this.props.navigator} todayRadio={() => {
+                            toast.showMsg('今晚22:30主播在这里等你', toast.SHORT)
+                        }}/>
                     )
                 }
                 //普通item
