@@ -3,8 +3,8 @@
  * @email : lyj1246505807@gmail.com
  * @description : 搜索结果
  */
-import React, {Component} from 'react';
-import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view';
+import React, {Component} from 'react'
+import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view'
 import {
     ScrollView,
     StyleSheet,
@@ -12,36 +12,36 @@ import {
     Text,
     View,
     TouchableOpacity
-} from 'react-native';
-import NetUtils from "../util/NetUtil";
-import constants from "../Constants";
-import SearchBar from './SearchBar';
-import Read from "../read/Read";
-import SearchHpDetail from './SearchHpDetail';
-import AuthorPage from "../author/AuthorPage";
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import NetUtils from "../util/NetUtil"
+import constants from "../Constants"
+import SearchBar from './SearchBar'
+import Read from "../read/Read"
+import SearchHpDetail from './SearchHpDetail'
+import AuthorPage from "../author/AuthorPage"
+let {width, height} = constants.ScreenWH
 
 class SearchResult extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             result:[],
             curText: '',
             loading:true
-        };
-        this.itemArr=[]; // 展示列表缓存为二维数组
-        this.scrollArr=[]; // 滚动布局数组
-        this.curPage=0;//当前第几页
-        this.pageTitle=['图文','阅读','音乐','影视','深夜电台','作者/音乐人'];//初始化页面标题
-        this.itemId=this.pageTitle.length;//item的id
+        }
+        this.itemArr=[] // 展示列表缓存为二维数组
+        this.scrollArr=[] // 滚动布局数组
+        this.curPage=0//当前第几页
+        this.pageTitle=['图文','阅读','音乐','影视','深夜电台','作者/音乐人']//初始化页面标题
+        this.itemId=this.pageTitle.length//item的id
     }
 
     componentDidMount(){
         this.setState({
             curText:this.props.route.params.searchKey,
             loading:false
-        });
-        this.searchKey(this.props.route.params.searchKey);
+        })
+        this.searchKey(this.props.route.params.searchKey)
     }
 
     /**
@@ -50,17 +50,17 @@ class SearchResult extends Component{
     getSearchType(){
         switch (this.curPage){
             case 0:
-                return 'hp';
+                return 'hp'
             case 1:
-                return 'reading';
+                return 'reading'
             case 2:
-                return 'music';
+                return 'music'
             case 3:
-                return 'movie';
+                return 'movie'
             case 4:
-                return 'radio';
+                return 'radio'
             case 5:
-                return 'author';
+                return 'author'
         }
     }
 
@@ -71,13 +71,13 @@ class SearchResult extends Component{
     searchKey(key){
         this.setState({
             loading:true
-        });
-        let url='http://v3.wufazhuce.com:8000/api/search/'+this.getSearchType()+'/'+ encodeURI(key)+'/0?version=4.3.4';
+        })
+        let url='http://v3.wufazhuce.com:8000/api/search/'+this.getSearchType()+'/'+ encodeURI(key)+'/0?version=4.3.4'
         NetUtils.get(url,null,(result) => {
-            this.state.result[this.curPage]=result.data.list;
+            this.state.result[this.curPage]=result.data.list
             this.setState({
                 loading:false
-            });
+            })
         })
     }
 
@@ -85,7 +85,7 @@ class SearchResult extends Component{
      * 渲染多个分页滚动界面
      */
     renderScrollView(){
-        this.scrollArr=[];
+        this.scrollArr=[]
        for(let i=0;i<this.pageTitle.length;i++){
           this.scrollArr.push(
               <ScrollView key={i} tabLabel={this.pageTitle[i]} style={{flex:1,backgroundColor:'white'}}>
@@ -93,7 +93,7 @@ class SearchResult extends Component{
               </ScrollView>
           )
        }
-       return this.scrollArr;
+       return this.scrollArr
     }
 
     /**
@@ -109,7 +109,7 @@ class SearchResult extends Component{
         else {
             return(
                 <Image style={styles.itemImg} source={{uri:itemResult.cover}}/>
-            );
+            )
         }
     }
     /**
@@ -117,12 +117,12 @@ class SearchResult extends Component{
      * @returns {*}
      */
     renderItems(indexPage){
-        this.itemArr[indexPage]=[];
+        this.itemArr[indexPage]=[]
         // 如果当前没有加载
         if(!this.state.loading){
             // 当前没有搜到数据
             if(this.state.result[this.curPage].length===0){
-                console.log('当前没有数据');
+                console.log('当前没有数据')
                 return(
                     <View style={{flex:1,alignItems:'center',justifyContent:'center',width:width,height:height*0.6}}>
                         <Image source={{uri:'no_search_result'}} style={styles.noResultImg}/>
@@ -133,8 +133,7 @@ class SearchResult extends Component{
             else if(this.state.result[this.curPage]!==undefined && this.state.result[this.curPage].length>0){
                 // 把该页的所有数据渲染出来
                 for(let i=0;i<this.state.result[this.curPage].length;i++){
-
-                    let itemResult=this.state.result[this.curPage][i];
+                    let itemResult=this.state.result[this.curPage][i]
                     this.itemArr[indexPage].push(
                         <TouchableOpacity key={this.itemId} style={styles.itemView} activeOpacity={1} onPress={() => this.pushToDetail(itemResult)}>
                             {this.renderLeftImg(itemResult)}
@@ -143,15 +142,12 @@ class SearchResult extends Component{
                                 <Text style={styles.itemOrder}>{itemResult.subtitle}</Text>
                             </View>
                         </TouchableOpacity>
-                    );
-                    this.itemId++;
+                    )
+                    this.itemId++
                 }
-                return this.itemArr[indexPage];
+                return this.itemArr[indexPage]
             }
         }
-
-
-
     }
 
     /***
@@ -160,17 +156,17 @@ class SearchResult extends Component{
     pushToDetail(itemResult){
         switch (this.curPage){
             case 0:
-                this.pushToHpDetail(itemResult.content_id);
-                break;
+                this.pushToHpDetail(itemResult.content_id)
+                break
             case 1:
             case 2:
             case 3:
             case 4:
-                this.pushToRead(itemResult);
-                break;
+                this.pushToRead(itemResult)
+                break
             case 5:
-                this.pushToAuthorDetail(itemResult);
-                break;
+                this.pushToAuthorDetail(itemResult)
+                break
         }
     }
 
@@ -224,7 +220,7 @@ class SearchResult extends Component{
     updateText(text) {
         this.setState({
             curText: text,
-        });
+        })
     }
 
     render(){
@@ -273,7 +269,7 @@ class SearchResult extends Component{
               </ScrollableTabView>
               {constants.renderLoading(this.state.loading)}
           </View>
-        );
+        )
     }
 }
 const styles = StyleSheet.create({
@@ -319,5 +315,5 @@ const styles = StyleSheet.create({
         width:width*0.4,
         height:width*0.51
     }
-});
-export default SearchResult;
+})
+export default SearchResult

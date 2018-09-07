@@ -1,21 +1,19 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow　设置标题
+ * @date : 9/7/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 设置标题
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
-    Image,
-    TouchableOpacity,
-
-} from 'react-native';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 class SettingLabel extends Component{
     render() {
         return (
@@ -24,14 +22,13 @@ class SettingLabel extends Component{
                     {this.props.text}
                 </Text>
             </View>
-        );
+        )
     }
 }
 
-SettingLabel.defaultProps={
-    text: ''
-};
-
+SettingLabel.propTypes={
+    text: PropTypes.string.isRequired
+}
 const styles = StyleSheet.create({
     container: {
         justifyContent:'center',
@@ -42,8 +39,7 @@ const styles = StyleSheet.create({
         width:width,
         marginLeft:width*0.12,
     },
+})
 
-});
 
-
-export default SettingLabel;
+export default SettingLabel

@@ -5,7 +5,7 @@
  * @description : 单选菜单
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {
     View,
@@ -13,9 +13,9 @@ import {
     TouchableOpacity,
     Modal,
     ScrollView
-} from 'react-native';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+let {width, height} = constants.ScreenWH
 
 export default class SingleChoiceDialog extends Component {
     static propTypes = {
@@ -24,16 +24,12 @@ export default class SingleChoiceDialog extends Component {
         dataSource: PropTypes.array, // 数据源
         onConfirm: PropTypes.func.isRequired, // 确认回调
         onCancel: PropTypes.func.isRequired, // 取消回调
-    };
+    }
 
     static defaultProps = {
         isSelected: '', // 默认语言为中文
         isVisible: false, // 默认关闭组件
         dataSource: [], // 默认数据源为空数组
-    }
-
-    constructor(props) {
-        super(props);
     }
 
     render() {
@@ -63,16 +59,14 @@ export default class SingleChoiceDialog extends Component {
 
                     </View>
                 </TouchableOpacity>
-
-
             </Modal>
-        );
+        )
     }
 
     renderOptionsList() {
-        let key = 0;
+        let key = 0
         return this.props.dataSource.map(option => {
-            key++;
+            key++
             return (
                 <TouchableOpacity key={key} onPress={() => {
                     this.optionSelected(option)
@@ -92,13 +86,13 @@ export default class SingleChoiceDialog extends Component {
     }
 
     onCancel() {
-        this.props.onCancel();
+        this.props.onCancel()
     }
 
     optionSelected(option) {
         // 通过回调传递数据
-        this.props.onConfirm(option);
+        this.props.onConfirm(option)
         // 关闭Dialog对话框
-        this.onCancel();
+        this.onCancel()
     }
 }

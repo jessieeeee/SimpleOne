@@ -43,7 +43,7 @@ class All extends Component {
      */
     renderNormal() {
         return (
-            <AllContentPage ref={(c) => {
+            <AllContentPage navigator={this.props.navigator} ref={(c) => {
                 this.content = c
             }} onError={() => {
                 this.statusManager.setStatus(Status.Error)

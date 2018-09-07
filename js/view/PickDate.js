@@ -5,9 +5,9 @@
  * @description : 选择日期调用native接口
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import {requireNativeComponent, View} from 'react-native';
+import React from 'react'
+import PropTypes from 'prop-types'
+import {requireNativeComponent, View} from 'react-native'
 
 
 let iface = {
@@ -21,7 +21,7 @@ let iface = {
     }
 }
 
-let RCTPickDateView = requireNativeComponent('PickDateView', iface);
+let RCTPickDateView = requireNativeComponent('PickDateView', iface)
 
 
-export default RCTPickDateView;
+export default RCTPickDateView

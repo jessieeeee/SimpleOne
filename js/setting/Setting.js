@@ -6,7 +6,6 @@
 
 import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -35,20 +34,21 @@ class Setting extends Component {
         }
     }
 
-    componentDidMount(){
-        clearCache.getCacheSize((value,unit)=>{
+    componentDidMount() {
+        clearCache.getCacheSize((value, unit) => {
             this.setState({
-                cacheSize:value, //缓存大小
-                unit:unit  //缓存单位
+                cacheSize: value, //缓存大小
+                unit: unit  //缓存单位
             })
-        });
+        })
     }
 
     render() {
         let tip = '确认要清除缓存?'
         return (
-            <ScrollView style={[styles.container,{backgroundColor: constants.nightMode? constants.nightModeGrayDark: 'white'}]}>
-                <View >
+            <ScrollView
+                style={[styles.container, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : 'white'}]}>
+                <View>
                     {this.renderNavBar()}
                     <SettingLabel text={'设置'}/>
                     <TouchableOpacity onPress={() => {
@@ -85,7 +85,7 @@ class Setting extends Component {
                             ]
                         )
                     }}>
-                        <SettingItem text={'清除缓存'+'('+this.state.cacheSize+this.state.unit+')'} rightStyle={0}/>
+                        <SettingItem text={'清除缓存' + '(' + this.state.cacheSize + this.state.unit + ')'} rightStyle={0}/>
                     </TouchableOpacity>
 
                     <SettingLabel text={'反馈'}/>
@@ -115,7 +115,7 @@ class Setting extends Component {
 
                 </View>
             </ScrollView>
-        );
+        )
     }
 
     /**
@@ -124,36 +124,36 @@ class Setting extends Component {
     renderNavBar() {
         return (
             // 顶部导航bar
-            <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayLight:'white'}]}>
-
+            <View style={[CommStyles.outNav, {
+                borderBottomColor: constants.nightMode ? constants.nightModeGrayLight : constants.bottomDivideColor,
+                backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'
+            }]}>
                 {/*左边按钮*/}
                 <TouchableOpacity style={CommStyles.leftBack}
                                   onPress={() => this.props.navigator.pop()}>
                     {
-                        <Image source={{uri: constants.nightMode ?'icon_back_white':'icon_back'}} style={CommStyles.navLeftBack}/>
+                        <Image source={{uri: constants.nightMode ? 'icon_back_white' : 'icon_back'}}
+                               style={CommStyles.navLeftBack}/>
                     }
                 </TouchableOpacity>
-
-                <Text style={[styles.title, {color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor}]}> 设置</Text>
+                <Text
+                    style={[styles.title, {color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor}]}> 设置</Text>
 
             </View>
-        );
+        )
     }
 
-    clearCache(){
-        clearCache.runClearCache(()=>{
+    clearCache() {
+        clearCache.runClearCache(() => {
             toast.showMsg('清除缓存成功!', toast.SHORT)
-            clearCache.getCacheSize((value,unit)=>{
+            clearCache.getCacheSize((value, unit) => {
                 this.setState({
-                    cacheSize:value, //缓存大小
-                    unit:unit  //缓存单位
+                    cacheSize: value, //缓存大小
+                    unit: unit  //缓存单位
                 })
-            });
-
-        });
-
+            })
+        })
     }
-
 }
 
 
@@ -165,5 +165,5 @@ const styles = StyleSheet.create({
         fontSize: width * 0.04,
         fontWeight: 'bold'
     }
-});
+})
 export default Setting

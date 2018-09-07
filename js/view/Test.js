@@ -23,8 +23,8 @@ class Test extends Component {
         setInterval(() => {
             this.setState({
                 value: parseInt(this.state.value) + 1 + ""
-            });
-        }, 2000);
+            })
+        }, 2000)
     }
     render() {
         return (
@@ -47,7 +47,7 @@ class Test extends Component {
                 <Ticker text={this.state.value} textStyle={styles.text} rotateTime={1000} />
 
             </View>
-        );
+        )
     }
 }
 
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 40,
         color: "#FFF",
-    },
-});
+    }
+})
 
-export default Test;
+export default Test

@@ -5,7 +5,7 @@
  * @description : 加载更多view
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     TouchableOpacity,
     StyleSheet,
@@ -13,13 +13,13 @@ import {
     Text,
     Animated,
     Easing
-} from 'react-native';
+} from 'react-native'
 
-import constants from '../Constants';
-import PropTypes from 'prop-types';
+import constants from '../Constants'
+import PropTypes from 'prop-types'
 import LoadMoreState from './LoadMoreState'
-let {width, height} = constants.ScreenWH;
-const pointsNum = 3; //点数量
+let {width, height} = constants.ScreenWH
+const pointsNum = 3 //点数量
 
 class LoadMore extends Component {
 
@@ -46,8 +46,8 @@ class LoadMore extends Component {
      */
     animate() {
         this.arr.forEach((value) => {
-            this.animatedValue[value].setValue(0);
-        });
+            this.animatedValue[value].setValue(0)
+        })
         const animations = this.arr.map((item) => {
             return Animated.timing(
                 this.animatedValue[item],
@@ -69,7 +69,7 @@ class LoadMore extends Component {
             <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                 { this.state.curState !== LoadMoreState.state.hide ? this.renderLoad() : null}
             </View>
-        );
+        )
     }
 
 
@@ -87,7 +87,7 @@ class LoadMore extends Component {
                 this.arr.forEach((item) => {
                     this.animatedValue[item].stopAnimation(value => {
                         console.log('剩余时间' + (1 - value) * 200);
-                    });
+                    })
                 })
                 break
             case LoadMoreState.state.noMore:
@@ -145,13 +145,14 @@ class LoadMore extends Component {
             )
     }
 }
-
-LoadMore.defaultProps = {
-    loading: false, //加载更多
-};
 LoadMore.propTypes = {
-    loading: PropTypes.bool.isRequired
-};
+    state: PropTypes.number, //加载更多
+    onRetry: PropTypes.func //重试回调
+}
+LoadMore.defaultProps = {
+    state: LoadMoreState.state.hide
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -168,6 +169,6 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
-});
+})
 
-export default LoadMore;
+export default LoadMore

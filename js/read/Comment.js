@@ -12,7 +12,7 @@ import {
     TouchableOpacity,
     Image,
 } from 'react-native'
-
+import PropTypes from 'prop-types'
 import Login from '../login/Login'
 import constants from '../Constants'
 let {width, height} = constants.ScreenWH
@@ -86,10 +86,14 @@ class Comment extends Component{
         )
     }
 }
-Component.defaultProps={
-    bgColor: 'white'
+Component.propTypes = {
+    data: PropTypes.object,
+    bgColor: PropTypes.string,
 }
-
+Component.defaultProps = {
+    data: null,
+    bgColor: ''
+}
 const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -154,6 +158,6 @@ const styles = StyleSheet.create({
             bottom: -width * 0.026
         },
     }
-);
+)
 
-export default Comment;
+export default Comment

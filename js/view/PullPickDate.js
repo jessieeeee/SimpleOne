@@ -6,46 +6,55 @@
  */
 
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-    AppRegistry,
-    StyleSheet,
-    Text,
     View,
     Modal,
     Animated,
     TouchableOpacity
 } from 'react-native';
-import PickDateView from '../view/PickDate';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+import PickDateView from '../view/PickDate'
+import constants from '../Constants'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 class PullPickDate extends Component{
+    static propTypes = {
+        year: PropTypes.string.isRequired,
+        month: PropTypes.string.isRequired,
+        onSure: PropTypes.func.isRequired,
+        onCancel: PropTypes.func.isRequired,
+        onShow: PropTypes.bool,
+    }
+
+    static defaultProps ={
+        onShow: false
+    }
     constructor(props){
-        super(props);
-        this.onLayout=this.onLayout.bind(this);
+        super(props)
+        this.onLayout=this.onLayout.bind(this)
         this.state={
             expanded: false,
             animation : new Animated.Value()
-        };
+        }
     }
     showAnimation(height){
-        let maxHeight=height;
-        let minHeight=0;
+        let maxHeight=height
+        let minHeight=0
         let initialValue = this.state.expanded ? maxHeight + minHeight : minHeight,
-            finalValue= this.state.expanded ? minHeight : maxHeight + minHeight;
+            finalValue= this.state.expanded ? minHeight : maxHeight + minHeight
         this.setState({
             expanded: !this.state.expanded //Step 2
         });
-        console.log('最大高度'+maxHeight);
-        console.log('初始值'+initialValue+'最终值'+finalValue);
-        this.state.animation.setValue(initialValue); //Step 3
+        console.log('最大高度'+maxHeight)
+        console.log('初始值'+initialValue+'最终值'+finalValue)
+        this.state.animation.setValue(initialValue) //Step 3
 
         this.timer = setTimeout(
             () => {
-                this.toggle(finalValue);
+                this.toggle(finalValue)
             },
             5000
-        );
+        )
     }
 
     toggle(finalValue) {
@@ -54,7 +63,7 @@ class PullPickDate extends Component{
             {
                 toValue: finalValue
             }
-        ).start();
+        ).start()
     }
 
     render() {
@@ -64,7 +73,7 @@ class PullPickDate extends Component{
                 transparent={true}
                 visible={this.props.onShow}
                 onRequestClose={() => {
-                    this.props.onCancel();
+                    this.props.onCancel()
                 }}>
 
                 <View style={{width: width, flex: 1, marginTop: height * 0.08 + 0.12 * width,backgroundColor: 'rgba(0, 0, 0, 0.7)'}}>
@@ -73,15 +82,15 @@ class PullPickDate extends Component{
                         setMonth={this.props.month}
                         onLayout={this.onLayout}
                         onChange={(obj) => {
-                            console.log('onSure收到事件' + obj.nativeEvent.msg + "目标id" + obj.nativeEvent.msg.year);
+                            console.log('onSure收到事件' + obj.nativeEvent.msg + "目标id" + obj.nativeEvent.msg.year)
                             //当此回调被onSure调用时
-                            let year = obj.nativeEvent.msg.year + '';
-                            let month = obj.nativeEvent.msg.month + '';
-                            let time= obj.nativeEvent.msg.time + '';
+                            let year = obj.nativeEvent.msg.year + ''
+                            let month = obj.nativeEvent.msg.month + ''
+                            let time= obj.nativeEvent.msg.time + ''
                             if (year !== 'undefined' && month !== 'undefined') {
                                 this.props.onCancel();
                             }else{
-                                this.props.onSure(year,month,time);
+                                this.props.onSure(year,month,time)
                             }
 
                         }}
@@ -89,12 +98,12 @@ class PullPickDate extends Component{
                     <TouchableOpacity style={{flex:0.58}} onPress={() => this.props.onCancel()}/>
                 </View>
             </Modal>
-        );
+        )
     }
 
     onLayout(event){
-        this.showAnimation(event.nativeEvent.layout.height);
+        this.showAnimation(event.nativeEvent.layout.height)
     }
 }
 
-export default PullPickDate;
+export default PullPickDate

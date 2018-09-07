@@ -4,7 +4,7 @@
  * @flow　阅读界面
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -16,27 +16,27 @@ import {
     FlatList,
     TouchableOpacity,
     Clipboard
-} from 'react-native';
-import constants from '../Constants';
-import NetUtils from "../util/NetUtil";
-import Login from '../login/Login';
-import SingleChoiceDialog from '../view/SingleChoiceDialog';
-import Share from '../share/Share';
-import Comment from './Comment';
-import ServerApi from '../ServerApi';
-import {BaseComponent} from '../view/BaseComponent';
-import CommStyles from "../CommStyles";
+} from 'react-native'
+import constants from '../Constants'
+import NetUtils from "../util/NetUtil"
+import Login from '../login/Login'
+import SingleChoiceDialog from '../view/SingleChoiceDialog'
+import Share from '../share/Share'
+import Comment from './Comment'
+import ServerApi from '../ServerApi'
+import {BaseComponent} from '../view/BaseComponent'
+import CommStyles from "../CommStyles"
 
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
     waitForInteraction: true,
-};
+}
 
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
-let WEBVIEW_REF = 'webview';
-let itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}];
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
+let WEBVIEW_REF = 'webview'
+let itemChoiceArr = [{"label": "拷贝", "value": "0"}, {"label": "举报", "value": "1"}]
 const BaseScriptChangeColor =
     `
      (function () {
@@ -58,7 +58,7 @@ const BaseScriptChangeColor =
         }
         setInterval(changeHeight, 100);
     } ())
-    `;
+    `
 const BaseScript =
     `
     (function () {
@@ -76,16 +76,16 @@ const BaseScript =
         }
         setInterval(changeHeight, 100);
     } ())
-    `;
+    `
 
 class Read extends Component {
     constructor(props) {
-        super(props);
-        this.onScroll = this.onScroll.bind(this);
-        this.renderRow = this.renderRow.bind(this);
-        this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-        this.onShouldStartLoadWithRequest = this.onShouldStartLoadWithRequest.bind(this);
-        this.onMessage = this.onMessage.bind(this);
+        super(props)
+        this.onScroll = this.onScroll.bind(this)
+        this.renderRow = this.renderRow.bind(this)
+        this.onNavigationStateChange = this.onNavigationStateChange.bind(this)
+        this.onShouldStartLoadWithRequest = this.onShouldStartLoadWithRequest.bind(this)
+        this.onMessage = this.onMessage.bind(this)
         this.state = {
             like: false,
             likeNum: 0,
@@ -105,31 +105,31 @@ class Read extends Component {
     }
 
     componentDidMount() {
-        let url;
+        let url
         if (this.props.route.params.entry === constants.AllRead) {
-            url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId);
+            url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId)
         } else {
-            url = this.getContentUrl().replace('{content_id}', this.props.route.params.data.content_id);
+            url = this.getContentUrl().replace('{content_id}', this.props.route.params.data.content_id)
         }
-        console.log('当前文章地址' + url);
+        console.log('当前文章地址' + url)
         NetUtils.get(url, null, (result) => {
             this.setState({
                 readData: result.data,
                 likeNum: result.data.praisenum,
-            });
-            let bgColor;
+            })
+            let bgColor
             if (result.data.category === constants.CategoryReadBg) {
-                bgColor = result.data.bg_color;
+                bgColor = result.data.bg_color
             } else {
-                bgColor = 'white';
+                bgColor = 'white'
             }
             this.setState({
                 bgColor: bgColor
-            });
+            })
             // console.log(result);
         }, (error) => {
-            console.log('error address' + error);
-        });
+            console.log('error address' + error)
+        })
 
     }
 
@@ -137,81 +137,81 @@ class Read extends Component {
      * 获取评论
      */
     getComments() {
-        let url;
+        let url
         if (this.props.route.params.entry === constants.AllRead) {
-            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.contentId);
+            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.contentId)
         } else {
-            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.data.content_id);
+            url = this.getCommentUrl().replace('{content_id}', this.props.route.params.data.content_id)
         }
-        console.log('请求评论' + url);
+        console.log('请求评论' + url)
         NetUtils.get(url, null, (result) => {
             this.setState({
                 commentData: result.data.data
-            });
-            console.log(result);
+            })
+            console.log(result)
         }, (error) => {
             console.log('error comment' + error);
 
-        });
+        })
     }
 
     getCommentUrl() {
-        let contentType;
+        let contentType
         if (this.props.route.params.entry === constants.AllRead) {
-            contentType = this.props.route.params.contentType;
+            contentType = this.props.route.params.contentType
         } else {
-            contentType = this.props.route.params.data.content_type;
+            contentType = this.props.route.params.data.content_type
         }
         switch (parseInt(contentType)) {
             case 1:
-                return ServerApi.EssayComment;
+                return ServerApi.EssayComment
             case 3:
-                return ServerApi.QuestionComment;
+                return ServerApi.QuestionComment
             case 2:
-                return ServerApi.SerialContentComment;
+                return ServerApi.SerialContentComment
             case 4:
-                return ServerApi.MusicComment;
+                return ServerApi.MusicComment
             case 5:
-                return ServerApi.MovieComment;
+                return ServerApi.MovieComment
             case 8:
-                return ServerApi.RadioComment;
+                return ServerApi.RadioComment
             case 11:
-                return ServerApi.TopicComment;
+                return ServerApi.TopicComment
         }
     }
 
     getContentUrl() {
-        let contentType;
+        let contentType
         if (this.props.route.params.entry === constants.AllRead) {
-            contentType = this.props.route.params.contentType;
+            contentType = this.props.route.params.contentType
         } else {
-            contentType = this.props.route.params.data.content_type;
+            contentType = this.props.route.params.data.content_type
         }
         switch (parseInt(contentType)) {
             case 1:
-                return ServerApi.Essay;
+                return ServerApi.Essay
             case 3:
-                return ServerApi.Question;
+                return ServerApi.Question
             case 2:
-                return ServerApi.SerialContent;
+                return ServerApi.SerialContent
             case 4:
-                return ServerApi.Music;
+                return ServerApi.Music
             case 5:
-                return ServerApi.Movie;
+                return ServerApi.Movie
             case 8:
-                return ServerApi.Radio;
+                return ServerApi.Radio
             case 11:
-                return ServerApi.Topic;
+                return ServerApi.Topic
         }
     }
 
     onMessage(event) {
-        console.log('onMessage->event.nativeEvent.data:');
-        console.log(event.nativeEvent.data);
+        console.log('onMessage->event.nativeEvent.data:')
+        console.log(event.nativeEvent.data)
         try {
-            const action = JSON.parse(event.nativeEvent.data);
+            const action = JSON.parse(event.nativeEvent.data)
             if (action.type === 'setHeight' && action.height > 0 && this.state.height < height) {
-                console.log('设置高度');
+                console.log('设置高度')
                 this.setState({height: action.height})
             }
         } catch (error) {
@@ -268,11 +268,11 @@ class Read extends Component {
      * scrollview滑动回调
      */
     onScroll(event) {
-        let y = event.nativeEvent.contentOffset.y;
+        let y = event.nativeEvent.contentOffset.y
         // console.log('滑动距离' + y);
-        let height = event.nativeEvent.layoutMeasurement.height;
+        let height = event.nativeEvent.layoutMeasurement.height
         // console.log('列表高度' + height);
-        let contentHeight = event.nativeEvent.contentSize.height;
+        let contentHeight = event.nativeEvent.contentSize.height
         // console.log('内容高度' + contentHeight);
         // console.log('判断条件' + (y + height));
         if (y + height >= contentHeight - 20) {
@@ -286,19 +286,17 @@ class Read extends Component {
     renderCommentList() {
         if (this.state.commentData !== null) {
             return (
-
                 <View style={{width: width, position: 'relative', bottom: width * 0.22}}>
                     <FlatList
                         data={this.state.commentData}
                         renderItem={this.renderRow}
                         keyExtractor={(item, index) => item.id}
                         onViewableItemsChanged={(info) => {
-                            console.log(info);
+                            console.log(info)
                         }}
 
-                        viewabilityConfig={VIEWABILITY_CONFIG}
-                    >
-                        }
+                        viewabilityConfig={VIEWABILITY_CONFIG}>
+
 
                     </FlatList>
                 </View>
@@ -308,11 +306,11 @@ class Read extends Component {
 
     // 单个item返回 线性布局
     renderRow(rowData) {
-        console.log(rowData);
+        console.log(rowData)
         if (typeof(rowData) !== 'undefined') {
             return (
                 <TouchableOpacity activeOpacity={1} onPress={() => {
-                    this.setState({isVisible: true, curItem: rowData.item});
+                    this.setState({isVisible: true, curItem: rowData.item})
                 }}>
                     <Comment data={rowData.item} bgColor={this.state.bgColor} navigator={this.props.navigator}/>
 
@@ -333,7 +331,7 @@ class Read extends Component {
                     this.setState({isVisible: false})
                 }}
             />
-        );
+        )
     }
 
     /**
@@ -342,9 +340,9 @@ class Read extends Component {
      */
     doSelected(option) {
         if (option.value === '1') {
-            this.pushToLogin();
+            this.pushToLogin()
         } else {
-            this.setClipboardContent();
+            this.setClipboardContent()
         }
     }
 
@@ -353,20 +351,20 @@ class Read extends Component {
      * @returns {Promise.<void>}
      */
     async setClipboardContent() {
-        Clipboard.setString(this.state.curItem.content);
+        Clipboard.setString(this.state.curItem.content)
         try {
-            let content = await Clipboard.getString();
-            toast.showMsg('已复制到剪切板', toast.SHORT);
-            this.setState({content: content});
+            let content = await Clipboard.getString()
+            toast.showMsg('已复制到剪切板', toast.SHORT)
+            this.setState({content: content})
         } catch (e) {
-            this.setState({content: e.message});
+            this.setState({content: e.message})
         }
     }
 
 
     onShouldStartLoadWithRequest(event) {
         // Implement any custom loading logic here, don't forget to return!
-        return true;
+        return true
     }
 
     onNavigationStateChange(navState) {
@@ -377,7 +375,7 @@ class Read extends Component {
             status: navState.title,
             loading: navState.loading,
             scalesPageToFit: true
-        });
+        })
     }
 
     /**
@@ -414,7 +412,7 @@ class Read extends Component {
                     {this.renderShare()}
                 </View>
             </View>
-        );
+        )
     }
 
     /**
@@ -443,11 +441,11 @@ class Read extends Component {
                     <Image source={{uri: 'stow_default'}} style={styles.rightBtn}/>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     renderShare() {
-        if (this.props.route.params.data !== undefined) {
+        if (this.props.route.params.data) {
             return (
                 <TouchableOpacity style={{position: 'absolute', right: 0}}
                                   onPress={() => this.pushToShare()}>
@@ -470,7 +468,7 @@ class Read extends Component {
                 }}>
                     {this.state.readData.commentnum}
                 </Text>
-            );
+            )
         }
     }
 
@@ -478,47 +476,47 @@ class Read extends Component {
      * 获取分类
      */
     getCategory() {
-        let contentType;
+        let contentType
         if (this.props.route.params.entry === constants.MenuRead) {
-            let tag = this.props.route.params.data.tag;
-            contentType = this.props.route.params.data.content_type;
+            let tag = this.props.route.params.data.tag
+            contentType = this.props.route.params.data.content_type
             if (tag != null) {
-                return tag.title;
+                return tag.title
             }
         }
         if (this.props.route.params.entry === constants.OneRead) {
-            let tagList = this.props.route.params.data.tag_list;
-            contentType = this.props.route.params.data.content_type;
+            let tagList = this.props.route.params.data.tag_list
+            contentType = this.props.route.params.data.content_type
             if (tagList != null && tagList.length > 0) {
-                return tagList[0].title;
+                return tagList[0].title
             }
         } else {
-            contentType = this.props.route.params.contentType;
+            contentType = this.props.route.params.contentType
         }
 
         if (contentType === 1) {
-            return '阅读';
+            return '阅读'
         }
         else if (contentType === 3) {
-            return '问答';
+            return '问答'
         }
         else if (contentType === 1) {
-            return '阅读';
+            return '阅读'
         }
         else if (contentType === 2) {
-            return '连载';
+            return '连载'
         }
         else if (contentType === 4) {
-            return '音乐';
+            return '音乐'
         }
         else if (contentType === 5) {
-            return '影视';
+            return '影视'
         }
         else if (contentType === 8) {
-            return '电台';
+            return '电台'
         }
         else if (contentType === 11) {
-            return '专题';
+            return '专题'
         }
     }
 
@@ -527,7 +525,7 @@ class Read extends Component {
      * @param url
      */
     pushToShare() {
-        console.log(this.props.route.params.data);
+        console.log(this.props.route.params.data)
         this.props.navigator.push(
             {
                 component: Share,
@@ -547,16 +545,16 @@ class Read extends Component {
         this.setState({
             likeNum: this.state.like ? this.state.readData.praisenum : this.state.readData.praisenum + 1,
             like: !this.state.like
-        });
+        })
     }
 
     //根据当前状态，显示喜欢图标
     showLikeIcon() {
         //喜欢
         if (this.state.like) {
-            return 'bubble_liked';
+            return 'bubble_liked'
         } else {
-            return 'bubble_like';
+            return 'bubble_like'
         }
     }
 
@@ -574,13 +572,6 @@ class Read extends Component {
         )
     }
 }
-
-
-// Read.defaultProps={
-//     duration: 10,
-//     // 外层回调函数参
-//     refreshView: false, //刷新
-// };
 
 const styles = StyleSheet.create({
     bottomView: {
@@ -620,6 +611,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: width * 0.038,
     }
-});
+})
 
-export default Readp = BaseComponent(Read);
+export default Readp = BaseComponent(Read)

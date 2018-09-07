@@ -4,24 +4,22 @@
  * @flow　分类搜索界面
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     TouchableOpacity
-
-} from 'react-native';
-import constants from '../Constants';
-import SearchCategory from '../search/SearchCategory';
-import SearchBar from './SearchBar';
-import SearchResult from './SearchResult';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import SearchCategory from '../search/SearchCategory'
+import SearchBar from './SearchBar'
+import SearchResult from './SearchResult'
+let {width, height} = constants.ScreenWH
 
 class Search extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             curText: '',
         }
@@ -32,12 +30,6 @@ class Search extends Component{
             <View style={[styles.container,{ backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
                 <SearchBar
                     navigator={this.props.navigator}
-                    onFocus={()=>{
-
-                    }}
-                    onBlur={()=>{
-
-                    }}
                     onChange={(event)=>{
                         this.updateText(event.nativeEvent.text)
                 }} onEndEditing={(event)=>{
@@ -89,7 +81,7 @@ class Search extends Component{
                     </Text>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     /**
@@ -126,7 +118,7 @@ class Search extends Component{
     updateText(text) {
         this.setState({
             curText: text,
-        });
+        })
     }
 
 }
@@ -142,8 +134,6 @@ const styles = StyleSheet.create({
         margin: width * 0.05,
     },
 
+})
 
-
-});
-
-export default Search;
+export default Search

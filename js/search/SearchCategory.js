@@ -4,7 +4,7 @@
  * @flow　分类搜索结果
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
     Text,
@@ -13,17 +13,16 @@ import {
     TouchableOpacity,
     WebView,
     Image,
-    NativeModules,
-} from 'react-native';
-import constants from '../Constants';
-import NetUtils from "../util/NetUtil";
-import PullMenu from '../view/PullMenu';
-import PullPickDate from '../view/PullPickDate';
-import ServerApi from '../ServerApi';
-import {BaseComponent} from "../view/BaseComponent";
-import CommStyles from "../CommStyles";
-let {width, height} = constants.ScreenWH;
-const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}];
+} from 'react-native'
+import constants from '../Constants'
+import NetUtils from "../util/NetUtil"
+import PullMenu from '../view/PullMenu'
+import PullPickDate from '../view/PullPickDate'
+import ServerApi from '../ServerApi'
+import {BaseComponent} from "../view/BaseComponent"
+import CommStyles from "../CommStyles"
+let {width, height} = constants.ScreenWH
+const menuArr=[{'key':'0','value':'图文'},{'key':'3','value':'问答'},{'key':'1','value':'阅读'},{'key':'2','value':'连载'},{'key':'5','value':'影视'},{'key':'4','value':'音乐'},{'key':'8','value':'电台'}]
 const BaseScriptChangeColor =
     `
     (function () {
@@ -37,9 +36,9 @@ const BaseScriptChangeColor =
     `
 class SearchCategory extends Component{
     constructor(props){
-        super(props);
-        this.onNavigationStateChange=this.onNavigationStateChange.bind(this);
-        this.onShouldStartLoadWithRequest=this.onShouldStartLoadWithRequest.bind(this);
+        super(props)
+        this.onNavigationStateChange=this.onNavigationStateChange.bind(this)
+        this.onShouldStartLoadWithRequest=this.onShouldStartLoadWithRequest.bind(this)
 
         this.state={
             HTML: '',
@@ -56,24 +55,36 @@ class SearchCategory extends Component{
             curYear: 0,  //当前年
             curMonth: 0, //当前月
             curTime: 0,   //当前时间
-            curMenuId:this.props.route.params.categoryId+'',  //当前菜单
+            curMenu: null,  //当前菜单
         }
     }
 
+
+    getCurMenu(){
+        for(let item of menuArr){
+            if(item.key.toString() === this.props.route.params.categoryId.toString()){
+                return item
+            }
+        }
+    }
     componentDidMount() {
-        this.getCategory(this.props.route.params.categoryId);
+        let curMenu = this.getCurMenu()
+        this.setState({
+            curMenu: curMenu
+        })
+        this.getCategory(this.props.route.params.categoryId)
     }
 
     getCategory(categoryId){
-        let url = ServerApi.SearchCategory.replace('{category_id}', categoryId);
+        let url = ServerApi.SearchCategory.replace('{category_id}', categoryId)
         NetUtils.get(url, null, (result) => {
             this.setState({
                 HTML: result.html_content,
-            });
+            })
 
         }, (error) => {
-            console.lo
-        });
+            console.log(error)
+        })
     }
 
     render() {
@@ -86,7 +97,7 @@ class SearchCategory extends Component{
                     borderBottomColor: constants.nightMode ? constants.nightModeGrayLight : constants.itemDividerColor,}]} onPress={() => {
                     this.setState({
                         isVisible: true,
-                    });
+                    })
                 }}>
                     <Text　style={{color: constants.nightMode ? 'white' : constants.normalTextLightColor}}>{constants.curDate.substring(0, 4) + '年' + constants.curDate.substring(5, 7) + '月'}</Text>
 
@@ -115,19 +126,19 @@ class SearchCategory extends Component{
                 {this.renderProgressBar()}
 
             </View>
-        );
+        )
     }
 
     //渲染下拉菜单选择器
     renderPullMenu() {
         return (
             <PullMenu menuData={menuArr} select={this.state.curMenu} onShow={this.state.showMenu} onSure={(clickItem) => {
-                this.setState({showMenu: false,curMenuId:clickItem.key});
-                this.getCategory(clickItem.key);
+                this.setState({showMenu: false,curMenu:clickItem})
+                this.getCategory(clickItem.key)
             }} onCancel={() => {
                 this.setState({showMenu: false})
             }}/>
-        );
+        )
     }
 
     //渲染日期选择器
@@ -139,13 +150,13 @@ class SearchCategory extends Component{
                                   curYear: year,
                                   curMonth: month,
                                   curTime: time
-                              });
+                              })
                           }} onCancel={() => {
                 this.setState({
                     isVisible: false
-                });
+                })
             }} onShow={this.state.isVisible}/>
-        );
+        )
     }
 
     //渲染进度条
@@ -158,13 +169,13 @@ class SearchCategory extends Component{
                     style={[styles.centering, {height: width * 0.4}]}
                     size="large"
                 />
-            );
+            )
         }
     }
 
     onShouldStartLoadWithRequest(event) {
         // Implement any custom loading logic here, don't forget to return!
-        return true;
+        return true
     }
 
     onNavigationStateChange(navState) {
@@ -175,7 +186,7 @@ class SearchCategory extends Component{
             status: navState.title,
             loading: navState.loading,
             scalesPageToFit: true
-        });
+        })
     }
 
 
@@ -199,41 +210,36 @@ class SearchCategory extends Component{
                 }} onPress={() => {
                     this.setState({
                         showMenu: true
-                    });
+                    })
                 }}>
                     <Text style={{color: constants.nightMode ? 'white' : constants.normalTextColor}}>{this.getTitle()}</Text>
                     {this.renderArrow(this.state.showMenu)}
 
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     renderArrow(show){
-        let arrowUri='';
+        let arrowUri=''
         if(show){
-            arrowUri='arrow_up_black';
+            arrowUri='arrow_up_black'
         }else{
-            arrowUri='arrow_down_black';
+            arrowUri='arrow_down_black'
         }
 
         return(
             <Image source={{uri: arrowUri}} style={styles.arrow}/>
-        );
+        )
     }
 
     /**
      * 获得标题
      */
     getTitle() {
-        for(let i=0;i<menuArr.length;i++){
-            if(menuArr[i].key===this.state.curMenuId){
-                console.log('当前类型'+menuArr[i].value);
-                return menuArr[i].value;
-            }
+        if (this.state.curMenu){
+            return this.state.curMenu.value
         }
-
-
     }
 }
 
@@ -266,7 +272,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: height * 0.4,
     },
+})
 
-});
-
-export default SearchCategoryPage = BaseComponent(SearchCategory);
+export default SearchCategoryPage = BaseComponent(SearchCategory)

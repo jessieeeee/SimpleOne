@@ -5,25 +5,37 @@
  * @description : 下拉菜单
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
-    View,
     Animated,
     FlatList,
     TouchableOpacity,
     Modal
-} from 'react-native';
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+} from 'react-native'
+import constants from '../Constants'
+import PropTypes from 'prop-types'
+let {width, height} = constants.ScreenWH
 const VIEWABILITY_CONFIG = {
     minimumViewTime: 3000,
     viewAreaCoveragePercentThreshold: 100,
     waitForInteraction: true,
-};
+}
 class PullMenu extends Component{
+    static propTypes = {
+        menuData: PropTypes.array.isRequired, //数据源数组
+        select: PropTypes.object, //当前选择项
+        onShow: PropTypes.bool, // 是否展开菜单
+        onSure: PropTypes.func.isRequired, // 点击确定回调
+        onCancel: PropTypes.func.isRequired // 点击取消回调
+    }
+
+    static defaultProps = {
+        onShow: false, // 默认不展开
+        select: null // 默认选中为空
+    }
+
     constructor(props){
         super(props)
         this.renderRow = this.renderRow.bind(this)
@@ -34,23 +46,23 @@ class PullMenu extends Component{
     }
 
     componentDidMount(){
-        let maxHeight=width * 0.14*this.props.menuData.length;
+        let maxHeight=width * 0.14*this.props.menuData.length
         let minHeight=0;
         let initialValue = this.state.expanded ? maxHeight + minHeight : minHeight,
-            finalValue= this.state.expanded ? minHeight : maxHeight + minHeight;
+            finalValue= this.state.expanded ? minHeight : maxHeight + minHeight
         this.setState({
             expanded: !this.state.expanded //Step 2
-        });
-        console.log('最大高度'+maxHeight);
-        console.log('初始值'+initialValue+'最终值'+finalValue);
-        this.state.animation.setValue(initialValue); //Step 3
+        })
+        console.log('最大高度'+maxHeight)
+        console.log('初始值'+initialValue+'最终值'+finalValue)
+        this.state.animation.setValue(initialValue) //Step 3
 
         this.timer = setTimeout(
             () => {
-                this.toggle(finalValue);
+                this.toggle(finalValue)
             },
             2000
-        );
+        )
     }
 
     render() {
@@ -84,26 +96,25 @@ class PullMenu extends Component{
                 </TouchableOpacity>
 
             </Modal>
-        );
+        )
     }
 
     toggle(finalValue) {
-
         Animated.spring(
             this.state.animation,
             {
                 toValue: finalValue
             }
-        ).start();
+        ).start()
     }
 
     // 单个item返回 线性布局
     renderRow(rowData) {
-        console.log(rowData);
-        if (typeof(rowData) !== 'undefined') {
+        console.log(rowData)
+        if (rowData) {
             return (
                 <TouchableOpacity activeOpacity={1} onPress={() => {
-                    this.props.onSure(rowData.item);
+                    this.props.onSure(rowData.item)
                 }}>
                     {this.renderItem(rowData)}
 
@@ -113,13 +124,13 @@ class PullMenu extends Component{
     }
 
     renderItem(rowData) {
-        let color = '#808080';
-        if (this.props.select === rowData.item.value) {
-            color = '#333333';
+        let color = '#808080'
+        if (this.props.select.key === rowData.item.key) {
+            color = '#333333'
         }
         return (
             <Text style={[styles.menu, {color: color}]}>{rowData.item.value}</Text>
-        );
+        )
     }
 }
 
@@ -137,11 +148,10 @@ const styles = StyleSheet.create({
         width: width,
         height: width * 0.14,
         textAlignVertical: 'center',
-        backgroundColor: 'white',
+        backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white',
         borderBottomWidth: constants.divideLineWidth,
-        borderBottomColor: '#dddddd'
+        borderBottomColor: constants.bottomDivideColor
     },
+})
 
-});
-
-export default PullMenu;
+export default PullMenu

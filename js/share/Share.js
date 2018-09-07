@@ -4,29 +4,28 @@
  * @flow 分享界面
  */
 
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     StyleSheet,
-    Text,
     View,
     Image,
     NativeModules,
     ScrollView,
     TouchableOpacity,
     Clipboard,
-} from 'react-native';
-import constants from '../Constants';
-import CommStyles from "../CommStyles";
-let toast = NativeModules.ToastNative;
-let {width, height} = constants.ScreenWH;
-let UShare = NativeModules.UShare;
+} from 'react-native'
+import constants from '../Constants'
+import CommStyles from "../CommStyles"
+let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
+let UShare = NativeModules.UShare
 
 class Share extends Component{
     constructor(props){
-        super(props);
+        super(props)
         this.state={
             content: 'Content will appear here',
-        };
+        }
     }
     
     render() {
@@ -49,7 +48,7 @@ class Share extends Component{
                     {this.showLink()}
                 </ScrollView>
             </View>
-        );
+        )
     }
 
     /**
@@ -57,58 +56,57 @@ class Share extends Component{
      * @param platform
      */
     platformShare(platform) {
-        let title='',content='',image='',url='';
+        let title='',content='',image='',url=''
         if(this.props.route.params.shareList !== undefined){
-            let data;
+            let data
             switch(platform){
                 case constants.PlatformWeChatMoments:
-                    data=this.props.route.params.shareList.wx_timeline;
-                    break;
+                    data=this.props.route.params.shareList.wx_timeline
+                    break
                 case constants.PlatformWeChat:
-                    data=this.props.route.params.shareList.wx;
-                    break;
+                    data=this.props.route.params.shareList.wx
+                    break
                 case constants.PlatformSina:
-                    data=this.props.route.params.shareList.weibo;
-                    break;
+                    data=this.props.route.params.shareList.weibo
+                    break
                 case constants.PlatformQQ:
-                    data=this.props.route.params.shareList.qq;
-                    break;
+                    data=this.props.route.params.shareList.qq
+                    break
             }
             if(data.title==null||data.title === ""){
-                title=this.props.route.params.shareInfo.title;
+                title=this.props.route.params.shareInfo.title
             }else{
-                title=data.title;
+                title=data.title
             }
             if(data.desc==null||data.desc === ""){
-                content=this.props.route.params.shareInfo.content;
+                content=this.props.route.params.shareInfo.content
             }else{
-                content=data.desc;
+                content=data.desc
             }
             if(data.imgUrl==null||data.imgUrl === ""){
-                image=this.props.route.params.shareInfo.image;
+                image=this.props.route.params.shareInfo.image
             }else{
-                image=data.imgUrl;
+                image=data.imgUrl
             }
             if(data.link==null||data.link === ""){
-                url=this.props.route.params.shareInfo.url;
+                url=this.props.route.params.shareInfo.url
             }else{
-                url=data.link;
+                url=data.link
             }
-
         }
 
-        UShare.share(platform,title ,content ,
+        UShare.share(platform,title ,content,
             image,url,
             (platform) => {
-                console.log(platform + '成功');
+                console.log(platform + '成功')
             },
             (platform, msg) => {
-                console.log(platform + '失败' + msg);
-                toast.showMsg(msg,toast.SHORT);
+                console.log(platform + '失败' + msg)
+                toast.showMsg(msg,toast.SHORT)
             },
             (platform) => {
-                console.log(platform + '取消');
-            });
+                console.log(platform + '取消')
+            })
     }
 
     /**
@@ -117,16 +115,16 @@ class Share extends Component{
      */
     async setClipboardContent() {
         if(this.props.route.params.shareInfo!==undefined){
-            Clipboard.setString(this.props.route.params.shareInfo.url);
+            Clipboard.setString(this.props.route.params.shareInfo.url)
             try {
-                let content = await Clipboard.getString();
-                this.setState({content: content});
-                toast.showMsg('已复制到剪切板',toast.SHORT);
+                let content = await Clipboard.getString()
+                this.setState({content: content})
+                toast.showMsg('已复制到剪切板',toast.SHORT)
             } catch (e) {
-                this.setState({content: e.message});
+                this.setState({content: e.message})
             }
         }else{
-            toast.showMsg('当前内容不支持分享',toast.SHORT);
+            toast.showMsg('当前内容不支持分享',toast.SHORT)
         }
     }
 
@@ -136,7 +134,7 @@ class Share extends Component{
                 <TouchableOpacity onPress={() => this.setClipboardContent()}>
                     <Image source={{uri: 'bubble_copy_link'}} style={styles.shareIcon}/>
                 </TouchableOpacity>
-            );
+            )
         }
     }
 
@@ -154,7 +152,7 @@ class Share extends Component{
                     </TouchableOpacity>
                 </View>
             </View>
-        );
+        )
     }
 }
 
@@ -181,6 +179,6 @@ const styles = StyleSheet.create({
         height: height * 0.06,
         marginBottom: width * 0.16
     }
-});
+})
 
-export default Share;
+export default Share

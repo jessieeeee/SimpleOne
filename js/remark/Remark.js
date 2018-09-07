@@ -33,6 +33,7 @@ class Remark extends Component{
             prev2Text: '<No Event>',
             imgUri: ''
         }
+        this.changeImgResponse = this.changeImgResponse.bind(this)
     }
     componentDidMount() {
         toast.showMsg('您可以修改图片和文字来创建自己的小记', toast.SHORT)

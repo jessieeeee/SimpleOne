@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import queryString from 'query-string'
 
 /**
  * @author : JessieK
@@ -16,7 +16,7 @@ export default class NetUtils {
      */
     static get(url, params, callbackSuccess, callbackError) {
         if (params) {
-            let paramsArray = [];
+            let paramsArray = []
             //拼接参数
             Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]))
             if (url.search(/\?/) === -1) {
@@ -25,7 +25,7 @@ export default class NetUtils {
                 url += '&' + paramsArray.join('&')
             }
         }
-        console.log('server--------->' + url);
+        console.log('server--------->' + url)
         fetch(url, {
             method: 'GET',
         })
@@ -36,12 +36,12 @@ export default class NetUtils {
             })
             .then((json) => {
                 console.log('server--------->',json)
-                callbackSuccess(json);
+                callbackSuccess(json)
             }).catch(error => {
-            console.log('server--------->', error);
-            callbackError(error);
-        });
-    };
+            console.log('server--------->', error)
+            callbackError(error)
+        })
+    }
 
     /**
      * post key-value 形式 hader为'Content-Type': 'application/x-www-form-urlencoded'
@@ -51,7 +51,7 @@ export default class NetUtils {
      * @param {*} callbackError  失败后的回调
      */
     static post(url, params, callbackSuccess, callbackError) {
-        console.log('server--------->' + url);
+        console.log('server--------->' + url)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -61,16 +61,16 @@ export default class NetUtils {
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.json();
+                    return response.json()
                 }
             })
             .then((json) => {
                 callbackSuccess(json);
             }).catch(error => {
-            console.log(url + ':' + error);
-            callbackError(error);
-        });
-    };
+            console.log(url + ':' + error)
+            callbackError(error)
+        })
+    }
 
     /**
      * post json形式  header为'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ export default class NetUtils {
      * @param {*} callbackError  失败后的回调
      */
     static postJson(url, jsonObj, callbackSuccess, callbackError) {
-        console.log('server--------->' + url);
+        console.log('server--------->' + url)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -90,14 +90,14 @@ export default class NetUtils {
         })
             .then((response) => {
                 if (response.ok) {
-                    return response.json();
+                    return response.json()
                 }
             })
             .then((json) => {
-                callbackSuccess(json);
+                callbackSuccess(json)
             }).catch(error => {
-            console.log(url + ':' + error);
-            callbackError(error);
-        });
-    };
+            console.log(url + ':' + error)
+            callbackError(error)
+        })
+    }
 }

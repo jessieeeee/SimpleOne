@@ -25,7 +25,7 @@ let {width, height} = constants.ScreenWH
 
 class MusicControl extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             isPlay: false,
             duration: 0,
@@ -179,7 +179,7 @@ class MusicControl extends Component {
                     }}/>
                 </View>
             </Modal>
-        );
+        )
     }
 
     showLastUri() {

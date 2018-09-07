@@ -3,17 +3,15 @@
  * @email :lyj1246505807@gmail.com
  * @description : 本地存储封装
  */
-import React, { Component } from 'react';
-import Storage from 'react-native-storage';
+import React, { Component } from 'react'
+import Storage from 'react-native-storage'
 
 import {
-    AppRegistry,
-    View,
     AsyncStorage
-} from 'react-native';
+} from 'react-native'
 
-let storage;//返回存储对象
-let defaultExpires = null;      // 数据过期时间，默认一整天（1000 * 3600 * 24 毫秒），设为null则永不过期
+let storage//返回存储对象
+let defaultExpires = null     // 数据过期时间，默认一整天（1000 * 3600 * 24 毫秒），设为null则永不过期
 let size = 1000; // 最大容量，默认值1000条数据循环存储
 
 export default class MySorage extends Component{
@@ -29,7 +27,7 @@ export default class MySorage extends Component{
                 defaultExpires: defaultExpires,
                 // 读写时在内存中缓存数据。默认启用。
                 enableCache: true,
-            });
+            })
         }
     }
 
@@ -40,11 +38,11 @@ export default class MySorage extends Component{
      */
     static save(key,object){
         //校验是否初始化
-        this.isInit();
+        this.isInit()
         storage.save({
             key: key,  // 注意:请不要在key中使用_下划线符号!
             data: object
-        });
+        })
     }
 
     /**
@@ -53,11 +51,11 @@ export default class MySorage extends Component{
      */
     static remove(key){
         //校验是否初始化
-        this.isInit();
+        this.isInit()
         // 删除单个数据
         storage.remove({
             key: key,
-        });
+        })
     }
 
     /**
@@ -65,9 +63,9 @@ export default class MySorage extends Component{
      */
     static removeAll(){
         //校验是否初始化
-        this.isInit();
+        this.isInit()
         // 移除所有数据（但会保留只有key的数据）
-        storage.clearMap();
+        storage.clearMap()
     }
 
     /**
@@ -76,16 +74,16 @@ export default class MySorage extends Component{
      */
     static clearMapForKey(key){
         //校验是否初始化
-        this.isInit();
+        this.isInit()
         // 清除某个key下的所有数据
-        storage.clearMapForKey(key);
+        storage.clearMapForKey(key)
     }
 
     /**
      查询所有数据
      */
     static loadAll(key,callBack){
-        this.load(key,null,null,callBack);
+        this.load(key,null,null,callBack)
     }
 
     /**
@@ -96,13 +94,13 @@ export default class MySorage extends Component{
         storage.load({
             key: key
         }).then(result => {
-           callback(result);
+           callback(result)
         }).catch(err => {
             //如果没有找到数据且没有sync方法，
             //或者有其他异常，则在catch中返回
-            exceptionCallback(err);
-            console.warn('数据库查询异常'+err.message);
-        });
+            exceptionCallback(err)
+            console.warn('数据库查询异常'+err.message)
+        })
     }
 
 
@@ -111,7 +109,7 @@ export default class MySorage extends Component{
      */
     static isInit(){
         if(storage === undefined){
-            throw "请先调用初始化";
+            throw "请先调用初始化"
         }
     }
 

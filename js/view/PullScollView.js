@@ -17,7 +17,7 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 import LottieView from 'lottie-react-native'
-import LoadingMore from './LoadMore';// 加载更多的view
+import LoadMore from './LoadMore';// 加载更多的view
 import Refresh from './Refresh'
 const defaultDuration = 300 //默认时长
 /**
@@ -255,7 +255,7 @@ export default class PullScollView extends Component {
                             this.scroll = c
                         }} scrollEnabled={this.state.scrollEnabled} onScroll={this.onScroll}>
                             {this.props.children}
-                            <LoadingMore state={this.props.loadMoreState} onRetry={() => this.props.onRetry()}/>
+                            <LoadMore state={this.props.loadMoreState} onRetry={() => this.props.onRetry()}/>
 
                         </ScrollView>
                     </View>

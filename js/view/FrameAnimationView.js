@@ -118,12 +118,12 @@ class FrameAnimationView extends Component{
 }
 
 FrameAnimationView.propTypes={
-    width: PropTypes.number.isRequired,
-    height:PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired, //高度
+    height:PropTypes.number.isRequired, //宽度
     loading: PropTypes.bool.isRequired, //是否在加载
     refreshTime: PropTypes.number.isRequired, //刷新频率
-    clickEvent: PropTypes.func,
-    loadingArr: PropTypes.array.isRequired
+    clickEvent: PropTypes.func, //点击事件回调
+    loadingArr: PropTypes.array.isRequired //载入动画数组
 }
 
 export default FrameAnimationView

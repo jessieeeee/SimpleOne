@@ -3,7 +3,7 @@
  * @email : lyj1246505807@gmail.com
  * @description : 搜索图文详情
  */
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
     View,
     TouchableOpacity,
@@ -12,18 +12,18 @@ import {
     StyleSheet,
     ScrollView
 } from 'react-native'
-import NetUtils from "../util/NetUtil";
-import CommStyles from "../CommStyles";
-import constants from "../Constants";
-import OneListTop from '../mainone/OneListTop';
-import DisplayImg from '../display/DisplayImg';
-import Share from "../share/Share";
+import NetUtils from "../util/NetUtil"
+import CommStyles from "../CommStyles"
+import constants from "../Constants"
+import OneListTop from '../mainone/OneListTop'
+import DisplayImg from '../display/DisplayImg'
+import Share from "../share/Share"
 
-let {width, height} = constants.ScreenWH;
+let {width, height} = constants.ScreenWH
 
 class SearchHpDetail extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             result: '',
             showDisplay: false,//是否显示大图
@@ -31,16 +31,16 @@ class SearchHpDetail extends Component {
     }
 
     componentDidMount() {
-        this.getHpDetail();
+        this.getHpDetail()
     }
 
     /**
      * 获取图文详情
      */
     getHpDetail() {
-        let url = 'http://v3.wufazhuce.com:8000/api/hp/feeds/' + this.props.route.params.contentId + '/';
+        let url = 'http://v3.wufazhuce.com:8000/api/hp/feeds/' + this.props.route.params.contentId + '/'
         NetUtils.get(url, null, (result) => {
-            console.log('result-----' + JSON.stringify(result.data));
+            console.log('result-----' + JSON.stringify(result.data))
             this.setState({
                 result: result.data
             })
@@ -52,7 +52,6 @@ class SearchHpDetail extends Component {
      * @param url
      */
     pushToShare(){
-
         this.props.navigator.push(
             {
                 component: Share,
@@ -90,7 +89,7 @@ class SearchHpDetail extends Component {
                     <Image source={{uri: 'share_image'}} style={CommStyles.navRightBar}/>
                 </TouchableOpacity>
             </View>
-        );
+        )
     }
 
     /**
@@ -131,7 +130,7 @@ class SearchHpDetail extends Component {
                                     showDisplay: true
                                 })
                             }}/>
-            );
+            )
         }
     }
 
@@ -154,13 +153,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
-
     title: {
         fontSize: width * 0.04,
         color: '#414141',
         fontWeight: 'bold'
     },
+})
 
-});
-
-export default SearchHpDetail;
+export default SearchHpDetail

@@ -4,8 +4,8 @@
  * @description : 滚动数字效果
  */
 
-import React, { Component } from "react";
-import { StyleSheet, Text, View, Animated } from "react-native";
+import React, { Component } from "react"
+import { StyleSheet, Text, View, Animated } from "react-native"
 import PropTypes from "prop-types";
 const styles = StyleSheet.create({
     // 数字水平浮动排列
@@ -20,25 +20,23 @@ const styles = StyleSheet.create({
         right: 0,
         opacity: 0,
     },
-});
+})
 
 
 const getPosition = ({ text, items, height }) => {
     // 获得文本在数组的下标
-    const index = items.findIndex(p => p === text);
+    const index = items.findIndex(p => p === text)
     // 返回文本绘制的y轴坐标
-    return index * height * -1;
-};
+    return index * height * -1
+}
 // 切割
-const splitText = (text = "") => (text + "").split("");
+const splitText = (text = "") => (text + "").split("")
 // 是十进制数字判断
-const isNumber = (text = "") => !isNaN(parseInt(text, 10));
-// 是字符串判断
-const isString = (text = "") => typeof text === "string";
+const isNumber = (text = "") => !isNaN(parseInt(text, 10))
 // 指定范围创建数组
-const range = length => Array.from({ length }, (x, i) => i);
+const range = length => Array.from({ length }, (x, i) => i)
 // 创建"0","1","2","3","4"..."9"的数组,默认绘制数据
-const numberRange = range(10).map(p => p + "");
+const numberRange = range(10).map(p => p + "")
 
 // 设置动画属性,垂直方向上平移
 const getAnimationStyle = animation => {
@@ -47,9 +45,9 @@ const getAnimationStyle = animation => {
             {
                 translateY: animation,
             },
-        ],
-    };
-};
+        ]
+    }
+}
 /**
  *
  * @param children 子组件
@@ -64,8 +62,8 @@ const Piece = ({ children, style, height, textStyle }) => {
         <View style={style}>
             <Text style={[textStyle, { height }]}>{children}</Text>
         </View>
-    );
-};
+    )
+}
 
 class Ticker extends Component {
 
@@ -73,31 +71,31 @@ class Ticker extends Component {
     static propTypes = {
         text: PropTypes.string,
         textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-    };
+    }
     // 定义默认属性值
     static defaultProps = {
         rotateTime: 250, // 默认滚动时间
-    };
+    }
 
     state = {
         measured: false, // 是否已测量
         height: 0, // 高度
         fontSize: StyleSheet.flatten(this.props.textStyle).fontSize, // 获取props中的字体大小
-    };
+    }
 
     // props变动时回调
     componentWillReceiveProps(nextProps) {
         this.setState({
             fontSize: StyleSheet.flatten(nextProps.textStyle).fontSize,
-        });
+        })
     }
 
     handleMeasure = e => {
         this.setState({
             measured: true, // 修改flag为已测量
             height: e.nativeEvent.layout.height, //测量高度
-        });
-    };
+        })
+    }
 
     /**
      * 渲染
@@ -105,13 +103,13 @@ class Ticker extends Component {
      */
     render() {
         // 获取文本内容,子组件,样式,滚动时长
-        const { text, children, textStyle, style, rotateTime } = this.props;
+        const { text, children, textStyle, style, rotateTime } = this.props
         // 获取高度, 是否测量标记
         const { height, measured } = this.state;
         // 如果未测量则透明
-        const opacity = measured ? 1 : 0;
+        const opacity = measured ? 1 : 0
         // 文本内容获取,读取text或子组件内容,两种方式配置文本内容
-        const childs = text || children;
+        const childs = text || children
         // 如果子组件是字符串,字符串渲染,否则子组件渲染
         return (
             <View style={[styles.row, { height, opacity }, style]}>
@@ -128,7 +126,7 @@ class Ticker extends Component {
                     0
                 </Text>
             </View>
-        );
+        )
     }
 }
 
@@ -140,7 +138,7 @@ const numberRenderer = ({ children, textStyle, height, rotateTime, rotateItems }
                 <Piece key={i} style={{ height }} textStyle={textStyle}>
                     {piece}
                 </Piece>
-            );
+            )
         }
         return (
             <Tick
@@ -151,9 +149,9 @@ const numberRenderer = ({ children, textStyle, height, rotateTime, rotateItems }
                 height={height}
                 rotateItems={rotateItems}
             />
-        );
-    });
-};
+        )
+    })
+}
 
 class Tick extends Component {
     /**
@@ -168,7 +166,7 @@ class Tick extends Component {
                 height: this.props.height,
             }),
         ),
-    };
+    }
     componentDidMount() {
         // 如果高度已测量,设置动画初始值
         if (this.props.height !== 0) {
@@ -180,7 +178,7 @@ class Tick extends Component {
                         height: this.props.height,
                     }),
                 ),
-            });
+            })
         }
     }
 
@@ -195,12 +193,12 @@ class Tick extends Component {
                         height: nextProps.height,
                     }),
                 ),
-            });
+            })
         }
     }
 
     componentDidUpdate(prevProps) {
-        const { height, duration, rotateItems, text } = this.props;
+        const { height, duration, rotateItems, text } = this.props
         // 数字变化,用当前动画值和变化后的动画值进行插值,并启动动画
         if (prevProps.text !== text) {
             Animated.timing(this.state.animation, {
@@ -211,13 +209,13 @@ class Tick extends Component {
                 }),
                 duration,
                 useNativeDriver: true,
-            }).start();
+            }).start()
         }
     }
 
     render() {
-        const { animation } = this.state;
-        const { textStyle, height, rotateItems } = this.props;
+        const { animation } = this.state
+        const { textStyle, height, rotateItems } = this.props
 
         return (
             <View style={{ height }}>
@@ -230,9 +228,9 @@ class Tick extends Component {
                     ))}
                 </Animated.View>
             </View>
-        );
+        )
     }
 }
 
-export { Tick, numberRange };
-export default Ticker;
+export { Tick, numberRange }
+export default Ticker

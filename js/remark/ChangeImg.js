@@ -1,22 +1,23 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * @date : 9/7/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description : 修改小记图片
  */
 
-import React, {Component} from 'react';
+
+import React, {Component} from 'react'
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
     Image,
     TouchableOpacity
-} from 'react-native';
+} from 'react-native'
 
-let ImagePicker = require('react-native-image-picker');
-import constants from '../Constants';
-let {width, height} = constants.ScreenWH;
+let ImagePicker = require('react-native-image-picker')
+import constants from '../Constants'
+let {width, height} = constants.ScreenWH
 
 let options = {
     title: 'Select Avatar',
@@ -27,12 +28,9 @@ let options = {
         skipBackup: true,
         path: 'images'
     }
-};
-
+}
 class ChangeImg extends Component{
-    constructor(props){
-        super(props);
-    }
+
     render() {
         return (
             <TouchableOpacity  style={styles.container} onPress={() => { this.props.navigator.pop()
@@ -58,7 +56,7 @@ class ChangeImg extends Component{
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
-        );
+        )
     }
 
     openCamera() {
@@ -77,13 +75,12 @@ class ChangeImg extends Component{
                 console.log('User tapped custom button: ', response.customButton);
             }
             else {
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                // console.log('source = ', source);
-                this.props.route.params.response(response);
-                this.props.navigator.pop();
-
+                // let source = { uri: 'data:image/jpeg;base64,' + response.data }
+                // console.log('source = ', source)
+                this.props.route.params.response(response)
+                this.props.navigator.pop()
             }
-        });
+        })
 
     }
 
@@ -91,25 +88,25 @@ class ChangeImg extends Component{
         // Open Image Library:
         ImagePicker.launchImageLibrary(options, (response) => {
             // Same code as in above section!
-            console.log('Response = ', response);
+            console.log('Response = ', response)
 
             if (response.didCancel) {
-                console.log('User cancelled image picker');
+                console.log('User cancelled image picker')
             }
             else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
+                console.log('ImagePicker Error: ', response.error)
             }
             else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
+                console.log('User tapped custom button: ', response.customButton)
             }
             else {
                 // let source = { uri: 'data:image/jpeg;base64,' + response.data };
                 // console.log('source = ', source);
-                this.props.route.params.response(response);
-                this.props.navigator.pop();
+                this.props.route.params.response(response)
+                this.props.navigator.pop()
 
             }
-        });
+        })
     }
 }
 
@@ -141,6 +138,6 @@ const styles = StyleSheet.create({
         fontSize: width * 0.03,
     },
 
-});
+})
 
-export default ChangeImg;
+export default ChangeImg

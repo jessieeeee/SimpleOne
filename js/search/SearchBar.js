@@ -17,6 +17,11 @@ import CommStyles from "../CommStyles"
 let {width, height} = constants.ScreenWH
 
 class SearchBar extends Component{
+    static propTypes = {
+        onChange: PropTypes.func,
+        onEndEditing: PropTypes.func,
+        onSubmitEditing: PropTypes.func,
+    }
     render(){
         return (
             <View style={[CommStyles.outNav, { borderBottomColor: constants.nightMode ? constants.nightModeGrayLight:constants.bottomDivideColor,backgroundColor: constants.nightMode ? constants.nightModeGrayDark:'white'}]}>
@@ -27,8 +32,6 @@ class SearchBar extends Component{
                     placeholderTextColor={constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor}
                     placeholder={this.props.searchKey?this.props.searchKey:"在这里写下你想寻找的"}
                     autoCorrect={false}
-                    onFocus={() => this.props.onFocus()}
-                    onBlur={() => this.props.onBlur()}
                     onChange={(event) => this.props.onChange(event)}
                     onEndEditing={(event) => this.props.onEndEditing(event)}
                     onSubmitEditing={(event) => this.props.onSubmitEditing(event)}
