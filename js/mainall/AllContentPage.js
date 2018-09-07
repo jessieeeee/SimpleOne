@@ -17,8 +17,7 @@ import constants from "../Constants"
 import CommStyles from "../CommStyles" // 顶部横幅滚动
 import PropTypes from 'prop-types'
 // 顶部的banner
-let key = 9;
-let bottomList = []
+let key = 9
 
 class AllContentPage extends Component {
 
@@ -30,7 +29,6 @@ class AllContentPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isRefreshing: false, //是否刷新所有页面
             loadMore: false, //底部是否显示更多列表
             startId: 0, //主题请求开始id
             lastId: 0, //记录上一次请求id
@@ -42,7 +40,12 @@ class AllContentPage extends Component {
         this.onError = this.onError.bind(this)
         this.onSuccess = this.onSuccess.bind(this)
         this.itemArr = []
+        this.bottomList = []
         this.loadNum = 0
+    }
+
+    componentDidMount() {
+        this.LoadAllItem()
     }
 
     render() {
@@ -60,20 +63,17 @@ class AllContentPage extends Component {
                     })
                 }}>
 
-                {this.renderAllItem()}
+                {this.itemArr}
                 {this.renderLoadMoreList()}
             </PullScollView>
         )
     }
 
     onPullRelease(resolve) {
-        //更改刷新状态
-        this.setState({isRefreshing: true})
         //刷新完毕，重置下拉刷新，再次更新刷新和加载更多状态
         setTimeout(() => {
             resolve()
             this.setState({
-                isRefreshing: false,
                 loadMore: false,
                 scrollEnabled: true
             })
@@ -93,7 +93,12 @@ class AllContentPage extends Component {
                 this.setState({
                     lastId: this.state.startId,
                 })
-                bottomList.push(
+                //设置正在加载和显示更多标记
+                this.setState({
+                    loadMore: true,
+                    loadingState: LoadMoreState.state.loading,
+                })
+                this.bottomList.push(
                     <AllListTopic key={key} showNum={5} startId={this.state.startId}
                                   onError={(callback) => {
                                       this.errCallback = callback
@@ -101,11 +106,11 @@ class AllContentPage extends Component {
                                           loadingState: LoadMoreState.state.error,
                                       })
                                       // 删除这个list
-                                      bottomList.pop()
+                                      this.bottomList.pop()
                                       key--
                                   }}
                                   getEndId={(endId, end) => {
-                                      console.log('回调了' + endId + end);
+                                      console.log('调用回调' + endId + end);
                                       this.setState({
                                           startId: endId,
                                           loadingState: LoadMoreState.state.tip,
@@ -113,11 +118,7 @@ class AllContentPage extends Component {
                                       })
                                   }}/>
                 )
-                //设置正在加载和显示更多标记
-                this.setState({
-                    loadMore: true,
-                    loadingState: LoadMoreState.state.loading,
-                })
+
             }
         } else {
             this.setState({
@@ -133,14 +134,12 @@ class AllContentPage extends Component {
      * @returns {Array}
      */
     renderLoadMoreList() {
-        //如果当前列表无数据直接返回
-        if (this.state.oneData) {
-            //如果当前是加载更多列表状态，直接返回
-            if (this.state.loadMore) {
-                console.log('最底部列表起始id' + this.state.startId);
-                return bottomList
-            }
+        //如果当前是加载更多列表状态，直接返回
+        if (this.state.loadMore) {
+            console.log('最底部列表起始id' + this.state.startId);
+            return this.bottomList
         }
+
     }
 
     onError() {
@@ -148,22 +147,23 @@ class AllContentPage extends Component {
     }
 
     onSuccess() {
-       this.loadNum ++
+        this.loadNum++
         if (this.loadNum === 4) {
-            this.props.onSuccess && this.props.onSuccess()
+        this.props.onSuccess && this.props.onSuccess()
         }
     }
 
     /**
      * 首次加载渲染
      */
-    renderAllItem() {
+    LoadAllItem() {
+        this.itemArr.splice(0, this.itemArr.length)
+        this.bottomList.splice(0,this.bottomList.length)
         this.itemArr.push(
             <AllListBanner
                 onError={this.onError}
                 onSuccess={this.onSuccess}
                 key={0}
-                refreshView={this.state.isRefreshing}
                 navigator={this.props.navigator}
                 scrollEnabled={this.state.scrollEnabled}/>
         )
@@ -186,7 +186,7 @@ class AllContentPage extends Component {
                 onSuccess={this.onSuccess}
                 key={4}
                 showNum={14}
-                refreshView={this.state.isRefreshing} startId={0}
+                startId={0}
                 navigator={this.props.navigator}
                 getEndId={(endId, end) => {
                     this.setState({
@@ -199,7 +199,6 @@ class AllContentPage extends Component {
         this.itemArr.push(
             <AllListAuthor
                 key={5}
-                refreshView={this.state.isRefreshing}
                 navigator={this.props.navigator}
                 onError={this.onError}
                 onSuccess={this.onSuccess}/>
@@ -214,7 +213,6 @@ class AllContentPage extends Component {
         this.itemArr.push(
             <AllListQuestion
                 key={7}
-                refreshView={this.state.isRefreshing}
                 navigator={this.props.navigator}
                 onError={this.onError}
                 onSuccess={this.onSuccess}/>
@@ -224,7 +222,11 @@ class AllContentPage extends Component {
             <View key={8}
                   style={[CommStyles.bottomLineAll, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
         )
-        return this.itemArr
+
+        this.setState({
+            loadMore: false,
+            scrollEnabled: true
+        })
     }
 }
 

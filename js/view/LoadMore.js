@@ -40,7 +40,13 @@ class LoadMore extends Component {
         }
     }
 
+    componentDidMount(){
+        this.isMount = true
+    }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
     /**
      * 动画执行，逐个显示
      */
@@ -92,9 +98,11 @@ class LoadMore extends Component {
                 break
             case LoadMoreState.state.noMore:
                 setTimeout(() => {
-                    this.setState({
-                        curState: LoadMoreState.state.hide
-                    })
+                   if(this.isMount){
+                       this.setState({
+                           curState: LoadMoreState.state.hide
+                       })
+                   }
                 }, 3000)
                 break
 

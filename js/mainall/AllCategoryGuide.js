@@ -15,7 +15,7 @@ import {
 import constants from '../Constants'
 import SearchCategory from '../search/SearchCategory'
 let {width, height} = constants.ScreenWH
-let key=0
+let key=200
 class AllCategoryGuide extends Component{
     render() {
         return (

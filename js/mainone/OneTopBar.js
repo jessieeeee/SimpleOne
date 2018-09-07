@@ -24,14 +24,15 @@ class OneTopBar extends Component {
     static defaultProps = {
         showDate: '',
         showArrow: false,
-        showSearch: false
+        showSearch: false,
+        curOneData: null
     }
 
     static propTypes = {
         showDate: PropTypes.string,
         showArrow: PropTypes.bool,
         showSearch: PropTypes.bool,
-        curOneData: PropTypes.object.isRequired,
+        curOneData: PropTypes.object,
         backToday: PropTypes.func,
     }
 

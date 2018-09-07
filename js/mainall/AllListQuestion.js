@@ -40,9 +40,7 @@ class  AllListQuestion extends Component{
      * @param nextProps
      */
     componentWillReceiveProps(nextProps){
-        if(nextProps.refreshView){
-            this.getQuestionData()
-        }
+        this.getQuestionData()
     }
 
     render() {
@@ -96,12 +94,7 @@ class  AllListQuestion extends Component{
     }
 }
 
-AllListQuestion.defaultProps={
-    refreshView: false, //刷新
-}
-
 AllListQuestion.propTypes = {
-    refreshView: PropTypes.bool,
     onError: PropTypes.func,
     onSuccess: PropTypes.func,
 }

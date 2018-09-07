@@ -1,8 +1,10 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow 作者信息的头部
+ * @date : 9/7/18
+ * @author : JessieK
+ * @email : lyj1246505807@gmail.com
+ * @description :作者信息的头部
  */
+
 
 import React, { Component } from 'react'
 import {
@@ -15,9 +17,19 @@ import {
 import constants from '../Constants'
 import NetUtils from "../util/NetUtil"
 import ServerApi from '../ServerApi'
+import PropTypes from 'prop-types'
 let {width, height} = constants.ScreenWH
 
 class AuthorHead extends Component{
+    static defaultProps = {
+        authorId: '',
+    }
+    static propTypes = {
+        onError: PropTypes.func.isRequired,
+        onSuccess: PropTypes.func.isRequired,
+        authorId: PropTypes.string.isRequired,
+    }
+
     constructor(props){
         super(props)
         this.state={
@@ -31,6 +43,12 @@ class AuthorHead extends Component{
             this.setState({
                 result:result.data
             })
+            console.log('head')
+            this.props.onSuccess && this.props.onSuccess()
+
+        },(error) => {
+            console.log('error',error)
+            this.props.onError && this.props.onError()
         })
     }
 
@@ -40,7 +58,7 @@ class AuthorHead extends Component{
                 <Image source={{uri:this.state.result.web_url}} style={styles.avatar}/>
                 <Text style={[styles.name,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.user_name} </Text>
                 <Text style={[styles.summary,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}]}>{this.state.result.summary}</Text>
-                <TouchableOpacity onPress={() => this.followAuthor()}>
+                <TouchableOpacity onPress={() => {}}>
                     <Text style={[styles.follow,
                         {color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
                             borderColor: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,}

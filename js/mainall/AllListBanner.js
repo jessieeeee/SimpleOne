@@ -44,9 +44,7 @@ class AllListBanner extends Component{
      * @param nextProps
      */
     componentWillReceiveProps(nextProps){
-        if(nextProps.refreshView){
-            this.getBannerData()
-        }
+        this.getBannerData()
     }
 
     /**
@@ -238,14 +236,11 @@ class AllListBanner extends Component{
 AllListBanner.propTypes = {
     onError: PropTypes.func,
     onSuccess: PropTypes.func,
-    refreshView: PropTypes.bool,
     duration: PropTypes.number,
     scrollEnabled: PropTypes.bool
 }
 AllListBanner.defaultProps={
     duration: 4000,
-    // 外层回调函数参
-    refreshView: false, //刷新
     scrollEnabled: true //解决滑动冲突外部控制
 }
 

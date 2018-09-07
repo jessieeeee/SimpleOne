@@ -25,69 +25,127 @@ import OneListMovie from '../mainone/OneListMovie'
 import OneListAudio from '../mainone/OneListAudio'
 import ServerApi from '../ServerApi'
 import CommStyles from "../CommStyles"
+import {BaseComponent} from "../view/BaseComponent"
+import Status from "../util/Status"
+import NetUtils from '../util/NetUtil'
+import {observer} from "mobx-react/native"
+import StatusManager from "../util/StatusManager"
+
 let toast = NativeModules.ToastNative
 let {width, height} = constants.ScreenWH
 
-
+@observer
 class AuthorPage extends Component {
     constructor(props) {
         super(props)
-        this.onLoadMore = this.onLoadMore.bind(this)
-        this.onPullRelease = this.onPullRelease.bind(this)
         this.state = {
-            loadingState: LoadMoreState.state.tip,//加载更多状态
+            loadingState: LoadMoreState.state.hide,//加载更多状态
             isEnd: false//是否到末尾标记
         }
         this.itemArr = []
         this.key = 0
         this.pageNum = 0
+        this.loadNum = 0
         this.workList = []
+        this.onLoadMore = this.onLoadMore.bind(this)
+        this.onPullRelease = this.onPullRelease.bind(this)
+        this.onError = this.onError.bind(this)
+        this.onSuccess = this.onSuccess.bind(this)
+        // 初始化状态界面管理器
+        this.statusManager = new StatusManager()
     }
 
     componentDidMount() {
-        this.getWorkList()
+        this.isMount = true
+        this.getWorkList(true)
     }
 
-    getWorkList() {
+    componentWillUnmount(){
+        this.isMount = false
+    }
+
+    /**
+     * 刷新内容
+     */
+    retry() {
+        this.getWorkList(true)
+    }
+
+    getWorkList(showLoading) {
         let url = ServerApi.AuthorPage.replace('{author_id}', this.props.route.params.authorId)
         url = url.replace('{page_num}', this.pageNum)
         console.log('加载页数' + this.pageNum)
         console.log("地址" + url)
-        NetUtil.get(url, null, (result) => {
-            this.workList = result.data
-            this.loadMoreView()
-            this.setState({
-                loadingState: LoadMoreState.state.tip,
-            })
-
-            if (result.data.length < 10) {
+        NetUtils.get(url,null,(result) => {
+            if (this.isMount){
+                this.workList = result.data
+                this.loadMoreView()
                 this.setState({
-                    isEnd: true,
+                    loadingState: LoadMoreState.state.tip,
                 })
+
+                if (result.data.length < 10) {
+                    this.setState({
+                        isEnd: true,
+                    })
+                }
+                console.log('main')
+                this.onSuccess()
+                console.log('当前数量' + this.workList.length)
             }
-            console.log('当前数量' + this.workList.length)
         }, (error) => {
+            if (showLoading){
+                this.onError()
+            }
             console.log('error' + error)
-            this.setState({
-                loadingState: LoadMoreState.state.error,
-            })
         })
+
     }
 
+    /**
+     * 如果失败
+     */
+    onError() {
+        this.statusManager.setStatus(Status.Error)
+    }
+
+    /**
+     * 如果成功
+     */
+    onSuccess(){
+        this.loadNum++
+        if (this.loadNum === 2){
+            this.statusManager.setStatus(Status.Normal)
+        }
+    }
+
+    renderNormal(){
+        return (
+            <PullScollView onPullRelease={this.onPullRelease}
+                           onRetry={() => {
+                               this.getWorkList(true)
+                           }}
+                           loadMoreState={this.state.loadingState}
+                           onLoadMore={this.onLoadMore}
+                           style={{width: width}}>
+                <AuthorHead authorId={this.props.route.params.authorId}
+                            onError={this.onError}
+                            onSuccess={this.onSuccess}/>
+                <View
+                    style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
+                {this.itemArr}
+            </PullScollView>
+        )
+    }
     render() {
         return (
-            <View style={[styles.container, {backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+            <View
+                style={[styles.container, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                 {this.renderNavBar()}
-                <PullScollView onPullRelease={this.onPullRelease}
-                               onRetry={() => {this.getWorkList()}}
-                               loadMoreState={this.state.loadingState}
-                               onLoadMore={this.onLoadMore}
-                               style={{width: width}}>
-                    <AuthorHead authorId={this.props.route.params.authorId}/>
-                    <View
-                        style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
-                    {this.itemArr}
-                </PullScollView>
+                {/*渲染正常界面*/}
+                {this.renderNormal()}
+                {/*渲染状态界面*/}
+                {this.props.displayStatus(this.statusManager)}
             </View>
         )
     }
@@ -98,7 +156,7 @@ class AuthorPage extends Component {
         //do something
         console.log('作者页调刷新')
         //发起请求
-        this.getWorkList()
+        this.getWorkList(false)
         setTimeout(() => {
             resolve()
         }, 3000)
@@ -111,15 +169,19 @@ class AuthorPage extends Component {
         if (!this.state.isEnd) {
             this.pageNum++
             console.log('当前页数' + this.pageNum)
-            this.getWorkList()
-            //设置正在加载和更多列表标记
-            this.setState({
-                loadingState: LoadMoreState.state.loading,
-            })
-        }else{
-            this.setState({
-                loadingState: LoadMoreState.state.noMore,
-            })
+            if (this.isMount){
+                //设置正在加载和更多列表标记
+                this.setState({
+                    loadingState: LoadMoreState.state.loading,
+                })
+            }
+            this.getWorkList(false)
+        } else {
+            if (this.isMount){
+                this.setState({
+                    loadingState: LoadMoreState.state.noMore,
+                })
+            }
         }
     }
 
@@ -140,19 +202,19 @@ class AuthorPage extends Component {
                 //音乐
                 else if (data.category === constants.CategoryMusic) {
                     this.itemArr.push(
-                        <OneListMusic key={key} data={data} navigator={this.props.navigator}/>
+                        <OneListMusic key={this.key} data={data} navigator={this.props.navigator}/>
                     )
                 }
                 //电影
                 else if (data.category === constants.CategoryMovie) {
                     this.itemArr.push(
-                        <OneListMovie key={key} data={data} navigator={this.props.navigator}/>
+                        <OneListMovie key={this.key} data={data} navigator={this.props.navigator}/>
                     )
                 }
                 //电台
                 else if (data.category === constants.CategoryRadio) {
                     this.itemArr.push(
-                        <OneListAudio key={key} data={data} navigator={this.props.navigator} todayRadio={() => {
+                        <OneListAudio key={this.key} data={data} navigator={this.props.navigator} todayRadio={() => {
                             toast.showMsg('今晚22:30主播在这里等你', toast.SHORT)
                         }}/>
                     )
@@ -160,18 +222,18 @@ class AuthorPage extends Component {
                 //普通item
                 else {
                     this.itemArr.push(
-                        <OneListCommon key={key}
+                        <OneListCommon key={this.key}
                                        navigator={this.props.navigator}
                                        data={data}/>
                     )
                 }
-                key++
+                this.key++
                 this.itemArr.push(
-                    <View key={key}
+                    <View key={this.key}
                           style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
                 )
 
-                key++
+                this.key++
                 console.log('渲染view' + this.itemArr.length)
             }
         }
@@ -195,7 +257,8 @@ class AuthorPage extends Component {
                     <Image source={{uri: 'icon_back'}} style={CommStyles.navLeftBack}/>
                 </TouchableOpacity>
 
-                <Text style={[styles.title,{color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
+                <Text style={[styles.title, {
+                    color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
                 }]}>{this.props.route.params.authorName}</Text>
 
             </View>
@@ -207,7 +270,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-
     },
 
     title: {
@@ -216,4 +278,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default AuthorPage
+export default BaseComponent(AuthorPage)

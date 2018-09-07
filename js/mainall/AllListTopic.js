@@ -31,12 +31,14 @@ class AllListTopic extends Component {
         super(props)
         this.renderRow = this.renderRow.bind(this)
         this.state = {}
+        console.log('进来了')
     }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
+        console.log('调用刷新')
         this.getTopicData()
     }
 
@@ -45,10 +47,8 @@ class AllListTopic extends Component {
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-        if (nextProps.refreshView) {
-            console.log('刷新了')
-            this.getTopicData()
-        }
+        console.log('刷新了')
+        this.getTopicData()
     }
 
     render() {
@@ -115,38 +115,37 @@ class AllListTopic extends Component {
     getTopicData() {
         let itemArr = [] //把显示数据放到一个数组里
         let url = ServerApi.AllTopic.replace('{id}', this.props.startId)
-
         NetUtils.get(url, null, (result) => {
             this.setState({
                 topic: result,
             })
             let end = false
-            if (this.state.topic.data.length >= this.props.showNum) {
+            if (result.data.length >= this.props.showNum) {
                 for (let i = 0; i < this.props.showNum; i++) {
                     // console.log(this.state.topic.data[i]);
-                    itemArr.push(this.state.topic.data[i])
+                    itemArr.push(result.data[i])
                 }
-                // console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
+                console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
                 this.setState({
-                    endId: this.state.topic.data[this.props.showNum - 1].id
+                    endId: result.data[this.props.showNum - 1].id
                 })
-                this.props.getEndId(this.state.topic.data[this.props.showNum - 1].id, end)
+                this.props.getEndId(result.data[this.props.showNum - 1].id, end)
             }
             //如果专题的数据数量小于显示数量，直接全部放进去
             else {
-                for (let i = 0; i < this.state.topic.data.length; i++) {
+                for (let i = 0; i < result.data.length; i++) {
                     // console.log(this.state.topic.data[i]);
-                    itemArr.push(this.state.topic.data[i])
+                    itemArr.push(result.data[i])
                 }
                 end = true
                 this.setState({
-                    endId: this.state.topic.data[this.state.topic.data.length - 1].id
+                    endId: result.data[result.data.length - 1].id
                 })
-                // console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
-                this.props.getEndId(this.state.topic.data[this.state.topic.data.length - 1].id, end)
+                console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
+                this.props.getEndId(result.data[result.data.length - 1].id, end)
             }
 
-
+            console.log('结果', itemArr)
             //将这个数组作为数据源
             this.setState({
                 dataSource: itemArr,
@@ -181,7 +180,6 @@ AllListTopic.propsTypes = {
     onError: PropTypes.func,
     onSuccess: PropTypes.func,
     showNum: PropTypes.number.isRequired,
-    refreshView: PropTypes.bool,
     startId: PropTypes.number.isRequired,
     endId: PropTypes.number.isRequired,
     getEndId: PropTypes.func
@@ -189,7 +187,6 @@ AllListTopic.propsTypes = {
 
 AllListTopic.defaultProps = {
     showNum: 10,//展示个数
-    refreshView: false, //刷新
     startId: 0,  //请求起始id
     endId: 0, //结束id
 }

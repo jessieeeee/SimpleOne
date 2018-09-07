@@ -19,6 +19,7 @@ import NetUtils from "../util/NetUtil"
 import constants from '../Constants'
 import AuthorPage from '../author/AuthorPage'
 import ServerApi from '../ServerApi'
+
 let toast = NativeModules.ToastNative
 let {width, height} = constants.ScreenWH
 
@@ -29,12 +30,13 @@ let ds = new ListView.DataSource({
     rowHasChanged: (r1, r2) => r1 != r2
 })
 
-class AllListAuthor extends Component{
-    constructor(props){
+class AllListAuthor extends Component {
+    constructor(props) {
         super(props)
-        this.state={}
-        this.renderRow=this.renderRow.bind(this)
+        this.state = {}
+        this.renderRow = this.renderRow.bind(this)
     }
+
     /**
      * 发起网络请求
      */
@@ -46,15 +48,14 @@ class AllListAuthor extends Component{
      * 父组件传参变化回调
      * @param nextProps
      */
-    componentWillReceiveProps(nextProps){
-        if(nextProps.refreshView){
-            this.getHotAuthorData()
-        }
+    componentWillReceiveProps(nextProps) {
+        this.getHotAuthorData()
     }
 
     render() {
         return (
-            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+            <View
+                style={[styles.container, {backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
                 <Text style={{
                     color: constants.nightMode ? 'white' : constants.normalTextColor,
                     fontSize: width * 0.04,
@@ -63,7 +64,7 @@ class AllListAuthor extends Component{
                 }}>近期热门作者</Text>
                 {this.renderList()}
 
-                <View style={{width:width, height:width*0.26,alignItems: 'center',justifyContent: 'center',}}>
+                <View style={{width: width, height: width * 0.26, alignItems: 'center', justifyContent: 'center',}}>
                     <View style={{
                         width: width * 0.22,
                         height: width * 0.096,
@@ -104,7 +105,10 @@ class AllListAuthor extends Component{
     renderRow(rowData, sectionID, rowID, highlightRow) {
         // console.log(rowData);
         return (
-            <View style={[styles.contentContainer, {  backgroundColor: constants.nightMode? constants.nightModeGrayLight:'white',borderBottomColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}>
+            <View style={[styles.contentContainer, {
+                backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white',
+                borderBottomColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor
+            }]}>
                 <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row'}}
                                   onPress={() => this.pushToAuthor(rowData)}>
                     {/*左边头像*/}
@@ -113,11 +117,14 @@ class AllListAuthor extends Component{
                     {/*右边文字*/}
                     <View style={styles.rightContainer}>
                         {/*上面名字*/}
-                        <Text style={[styles.topText, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
+                        <Text
+                            style={[styles.topText, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
                             {rowData.user_name}
                         </Text>
                         {/*下面介绍*/}
-                        <Text style={[styles.bottomText, {color: constants.nightMode ? 'white' : constants.normalTextLightColor}]} numberOfLines={1}>
+                        <Text
+                            style={[styles.bottomText, {color: constants.nightMode ? 'white' : constants.normalTextLightColor}]}
+                            numberOfLines={1}>
                             {rowData.desc}
                         </Text>
                     </View>
@@ -126,7 +133,7 @@ class AllListAuthor extends Component{
                 <TouchableOpacity
                     style={styles.follow}
                     activeOpacity={0.5}
-                    onPress={() => toast.showMsg('点击了' + rowID + '行',toast.SHORT)}>
+                    onPress={() => toast.showMsg('点击了' + rowID + '行', toast.SHORT)}>
 
                     <Text style={{
                         textAlign: 'center',
@@ -172,20 +179,17 @@ class AllListAuthor extends Component{
         this.props.navigator.push(
             {
                 component: AuthorPage,
-                title:'作者页',
-                params:{
-                    authorId:itemData.user_id,
-                    authorName:itemData.user_name
+                title: '作者页',
+                params: {
+                    authorId: itemData.user_id,
+                    authorName: itemData.user_name
                 }
             }
         )
     }
 }
-AllListAuthor.defaultProps = {
-    refreshView: false, //刷新
-}
+
 AllListAuthor.propTypes = {
-    refreshView: PropTypes.bool,
     onError: PropTypes.func,
     onSuccess: PropTypes.func
 }

@@ -45,7 +45,12 @@ class One extends Component {
         this.backToday = this.backToday.bind(this)
         this.onPullRelease = this.onPullRelease.bind(this)
     }
-
+    /**
+     * 刷新内容
+     */
+    retry() {
+        this.onPullRelease()
+    }
     /**
      * 发起网络请求
      */
@@ -109,13 +114,6 @@ class One extends Component {
     renderNormal() {
         return (
             <View>
-                {/*渲染头部bar*/}
-                <OneTopBar navigator={this.props.navigator}
-                           showDate={this.state.showDate}
-                           showArrow={this.state.showArrow}
-                           showSearch={this.state.showSearch}
-                           curOneData={this.state.curOneData}
-                           backToday={this.backToday}/>
                 {/*渲染内容界面*/}
                 <OneTabPage ref={(c) => this.oneTabPage = c}
                             curPage={this.curPage}
@@ -206,10 +204,19 @@ class One extends Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                {/*渲染正常界面*/}
-                {this.statusManager.Status === Status.Normal ? this.renderNormal() : null}
-                {/*渲染状态界面*/}
-                {this.props.displayStatus(this.statusManager)}
+                {/*渲染头部bar*/}
+                <OneTopBar navigator={this.props.navigator}
+                           showDate={this.state.showDate}
+                           showArrow={this.state.showArrow}
+                           showSearch={this.state.showSearch}
+                           curOneData={this.state.curOneData}
+                           backToday={this.backToday}/>
+                <View style={{flex: 1}}>
+                    {/*渲染正常界面*/}
+                    {this.statusManager.Status === Status.Normal ? this.renderNormal() : null}
+                    {/*渲染状态界面*/}
+                    {this.props.displayStatus(this.statusManager)}
+                </View>
                 <GuideView isVisible={this.state.showGuide}
                            onCancel={() => {
                                this.setState({showGuide: false})
@@ -282,9 +289,9 @@ class One extends Component {
 
         this.props.request(url, null, this.statusManager, (result) => {
             if (!refresh) {
-                this.date = requestDate;
+                this.date = requestDate
             }
-            onSuccess(result);
+            onSuccess(result)
         }, (error) => {
             console.log('error' + error)
         }, !refresh)
