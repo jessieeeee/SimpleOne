@@ -68,6 +68,7 @@ class SearchCategory extends Component{
         }
     }
     componentDidMount() {
+        this.isMount = true
         let curMenu = this.getCurMenu()
         this.setState({
             curMenu: curMenu
@@ -75,13 +76,18 @@ class SearchCategory extends Component{
         this.getCategory(this.props.route.params.categoryId)
     }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
+
     getCategory(categoryId){
         let url = ServerApi.SearchCategory.replace('{category_id}', categoryId)
         NetUtils.get(url, null, (result) => {
-            this.setState({
-                HTML: result.html_content,
-            })
-
+           if(this.isMount){
+               this.setState({
+                   HTML: result.html_content,
+               })
+           }
         }, (error) => {
             console.log(error)
         })
@@ -179,14 +185,16 @@ class SearchCategory extends Component{
     }
 
     onNavigationStateChange(navState) {
-        this.setState({
-            backButtonEnabled: navState.canGoBack,
-            forwardButtonEnabled: navState.canGoForward,
-            url: navState.url,
-            status: navState.title,
-            loading: navState.loading,
-            scalesPageToFit: true
-        })
+        if(this.isMount){
+            this.setState({
+                backButtonEnabled: navState.canGoBack,
+                forwardButtonEnabled: navState.canGoForward,
+                url: navState.url,
+                status: navState.title,
+                loading: navState.loading,
+                scalesPageToFit: true
+            })
+        }
     }
 
 

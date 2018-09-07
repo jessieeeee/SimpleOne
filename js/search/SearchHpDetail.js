@@ -31,19 +31,25 @@ class SearchHpDetail extends Component {
     }
 
     componentDidMount() {
+        this.isMount = true
         this.getHpDetail()
     }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
     /**
      * 获取图文详情
      */
     getHpDetail() {
         let url = 'http://v3.wufazhuce.com:8000/api/hp/feeds/' + this.props.route.params.contentId + '/'
         NetUtils.get(url, null, (result) => {
-            console.log('result-----' + JSON.stringify(result.data))
-            this.setState({
-                result: result.data
-            })
+            if (this.isMount){
+                console.log('result-----' + JSON.stringify(result.data))
+                this.setState({
+                    result: result.data
+                })
+            }
         })
     }
 

@@ -37,6 +37,7 @@ class SearchResult extends Component{
     }
 
     componentDidMount(){
+        this.isMount = true
         this.setState({
             curText:this.props.route.params.searchKey,
             loading:false
@@ -44,6 +45,9 @@ class SearchResult extends Component{
         this.searchKey(this.props.route.params.searchKey)
     }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
     /**
      * 获取搜索类型
      */
@@ -69,16 +73,21 @@ class SearchResult extends Component{
      * @param key
      */
     searchKey(key){
-        this.setState({
-            loading:true
-        })
-        let url='http://v3.wufazhuce.com:8000/api/search/'+this.getSearchType()+'/'+ encodeURI(key)+'/0?version=4.3.4'
-        NetUtils.get(url,null,(result) => {
-            this.state.result[this.curPage]=result.data.list
+        if (this.isMount){
             this.setState({
-                loading:false
+                loading:true
             })
-        })
+            let url='http://v3.wufazhuce.com:8000/api/search/'+this.getSearchType()+'/'+ encodeURI(key)+'/0?version=4.3.4'
+            NetUtils.get(url,null,(result) => {
+                if(this.isMount){
+                    this.state.result[this.curPage]=result.data.list
+                    this.setState({
+                        loading:false
+                    })
+                }
+            })
+        }
+
     }
 
     /**
@@ -218,9 +227,11 @@ class SearchResult extends Component{
     }
 
     updateText(text) {
-        this.setState({
-            curText: text,
-        })
+       if(this.isMount){
+           this.setState({
+               curText: text,
+           })
+       }
     }
 
     render(){
@@ -229,12 +240,6 @@ class SearchResult extends Component{
               <SearchBar
                   navigator={this.props.navigator}
                   searchKey={this.props.route.params.searchKey}
-                  onFocus={()=>{
-
-                  }}
-                  onBlur={()=>{
-
-                  }}
                   onChange={(event)=>{
                       this.updateText(event.nativeEvent.text)
                   }} onEndEditing={(event)=>{

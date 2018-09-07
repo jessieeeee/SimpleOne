@@ -104,7 +104,11 @@ class Read extends Component {
         }
     }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
     componentDidMount() {
+        this.isMount = true
         let url
         if (this.props.route.params.entry === constants.AllRead) {
             url = this.getContentUrl().replace('{content_id}', this.props.route.params.contentId)
@@ -113,19 +117,21 @@ class Read extends Component {
         }
         console.log('当前文章地址' + url)
         NetUtils.get(url, null, (result) => {
-            this.setState({
-                readData: result.data,
-                likeNum: result.data.praisenum,
-            })
-            let bgColor
-            if (result.data.category === constants.CategoryReadBg) {
-                bgColor = result.data.bg_color
-            } else {
-                bgColor = 'white'
+            if (this.isMount){
+                this.setState({
+                    readData: result.data,
+                    likeNum: result.data.praisenum,
+                })
+                let bgColor
+                if (result.data.category === constants.CategoryReadBg) {
+                    bgColor = result.data.bg_color
+                } else {
+                    bgColor = 'white'
+                }
+                this.setState({
+                    bgColor: bgColor
+                })
             }
-            this.setState({
-                bgColor: bgColor
-            })
             // console.log(result);
         }, (error) => {
             console.log('error address' + error)
@@ -145,10 +151,12 @@ class Read extends Component {
         }
         console.log('请求评论' + url)
         NetUtils.get(url, null, (result) => {
-            this.setState({
-                commentData: result.data.data
-            })
-            console.log(result)
+            if(this.isMount){
+                this.setState({
+                    commentData: result.data.data
+                })
+                console.log(result)
+            }
         }, (error) => {
             console.log('error comment' + error);
 
@@ -210,7 +218,7 @@ class Read extends Component {
         console.log(event.nativeEvent.data)
         try {
             const action = JSON.parse(event.nativeEvent.data)
-            if (action.type === 'setHeight' && action.height > 0 && this.state.height < height) {
+            if (this.isMount && action.type === 'setHeight' && action.height > 0 && this.state.height < height) {
                 console.log('设置高度')
                 this.setState({height: action.height})
             }

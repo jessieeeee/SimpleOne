@@ -25,6 +25,13 @@ class Search extends Component{
         }
     }
 
+    componentDidMount(){
+        this.isMount = true
+    }
+
+    componentWillUnmount(){
+        this.isMount = false
+    }
     render() {
         return (
             <View style={[styles.container,{ backgroundColor: constants.nightMode ? constants.nightModeGrayLight :'white'}]}>
@@ -116,9 +123,11 @@ class Search extends Component{
     }
 
     updateText(text) {
-        this.setState({
-            curText: text,
-        })
+       if(this.isMount){
+           this.setState({
+               curText: text,
+           })
+       }
     }
 
 }

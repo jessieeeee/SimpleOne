@@ -28,21 +28,27 @@ let {width, height} = constants.ScreenWH
 
 class Setting extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             nightMode: constants.nightMode
         }
     }
 
     componentDidMount() {
+        this.isMount = true
         clearCache.getCacheSize((value, unit) => {
-            this.setState({
-                cacheSize: value, //缓存大小
-                unit: unit  //缓存单位
-            })
+            if (this.isMount){
+                this.setState({
+                    cacheSize: value, //缓存大小
+                    unit: unit  //缓存单位
+                })
+            }
         })
     }
 
+    componentWillUnmount(){
+        this.isMount = false
+    }
     render() {
         let tip = '确认要清除缓存?'
         return (
@@ -147,10 +153,12 @@ class Setting extends Component {
         clearCache.runClearCache(() => {
             toast.showMsg('清除缓存成功!', toast.SHORT)
             clearCache.getCacheSize((value, unit) => {
-                this.setState({
-                    cacheSize: value, //缓存大小
-                    unit: unit  //缓存单位
-                })
+                if(this.isMount){
+                    this.setState({
+                        cacheSize: value, //缓存大小
+                        unit: unit  //缓存单位
+                    })
+                }
             })
         })
     }

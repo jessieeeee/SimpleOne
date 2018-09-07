@@ -114,7 +114,7 @@ class Share extends Component{
      * @returns {Promise.<void>}
      */
     async setClipboardContent() {
-        if(this.props.route.params.shareInfo!==undefined){
+        if(this.props.route.params.shareInfo){
             Clipboard.setString(this.props.route.params.shareInfo.url)
             try {
                 let content = await Clipboard.getString()
