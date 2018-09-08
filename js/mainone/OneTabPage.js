@@ -12,7 +12,7 @@ import OneListAudio from './OneListAudio'
 import OneListMusic from './OneListMusic'
 import OneListMovie from './OneListMovie'
 import OneListTop from './OneListTop'
-import PullScollView from '../view/PullScollView'
+import PullScrollView from '../view/PullScrollView'
 import constants from "../Constants"
 import CommStyles from "../CommStyles"
 import PropTypes from 'prop-types'
@@ -66,6 +66,9 @@ class OneTabPage extends Component{
 
     }
 
+    resetView(){
+        this.itemPageArr.splice(0,this.itemPageArr.length)
+    }
     /**
      * 添加后面一页的空白界面
      */
@@ -82,12 +85,13 @@ class OneTabPage extends Component{
 
     onPullRelease(resolve){
         //do something
-        console.log('one分页调刷新');
+        console.log('one分页调刷新')
         this.props.onPullRelease && this.props.onPullRelease()
         setTimeout(() => {
-            resolve();
+            resolve()
         }, 3000);
     }
+
     // 添加内容页面
     addPage(oneData) {
         // 把空白界面删除
@@ -95,7 +99,8 @@ class OneTabPage extends Component{
         this.key--
         // 添加内容界面
         this.itemPageArr.push(
-            <PullScollView
+            <PullScrollView
+                style={{flex:1}}
                 key={this.key}
                 onPullRelease={this.onPullRelease}
                 onScroll={this.onScroll}
@@ -103,7 +108,7 @@ class OneTabPage extends Component{
 
                 {this.renderAllItem(oneData, this.key)}
 
-            </PullScollView>
+            </PullScrollView>
         )
         {
             this.key++
@@ -207,7 +212,7 @@ class OneTabPage extends Component{
                 }
             }
             //添加菜单和分割线
-            if (oneData.menu != null) {
+            if (oneData.menu) {
                 itemArr.splice(2, 0,
                     <ExpandMenu key={2} menu={oneData.menu} navigator={this.props.navigator} date={this.props.showDate}
                                 todayRadio={() => {
@@ -230,10 +235,11 @@ class OneTabPage extends Component{
 
     render(){
         return(
-            <ScrollView horizontal={true} ref='sv_one' pagingEnabled={true}
+            <ScrollView
+                style={{flex:1}}
+                horizontal={true} ref='sv_one' pagingEnabled={true}
                         scrollEnabled={true} showsHorizontalScrollIndicator={false}
                         onMomentumScrollEnd={this.onMomentumScrollEnd}>
-
                 {/*渲染分页*/}
                 {this.itemPageArr}
 

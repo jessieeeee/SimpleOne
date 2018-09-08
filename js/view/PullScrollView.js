@@ -41,7 +41,7 @@ const isVerticalGesture = (x, y) => {
     return (Math.abs(x) < Math.abs(y));
 };
 
-export default class PullScollView extends Component {
+export default class PullScrollView extends Component {
 
     static defaultProps = {
         topRefreshHeight: 50, //顶部刷新视图的高度
@@ -251,7 +251,7 @@ export default class PullScollView extends Component {
                     <View ref={(c) => {
                         this.scrollContainer = c
                     }} {...this.panResponder.panHandlers} style={{width: this.state.width, height: this.state.height}}>
-                        <ScrollView ref={(c) => {
+                        <ScrollView {...this.props} ref={(c) => {
                             this.scroll = c
                         }} scrollEnabled={this.state.scrollEnabled} onScroll={this.onScroll}>
                             {this.props.children}

@@ -81,6 +81,7 @@ class  AllListQuestion extends Component{
 
     // 请求问题数据
     getQuestionData() {
+        console.log('请求question')
         NetUtils.get(ServerApi.AllQuestion, null, (result) => {
             this.setState({
                 questions: result,

@@ -1,11 +1,12 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow 主界面-one分页
+ * @date :2018/9/7
+ * @author :JessieKate
+ * @email :lyj1246505807@gmail.com
+ * @description :主界面-one分页
  */
 
+
 import React, {Component} from 'react'
-import Status from '../util/Status'
 import constants from '../Constants'
 import {
     View,
@@ -20,12 +21,12 @@ import ServerApi from '../ServerApi'
 import OneTopBar from './OneTopBar'
 import StatusManager from '../util/StatusManager'
 import {BaseComponent} from "../view/BaseComponent"
-
+import {observer} from "mobx-react/native"
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
-
+@observer
 class One extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             showSearch: false,//是否显示搜索按钮
             showArrow: false,//是否显示箭头
@@ -49,7 +50,7 @@ class One extends Component {
      * 刷新内容
      */
     retry() {
-        this.onPullRelease()
+        this.loadPage()
     }
     /**
      * 发起网络请求
@@ -93,14 +94,24 @@ class One extends Component {
                 this.setState({
                     nextOneData: result,
                 })
-            }, false)
+            }, false, () => {
+                this.setState({
+                    nextOneData: null,
+                })
+            })
         })
     }
 
     // 刷新释放回调
     onPullRelease() {
+        console.log('this',this)
+        if(!this.state.nextOneData){
+            console.log('this添加界面')
+            this.oneTabPage && this.oneTabPage.addEmptyView()
+        }
         //发起请求
         this.getOneList((result) => {
+            console.log('请求成功',result)
             this.setState({
                 curOneData: result,
             })
@@ -112,32 +123,34 @@ class One extends Component {
      * @returns {*}
      */
     renderNormal() {
-        return (
-            <View>
-                {/*渲染内容界面*/}
-                <OneTabPage ref={(c) => this.oneTabPage = c}
-                            curPage={this.curPage}
-                            weather={this.state.curOneData.data.weather}
-                            navigator={this.props.navigator}
-                            forward={this.forward}
-                            backward={this.backward}
-                            showDate={this.state.showDate}
-                            onPullRelease={this.onPullRelease}
-                            showArrowAndSearch={this.showArrowAndSearch}
-                            clickDisplay={(topText, imgUrl, bottomText, originalW, originalH) => {
-                                this.setState({
-                                    topText: topText,
-                                    imgUrl: imgUrl,
-                                    bottomText: bottomText,
-                                    originalW: originalW,
-                                    originalH: originalH,
-                                    showDisplay: true
-                                })
-                            }}/>
-                {/*渲染展示大图*/}
-                {this.renderDisplay()}
-            </View>
-        )
+        if (this.state.curOneData){
+            return (
+                <View style={{flex:1}}>
+                    {/*渲染内容界面*/}
+                    <OneTabPage ref={(c) => this.oneTabPage = c}
+                                curPage={this.curPage}
+                                weather={this.state.curOneData.data.weather}
+                                navigator={this.props.navigator}
+                                forward={this.forward}
+                                backward={this.backward}
+                                showDate={this.state.showDate}
+                                onPullRelease={this.onPullRelease}
+                                showArrowAndSearch={this.showArrowAndSearch}
+                                clickDisplay={(topText, imgUrl, bottomText, originalW, originalH) => {
+                                    this.setState({
+                                        topText: topText,
+                                        imgUrl: imgUrl,
+                                        bottomText: bottomText,
+                                        originalW: originalW,
+                                        originalH: originalH,
+                                        showDisplay: true
+                                    })
+                                }}/>
+                    {/*渲染展示大图*/}
+                    {this.renderDisplay()}
+                </View>
+            )
+        }
     }
 
     // 显示箭头和搜索
@@ -192,7 +205,11 @@ class One extends Component {
                     nextOneData: result,
                 })
                 this.oneTabPage.addEmptyView()
-            }, false)
+            }, false ,() => {
+                this.setState({
+                    nextOneData: null,
+                })
+            })
         }
         this.curPage = currentPage
     }
@@ -213,7 +230,7 @@ class One extends Component {
                            backToday={this.backToday}/>
                 <View style={{flex: 1}}>
                     {/*渲染正常界面*/}
-                    {this.statusManager.Status === Status.Normal ? this.renderNormal() : null}
+                    {this.renderNormal() }
                     {/*渲染状态界面*/}
                     {this.props.displayStatus(this.statusManager)}
                 </View>
@@ -260,7 +277,8 @@ class One extends Component {
             })
             console.log('今日日期' + this.date)
             constants.curDate = this.date
-            this.oneTabPage.addPage(this.state.curOneData.data);
+            this.oneTabPage.resetView()
+            this.oneTabPage.addPage(this.state.curOneData.data)
             loadFirstSuccess()
         }, false)
     }
@@ -269,30 +287,33 @@ class One extends Component {
      * 获取内容列表
      * @param onSuccess 成功请求回调
      * @param refresh 是否刷新
+     * @param onError 错误回调
      */
-    getOneList(onSuccess, refresh) {
-        console.log('请求date' + this.date);
+    getOneList(onSuccess, refresh, onError) {
+        console.log('请求date' + this.date)
         let requestDate;
         if (this.date === '0') {
-            requestDate = '0';
+            requestDate = '0'
         } else {
             if (refresh) {
-                requestDate = this.state.showDate;
+                requestDate = this.state.showDate
             } else {
-                requestDate = DateUtil.getLastDate(this.date);
+                requestDate = DateUtil.getLastDate(this.date)
             }
         }
 
-        let url = ServerApi.OneList.replace('{date}', requestDate);
+        let url = ServerApi.OneList.replace('{date}', requestDate)
 
-        console.log('请求日期date' + requestDate);
-
+        console.log('请求日期date' + requestDate)
         this.props.request(url, null, this.statusManager, (result) => {
             if (!refresh) {
                 this.date = requestDate
             }
             onSuccess(result)
         }, (error) => {
+            if (onError){
+                onError()
+            }
             console.log('error' + error)
         }, !refresh)
     }

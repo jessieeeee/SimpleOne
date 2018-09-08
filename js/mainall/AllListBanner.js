@@ -90,6 +90,7 @@ class AllListBanner extends Component{
      * @param id  id值
      */
     getBannerData() {
+        console.log('请求banner')
         NetUtils.get(ServerApi.AllBanner, null, (result) => {
             this.setState({
                 banner: result,

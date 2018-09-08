@@ -5,8 +5,7 @@
  */
 
 import React, {Component} from 'react'
-import PullScollView from '../view/PullScollView'
-import NetUtil from '../util/NetUtil'
+import PullScrollView from '../view/PullScrollView'
 import AuthorHead from './AuthorHead'
 import LoadMoreState from '../view/LoadMoreState'
 import {
@@ -106,6 +105,7 @@ class AuthorPage extends Component {
      * 如果失败
      */
     onError() {
+        this.loadNum = 0
         this.statusManager.setStatus(Status.Error)
     }
 
@@ -115,26 +115,27 @@ class AuthorPage extends Component {
     onSuccess(){
         this.loadNum++
         if (this.loadNum === 2){
+            this.loadNum = 0
             this.statusManager.setStatus(Status.Normal)
         }
     }
 
     renderNormal(){
         return (
-            <PullScollView onPullRelease={this.onPullRelease}
-                           onRetry={() => {
+            <PullScrollView onPullRelease={this.onPullRelease}
+                            onRetry={() => {
                                this.getWorkList(true)
                            }}
-                           loadMoreState={this.state.loadingState}
-                           onLoadMore={this.onLoadMore}
-                           style={{width: width}}>
+                            loadMoreState={this.state.loadingState}
+                            onLoadMore={this.onLoadMore}
+                            style={{width: width}}>
                 <AuthorHead authorId={this.props.route.params.authorId}
                             onError={this.onError}
                             onSuccess={this.onSuccess}/>
                 <View
                     style={[CommStyles.bottomLine, {backgroundColor: constants.nightMode ? constants.nightModeGrayDark : constants.itemDividerColor}]}/>
                 {this.itemArr}
-            </PullScollView>
+            </PullScrollView>
         )
     }
     render() {

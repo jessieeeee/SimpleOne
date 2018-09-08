@@ -31,7 +31,8 @@ class All extends Component {
      * 刷新内容
      */
     retry() {
-        this.content.onPullRelease()
+        this.statusManager.setStatus(Status.Loading)
+        this.content.refresh()
     }
 
     componentDidMount() {

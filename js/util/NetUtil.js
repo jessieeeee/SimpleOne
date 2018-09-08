@@ -35,10 +35,10 @@ export default class NetUtils {
                 }
             })
             .then((json) => {
-                console.log('server--------->',json)
+                console.log('server--------->1',json)
                 callbackSuccess(json)
             }).catch(error => {
-            console.log('server--------->', error)
+            console.log('server--------->2', error)
             callbackError(error)
         })
     }

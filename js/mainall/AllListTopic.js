@@ -31,14 +31,12 @@ class AllListTopic extends Component {
         super(props)
         this.renderRow = this.renderRow.bind(this)
         this.state = {}
-        console.log('进来了')
     }
 
     /**
      * 发起网络请求
      */
     componentDidMount() {
-        console.log('调用刷新')
         this.getTopicData()
     }
 
@@ -47,7 +45,6 @@ class AllListTopic extends Component {
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-        console.log('刷新了')
         this.getTopicData()
     }
 
@@ -113,6 +110,7 @@ class AllListTopic extends Component {
 
     // 请求专题数据
     getTopicData() {
+        console.log('请求topic')
         let itemArr = [] //把显示数据放到一个数组里
         let url = ServerApi.AllTopic.replace('{id}', this.props.startId)
         NetUtils.get(url, null, (result) => {

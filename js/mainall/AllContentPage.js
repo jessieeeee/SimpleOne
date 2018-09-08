@@ -6,7 +6,7 @@
 
 import React, {Component} from 'react'
 import {View} from 'react-native'
-import PullScollView from '../view/PullScollView'
+import PullScrollView from '../view/PullScrollView'
 import AllListTopic from './AllListTopic'// 专题列表
 import AllCategoryGuide from './AllCategoryGuide'// 分类导航
 import AllListAuthor from './AllListAuthor'// 热门作者
@@ -50,7 +50,7 @@ class AllContentPage extends Component {
 
     render() {
         return (
-            <PullScollView
+            <PullScrollView
                 onRetry={() => {
                     this.errCallback()
                 }}
@@ -65,19 +65,24 @@ class AllContentPage extends Component {
 
                 {this.itemArr}
                 {this.renderLoadMoreList()}
-            </PullScollView>
+            </PullScrollView>
         )
     }
 
+    refresh(){
+        this.LoadAllItem()
+    }
+
     onPullRelease(resolve) {
+        this.LoadAllItem()
         //刷新完毕，重置下拉刷新，再次更新刷新和加载更多状态
-        setTimeout(() => {
-            resolve()
-            this.setState({
-                loadMore: false,
-                scrollEnabled: true
-            })
-        }, 3000)
+           setTimeout(() => {
+               resolve()
+               this.setState({
+                   loadMore: false,
+                   scrollEnabled: true
+               })
+           }, 3000)
     }
 
     /**
@@ -143,13 +148,16 @@ class AllContentPage extends Component {
     }
 
     onError() {
+        this.loadNum = 0
         this.props.onError && this.props.onError()
     }
 
     onSuccess() {
         this.loadNum++
+        console.log('suc',this.loadNum)
         if (this.loadNum === 4) {
-        this.props.onSuccess && this.props.onSuccess()
+            this.loadNum = 0
+            this.props.onSuccess && this.props.onSuccess()
         }
     }
 

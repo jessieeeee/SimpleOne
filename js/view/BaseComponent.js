@@ -25,6 +25,7 @@ export const BaseComponent = (WrapComponent) => {
             this.state = {
                 showMusicControl:false,//是否显示音乐控制板
             }
+
         }
 
         // 渲染音乐播放
@@ -96,12 +97,10 @@ export const BaseComponent = (WrapComponent) => {
                     }
                 }
             }, (error) => {
-                console.log(error)
                 if (showLoading){
                     statusManager.setStatus(Status.Error)
                 }
                 err(error)
-
             })
         }
 
@@ -118,7 +117,7 @@ export const BaseComponent = (WrapComponent) => {
             }
             console.log('显示异常界面')
             return (
-                <DefaultDisplay status={statusManager.Status} onRetry={() => this.retryCallback() }/>
+                <DefaultDisplay status={statusManager.Status} onRetry={() => this.retryCallback()}/>
             )
         }
 
@@ -127,6 +126,7 @@ export const BaseComponent = (WrapComponent) => {
          */
         retryCallback(){
             if(this.component.retry){
+                this.component.retry.bind(this.component)
                 this.component.retry()
             }
         }
@@ -138,8 +138,8 @@ export const BaseComponent = (WrapComponent) => {
                 }}>
                     <WrapComponent ref={(ref) => {
                         this.component = ref
-                    }} {...this.props} request={(url, params, statusManager, next ,err) => {
-                        this.request(url, params, statusManager ,next, err)
+                    }} {...this.props} request={(url, params, statusManager, next ,err, showLoading) => {
+                        this.request(url, params, statusManager ,next, err, showLoading)
                     }} displayStatus={(statusManager) => {return this.displayStatus(statusManager)}}
                     />
                     {this.renderAudioPlay()}

@@ -92,7 +92,7 @@ class LoadMore extends Component {
 //                console.log('callback---stop');
                 this.arr.forEach((item) => {
                     this.animatedValue[item].stopAnimation(value => {
-                        console.log('剩余时间' + (1 - value) * 200);
+                        // console.log('剩余时间' + (1 - value) * 200);
                     })
                 })
                 break

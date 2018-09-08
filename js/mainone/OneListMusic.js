@@ -81,7 +81,7 @@ class OneListMusic extends Component{
                 })
                 rotate=false;
                 this.state.spinValue.stopAnimation(value => {
-                    console.log('剩余时间' + (1 - value) * 4000)
+                    // console.log('剩余时间' + (1 - value) * 4000)
                     //计算角度比例
                     this.animation = Animated.timing(this.state.spinValue, {
                         toValue: 1,
