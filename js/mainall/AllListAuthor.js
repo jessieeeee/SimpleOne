@@ -34,6 +34,7 @@ class AllListAuthor extends Component {
     constructor(props) {
         super(props)
         this.state = {}
+        this.index = 0
         this.renderRow = this.renderRow.bind(this)
     }
 
@@ -74,13 +75,15 @@ class AllListAuthor extends Component {
                         borderWidth: width * 0.003,
                         borderRadius: width * 0.005,
                     }}>
-                        <Text style={{
-                            textAlign: 'center',
-                            fontSize: width * 0.034,
-                            color: constants.nightMode ? 'white' : constants.normalTextColor
-                        }}>
-                            换一换
-                        </Text>
+                        <TouchableOpacity onPress={() => {this.changeAuthor()}}>
+                            <Text style={{
+                                textAlign: 'center',
+                                fontSize: width * 0.034,
+                                color: constants.nightMode ? 'white' : constants.normalTextColor
+                            }}>
+                                换一换
+                            </Text>
+                        </TouchableOpacity>
                     </View>
 
                 </View>
@@ -133,7 +136,7 @@ class AllListAuthor extends Component {
                 <TouchableOpacity
                     style={styles.follow}
                     activeOpacity={0.5}
-                    onPress={() => toast.showMsg('点击了' + rowID + '行', toast.SHORT)}>
+                    onPress={() => toast.showMsg('demo不支持此功能', toast.SHORT)}>
 
                     <Text style={{
                         textAlign: 'center',
@@ -148,6 +151,29 @@ class AllListAuthor extends Component {
         )
     }
 
+    changeAuthor(){
+        this.index ++
+        this.setAuthor(this.state.result)
+    }
+
+    setAuthor(author){
+        let itemArr = []
+        let i = 0
+        // 循环3次，取出3个作者
+        while (i < 3){
+            if (this.index >= itemArr.length - 1){ //当前越界
+                this.index = this.index - (itemArr.length - 1) //指针回到头部继续
+            }
+            console.log('取出index',this.index)
+            itemArr.push(author.data[this.index]) //放入作者数据
+            this.index ++ //指针后移
+            i ++ //当前次数+1
+        }
+        this.setState({
+            dataSource: ds.cloneWithRows(itemArr),
+        })
+    }
+
     // 请求专题数据
     getHotAuthorData() {
         console.log('请求author')
@@ -156,15 +182,8 @@ class AllListAuthor extends Component {
             this.setState({
                 author: result,
             })
+            this.setAuthor(result)
 
-            let itemArr = []
-            for (var i = 0; i < 3; i++) {
-                itemArr.push(this.state.author.data[i])
-            }
-
-            this.setState({
-                dataSource: ds.cloneWithRows(itemArr),
-            })
             // console.log(result);
         }, (error) => {
             console.log('error' + error)
