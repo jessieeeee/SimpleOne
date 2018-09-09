@@ -52,7 +52,8 @@ class AllContentPage extends Component {
         return (
             <PullScrollView
                 onRetry={() => {
-                    this.errCallback()
+                    console.log('重试加载')
+                    this.onLoadMore()
                 }}
                 onPullRelease={this.onPullRelease}
                 onLoadMore={this.onLoadMore}
@@ -95,9 +96,6 @@ class AllContentPage extends Component {
             if (this.state.lastId === 0 || (this.state.lastId !== 0 && this.state.lastId !== this.state.startId)) {
                 //放入长度为5的列表
                 key++
-                this.setState({
-                    lastId: this.state.startId,
-                })
                 //设置正在加载和显示更多标记
                 this.setState({
                     loadMore: true,
@@ -105,8 +103,7 @@ class AllContentPage extends Component {
                 })
                 this.bottomList.push(
                     <AllListTopic key={key} showNum={5} startId={this.state.startId}
-                                  onError={(callback) => {
-                                      this.errCallback = callback
+                                  onError={() => {
                                       this.setState({
                                           loadingState: LoadMoreState.state.error,
                                       })
@@ -115,8 +112,9 @@ class AllContentPage extends Component {
                                       key--
                                   }}
                                   getEndId={(endId, end) => {
-                                      console.log('调用回调' + endId + end);
+                                      console.log('调用回调' + endId + end)
                                       this.setState({
+                                          lastId: this.state.startId,
                                           startId: endId,
                                           loadingState: LoadMoreState.state.tip,
                                           isEnd: end,

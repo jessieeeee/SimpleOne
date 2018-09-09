@@ -31,6 +31,7 @@ class AllListTopic extends Component {
         super(props)
         this.renderRow = this.renderRow.bind(this)
         this.state = {}
+        this.getTopicData = this.getTopicData.bind(this)
     }
 
     /**
@@ -139,8 +140,8 @@ class AllListTopic extends Component {
                 this.setState({
                     endId: result.data[result.data.length - 1].id
                 })
-                console.log('调用回调' + this.state.topic.data[this.state.topic.data.length - 1].id + ":" + end);
-                this.props.getEndId(result.data[result.data.length - 1].id, end)
+                console.log('调用回调' + result.data[result.data.length - 1].id + ":" + end);
+                this.props.getEndId && this.props.getEndId(result.data[result.data.length - 1].id, end)
             }
 
             console.log('结果', itemArr)
@@ -150,7 +151,7 @@ class AllListTopic extends Component {
             })
             this.props.onSuccess && this.props.onSuccess()
         }, (error) => {
-            this.props.onError && this.props.onError(this.getTopicData)
+            this.props.onError && this.props.onError()
             console.log('error' + error)
         })
     }
@@ -180,7 +181,7 @@ AllListTopic.propsTypes = {
     showNum: PropTypes.number.isRequired,
     startId: PropTypes.number.isRequired,
     endId: PropTypes.number.isRequired,
-    getEndId: PropTypes.func
+    getEndId: PropTypes.func.isRequired
 }
 
 AllListTopic.defaultProps = {
