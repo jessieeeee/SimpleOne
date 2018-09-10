@@ -18,6 +18,7 @@ import {
 import constants from '../Constants'
 import PropTypes from 'prop-types'
 import LoadMoreState from './LoadMoreState'
+import DoubleClick from '../util/DoubleClick'
 let {width, height} = constants.ScreenWH
 const pointsNum = 3 //点数量
 
@@ -113,6 +114,7 @@ class LoadMore extends Component {
         switch (this.state.curState) {
             case LoadMoreState.state.loading:
                 return LoadMoreState.stateText.loading
+                return LoadMoreState.stateText.loading
             case LoadMoreState.state.noMore:
                 return LoadMoreState.stateText.noMore
             case LoadMoreState.state.tip:
@@ -133,11 +135,17 @@ class LoadMore extends Component {
             return (
                 <TouchableOpacity
                     style={{flexDirection: 'row', alignItems: 'center', height: width * 0.14,}}
-                    onPress={() => {
-                        if (this.state.curState === LoadMoreState.state.error){
-                            this.props.onRetry && this.props.onRetry()
-                        }
-                    }}>
+                    onPress={() =>new DoubleClick().filterDoubleClick(
+                     function () {
+                         if (this.state.curState === LoadMoreState.state.error){
+                             this.props.onRetry && this.props.onRetry()
+                             this.setState({
+                                 curState:LoadMoreState.state.loading
+                             })
+                             this.animate()
+                         }
+                     }.bind(this)
+                    )}>
                     <Text style={{
                         color: constants.nightMode ? constants.nightModeTextColor : constants.normalTextColor,
                         fontSize: width * 0.04,
