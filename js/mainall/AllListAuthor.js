@@ -152,8 +152,7 @@ class AllListAuthor extends Component {
     }
 
     changeAuthor(){
-        this.index ++
-        this.setAuthor(this.state.result)
+        this.setAuthor(this.state.author)
     }
 
     setAuthor(author){
@@ -161,8 +160,8 @@ class AllListAuthor extends Component {
         let i = 0
         // 循环3次，取出3个作者
         while (i < 3){
-            if (this.index >= itemArr.length - 1){ //当前越界
-                this.index = this.index - (itemArr.length - 1) //指针回到头部继续
+            if (this.index > author.data.length - 1){ //当前越界
+                this.index = this.index - author.data.length //指针回到头部继续
             }
             console.log('取出index',this.index)
             itemArr.push(author.data[this.index]) //放入作者数据
