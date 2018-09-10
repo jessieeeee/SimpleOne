@@ -67,6 +67,7 @@ class AuthorPage extends Component {
      * 刷新内容
      */
     retry() {
+        this.head && this.head.getHeadInfo()
         this.getWorkList(true)
     }
 
@@ -93,10 +94,14 @@ class AuthorPage extends Component {
                 console.log('当前数量' + this.workList.length)
             }
         }, (error) => {
+            console.log('错误',error)
             if (showLoading){
                 this.onError()
+            }else{
+                this.setState({
+                    loadingState: LoadMoreState.state.error,
+                })
             }
-            console.log('error' + error)
         })
 
     }
@@ -129,7 +134,8 @@ class AuthorPage extends Component {
                             loadMoreState={this.state.loadingState}
                             onLoadMore={this.onLoadMore}
                             style={{width: width}}>
-                <AuthorHead authorId={this.props.route.params.authorId}
+                <AuthorHead ref={(c) => {this.head = c}}
+                            authorId={this.props.route.params.authorId}
                             onError={this.onError}
                             onSuccess={this.onSuccess}/>
                 <View

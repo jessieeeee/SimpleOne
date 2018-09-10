@@ -43,15 +43,18 @@ class AuthorHead extends Component{
 
     componentDidMount(){
         this.isMount = true
+        this.getHeadInfo()
+    }
+
+    getHeadInfo(){
         let url= ServerApi.AuthorHead.replace('{author_id}', this.props.authorId)
         NetUtils.get(url,null,(result) => {
-           if (this.isMount){
-               this.setState({
-                   result:result.data
-               })
-               console.log('head')
-               this.props.onSuccess && this.props.onSuccess()
-           }
+            if (this.isMount){
+                this.setState({
+                    result:result.data
+                })
+                this.props.onSuccess && this.props.onSuccess()
+            }
 
         },(error) => {
             console.log('error',error)

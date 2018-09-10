@@ -152,7 +152,7 @@ class AllListTopic extends Component {
             this.props.onSuccess && this.props.onSuccess()
         }, (error) => {
             this.props.onError && this.props.onError()
-            console.log('error' + error)
+            console.log('错误' , error)
         })
     }
 

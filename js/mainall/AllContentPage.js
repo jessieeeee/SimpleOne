@@ -90,6 +90,7 @@ class AllContentPage extends Component {
      * scrollview滑动回调
      */
     onLoadMore() {
+        console.log('加载更多')
         //如果列表没有结束
         if (!this.state.isEnd) {
             //如果最后一次请求起始id为0或者当前请求起始id不等于最后一次请求起始id,添加更多列表
@@ -102,8 +103,12 @@ class AllContentPage extends Component {
                     loadingState: LoadMoreState.state.loading,
                 })
                 this.bottomList.push(
-                    <AllListTopic key={key} showNum={5} startId={this.state.startId}
+                    <AllListTopic key={key}
+                                  showNum={5}
+                                  startId={this.state.startId}
+                                  navigator={this.props.navigator}
                                   onError={() => {
+                                      console.log('加载失败')
                                       this.setState({
                                           loadingState: LoadMoreState.state.error,
                                       })

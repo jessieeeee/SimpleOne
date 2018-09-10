@@ -163,7 +163,6 @@ class AllListAuthor extends Component {
             if (this.index > author.data.length - 1){ //当前越界
                 this.index = this.index - author.data.length //指针回到头部继续
             }
-            console.log('取出index',this.index)
             itemArr.push(author.data[this.index]) //放入作者数据
             this.index ++ //指针后移
             i ++ //当前次数+1
