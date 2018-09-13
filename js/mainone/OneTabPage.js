@@ -96,7 +96,6 @@ class OneTabPage extends Component{
     addPage(oneData) {
         // 把空白界面删除
         this.itemPageArr.pop()
-        this.key--
         // 添加内容界面
         this.itemPageArr.push(
             <PullScrollView
@@ -110,9 +109,6 @@ class OneTabPage extends Component{
 
             </PullScrollView>
         )
-        {
-            this.key++
-        }
     }
 
     /**
