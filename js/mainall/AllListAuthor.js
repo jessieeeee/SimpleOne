@@ -174,7 +174,6 @@ class AllListAuthor extends Component {
 
     // 请求专题数据
     getHotAuthorData() {
-        console.log('请求author')
         NetUtils.get(ServerApi.HotAuthor, null, (result) => {
             this.props.onSuccess && this.props.onSuccess()
             this.setState({

@@ -8,7 +8,7 @@ import {
 import AppState from "./store/AppState";
 
 const object = {
-
+    DEBUG: true, //是否开启日志
     nightMode:false,  // 夜间模式
     nightModeGrayLight:'#484848', // 浅灰
     nightModeGrayDark:'#272727', // 深灰

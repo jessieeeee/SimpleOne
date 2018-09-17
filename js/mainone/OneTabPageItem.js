@@ -4,7 +4,7 @@
  * @description : one分页内容-水平方向单个item
  */
 import React, {Component} from 'react'
-import {NativeModules, View} from 'react-native'
+import {StyleSheet, NativeModules, View} from 'react-native'
 import PullScrollView from '../view/PullScrollView'
 import constants from "../Constants"
 import CommStyles from "../CommStyles"
@@ -17,48 +17,104 @@ import OneListMusic from './OneListMusic'
 import OneListMovie from './OneListMovie'
 import OneListTop from './OneListTop'
 let toast = NativeModules.ToastNative
+let {width, height} = constants.ScreenWH
+
 class OneTabPageItem extends Component {
     static defaultProps = {
-        showDate:''
+        showDate:'',
+        page:1
     }
 
     static propTypes = {
-        weather: PropTypes.object.isRequired,
+        weather: PropTypes.object.isRequired, //天气
         clickDisplay: PropTypes.func, //点击查看大图
-        showDate: PropTypes.string,
+        showDate: PropTypes.string, // 展示日期
+        refCallback: PropTypes.func, // ref回调
+        onPullRelease: PropTypes.func, // 刷新回调
+        showArrowAndSearch: PropTypes.func, // 显示回调
+        page : PropTypes.number, // 页面key值
+        onPulling: PropTypes.func, //下拉回调
+        displayStatus: PropTypes.func, //展示状态
     }
 
     constructor(props) {
         super(props)
         this.state = {
-            oneData: []
+            oneData: null,
+            statusManager: null
         }
+        this.onPullRelease = this.onPullRelease.bind(this)
+        this.onScroll = this.onScroll.bind(this)
     }
 
+    componentDidMount(){
+        this.isMount = true
+        this.props.refCallback && this.props.refCallback(this)
+    }
+
+    componentWillUnmount(){
+        this.isMount = false
+    }
     /**
      * 刷新数据
      * @param Data
      */
     update(Data){
-        this.setState({
-            oneData: Data
-        })
+        if(this.isMount){
+            this.setState({
+                oneData: Data
+            })
+        }
     }
 
+    setStatus(statusManager){
+        if (this.isMount){
+            this.setState({
+                statusManager: statusManager
+            })
+        }
+    }
     render() {
         return (
-            <PullScrollView
-                style={{flex: 1}}
-                onPullRelease={this.onPullRelease}
-                onScroll={this.onScroll}
-            >
+            <View style={{flex: 1}}>
+                <PullScrollView
+                    style={{flex: 1}}
+                    onPullRelease={this.onPullRelease}
+                    onScroll={this.onScroll}
+                    onPulling={() => {
+                      this.props.onPulling && this.props.onPulling()
+                    }}
+                >
+                    {this.state.oneData && this.state.oneData.content_list ? this.renderAllItem(this.props.page) :null}
 
-                {this.renderAllItem(this.props.key)}
-
-            </PullScrollView>
+                </PullScrollView>
+                {/*渲染状态界面*/}
+                {this.state.statusManager ? this.props.displayStatus(this.state.statusManager) : null}
+            </View>
         )
     }
 
+    onPullRelease(resolve){
+        //do something
+        console.log('one分页调刷新')
+        setTimeout(() => {
+            resolve()
+        }, 3000);
+        this.props.onPullRelease && this.props.onPullRelease()
+    }
+
+    /**
+     * scrollview滑动回调
+     */
+    onScroll(event) {
+        let y = event.nativeEvent.contentOffset.y
+        // 显示搜索按钮和标题下面的箭头
+        if (y > height * 0.1) {
+            this.props.showArrowAndSearch && this.props.showArrowAndSearch(true)
+        } else {
+            this.props.showArrowAndSearch && this.props.showArrowAndSearch(false)
+        }
+    }
     /**
      * 列表item渲染
      * @param oneData
@@ -153,5 +209,10 @@ class OneTabPageItem extends Component {
     }
 
 }
-
+const styles = StyleSheet.create({
+    menuLine: {
+        height: width * 0.012,
+        width: width
+    },
+})
 export default OneTabPageItem

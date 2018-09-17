@@ -21,8 +21,10 @@ import ServerApi from '../ServerApi'
 import OneTopBar from './OneTopBar'
 import StatusManager from '../util/StatusManager'
 import {BaseComponent} from "../view/BaseComponent"
-import {observer} from "mobx-react/native"
+
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
+import {observer} from "mobx-react/native"
+
 @observer
 class One extends Component {
     constructor(props) {
@@ -50,7 +52,12 @@ class One extends Component {
      * 刷新内容
      */
     retry() {
-        this.loadPage()
+        if (!this.state.curOneData){
+            this.loadPage()
+        } else {
+            this.onPullRelease()
+        }
+
     }
     /**
      * 发起网络请求
@@ -104,16 +111,25 @@ class One extends Component {
 
     // 刷新释放回调
     onPullRelease() {
-        console.log('this',this)
         if(!this.state.nextOneData){
-            console.log('this添加界面')
             this.oneTabPage && this.oneTabPage.addEmptyView()
         }
         //发起请求
         this.getOneList((result) => {
-            console.log('请求成功',result)
+            this.oneTabPage.updatePage(result.data)
+            //设置当前页数
             this.setState({
                 curOneData: result,
+            })
+            // 获取下一页
+            this.getOneList((result) => {
+                this.setState({
+                    nextOneData: result,
+                })
+            }, false, () => {
+                this.setState({
+                    nextOneData: null,
+                })
             })
         }, true)
     }
@@ -134,6 +150,7 @@ class One extends Component {
                                 forward={this.forward}
                                 backward={this.backward}
                                 showDate={this.state.showDate}
+                                displayStatus={this.props.displayStatus}
                                 onPullRelease={this.onPullRelease}
                                 showArrowAndSearch={this.showArrowAndSearch}
                                 clickDisplay={(topText, imgUrl, bottomText, originalW, originalH) => {
@@ -189,7 +206,7 @@ class One extends Component {
     backward(currentPage) {
         this.setState({
             showDate: DateUtil.getLastDate(this.state.showDate, currentPage - this.curPage)
-        });
+        })
         console.log('往后翻:' + currentPage + '缓存页数' + this.state.cachePage)
         //添加下一页缓存
         if (currentPage === this.state.cachePage) {
@@ -214,11 +231,15 @@ class One extends Component {
         this.curPage = currentPage
     }
 
+    componentWillUpdate( nextProps, nextState){
+        this.oneTabPage && this.oneTabPage.setStatusPage(this.statusManager)
+    }
     /**
      * 界面绘制
      * @returns {XML}
      */
     render() {
+
         return (
             <View style={{flex: 1}}>
                 {/*渲染头部bar*/}
@@ -228,12 +249,9 @@ class One extends Component {
                            showSearch={this.state.showSearch}
                            curOneData={this.state.curOneData}
                            backToday={this.backToday}/>
-                <View style={{flex: 1}}>
+
                     {/*渲染正常界面*/}
                     {this.renderNormal() }
-                    {/*渲染状态界面*/}
-                    {this.props.displayStatus(this.statusManager)}
-                </View>
                 <GuideView isVisible={this.state.showGuide}
                            onCancel={() => {
                                this.setState({showGuide: false})
@@ -290,7 +308,6 @@ class One extends Component {
      * @param onError 错误回调
      */
     getOneList(onSuccess, refresh, onError) {
-        console.log('请求date' + this.date)
         let requestDate;
         if (this.date === '0') {
             requestDate = '0'
@@ -317,6 +334,7 @@ class One extends Component {
             console.log('error' + error)
         }, !refresh)
     }
+
 }
 
 export default OnePage = BaseComponent(One)

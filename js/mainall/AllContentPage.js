@@ -52,7 +52,6 @@ class AllContentPage extends Component {
         return (
             <PullScrollView
                 onRetry={() => {
-                    console.log('重试加载')
                     this.onLoadMore()
                 }}
                 onPullRelease={this.onPullRelease}
@@ -106,8 +105,6 @@ class AllContentPage extends Component {
                                   startId={this.state.startId}
                                   navigator={this.props.navigator}
                                   onError={() => {
-                                      console.log('加载失败')
-                                      console.log('加载失败')
                                       this.setState({
                                           loadingState: LoadMoreState.state.error,
                                       })

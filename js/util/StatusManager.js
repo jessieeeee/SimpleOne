@@ -12,7 +12,7 @@ class StatusManager {
     @observable
     status = Status.Loading
 
-    targetEmptyKey: null //目标空数据
+    targetEmptyKey = null //目标空数据
 
     @action
     setStatus = (status) => {

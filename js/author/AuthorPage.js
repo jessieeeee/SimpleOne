@@ -89,9 +89,7 @@ class AuthorPage extends Component {
                         isEnd: true,
                     })
                 }
-                console.log('main')
                 this.onSuccess()
-                console.log('当前数量' + this.workList.length)
             }
         }, (error) => {
             console.log('错误',error)
@@ -160,8 +158,6 @@ class AuthorPage extends Component {
 
     // 刷新释放回调
     onPullRelease(resolve) {
-        //do something
-        console.log('作者页调刷新')
         //发起请求
         this.getWorkList(false)
         setTimeout(() => {
@@ -175,7 +171,6 @@ class AuthorPage extends Component {
     onLoadMore() {
         if (!this.state.isEnd) {
             this.pageNum++
-            console.log('当前页数' + this.pageNum)
             if (this.isMount){
                 //设置正在加载和更多列表标记
                 this.setState({
@@ -241,7 +236,6 @@ class AuthorPage extends Component {
                 )
 
                 this.key++
-                console.log('渲染view' + this.itemArr.length)
             }
         }
     }

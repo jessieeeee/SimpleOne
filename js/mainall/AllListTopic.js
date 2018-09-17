@@ -143,8 +143,6 @@ class AllListTopic extends Component {
                 console.log('调用回调' + result.data[result.data.length - 1].id + ":" + end);
                 this.props.getEndId && this.props.getEndId(result.data[result.data.length - 1].id, end)
             }
-
-            console.log('结果', itemArr)
             //将这个数组作为数据源
             this.setState({
                 dataSource: itemArr,

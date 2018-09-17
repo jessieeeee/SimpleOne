@@ -65,7 +65,6 @@ class FrameAnimationView extends Component{
             console.log('开始动画')
             this.startTimer()
         }
-        console.log(nextProps.loading)
         this.setState({
             rotate: nextProps.loading,
         })
@@ -86,7 +85,7 @@ class FrameAnimationView extends Component{
                             page.refs.img.setNativeProps({
                                 source:{uri: page.props.loadingArr[page.loadingIndex]},
                             })
-                            console.log('刷新下标' + page.props.loadingArr[page.loadingIndex])
+                            // console.log('刷新下标' + page.props.loadingArr[page.loadingIndex])
                             page.loadingIndex++
                             if(page.loadingIndex >= page.props.loadingArr.length){
                                 page.loadingIndex=0

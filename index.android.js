@@ -1,9 +1,10 @@
-'use strict';
+'use strict'
 
-import React from 'react';
-import {AppRegistry} from 'react-native';
-import {Navigator} from 'react-native-deprecated-custom-components';
-import Main from './js/Main';
+import React from 'react'
+import {AppRegistry} from 'react-native'
+import {Navigator} from 'react-native-deprecated-custom-components'
+import Main from './js/Main'
+import Constants from './js/Constants'
 // import Test from './js/store/Test';
 // import Test from './js/view/Test';
 class SimpleOne extends React.Component {
@@ -22,6 +23,9 @@ class SimpleOne extends React.Component {
     )
   }
 }
-
-// console.disableYellowBox = true; 忽略警告弹窗
+//是否关闭log日志
+if(!Constants.DEBUG){
+    console.log = function() {}
+}
+// console.disableYellowBox = true 忽略警告弹窗
 AppRegistry.registerComponent('SimpleOne', () => SimpleOne);

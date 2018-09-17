@@ -158,14 +158,15 @@ export default class PullScrollView extends Component {
                     }, 3000)
                 }
             }
-            this.setPullState(statePullrelease); //记录当前状态为完成下拉，已松开
+
+            this.setPullState(statePullrelease) //记录当前状态为完成下拉，已松开
+
             // 刷新view 的下拉动画开启
             Animated.timing(this.state.pullPan, {
                 toValue: {x: 0, y: 0},
                 easing: Easing.linear,
                 duration: defaultDuration
             }).start()
-
             // 刷新视图中的转圈动画开启
             this.spin()
         }

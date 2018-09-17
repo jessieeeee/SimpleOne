@@ -116,7 +116,7 @@ class MusicControl extends Component {
                             }}
                             onValueChange={value => {
                                 console.log(value);
-                                media.seekTo(value * this.state.totalMsec);
+                                media.seekTo(value * this.state.totalMsec)
                             }}
                         />
                         <View style={{width: width, height: width * 0.03, marginTop: -width * 0.04}}>

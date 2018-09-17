@@ -70,7 +70,6 @@ class ReadBottomBar extends Component {
      * @param url
      */
     pushToShare() {
-        console.log(this.props.route.params.data)
         this.props.navigator.push(
             {
                 component: Share,
