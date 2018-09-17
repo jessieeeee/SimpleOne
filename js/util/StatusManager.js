@@ -10,7 +10,7 @@ import {action, observable ,computed, autorun} from 'mobx'
 class StatusManager {
 
     @observable
-    status = Status.Loading
+    status = Status.hide
 
     targetEmptyKey = null //目标空数据
 

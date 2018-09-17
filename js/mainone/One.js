@@ -24,6 +24,7 @@ import {BaseComponent} from "../view/BaseComponent"
 
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
 import {observer} from "mobx-react/native"
+import Status from "../util/Status"
 
 @observer
 class One extends Component {
@@ -39,7 +40,6 @@ class One extends Component {
             nextOneData: null, //缓存下一页
         }
         this.date = '0'; //请求的日期
-        this.curPage = 0
         // 初始化状态界面管理器
         this.statusManager = new StatusManager()
         this.showArrowAndSearch = this.showArrowAndSearch.bind(this)
@@ -57,7 +57,6 @@ class One extends Component {
         } else {
             this.onPullRelease()
         }
-
     }
     /**
      * 发起网络请求
@@ -144,7 +143,6 @@ class One extends Component {
                 <View style={{flex:1}}>
                     {/*渲染内容界面*/}
                     <OneTabPage ref={(c) => this.oneTabPage = c}
-                                curPage={this.curPage}
                                 weather={this.state.curOneData.data.weather}
                                 navigator={this.props.navigator}
                                 forward={this.forward}
@@ -183,7 +181,6 @@ class One extends Component {
      * 回到今天
      */
     backToday() {
-        this.curPage = 0
         this.setState({
             showDate: constants.curDate
         })
@@ -193,19 +190,18 @@ class One extends Component {
     /**
      * 向前翻页
      */
-    forward(currentPage) {
+    forward(curPage,currentPage) {
         this.setState({
-            showDate: DateUtil.getNextDate(this.state.showDate, this.curPage - currentPage)
+            showDate: DateUtil.getNextDate(this.state.showDate, curPage - currentPage)
         })
-        this.curPage = currentPage
     }
 
     /**
      * 向后翻页
      */
-    backward(currentPage) {
+    backward(curPage,currentPage) {
         this.setState({
-            showDate: DateUtil.getLastDate(this.state.showDate, currentPage - this.curPage)
+            showDate: DateUtil.getLastDate(this.state.showDate, currentPage - curPage)
         })
         console.log('往后翻:' + currentPage + '缓存页数' + this.state.cachePage)
         //添加下一页缓存
@@ -228,7 +224,6 @@ class One extends Component {
                 })
             })
         }
-        this.curPage = currentPage
     }
 
     componentWillUpdate( nextProps, nextState){

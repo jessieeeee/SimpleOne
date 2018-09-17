@@ -117,7 +117,11 @@ export const BaseComponent = (WrapComponent) => {
             }
             console.log('显示异常界面')
             return (
-                <DefaultDisplay status={statusManager.Status} onRetry={() => this.retryCallback()}/>
+                <DefaultDisplay status={statusManager.Status}
+                                onRetry={() =>
+                                {
+                                    this.retryCallback()
+                                }}/>
             )
         }
 

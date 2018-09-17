@@ -14,7 +14,6 @@ class OneTabPage extends Component{
         showDate:''
     }
     static propTypes = {
-        curPage: PropTypes.number.isRequired,//当前页数
         forward: PropTypes.func, //向前翻回调
         backward: PropTypes.func,//向后翻回调
         showArrowAndSearch: PropTypes.func, //显示箭头和搜索
@@ -29,7 +28,7 @@ class OneTabPage extends Component{
         super(props)
         this.itemPageArr = [] //分页数组
         this.key = 1 //横向页面的id
-
+        this.curPage = 0
         this.items = []
         this.state={
             scrollEnable: true
@@ -52,12 +51,14 @@ class OneTabPage extends Component{
         let currentPage = Math.round(offset / width)
 
         //往后翻
-        if (currentPage > this.props.curPage) {
-            this.props.backward && this.props.backward(currentPage)
+        if (currentPage > this.curPage) {
+            this.props.backward && this.props.backward(this.curPage,currentPage)
+            this.curPage = currentPage
         }
-        else if (currentPage < this.props.curPage) {
+        else if (currentPage < this.curPage) {
             // console.log('往前翻')
-            this.props.forward && this.props.forward(currentPage)
+            this.props.forward && this.props.forward(this.curPage,currentPage)
+            this.curPage = currentPage
         }
 
     }
@@ -82,13 +83,14 @@ class OneTabPage extends Component{
 
 
 
-    // 刷新界面
+    // 刷新内容item
     updatePage(oneData){
-        this.items[this.props.curPage].update(oneData)
+        this.items[this.curPage].update(oneData)
     }
 
+    // 设置内容item的状态
     setStatusPage(statusManager){
-        this.items[this.props.curPage] && this.items[this.props.curPage].setStatus(statusManager)
+        this.items[this.curPage] && this.items[this.curPage].setStatus(statusManager)
     }
 
     pulling(){
@@ -138,6 +140,7 @@ class OneTabPage extends Component{
         //获得scrollView
         let scrollView = this.refs.sv_one
         scrollView.scrollResponderScrollTo({x: 0, y: 0, animated: true})
+        this.curPage = 0
     }
 
     render(){

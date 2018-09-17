@@ -9,14 +9,20 @@ import PropTypes from 'prop-types'
 import Status from '../util/Status'
 import constants from '../Constants'
 let {width, height} = constants.ScreenWH
-class DefaultDisplay extends Component<Props> {
+class DefaultDisplay extends Component {
 
+    constructor(props){
+        super(props)
+        this.state = {
+            status: props.status
+        }
+    }
     static propTypes = {
         status: PropTypes.number, // 展示状态,
     }
 
     static defaultProps = {
-        status: Status.Loading, // 默认加载状态
+        status: Status.hide, // 默认加载状态
     }
 
     render() {
@@ -35,8 +41,14 @@ class DefaultDisplay extends Component<Props> {
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                     {this.renderStatus()}
                     {
-                        this.props.status !== Status.Loading ?
-                            <TouchableOpacity onPress={() => this.props.onRetry()}>
+                        this.state.status !== Status.Loading ?
+                            <TouchableOpacity onPress={() =>
+                            {
+                                this.props.onRetry()
+                                this.setState({
+                                    status: Status.Loading
+                                })
+                            }}>
                                 <Text style={[styles.retryText,{ color: constants.nightMode ? 'white' : constants.normalTextColor,}]}>重新加载</Text>
                             </TouchableOpacity> : null
                     }
@@ -46,7 +58,7 @@ class DefaultDisplay extends Component<Props> {
     }
 
     renderStatus() {
-        switch (this.props.status) {
+        switch (this.state.status) {
             case Status.Loading:
                 return this.renderLoading()
             case Status.Empty:
