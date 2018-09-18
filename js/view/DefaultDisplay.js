@@ -57,6 +57,12 @@ class DefaultDisplay extends Component {
         )
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            status: nextProps.status
+        })
+    }
+
     renderStatus() {
         switch (this.state.status) {
             case Status.Loading:
