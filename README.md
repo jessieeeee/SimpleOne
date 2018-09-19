@@ -166,5 +166,5 @@ React-native encapsulates native components.
 23. Modify the web page style in the webview to implement night mode by inject javascript (2018.7.18 update)
 24. update loadMore Prompt status (2018.9.3 update)
 25. fix bug of the sliding conflict of scrollview nesting (2018.9.3 update)
-
+26. add view display status prompt (2018.9.17 update)
 [1]: https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md
