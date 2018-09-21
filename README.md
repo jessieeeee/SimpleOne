@@ -149,7 +149,7 @@ React-native encapsulates native components.
 6. subcomponent encapsulates, call and callback
 7. Passing parameters between parent and child components
 8. Parameter transfer at page navigation jumps, and callbacks
-9. Pull-down refresh, add third-party react-native-pulls, and partial modification
+9. custom pull-down refresh
 10. Custom folding component (menus in one paging)
 11. Custom banner component, Implement the banner display in all paging
 12. Custom load more component, listen to ScrollView Slide
@@ -167,4 +167,6 @@ React-native encapsulates native components.
 24. update loadMore Prompt status (2018.9.3 update)
 25. fix bug of the sliding conflict of scrollview nesting (2018.9.3 update)
 26. add view display status prompt (2018.9.17 update)
+
+
 [1]: https://github.com/jessieeeee/SimpleOne/blob/master/README_zh.md
