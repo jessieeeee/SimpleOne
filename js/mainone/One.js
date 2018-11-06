@@ -24,7 +24,6 @@ import {BaseComponent} from "../view/BaseComponent"
 
 // toast.show('Toast message',toast.SHORT,(message,count)=>{console.log("==",message,count)},(message,count)=>{console.log("++",message,count)})
 import {observer} from "mobx-react/native"
-import Status from "../util/Status"
 
 @observer
 class One extends Component {
@@ -214,10 +213,10 @@ class One extends Component {
             })
             this.oneTabPage.addPage(this.state.nextOneData.data)
             this.getOneList((result) => {
+                this.oneTabPage.addEmptyView()
                 this.setState({
                     nextOneData: result,
                 })
-                this.oneTabPage.addEmptyView()
             }, false ,() => {
                 this.setState({
                     nextOneData: null,

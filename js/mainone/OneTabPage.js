@@ -4,14 +4,15 @@
  * @description : one分页内容页面渲染
  */
 import React, {Component} from 'react'
-import {ScrollView, View} from 'react-native'
+import {ScrollView, View, Text} from 'react-native'
 import OneTabPageItem from './OneTabPageItem'
 import constants from "../Constants"
 import PropTypes from 'prop-types'
 let {width, height} = constants.ScreenWH
-class OneTabPage extends Component{
+
+class OneTabPage extends Component {
     static defaultProps = {
-        showDate:''
+        showDate: ''
     }
     static propTypes = {
         forward: PropTypes.func, //向前翻回调
@@ -24,13 +25,13 @@ class OneTabPage extends Component{
         displayStatus: PropTypes.func, //展示状态
     }
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.itemPageArr = [] //分页数组
         this.key = 1 //横向页面的id
         this.curPage = 0
         this.items = []
-        this.state={
+        this.state = {
             scrollEnable: true
         }
         // 绑定回调
@@ -52,54 +53,57 @@ class OneTabPage extends Component{
 
         //往后翻
         if (currentPage > this.curPage) {
-            this.props.backward && this.props.backward(this.curPage,currentPage)
+            this.props.backward && this.props.backward(this.curPage, currentPage)
             this.curPage = currentPage
         }
         else if (currentPage < this.curPage) {
             // console.log('往前翻')
-            this.props.forward && this.props.forward(this.curPage,currentPage)
+            this.props.forward && this.props.forward(this.curPage, currentPage)
             this.curPage = currentPage
         }
 
     }
 
-    resetView(){
-        this.itemPageArr.splice(0,this.itemPageArr.length)
+    resetView() {
+        this.itemPageArr.splice(0, this.itemPageArr.length)
     }
+
     /**
      * 添加后面一页的空白界面
      */
     addEmptyView() {
         this.itemPageArr.push(
             <View key={this.key} style={{
-                flex:1,
+                flex: 1,
                 width: width,
-                height: height,
+                justifyContent: 'center',
+                alignItems: 'center',
                 backgroundColor: constants.nightMode ? constants.nightModeGrayLight : 'white'
-            }}/>
-        )
+            }}>
+                <Text style={{ color: constants.nightMode ? 'white' : constants.normalTextColor, fontSize: width * 0.04}}>正在加载中.....</Text>
 
+            </View>
+        )
     }
 
 
-
     // 刷新内容item
-    updatePage(oneData){
+    updatePage(oneData) {
         this.items[this.curPage].update(oneData)
     }
 
     // 设置内容item的状态
-    setStatusPage(statusManager){
+    setStatusPage(statusManager) {
         this.items[this.curPage] && this.items[this.curPage].setStatus(statusManager)
     }
 
-    pulling(){
+    pulling() {
         this.setState({
             scrollEnable: false
         })
     }
 
-    pullRelease(){
+    pullRelease() {
         this.setState({
             scrollEnable: true
         })
@@ -123,14 +127,15 @@ class OneTabPage extends Component{
                 showDate={this.props.showDate}
                 refCallback=
                     {(ref) => {
-                    this.items.push(ref)
-                    // 刷新界面
-                    this.items[this.items.length - 1].update(oneData)}}
+                        this.items.push(ref)
+                        // 刷新界面
+                        this.items[this.items.length - 1].update(oneData)
+                    }}
                 onPullRelease={this.pullRelease}
                 showArrowAndSearch={this.props.showArrowAndSearch}
             />
         )
-        this.key ++
+        this.key++
     }
 
     /**
@@ -143,13 +148,13 @@ class OneTabPage extends Component{
         this.curPage = 0
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <ScrollView
-                style={{flex:1}}
+                style={{flex: 1}}
                 horizontal={true} ref='sv_one' pagingEnabled={true}
-                        scrollEnabled={this.state.scrollEnable} showsHorizontalScrollIndicator={false}
-                        onMomentumScrollEnd={this.onMomentumScrollEnd}>
+                scrollEnabled={this.state.scrollEnable} showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={this.onMomentumScrollEnd}>
                 {/*渲染分页*/}
                 {this.itemPageArr}
 
