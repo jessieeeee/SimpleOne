@@ -43,6 +43,7 @@ class ReadContent extends Component {
 
     componentDidMount(){
         this.isMount = true
+
     }
 
     componentWillUnmount(){
@@ -70,6 +71,7 @@ class ReadContent extends Component {
                    javaScriptEnabled={true}
                    domStorageEnabled={true}
                    decelerationRate="normal"
+                   onLoad={(e) => console.log('onLoad')}
                    onNavigationStateChange={this.onNavigationStateChange}
                    onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
                    startInLoadingState={true}
@@ -142,6 +144,13 @@ class ReadContent extends Component {
         this.setState({
             scalesPageToFit: true
         })
+        if(!navState.loading){
+            setTimeout(()=>{
+                if (!this.props.commentData) {
+                    this.props.getComments && this.props.getComments()
+                }
+            },2000)
+        }
     }
     /**
      * scrollview滑动回调
