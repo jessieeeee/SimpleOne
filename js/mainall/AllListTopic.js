@@ -115,38 +115,42 @@ class AllListTopic extends Component {
         let itemArr = [] //把显示数据放到一个数组里
         let url = ServerApi.AllTopic.replace('{id}', this.props.startId)
         NetUtils.get(url, null, (result) => {
-            this.setState({
-                topic: result,
-            })
-            let end = false
-            if (result.data.length >= this.props.showNum) {
-                for (let i = 0; i < this.props.showNum; i++) {
-                    // console.log(this.state.topic.data[i]);
-                    itemArr.push(result.data[i])
-                }
-                console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
+            if (result.data !== null && result.data.length > 0) {
                 this.setState({
-                    endId: result.data[this.props.showNum - 1].id
+                    topic: result,
                 })
-                this.props.getEndId(result.data[this.props.showNum - 1].id, end)
-            }
-            //如果专题的数据数量小于显示数量，直接全部放进去
-            else {
-                for (let i = 0; i < result.data.length; i++) {
-                    // console.log(this.state.topic.data[i]);
-                    itemArr.push(result.data[i])
+                let end = false
+                if (result.data.length >= this.props.showNum) {
+                    for (let i = 0; i < this.props.showNum; i++) {
+                        // console.log(this.state.topic.data[i]);
+                        itemArr.push(result.data[i])
+                    }
+                    console.log('调用回调' + this.state.topic.data[this.props.showNum - 1].id + ":" + end);
+                    this.setState({
+                        endId: result.data[this.props.showNum - 1].id
+                    })
+                    this.props.getEndId(result.data[this.props.showNum - 1].id, end)
                 }
-                end = true
+                //如果专题的数据数量小于显示数量，直接全部放进去
+                else {
+                    for (let i = 0; i < result.data.length; i++) {
+                        // console.log(this.state.topic.data[i]);
+                        itemArr.push(result.data[i])
+                    }
+                    end = true
+                    this.setState({
+                        endId: result.data[result.data.length - 1].id
+                    })
+                    console.log('调用回调' + result.data[result.data.length - 1].id + ":" + end);
+                    this.props.getEndId && this.props.getEndId(result.data[result.data.length - 1].id, end)
+                }
+                //将这个数组作为数据源
                 this.setState({
-                    endId: result.data[result.data.length - 1].id
+                    dataSource: itemArr,
                 })
-                console.log('调用回调' + result.data[result.data.length - 1].id + ":" + end);
-                this.props.getEndId && this.props.getEndId(result.data[result.data.length - 1].id, end)
+            }else{
+                this.props.getEndId && this.props.getEndId(0, true)
             }
-            //将这个数组作为数据源
-            this.setState({
-                dataSource: itemArr,
-            })
             this.props.onSuccess && this.props.onSuccess()
         }, (error) => {
             this.props.onError && this.props.onError()

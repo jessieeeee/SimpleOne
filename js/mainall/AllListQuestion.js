@@ -44,20 +44,24 @@ class  AllListQuestion extends Component{
     }
 
     render() {
-        return (
-            <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
-                <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
-                    所有人问所有人
-                </Text>
-                <ScrollView style={styles.scrollview} horizontal={true} showsHorizontalScrollIndicator={false}>
+        if (this.state.questions !== null && this.state.questions.data !== null && this.state.questions.data.length > 0){
+            return (
+                <View style={[styles.container,{backgroundColor:constants.nightMode ? constants.nightModeGrayLight : 'white'}]}>
+                    <Text style={[styles.title, {color: constants.nightMode ? 'white' : constants.normalTextColor}]}>
+                        所有人问所有人
+                    </Text>
+                    <ScrollView style={styles.scrollview} horizontal={true} showsHorizontalScrollIndicator={false}>
 
-                    {/*下部分*/}
-                    {this.renderAllItem()}
-                </ScrollView>
-
-
-            </View>
-        )
+                        {/*下部分*/}
+                        {this.renderAllItem()}
+                    </ScrollView>
+                </View>
+            )
+        }else{
+            return (
+                <View/>
+            )
+        }
     }
 
     //返回所有的item

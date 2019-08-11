@@ -96,8 +96,10 @@ class AllListBanner extends Component{
                 banner: result,
             })
             this.props.onSuccess && this.props.onSuccess()
-            //开启定时器
-            this.startTimer()
+            if (result !== null && result.data !== null && result.data.length > 0){
+                //开启定时器
+                this.startTimer()
+            }
         }, (error) => {
             console.log('error' + error)
             this.props.onError && this.props.onError()
@@ -105,34 +107,40 @@ class AllListBanner extends Component{
     }
 
     render() {
-        return (
-            <View style={styles.banner}>
+       if (this.state.banner !== null && this.state.banner.data !== null && this.state.banner.data.length > 0){
+           return (
+               <View style={styles.banner}>
 
-                <ScrollView ref='sv_banner'
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                            pagingEnabled={true}
-                            scrollEnabled={this.props.scrollEnabled}
-                            onScrollBeginDrag={
-                                (e) => this.stopTimer()
-                            }
-                            onScrollEndDrag={
-                                (e) => this.startTimer()
-                            }
-                            onMomentumScrollEnd={
-                                (e) => this.onAnimationEnd(e)
-                                // this.onScrollEndDrag()
+                   <ScrollView ref='sv_banner'
+                               horizontal={true}
+                               showsHorizontalScrollIndicator={false}
+                               pagingEnabled={true}
+                               scrollEnabled={this.props.scrollEnabled}
+                               onScrollBeginDrag={
+                                   (e) => this.stopTimer()
+                               }
+                               onScrollEndDrag={
+                                   (e) => this.startTimer()
+                               }
+                               onMomentumScrollEnd={
+                                   (e) => this.onAnimationEnd(e)
+                                   // this.onScrollEndDrag()
 
-                            }
-                >
-                    {this.renderChildView()}
-                </ScrollView>
-                <View style={styles.pageView}>
-                    {this.renderPageCircle()}
-                </View>
+                               }
+                   >
+                       {this.renderChildView()}
+                   </ScrollView>
+                   <View style={styles.pageView}>
+                       {this.renderPageCircle()}
+                   </View>
 
-            </View>
-        )
+               </View>
+           )
+       }else{
+           return (
+               <View/>
+           )
+       }
     }
 
     /**
