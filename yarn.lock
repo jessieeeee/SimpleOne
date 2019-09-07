@@ -1183,7 +1183,7 @@ connect@^2.8.3:
     fresh "0.5.2"
     http-errors "~1.3.1"
     method-override "~2.3.5"
-    morgan "~1.6.1"
+    morgan "~1.9.1"
     multiparty "3.3.2"
     on-headers "~1.0.0"
     parseurl "~1.3.0"
@@ -1644,13 +1644,13 @@ fstream-ignore@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/fstream-ignore/-/fstream-ignore-1.0.5.tgz#9c31dae34767018fe1d249b24dada67d092da105"
   dependencies:
-    fstream "^1.0.0"
+    fstream "^1.0.12"
     inherits "2"
     minimatch "^3.0.0"
 
-fstream@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/fstream/-/fstream-1.0.2.tgz#5c1fb1f117477114f0632a0eb4b71b3cb0fd3171"
+fstream@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/fstream/-/fstream-1.0.12.tgz#5c1fb1f117477114f0632a0eb4b71b3cb0fd3171"
   dependencies:
     graceful-fs "^4.1.2"
     inherits "~2.0.0"
@@ -2469,9 +2469,9 @@ mobx@^4.2.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.3.1.tgz#334e5aab4916b1d43f0faf3605a64b1b4b3ccb8d"
 
-morgan@~1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.6.1.tgz#5fd818398c6819cba28a7cd6664f292fe1c0bbf2"
+morgan@~1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#5fd818398c6819cba28a7cd6664f292fe1c0bbf2"
   dependencies:
     basic-auth "~1.0.3"
     debug "~2.2.0"
@@ -2544,7 +2544,7 @@ node-pre-gyp@^0.6.39:
     request "2.81.0"
     rimraf "^2.6.1"
     semver "^5.3.0"
-    tar "^2.2.1"
+    tar "^2.2.2"
     tar-pack "^3.4.0"
 
 nopt@^4.0.1:
@@ -3423,7 +3423,7 @@ spdx-license-ids@^1.0.2:
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-1.2.2.tgz#c9df7a3424594ade6bd11900d596696dc06bac57"
 
 sshpk@^1.13.2:
-  version "1.13.1"
+  version "1.13.2"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.13.2.tgz#512df6da6287144316dc4c18fe1cf1d940739be3"
   dependencies:
     asn1 "~0.2.3"
@@ -3524,20 +3524,20 @@ tar-pack@^3.4.0:
   resolved "https://registry.yarnpkg.com/tar-pack/-/tar-pack-3.4.1.tgz#e1dbc03a9b9d3ba07e896ad027317eb679a10a1f"
   dependencies:
     debug "^2.2.0"
-    fstream "^1.0.2"
+    fstream "^1.0.12"
     fstream-ignore "^1.0.5"
     once "^1.3.3"
     readable-stream "^2.1.4"
     rimraf "^2.5.1"
-    tar "^2.2.1"
+    tar "^2.2.2"
     uid-number "^0.0.6"
 
-tar@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-2.2.1.tgz#8e4d2a256c0e2185c6b18ad694aec968b83cb1d1"
+tar@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-2.2.2.tgz#8e4d2a256c0e2185c6b18ad694aec968b83cb1d1"
   dependencies:
     block-stream "*"
-    fstream "^1.0.2"
+    fstream "^1.0.12"
     inherits "2"
 
 temp@0.8.3:
